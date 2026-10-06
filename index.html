@@ -6,338 +6,149 @@
 <title>ПСЫ.gg — Апгрейдер</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
-        background: #0a0a0a;
-        color: #fff;
+        background: #0a0a0a; color: #fff;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        padding: 12px;
-        min-height: 100vh;
-        overflow-x: hidden;
+        padding: 12px; min-height: 100vh; overflow-x: hidden;
     }
 
     /* ХЕДЕР */
     .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 14px;
-        background: #151515;
-        border-radius: 12px;
-        margin-bottom: 14px;
-        border: 1px solid rgba(255,255,255,0.08);
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 14px; background: #151515; border-radius: 12px;
+        margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.08);
     }
-    .logo {
-        font-size: 18px;
-        font-weight: 900;
-        letter-spacing: 1px;
-        color: #fff;
-        text-transform: uppercase;
-    }
+    .logo { font-size: 18px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
     .logo .dot { color: #888; }
-    .balance {
-        background: #ffffff;
-        color: #000;
-        padding: 6px 14px;
-        border-radius: 16px;
-        font-size: 13px;
-        font-weight: 800;
-    }
+    .balance { background: #fff; color: #000; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 800; }
 
-    /* АРЕНА */
+    /* АРЕНА — УВЕЛИЧЕНА */
     .arena {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
-        gap: 8px;
-        align-items: stretch;
-        margin-bottom: 12px;
+        gap: 10px; align-items: stretch; margin-bottom: 14px;
     }
     .item-slot {
-        background: #151515;
-        border-radius: 14px;
-        padding: 22px 8px 14px 8px;
-        text-align: center;
+        background: #151515; border-radius: 16px;
+        padding: 26px 12px 18px 12px; text-align: center;
         border: 1px solid rgba(255,255,255,0.08);
         transition: all 0.3s;
-        min-height: 190px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        min-height: 260px;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
         position: relative;
     }
-    .item-slot.win {
-        border-color: #fff;
-        box-shadow: 0 0 25px rgba(255,255,255,0.3);
-    }
-    .item-slot.lose {
-        border-color: #555;
-        box-shadow: 0 0 25px rgba(100,100,100,0.3);
-    }
+    .item-slot.win { border-color: #fff; box-shadow: 0 0 30px rgba(255,255,255,0.35); }
+    .item-slot.lose { border-color: #555; box-shadow: 0 0 30px rgba(100,100,100,0.35); }
+
     .slot-title {
-        font-size: 10px;
-        color: #777;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 10px;
-        position: absolute;
-        top: 10px;
-        left: 0;
-        right: 0;
+        font-size: 11px; color: #777; text-transform: uppercase;
+        letter-spacing: 1px; margin-bottom: 12px;
+        position: absolute; top: 12px; left: 0; right: 0;
     }
     .item-img {
-        width: 84px;
-        height: 84px;
-        object-fit: contain;
-        margin-bottom: 8px;
-        filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+        width: 120px; height: 120px; object-fit: contain;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 0 14px rgba(255,255,255,0.25));
         transition: all 0.3s;
     }
-    .item-name {
-        font-size: 11px;
-        color: #ccc;
-        margin-bottom: 4px;
-        line-height: 1.2;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .item-value {
-        font-size: 14px;
-        font-weight: 800;
-        color: #fff;
-    }
+    .item-name { font-size: 13px; color: #ccc; margin-bottom: 5px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .item-value { font-size: 16px; font-weight: 800; color: #fff; }
 
-    /* КОЛЕСО */
+    /* КОЛЕСО — УВЕЛИЧЕНО */
     .wheel-col {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        min-width: 170px;
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; gap: 10px; min-width: 230px;
     }
-    .wheel-wrap {
-        position: relative;
-        width: 170px;
-        height: 170px;
-    }
+    .wheel-wrap { position: relative; width: 230px; height: 230px; }
     .wheel-svg { width: 100%; height: 100%; }
     .wheel-pointer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         transition: transform 7.5s cubic-bezier(0.15, 0.7, 0.15, 1);
     }
     .wheel-pointer::before {
-        content: '';
-        position: absolute;
-        top: -4px;
-        left: 50%;
+        content: ''; position: absolute; top: -6px; left: 50%;
         transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 9px solid transparent;
-        border-right: 9px solid transparent;
-        border-top: 16px solid #fff;
-        filter: drop-shadow(0 0 8px rgba(255,255,255,0.7));
+        width: 0; height: 0;
+        border-left: 11px solid transparent;
+        border-right: 11px solid transparent;
+        border-top: 20px solid #fff;
+        filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
     }
     .wheel-center {
-        position: absolute;
-        top: 50%;
-        left: 50%;
+        position: absolute; top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        width: 95px;
-        height: 95px;
-        border-radius: 50%;
+        width: 130px; height: 130px; border-radius: 50%;
         background: #0a0a0a;
         border: 2px solid rgba(255,255,255,0.15);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 3;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center; z-index: 3;
     }
-    .wheel-percent {
-        font-size: 26px;
-        font-weight: 900;
-        color: #fff;
-        line-height: 1;
-    }
-    .wheel-chance-label {
-        font-size: 9px;
-        color: #777;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-top: 3px;
-    }
+    .wheel-percent { font-size: 34px; font-weight: 900; color: #fff; line-height: 1; }
+    .wheel-chance-label { font-size: 10px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
 
     /* МИНИ-ШКАЛЫ */
-    .mini-scales {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin-top: 6px;
-        width: 100%;
-    }
-    .mini-row {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 10px;
-    }
-    .mini-row .label {
-        color: #666;
-        min-width: 32px;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 0.3px;
-    }
-    .mini-bar {
-        flex: 1;
-        height: 4px;
-        background: rgba(255,255,255,0.08);
-        border-radius: 2px;
-        overflow: hidden;
-    }
-    .mini-fill {
-        height: 100%;
-        background: #fff;
-        border-radius: 2px;
-        transition: width 0.25s;
-    }
-    .mini-value {
-        color: #fff;
-        font-weight: 700;
-        min-width: 36px;
-        text-align: right;
-    }
+    .mini-scales { display: flex; flex-direction: column; gap: 5px; margin-top: 6px; width: 100%; }
+    .mini-row { display: flex; align-items: center; gap: 6px; font-size: 10px; }
+    .mini-row .label { color: #666; min-width: 32px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px; }
+    .mini-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .mini-fill { height: 100%; background: #fff; border-radius: 2px; transition: width 0.25s; }
+    .mini-value { color: #fff; font-weight: 700; min-width: 36px; text-align: right; }
 
-    /* МНОЖИТЕЛИ — компактные */
+    /* КНОПКИ × и % — УЖЕ (в 2 раза) */
     .multiplier-grid {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        gap: 4px;
-        margin-bottom: 10px;
+        display: grid; grid-template-columns: repeat(8, 1fr);
+        gap: 4px; margin-bottom: 12px;
+        max-width: 380px; margin-left: auto; margin-right: auto;
     }
     .mult-btn {
-        background: #151515;
-        border: 1px solid rgba(255,255,255,0.1);
-        color: #fff;
-        padding: 5px 2px;
-        border-radius: 6px;
-        font-size: 9px;
-        font-weight: 800;
-        cursor: pointer;
-        transition: all 0.2s;
-        line-height: 1.1;
+        background: #151515; border: 1px solid rgba(255,255,255,0.1);
+        color: #fff; padding: 6px 2px; border-radius: 6px;
+        font-size: 9px; font-weight: 800; cursor: pointer;
+        transition: all 0.2s; line-height: 1.1;
     }
-    .mult-btn.active {
-        background: #ffffff;
-        border-color: #fff;
-        color: #000;
-    }
-    .mult-btn .chance {
-        display: block;
-        font-size: 7px;
-        color: #888;
-        font-weight: 500;
-        margin-top: 1px;
-    }
+    .mult-btn.active { background: #ffffff; border-color: #fff; color: #000; }
+    .mult-btn .chance { display: block; font-size: 7px; color: #888; font-weight: 500; margin-top: 1px; }
     .mult-btn.active .chance { color: rgba(0,0,0,0.6); }
 
-    /* КНОПКА АПГРЕЙДА */
+    /* КНОПКА АПГРЕЙДА — УЖЕ */
     .action-btn {
-        width: 100%;
-        padding: 16px;
+        display: block;
+        width: 50%;
+        margin: 0 auto 14px auto;
+        padding: 14px;
         background: #ffffff;
-        border: none;
-        border-radius: 14px;
-        color: #000;
-        font-size: 16px;
-        font-weight: 900;
-        cursor: pointer;
-        letter-spacing: 1px;
+        border: none; border-radius: 12px;
+        color: #000; font-size: 15px; font-weight: 900;
+        cursor: pointer; letter-spacing: 1px;
         text-transform: uppercase;
         transition: transform 0.1s;
-        margin-bottom: 12px;
     }
     .action-btn:active { transform: scale(0.97); }
     .action-btn:disabled { opacity: 0.5; }
 
     /* ИНВЕНТАРЬ И ЦЕЛИ */
-    .two-cols {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
+    .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .col-block {
-        background: #151515;
-        border-radius: 14px;
-        padding: 10px;
+        background: #151515; border-radius: 14px; padding: 10px;
         border: 1px solid rgba(255,255,255,0.08);
-        max-height: 240px;
-        overflow-y: auto;
+        max-height: 260px; overflow-y: auto;
     }
-    .col-block h4 {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #777;
-        margin-bottom: 8px;
-    }
+    .col-block h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #777; margin-bottom: 8px; }
     .gift-item {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px;
-        border-radius: 8px;
-        margin-bottom: 4px;
+        display: flex; align-items: center; gap: 6px;
+        padding: 6px; border-radius: 8px; margin-bottom: 4px;
         background: rgba(255,255,255,0.03);
         border: 1px solid rgba(255,255,255,0.05);
-        cursor: pointer;
-        transition: all 0.15s;
+        cursor: pointer; transition: all 0.15s;
     }
-    .gift-item.active {
-        border-color: #fff;
-        background: rgba(255,255,255,0.08);
-    }
-    .gift-item img {
-        width: 26px;
-        height: 26px;
-        object-fit: contain;
-        flex-shrink: 0;
-    }
-    .gift-item .gname {
-        flex: 1;
-        font-size: 10px;
-        color: #ccc;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .gift-item .gval {
-        font-size: 10px;
-        color: #fff;
-        font-weight: 700;
-    }
+    .gift-item.active { border-color: #fff; background: rgba(255,255,255,0.08); }
+    .gift-item img { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+    .gift-item .gname { flex: 1; font-size: 10px; color: #ccc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gift-item .gval { font-size: 10px; color: #fff; font-weight: 700; }
 
-    /* ФУТЕР */
-    .footer {
-        text-align: center;
-        margin-top: 18px;
-        font-size: 10px;
-        color: #555;
-        padding-bottom: 10px;
-    }
+    .footer { text-align: center; margin-top: 18px; font-size: 10px; color: #555; padding-bottom: 10px; }
     .footer a { color: #fff; text-decoration: none; }
 </style>
 </head>
@@ -435,7 +246,6 @@
         { api: 'SwissWatch',   name: 'Swiss Watch',  value: 2500  }
     ];
 
-    // ====== МНОЖИТЕЛИ ======
     const MULTIPLIERS = [
         { mult: 1.2, chance: 80 },
         { mult: 1.5, chance: 65 },
@@ -447,9 +257,10 @@
         { mult: 100, chance: 1  }
     ];
 
-    const SPIN_DURATION = 7500; // 7.5 секунды
+    const SPIN_DURATION = 7500;
 
-    function giftImage(apiName, size = 128) {
+    // ====== КАРТИНКИ: api.changes.tg + fallback на cdn.changes.tg ======
+    function giftImage(apiName, size = 256) {
         return `https://api.changes.tg/original/${apiName}.png?size=${size}`;
     }
 
@@ -467,19 +278,15 @@
         return 'безумие';
     }
 
-    // ====== СЕКТОР ПОБЕДЫ ======
     function updateWinArc() {
         const arc = $('win-arc');
         const cx = 50, cy = 50;
         const half = currentMult.chance * 3.6 / 2;
         const startAngle = 180 - half;
         const endAngle = 180 + half;
-
         const toRad = deg => (deg * Math.PI) / 180;
         const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
-
-        const rOuter = 49;
-        const rInner = 39;
+        const rOuter = 49, rInner = 39;
 
         const xo1 = cx + rOuter * Math.sin(toRad(startAngle));
         const yo1 = cy - rOuter * Math.cos(toRad(startAngle));
@@ -560,7 +367,7 @@
             const div = document.createElement('div');
             div.className = 'gift-item' + (it === currentItem ? ' active' : '');
             div.innerHTML = `
-                <img src="${giftImage(it.api, 64)}" alt="">
+                <img src="${giftImage(it.api, 128)}" alt="">
                 <span class="gname">${it.name}</span>
                 <span class="gval">${it.value}⭐</span>
             `;
@@ -583,7 +390,7 @@
             const div = document.createElement('div');
             div.className = 'gift-item';
             div.innerHTML = `
-                <img src="${giftImage(it.api, 64)}" alt="">
+                <img src="${giftImage(it.api, 128)}" alt="">
                 <span class="gname">${it.name}</span>
                 <span class="gval">${it.value}⭐</span>
             `;
@@ -591,7 +398,6 @@
         });
     }
 
-    // ====== КОЛЕСО ======
     function spinWheel(chance) {
         return new Promise(resolve => {
             const pointer = $('wheel-pointer');
