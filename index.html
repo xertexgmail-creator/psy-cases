@@ -150,7 +150,6 @@
         margin-top: 3px;
     }
 
-    /* ШКАЛА ПРОЦЕНТОВ И КЭФОВ — маленькая под полоской */
     .mini-scales {
         display: flex;
         flex-direction: column;
@@ -242,7 +241,6 @@
     .action-btn:active { transform: scale(0.97); }
     .action-btn:disabled { opacity: 0.5; }
 
-    /* ДВЕ КОЛОНКИ: инвентарь слева, цели справа */
     .two-cols {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -326,15 +324,12 @@
     <div class="wheel-col">
         <div class="wheel-wrap">
             <svg class="wheel-svg" viewBox="0 0 100 100">
-                <!-- фон обода -->
                 <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
-                <!-- жёлтый сектор победы: снизу, растёт вверх -->
+                <!-- жёлтый сектор победы: растёт симметрично вверх от низа -->
                 <circle id="win-arc" cx="50" cy="50" r="44" fill="none"
                         stroke="#f5c518" stroke-width="10"
                         stroke-linecap="butt"
-                        transform="rotate(90 50 50)"
                         stroke-dasharray="0 276.46"/>
-                <!-- обводка -->
                 <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(245,197,24,0.12)" stroke-width="0.5"/>
             </svg>
             <div class="wheel-pointer" id="wheel-pointer"></div>
@@ -344,7 +339,6 @@
             </div>
         </div>
 
-        <!-- МИНИ-ШКАЛЫ под колесом -->
         <div class="mini-scales">
             <div class="mini-row">
                 <span class="label">%</span>
@@ -391,7 +385,7 @@
     tg.ready();
     tg.expand();
 
-    // ====== ГИФТЫ: официальные API-имена ======
+    // ====== ГИФТЫ (точные API-имена) ======
     const ITEMS = [
         { api: 'Heart',       name: 'Heart',        value: 15    },
         { api: 'TeddyBear',   name: 'Teddy Bear',   value: 15    },
@@ -444,12 +438,21 @@
     }
 
     // ===== ЖЁЛТЫЙ СЕКТОР ПОБЕДЫ =====
-    // Сектор начинается снизу (180° в SVG) и растёт симметрично вверх.
-    // Чем выше шанс — тем больше жёлтая дуга.
+    // Сектор победы центрируется на 180° (низ колеса) и растёт симметрично вверх.
+    // SVG: круг рисуется от 0° (справа), по часовой. Используем rotate(-90) чтобы 0° был сверху,
+    // и поворачиваем dasharray так, чтобы центр дуги был на 180°.
     function updateWinArc() {
         const arc = $('win-arc');
         const winLength = (currentMult.chance / 100) * CIRCUMFERENCE;
+        // центр дуги в 180° от верха. Начало дуги = 180 - winLength/2 в градусах.
+        const halfDeg = (currentMult.chance * 3.6) / 2;
+        const startAngle = 180 - halfDeg;
+        // SVG stroke начинается с 0° (правая точка) по часовой стрелке.
+        // Поворачиваем начало дуги в нужное место через rotate.
         arc.setAttribute('stroke-dasharray', `${winLength} ${CIRCUMFERENCE}`);
+        // rotate: 0° в SVG = правая точка. Нам нужна точка startAngle от верха.
+        // От верха по часовой: угол в SVG = startAngle - 90.
+        arc.setAttribute('transform', `rotate(${startAngle - 90} 50 50)`);
     }
 
     function updatePercentUI() {
@@ -543,10 +546,9 @@
     }
 
     // ===== КОЛЕСО =====
-    // Сектор победы: снизу, растёт вверх симметрично.
-    // Стрелка: 0° = верх. Сектор победы центрируется на 180° (низ).
-    // Стрелка попадает в сектор, если угол в диапазоне:
-    //   180 - (chance*3.6/2) ... 180 + (chance*3.6/2)
+    // Сектор победы: симметрично снизу вверх, центр на 180°.
+    // Стрелка: 0° = верх (указывает вверх).
+    // Проверяем победу по ФАКТИЧЕСКОМУ углу стрелки, не по Math.random().
     function spinWheel(chance) {
         return new Promise(resolve => {
             const pointer = $('wheel-pointer');
@@ -578,7 +580,21 @@
             pointer.style.transition = 'transform 2.5s cubic-bezier(0.2, 0.7, 0.15, 1)';
             pointer.style.transform = `rotate(${totalAngle}deg)`;
 
-            setTimeout(() => resolve(isWin), 2600);
+            // Проверяем фактический угол
+            const finalAngle = ((totalAngle % 360) + 360) % 360;
+            const sectorStart = centerAngle - sectorSize / 2;
+            const sectorEnd = centerAngle + sectorSize / 2;
+
+            let realWin;
+            if (sectorStart < 0) {
+                realWin = finalAngle >= (360 + sectorStart) || finalAngle <= sectorEnd;
+            } else if (sectorEnd > 360) {
+                realWin = finalAngle >= sectorStart || finalAngle <= (sectorEnd - 360);
+            } else {
+                realWin = finalAngle >= sectorStart && finalAngle <= sectorEnd;
+            }
+
+            setTimeout(() => resolve(realWin), 2600);
         });
     }
 
