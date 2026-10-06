@@ -1,444 +1,558 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PSY GIFTS UPGRADER</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body {
-            background: radial-gradient(circle at top, #1e1e3f 0%, #0d0d1f 100%);
-            color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            padding: 16px;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>АПГРЕЙДЕР — PSY</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+        background: #0f0f0f;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        padding: 12px;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
 
-        .header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 18px;
-        }
-        .logo {
-            font-size: 18px; font-weight: 800; letter-spacing: 1px;
-            background: linear-gradient(90deg, #4a86ff, #a855f7);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .balance {
-            background: rgba(74, 134, 255, 0.15);
-            border: 1px solid rgba(74, 134, 255, 0.4);
-            padding: 6px 14px; border-radius: 20px;
-            font-size: 14px; font-weight: 600;
-        }
+    /* ===== ХЕДЕР ===== */
+    .header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 8px 12px;
+        background: linear-gradient(90deg, #1a1a1a, #141414);
+        border-radius: 12px;
+        margin-bottom: 14px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    .logo {
+        font-size: 14px; font-weight: 800; letter-spacing: 0.5px;
+        color: #f5c518;
+        text-transform: uppercase;
+    }
+    .balance {
+        background: rgba(245,197,24,0.12);
+        border: 1px solid rgba(245,197,24,0.35);
+        padding: 5px 12px; border-radius: 16px;
+        font-size: 13px; font-weight: 700;
+        color: #f5c518;
+    }
 
-        /* ===== АРЕНА ===== */
-        .arena {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 18px;
-        }
+    /* ===== АРЕНА ===== */
+    .arena {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 8px;
+        align-items: stretch;
+        margin-bottom: 14px;
+    }
+    .item-slot {
+        background: linear-gradient(160deg, #1c1c1c, #121212);
+        border-radius: 14px;
+        padding: 14px 8px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.06);
+        transition: all 0.3s;
+        min-height: 180px;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+        position: relative;
+    }
+    .item-slot.win { border-color: #22c55e; box-shadow: 0 0 25px rgba(34,197,94,0.4); }
+    .item-slot.lose { border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.4); }
 
-        .item-slot {
-            background: linear-gradient(145deg, #1a1a35, #12122a);
-            border-radius: 16px; padding: 14px 8px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.3s;
-            min-height: 130px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .item-slot.win { border-color: #22c55e; box-shadow: 0 0 25px rgba(34,197,94,0.4); }
-        .item-slot.lose { border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.4); }
+    .slot-title {
+        font-size: 10px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 10px;
+        position: absolute;
+        top: 10px; left: 0; right: 0;
+    }
 
-        .item-img {
-            width: 56px; height: 56px;
-            object-fit: contain;
-            margin-bottom: 6px;
-            filter: drop-shadow(0 0 8px rgba(74,134,255,0.3));
-        }
-        .item-name { font-size: 11px; color: #a0a0c0; margin-bottom: 4px; line-height: 1.2; }
-        .item-value { font-size: 14px; font-weight: 700; color: #4a86ff; }
+    .item-img {
+        width: 80px; height: 80px;
+        object-fit: contain;
+        margin-bottom: 8px;
+        filter: drop-shadow(0 0 12px rgba(245,197,24,0.25));
+        transition: all 0.3s;
+    }
+    .item-name {
+        font-size: 11px;
+        color: #ccc;
+        margin-bottom: 4px;
+        line-height: 1.2;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .item-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: #f5c518;
+    }
 
-        /* ===== КОЛЕСО ===== */
-        .wheel-wrap {
-            position: relative;
-            width: 100px; height: 100px;
-        }
-        .wheel-svg { width: 100%; height: 100%; }
-        .wheel-pointer {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1);
-        }
-        .wheel-pointer::before {
-            content: '';
-            position: absolute;
-            top: -6px; left: 50%;
-            transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 7px solid transparent;
-            border-right: 7px solid transparent;
-            border-top: 12px solid #fff;
-            filter: drop-shadow(0 0 6px #4a86ff);
-        }
-        .wheel-hub {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #1a1a35, #0d0d1f);
-            border: 2px solid #4a86ff;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            font-size: 10px; font-weight: 800;
-            letter-spacing: 0.5px;
-            z-index: 3;
-            box-shadow: 0 0 15px rgba(74,134,255,0.5);
-        }
-        .wheel-hub .win-txt { color: #22c55e; font-size: 9px; }
-        .wheel-hub .lose-txt { color: #ef4444; font-size: 9px; }
+    /* ===== КОЛЕСО ===== */
+    .wheel-col {
+        display: flex; flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-width: 180px;
+    }
 
-        /* ===== МНОЖИТЕЛИ ===== */
-        .multiplier-section {
-            background: rgba(255,255,255,0.03);
-            border-radius: 16px; padding: 14px; margin-bottom: 14px;
-        }
-        .section-label {
-            font-size: 11px; text-transform: uppercase;
-            letter-spacing: 1px; color: #8080a0; margin-bottom: 10px;
-        }
-        .multiplier-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
-        }
-        .mult-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; padding: 10px 4px;
-            border-radius: 10px; font-size: 13px;
-            font-weight: 600; cursor: pointer;
-            transition: all 0.2s;
-        }
-        .mult-btn.active {
-            background: linear-gradient(135deg, #4a86ff, #a855f7);
-            border-color: transparent;
-            box-shadow: 0 4px 20px rgba(74,134,255,0.5);
-        }
-        .mult-btn .chance {
-            display: block; font-size: 9px;
-            color: #a0a0c0; font-weight: 400; margin-top: 2px;
-        }
-        .mult-btn.active .chance { color: rgba(255,255,255,0.85); }
+    .wheel-wrap {
+        position: relative;
+        width: 170px; height: 170px;
+    }
+    .wheel-svg { width: 100%; height: 100%; }
+    .wheel-pointer {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        transition: transform 1.2s cubic-bezier(0.15, 0.85, 0.3, 1);
+    }
+    .wheel-pointer::before {
+        content: '';
+        position: absolute;
+        top: -4px; left: 50%;
+        transform: translateX(-50%);
+        width: 0; height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 14px solid #f5c518;
+        filter: drop-shadow(0 0 8px #f5c518);
+    }
 
-        .action-btn {
-            width: 100%; padding: 16px;
-            background: linear-gradient(135deg, #4a86ff, #a855f7);
-            border: none; border-radius: 16px;
-            color: #fff; font-size: 16px; font-weight: 700;
-            cursor: pointer; letter-spacing: 0.5px;
-            box-shadow: 0 8px 30px rgba(74,134,255,0.4);
-            transition: transform 0.1s;
-        }
-        .action-btn:active { transform: scale(0.97); }
-        .action-btn:disabled { opacity: 0.5; }
+    /* центральный круг с процентами */
+    .wheel-center {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90px; height: 90px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #1a1a1a 60%, #0f0f0f 100%);
+        border: 2px solid rgba(245,197,24,0.3);
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        z-index: 3;
+        box-shadow: 0 0 20px rgba(245,197,24,0.2) inset;
+    }
+    .wheel-percent {
+        font-size: 24px;
+        font-weight: 800;
+        color: #22c55e;
+        line-height: 1;
+        transition: color 0.3s;
+    }
+    .wheel-percent.low { color: #f5c518; }
+    .wheel-percent.danger { color: #ef4444; }
+    .wheel-chance-label {
+        font-size: 9px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 3px;
+    }
 
-        /* ===== СПИСКИ ГИФТОВ ===== */
-        .gifts-row {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-            margin-top: 16px;
-        }
-        .gifts-block {
-            background: rgba(255,255,255,0.03);
-            border-radius: 14px; padding: 10px;
-            max-height: 170px; overflow-y: auto;
-        }
-        .gifts-block h4 {
-            font-size: 10px; text-transform: uppercase;
-            letter-spacing: 1px; color: #8080a0; margin-bottom: 8px;
-        }
-        .gift-chip {
-            display: flex; align-items: center; gap: 8px;
-            padding: 6px 8px; border-radius: 8px;
-            font-size: 11px; margin-bottom: 4px;
-            background: rgba(255,255,255,0.04);
-        }
-        .gift-chip img {
-            width: 22px; height: 22px; object-fit: contain;
-        }
-        .gift-chip .gname { flex: 1; color: #d0d0e0; }
-        .gift-chip .gval { color: #4a86ff; font-weight: 600; }
+    /* полоска шанса снизу */
+    .chance-bar {
+        width: 170px; height: 6px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 3px;
+        overflow: hidden;
+        position: relative;
+    }
+    .chance-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #ef4444, #f5c518, #22c55e);
+        border-radius: 3px;
+        transition: width 0.35s ease;
+    }
 
-        /* ===== ФУТЕР ===== */
-        .footer {
-            text-align: center;
-            margin-top: 22px;
-            font-size: 10px;
-            color: #50507a;
-            padding-bottom: 10px;
-        }
-        .footer a { color: #4a86ff; text-decoration: none; }
-    </style>
+    /* ===== МНОЖИТЕЛИ ===== */
+    .multiplier-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+    .mult-btn {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #fff;
+        padding: 12px 4px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .mult-btn.active {
+        background: linear-gradient(135deg, #f5c518, #e0a800);
+        border-color: transparent;
+        color: #000;
+        box-shadow: 0 4px 20px rgba(245,197,24,0.5);
+    }
+    .mult-btn .chance {
+        display: block;
+        font-size: 9px;
+        color: #888;
+        font-weight: 400;
+        margin-top: 2px;
+    }
+    .mult-btn.active .chance { color: rgba(0,0,0,0.7); }
+
+    .action-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #f5c518, #e0a800);
+        border: none;
+        border-radius: 14px;
+        color: #000;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        box-shadow: 0 8px 30px rgba(245,197,24,0.35);
+        transition: transform 0.1s;
+        margin-bottom: 14px;
+    }
+    .action-btn:active { transform: scale(0.97); }
+    .action-btn:disabled { opacity: 0.5; }
+
+    /* ===== СПИСКИ ГИФТОВ ===== */
+    .gifts-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .gifts-block {
+        background: #161616;
+        border-radius: 14px;
+        padding: 10px;
+        border: 1px solid rgba(255,255,255,0.05);
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    .gifts-block h4 {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        margin-bottom: 8px;
+    }
+    .gift-chip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 11px;
+        margin-bottom: 4px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.04);
+    }
+    .gift-chip img {
+        width: 26px; height: 26px;
+        object-fit: contain;
+    }
+    .gift-chip .gname {
+        flex: 1;
+        color: #d0d0e0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .gift-chip .gval {
+        color: #f5c518;
+        font-weight: 700;
+    }
+
+    /* ===== ФУТЕР ===== */
+    .footer {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 10px;
+        color: #555;
+        padding-bottom: 10px;
+    }
+    .footer a { color: #f5c518; text-decoration: none; }
+</style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">PSY GIFTS UPGRADER</div>
-        <div class="balance">⭐ <span id="balance">1000</span></div>
+
+<div class="header">
+    <div class="logo">🔱 Апгрейдер Gifts</div>
+    <div class="balance">⭐ <span id="balance">1000</span></div>
+</div>
+
+<div class="arena">
+    <div class="item-slot" id="from-card">
+        <div class="slot-title">Твой гифт</div>
+        <img class="item-img" id="from-img" src="" alt="">
+        <div class="item-name" id="from-name">—</div>
+        <div class="item-value" id="from-value">—</div>
     </div>
 
-    <div class="arena">
-        <div class="item-slot" id="from-card">
-            <img class="item-img" id="from-img" src="" alt="">
-            <div class="item-name" id="from-name">—</div>
-            <div class="item-value" id="from-value">—</div>
-        </div>
-
+    <div class="wheel-col">
         <div class="wheel-wrap">
             <svg class="wheel-svg" viewBox="0 0 100 100">
-                <!-- колесо: верхняя половина зелёная, нижняя красная -->
-                <path d="M 50 50 L 50 5 A 45 45 0 0 1 50 95 Z" fill="#ef4444" opacity="0.9"/>
-                <path d="M 50 50 L 50 95 A 45 45 0 0 1 50 5 Z" fill="#22c55e" opacity="0.9"/>
-                <circle cx="50" cy="50" r="45" fill="none" stroke="#4a86ff" stroke-width="1.5" opacity="0.6"/>
+                <circle cx="50" cy="50" r="46" fill="#141414" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                <path d="M 50 50 L 50 4 A 46 46 0 0 1 50 96 Z" fill="#1f1f1f"/>
+                <path d="M 50 50 L 50 96 A 46 46 0 0 1 50 4 Z" fill="#1a1a1a"/>
+                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(245,197,24,0.25)" stroke-width="1"/>
             </svg>
             <div class="wheel-pointer" id="wheel-pointer"></div>
-            <div class="wheel-hub">
-                <span class="win-txt">ДА</span>
-                <span class="lose-txt">НЕТ</span>
+            <div class="wheel-center">
+                <div class="wheel-percent" id="wheel-percent">65%</div>
+                <div class="wheel-chance-label" id="wheel-label">средний</div>
             </div>
         </div>
-
-        <div class="item-slot" id="to-card">
-            <img class="item-img" id="to-img" src="" alt="" style="opacity:0.4;">
-            <div class="item-name">Результат</div>
-            <div class="item-value" id="to-value">—</div>
+        <div class="chance-bar">
+            <div class="chance-bar-fill" id="chance-bar-fill"></div>
         </div>
     </div>
 
-    <div class="multiplier-section">
-        <div class="section-label">Множитель</div>
-        <div class="multiplier-grid" id="mult-grid"></div>
+    <div class="item-slot" id="to-card">
+        <div class="slot-title">Цель</div>
+        <img class="item-img" id="to-img" src="" alt="" style="opacity:0.35;">
+        <div class="item-name" id="to-name">—</div>
+        <div class="item-value" id="to-value">—</div>
     </div>
+</div>
 
-    <button class="action-btn" id="upgrade-btn">АПГРЕЙД</button>
+<div class="multiplier-grid" id="mult-grid"></div>
 
-    <div class="gifts-row">
-        <div class="gifts-block">
-            <h4>У тебя сейчас</h4>
-            <div id="my-gifts"></div>
-        </div>
-        <div class="gifts-block">
-            <h4>Твои цели</h4>
-            <div id="target-gifts"></div>
-        </div>
+<button class="action-btn" id="upgrade-btn">Прокачать</button>
+
+<div class="gifts-row">
+    <div class="gifts-block">
+        <h4>Мои гифты</h4>
+        <div id="my-gifts"></div>
     </div>
-
-    <div class="footer">
-        powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a> (api.changes.tg)
+    <div class="gifts-block">
+        <h4>Доступные цели</h4>
+        <div id="target-gifts"></div>
     </div>
+</div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+<div class="footer">
+    powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a>
+</div>
 
-        // ====== ГИФТЫ TELEGRAM (официальные имена для API) ======
-        const ITEMS = [
-            { api: 'Heart',       name: 'Heart',       value: 15    },
-            { api: 'TeddyBear',   name: 'Teddy Bear',  value: 15    },
-            { api: 'Present',     name: 'Present',     value: 25    },
-            { api: 'Rose',        name: 'Rose',        value: 25    },
-            { api: 'Cake',        name: 'Cake',        value: 50    },
-            { api: 'Bouquet',     name: 'Bouquet',     value: 50    },
-            { api: 'Rocket',      name: 'Rocket',      value: 50    },
-            { api: 'Champagne',   name: 'Champagne',   value: 50    },
-            { api: 'Trophy',      name: 'Trophy',      value: 100   },
-            { api: 'Crown',       name: 'Crown',       value: 100   },
-            { api: 'Ring',        name: 'Ring',        value: 100   },
-            { api: 'Diamond',     name: 'Diamond',     value: 100   },
-            { api: 'JollyChimp',  name: 'Jolly Chimp', value: 250   },
-            { api: 'PlushPepe',   name: 'Plush Pepe',  value: 500   },
-            { api: 'SnoopDogg',   name: 'Snoop Dogg',  value: 1000  },
-            { api: 'Papakha',     name: 'Papakha',     value: 2500  }
-        ];
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
 
-        const MULTIPLIERS = [
-            { mult: 1.2, chance: 80 },
-            { mult: 1.5, chance: 65 },
-            { mult: 2.0, chance: 50 },
-            { mult: 3.0, chance: 33 },
-            { mult: 5.0, chance: 20 },
-            { mult: 10,  chance: 10 },
-            { mult: 25,  chance: 4  },
-            { mult: 100, chance: 1  }
-        ];
+    const ITEMS = [
+        { api: 'Heart',      name: 'Heart',       value: 15    },
+        { api: 'TeddyBear',  name: 'Teddy Bear',  value: 15    },
+        { api: 'Present',    name: 'Present',     value: 25    },
+        { api: 'Rose',       name: 'Rose',        value: 25    },
+        { api: 'Cake',       name: 'Cake',        value: 50    },
+        { api: 'Bouquet',    name: 'Bouquet',     value: 50    },
+        { api: 'Rocket',     name: 'Rocket',      value: 50    },
+        { api: 'Champagne',  name: 'Champagne',   value: 50    },
+        { api: 'Trophy',     name: 'Trophy',      value: 100   },
+        { api: 'Crown',      name: 'Crown',       value: 100   },
+        { api: 'Ring',       name: 'Ring',        value: 100   },
+        { api: 'Diamond',    name: 'Diamond',     value: 100   },
+        { api: 'JollyChimp', name: 'Jolly Chimp', value: 250   },
+        { api: 'PlushPepe',  name: 'Plush Pepe',  value: 500   },
+        { api: 'SnoopDogg',  name: 'Snoop Dogg',  value: 1000  },
+        { api: 'Papakha',    name: 'Papakha',     value: 2500  }
+    ];
 
-        // ====== ФУНКЦИЯ ПОЛУЧЕНИЯ КАРТИНКИ ГИФТА ======
-        function giftImage(apiName, size = 128) {
-            return `https://api.changes.tg/original/${apiName}.png?size=${size}`;
-        }
+    const MULTIPLIERS = [
+        { mult: 1.2, chance: 80 },
+        { mult: 1.5, chance: 65 },
+        { mult: 2.0, chance: 50 },
+        { mult: 3.0, chance: 33 },
+        { mult: 5.0, chance: 20 },
+        { mult: 10,  chance: 10 },
+        { mult: 25,  chance: 4  },
+        { mult: 100, chance: 1  }
+    ];
 
-        let balance = 1000;
-        let currentItem = ITEMS[3];
-        let currentMult = MULTIPLIERS[1];
-        let isSpinning = false;
+    function giftImage(apiName, size = 128) {
+        return `https://api.changes.tg/original/${apiName}.png?size=${size}`;
+    }
 
-        const $ = id => document.getElementById(id);
+    let balance = 1000;
+    let currentItem = ITEMS[3];
+    let currentMult = MULTIPLIERS[1];
+    let isSpinning = false;
 
-        // ====== МНОЖИТЕЛИ ======
-        function renderMultipliers() {
-            const grid = $('mult-grid');
-            grid.innerHTML = '';
-            MULTIPLIERS.forEach((m, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'mult-btn' + (i === 1 ? ' active' : '');
-                btn.innerHTML = `×${m.mult}<span class="chance">${m.chance}%</span>`;
-                btn.onclick = () => {
-                    if (isSpinning) return;
-                    document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentMult = m;
-                    updatePreview();
-                };
-                grid.appendChild(btn);
-            });
-        }
+    const $ = id => document.getElementById(id);
 
-        function updatePreview() {
-            const targetValue = Math.round(currentItem.value * currentMult.mult);
-            $('to-value').textContent = `~${targetValue} ⭐`;
-            $('to-img').src = giftImage(currentItem.api);
-            $('to-img').style.opacity = '0.4';
-            $('to-card').className = 'item-slot';
-        }
+    function chanceLabel(c) {
+        if (c >= 60) return 'высокий';
+        if (c >= 30) return 'средний';
+        if (c >= 10) return 'низкий';
+        return 'безумие';
+    }
 
-        function updateFromCard() {
-            $('from-img').src = giftImage(currentItem.api);
-            $('from-img').style.opacity = '1';
-            $('from-name').textContent = currentItem.name;
-            $('from-value').textContent = currentItem.value + ' ⭐';
-            updatePreview();
-        }
+    function updatePercentUI() {
+        const p = $('wheel-percent');
+        p.textContent = currentMult.chance + '%';
+        p.classList.remove('low', 'danger');
+        if (currentMult.chance < 30) p.classList.add('danger');
+        else if (currentMult.chance < 60) p.classList.add('low');
+        $('wheel-label').textContent = chanceLabel(currentMult.chance);
+        $('chance-bar-fill').style.width = currentMult.chance + '%';
+    }
 
-        function selectRandomItem() {
-            const pool = ITEMS.slice(0, ITEMS.length - 4);
-            return pool[Math.floor(Math.random() * pool.length)];
-        }
+    function renderMultipliers() {
+        const grid = $('mult-grid');
+        grid.innerHTML = '';
+        MULTIPLIERS.forEach((m, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'mult-btn' + (i === 1 ? ' active' : '');
+            btn.innerHTML = `×${m.mult}<span class="chance">${m.chance}%</span>`;
+            btn.onclick = () => {
+                if (isSpinning) return;
+                document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMult = m;
+                updatePercentUI();
+                updatePreview();
+            };
+            grid.appendChild(btn);
+        });
+    }
 
-        // ====== КОЛЕСО ======
-        // Колесо разделено пополам: верх = НЕТ (красный), низ = ДА (зелёный) визуально.
-        // Стрелка стартует сверху и вращается по часовой стрелке.
-        // Шанс win определяет, в какую половину она попадёт.
-        function spinWheel(chance) {
-            return new Promise(resolve => {
-                const pointer = $('wheel-pointer');
+    function updatePreview() {
+        const targetValue = Math.round(currentItem.value * currentMult.mult);
+        const targetItem = ITEMS.reduce((prev, curr) =>
+            Math.abs(curr.value - targetValue) < Math.abs(prev.value - targetValue) ? curr : prev
+        );
+        $('to-img').src = giftImage(targetItem.api);
+        $('to-img').style.opacity = '0.35';
+        $('to-name').textContent = targetItem.name;
+        $('to-value').textContent = targetItem.value + ' ⭐';
+        $('to-card').className = 'item-slot';
+    }
 
-                // Сначала выбираем: win или lose по вероятности
-                const isWin = Math.random() * 100 < chance;
+    function updateFromCard() {
+        $('from-img').src = giftImage(currentItem.api);
+        $('from-img').style.opacity = '1';
+        $('from-name').textContent = currentItem.name;
+        $('from-value').textContent = currentItem.value + ' ⭐';
+        updatePreview();
+    }
 
-                // Сектор выигрыша — верхняя половина (0-180°).
-                // Сектор проигрыша — нижняя (180-360°).
-                let angle;
-                if (isWin) {
-                    // угол в верхней половине (0–180), но не ровно на границе
-                    angle = 5 + Math.random() * 170;
-                } else {
-                    // угол в нижней половине (180–360)
-                    angle = 185 + Math.random() * 170;
-                }
+    function selectRandomItem() {
+        const pool = ITEMS.slice(0, ITEMS.length - 4);
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
 
-                // Добавляем 3–5 оборотов для азарта
-                const turns = 3 + Math.floor(Math.random() * 3);
-                const totalAngle = turns * 360 + angle;
+    // ===== КОЛЕСО: 1.2 сек, резкая остановка =====
+    function spinWheel(chance) {
+        return new Promise(resolve => {
+            const pointer = $('wheel-pointer');
 
-                // Сброс без анимации
-                pointer.style.transition = 'none';
-                pointer.style.transform = 'rotate(0deg)';
-                void pointer.offsetWidth;
+            const isWin = Math.random() * 100 < chance;
 
-                // Крутим
-                pointer.style.transition = 'transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1)';
-                pointer.style.transform = `rotate(${totalAngle}deg)`;
-
-                setTimeout(() => resolve(isWin), 3300);
-            });
-        }
-
-        // ====== АПГРЕЙД ======
-        async function doUpgrade() {
-            if (isSpinning) return;
-
-            isSpinning = true;
-            $('upgrade-btn').disabled = true;
-            $('to-card').className = 'item-slot';
-
-            const targetValue = Math.round(currentItem.value * currentMult.mult);
-            const win = await spinWheel(currentMult.chance);
-
-            if (win) {
-                const newItem = ITEMS.reduce((prev, curr) =>
-                    Math.abs(curr.value - targetValue) < Math.abs(prev.value - targetValue) ? curr : prev
-                );
-
-                $('to-img').src = giftImage(newItem.api);
-                $('to-img').style.opacity = '1';
-                $('to-value').textContent = newItem.value + ' ⭐';
-                $('to-card').classList.add('win');
-
-                tg.HapticFeedback?.notificationOccurred('success');
-                currentItem = newItem;
+            let angle;
+            if (isWin) {
+                angle = 5 + Math.random() * 170;
             } else {
-                $('to-img').src = giftImage(currentItem.api);
-                $('to-img').style.opacity = '0.15';
-                $('to-value').textContent = 'Провал';
-                $('to-card').classList.add('lose');
-
-                tg.HapticFeedback?.notificationOccurred('error');
-                balance = Math.max(0, balance - currentItem.value);
-                $('balance').textContent = balance;
-                currentItem = selectRandomItem();
+                angle = 185 + Math.random() * 170;
             }
 
-            renderGiftLists();
+            const turns = 2 + Math.floor(Math.random() * 2); // 2-3 оборота
+            const totalAngle = turns * 360 + angle;
 
-            setTimeout(() => {
-                updateFromCard();
-                isSpinning = false;
-                $('upgrade-btn').disabled = false;
-            }, 900);
+            pointer.style.transition = 'none';
+            pointer.style.transform = 'rotate(0deg)';
+            void pointer.offsetWidth;
+
+            pointer.style.transition = 'transform 1.2s cubic-bezier(0.15, 0.85, 0.3, 1)';
+            pointer.style.transform = `rotate(${totalAngle}deg)`;
+
+            setTimeout(() => resolve(isWin), 1300);
+        });
+    }
+
+    async function doUpgrade() {
+        if (isSpinning) return;
+
+        isSpinning = true;
+        $('upgrade-btn').disabled = true;
+        $('to-card').className = 'item-slot';
+
+        const targetValue = Math.round(currentItem.value * currentMult.mult);
+        const win = await spinWheel(currentMult.chance);
+
+        if (win) {
+            const newItem = ITEMS.reduce((prev, curr) =>
+                Math.abs(curr.value - targetValue) < Math.abs(prev.value - targetValue) ? curr : prev
+            );
+
+            $('to-img').src = giftImage(newItem.api);
+            $('to-img').style.opacity = '1';
+            $('to-name').textContent = newItem.name;
+            $('to-value').textContent = newItem.value + ' ⭐';
+            $('to-card').classList.add('win');
+
+            tg.HapticFeedback?.notificationOccurred('success');
+            currentItem = newItem;
+        } else {
+            $('to-img').src = giftImage(currentItem.api);
+            $('to-img').style.opacity = '0.15';
+            $('to-name').textContent = 'Провал';
+            $('to-value').textContent = '−' + currentItem.value + ' ⭐';
+            $('to-card').classList.add('lose');
+
+            tg.HapticFeedback?.notificationOccurred('error');
+            balance = Math.max(0, balance - currentItem.value);
+            $('balance').textContent = balance;
+            currentItem = selectRandomItem();
         }
 
-        // ====== СПИСКИ ГИФТОВ ======
-        function renderGiftLists() {
-            const my = $('my-gifts');
-            my.innerHTML = '';
-            const idx = ITEMS.indexOf(currentItem);
-            const myPool = ITEMS.slice(Math.max(0, idx - 2), idx + 3);
-            myPool.forEach(it => {
-                const div = document.createElement('div');
-                div.className = 'gift-chip';
-                div.innerHTML = `<img src="${giftImage(it.api, 64)}" alt=""><span class="gname">${it.name}</span><span class="gval">${it.value}⭐</span>`;
-                my.appendChild(div);
-            });
-
-            const target = $('target-gifts');
-            target.innerHTML = '';
-            const targets = ITEMS.slice(idx + 1, idx + 6);
-            targets.forEach(it => {
-                const div = document.createElement('div');
-                div.className = 'gift-chip';
-                div.innerHTML = `<img src="${giftImage(it.api, 64)}" alt=""><span class="gname">${it.name}</span><span class="gval">${it.value}⭐</span>`;
-                target.appendChild(div);
-            });
-        }
-
-        // ====== СТАРТ ======
-        renderMultipliers();
-        updateFromCard();
         renderGiftLists();
-        $('upgrade-btn').onclick = doUpgrade;
-    </script>
+
+        setTimeout(() => {
+            updateFromCard();
+            isSpinning = false;
+            $('upgrade-btn').disabled = false;
+        }, 600);
+    }
+
+    function renderGiftLists() {
+        const my = $('my-gifts');
+        my.innerHTML = '';
+        const idx = ITEMS.indexOf(currentItem);
+        const myPool = ITEMS.slice(Math.max(0, idx - 2), idx + 3);
+        myPool.forEach(it => {
+            const div = document.createElement('div');
+            div.className = 'gift-chip';
+            div.innerHTML = `<img src="${giftImage(it.api, 64)}" alt=""><span class="gname">${it.name}</span><span class="gval">${it.value}⭐</span>`;
+            my.appendChild(div);
+        });
+
+        const target = $('target-gifts');
+        target.innerHTML = '';
+        const targets = ITEMS.slice(idx + 1, idx + 6);
+        targets.forEach(it => {
+            const div = document.createElement('div');
+            div.className = 'gift-chip';
+            div.innerHTML = `<img src="${giftImage(it.api, 64)}" alt=""><span class="gname">${it.name}</span><span class="gval">${it.value}⭐</span>`;
+            target.appendChild(div);
+        });
+    }
+
+    renderMultipliers();
+    updateFromCard();
+    updatePercentUI();
+    renderGiftLists();
+    $('upgrade-btn').onclick = doUpgrade;
+</script>
 </body>
 </html>
