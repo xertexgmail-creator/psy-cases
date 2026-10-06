@@ -7,55 +7,137 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 10px; min-height: 100vh; overflow-x: hidden; }
+    html, body { overflow-x: hidden; }
+    body {
+        background: #0a0a0a;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        padding: 10px;
+        min-height: 100vh;
+        position: relative;
+    }
+    /* ГРАДИЕНТЫ ФОНА */
+    body::before {
+        content: '';
+        position: fixed;
+        top: -20%; left: -20%;
+        width: 140%; height: 60%;
+        background: radial-gradient(ellipse at center, rgba(74,134,255,0.15) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+    }
+    body::after {
+        content: '';
+        position: fixed;
+        bottom: -20%; right: -20%;
+        width: 140%; height: 60%;
+        background: radial-gradient(ellipse at center, rgba(168,85,247,0.12) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+    }
+    body > * { position: relative; z-index: 1; }
 
     /* ХЕДЕР */
-    .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #151515; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.08); }
-    .logo { font-size: 18px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
-    .logo .dot { color: #888; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: linear-gradient(135deg, #1a1a1a, #121212); border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .logo { font-size: 18px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo .dot { color: #888; -webkit-text-fill-color: #888; }
     .balance-wrap { display: flex; align-items: center; gap: 6px; }
-    .balance { display: flex; align-items: center; gap: 5px; background: #fff; color: #000; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 800; }
+    .balance { display: flex; align-items: center; gap: 5px; background: #fff; color: #000; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 800; box-shadow: 0 0 15px rgba(255,255,255,0.2); }
     .star-svg { width: 14px; height: 14px; }
-    .plus-btn { width: 32px; height: 32px; border-radius: 50%; background: #fff; color: #000; border: none; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+    .plus-btn { width: 32px; height: 32px; border-radius: 50%; background: #fff; color: #000; border: none; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 0 15px rgba(255,255,255,0.25); }
     .plus-btn:active { transform: scale(0.92); }
 
     /* АРЕНА */
-    .arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: stretch; margin-bottom: 10px; }
-    .item-slot { background: #151515; border-radius: 14px; padding: 22px 8px 14px 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s; min-height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
-    .item-slot.win { border-color: #fff; box-shadow: 0 0 25px rgba(255,255,255,0.35); }
-    .item-slot.lose { border-color: #555; box-shadow: 0 0 25px rgba(100,100,100,0.35); }
+    .arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; margin-bottom: 12px; }
+    .item-slot {
+        background: linear-gradient(160deg, #1c1c1c, #121212);
+        border-radius: 16px;
+        padding: 26px 10px 16px 10px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.08);
+        transition: all 0.3s;
+        min-height: 260px;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+        position: relative;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .item-slot.win { border-color: #22c55e; box-shadow: 0 0 40px rgba(34,197,94,0.5), inset 0 0 30px rgba(34,197,94,0.15); }
+    .item-slot.lose { border-color: #ef4444; box-shadow: 0 0 40px rgba(239,68,68,0.4), inset 0 0 30px rgba(239,68,68,0.15); }
     .slot-title { font-size: 10px; color: #777; text-transform: uppercase; letter-spacing: 1px; position: absolute; top: 10px; left: 0; right: 0; }
-    .slot-icon { width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; position: relative; }
-    .slot-icon .emoji-fb { font-size: 68px; line-height: 1; }
-    .slot-icon img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255,255,255,0.25)); }
-    .item-name { font-size: 12px; color: #ccc; margin-bottom: 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .item-value { font-size: 15px; font-weight: 800; color: #fff; }
+    .slot-icon { width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; position: relative; }
+    .slot-icon .emoji-fb { font-size: 82px; line-height: 1; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
+    .slot-icon img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
+    .item-name { font-size: 13px; color: #ccc; margin-bottom: 5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .item-value { font-size: 17px; font-weight: 800; color: #fff; }
 
-    /* КОЛЕСО */
-    .wheel-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-width: 210px; }
-    .wheel-wrap { position: relative; width: 210px; height: 210px; }
-    .wheel-svg { width: 100%; height: 100%; }
+    /* КОЛЕСО — УВЕЛИЧЕНО */
+    .wheel-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-width: 280px; }
+    .wheel-wrap { position: relative; width: 280px; height: 280px; }
+    .wheel-wrap::before {
+        content: '';
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .wheel-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
     .wheel-pointer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: transform 7.5s cubic-bezier(0.15, 0.7, 0.15, 1); }
-    .wheel-pointer::before { content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)); }
-    .wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 118px; height: 118px; border-radius: 50%; background: #0a0a0a; border: 2px solid rgba(255,255,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3; }
-    .wheel-percent { font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
-    .wheel-chance-label { font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .wheel-pointer::before {
+        content: '';
+        position: absolute;
+        top: -8px; left: 50%;
+        transform: translateX(-50%);
+        width: 0; height: 0;
+        border-left: 13px solid transparent;
+        border-right: 13px solid transparent;
+        border-top: 22px solid #fff;
+        filter: drop-shadow(0 0 12px rgba(255,255,255,0.9));
+    }
+    .wheel-center {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 158px; height: 158px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
+        border: 2px solid rgba(255,255,255,0.18);
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        z-index: 3;
+        box-shadow: 0 0 30px rgba(255,255,255,0.1), inset 0 0 30px rgba(0,0,0,0.5);
+    }
+    .wheel-percent { font-size: 38px; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 15px rgba(255,255,255,0.5); }
+    .wheel-chance-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
     /* КНОПКИ × */
-    .multiplier-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-bottom: 10px; max-width: 400px; margin-left: auto; margin-right: auto; }
-    .mult-btn { background: #151515; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 2px; border-radius: 6px; font-size: 9px; font-weight: 800; cursor: pointer; transition: all 0.2s; line-height: 1.1; }
-    .mult-btn.active { background: #fff; border-color: #fff; color: #000; }
+    .multiplier-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-bottom: 12px; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .mult-btn { background: linear-gradient(160deg, #1c1c1c, #121212); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 2px; border-radius: 6px; font-size: 9px; font-weight: 800; cursor: pointer; transition: all 0.2s; line-height: 1.1; }
+    .mult-btn.active { background: #fff; border-color: #fff; color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
     .mult-btn .chance { display: block; font-size: 7px; color: #888; font-weight: 500; margin-top: 1px; }
     .mult-btn.active .chance { color: rgba(0,0,0,0.6); }
 
     /* КНОПКА АПГРЕЙДА */
-    .action-btn { display: block; width: 55%; margin: 0 auto 12px auto; padding: 13px; background: #fff; border: none; border-radius: 12px; color: #000; font-size: 14px; font-weight: 900; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; transition: transform 0.1s; }
+    .action-btn {
+        display: block;
+        width: 55%;
+        margin: 0 auto 14px auto;
+        padding: 15px;
+        background: linear-gradient(135deg, #ffffff, #d0d0d0);
+        border: none; border-radius: 14px;
+        color: #000; font-size: 15px; font-weight: 900;
+        cursor: pointer; letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: transform 0.1s, box-shadow 0.2s;
+        box-shadow: 0 0 25px rgba(255,255,255,0.25);
+    }
     .action-btn:active { transform: scale(0.97); }
-    .action-btn:disabled { opacity: 0.35; }
+    .action-btn:disabled { opacity: 0.35; box-shadow: none; }
 
-    /* НИЖНИЕ ПАНЕЛИ */
+    /* ПАНЕЛИ */
     .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .panel { background: #151515; border-radius: 12px; padding: 10px; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; max-height: 380px; }
+    .panel { background: linear-gradient(160deg, #1a1a1a, #101010); border-radius: 14px; padding: 10px; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; max-height: 400px; }
     .panel h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #777; margin-bottom: 8px; flex-shrink: 0; }
     .panel-body { overflow-y: auto; flex: 1; }
 
@@ -68,36 +150,81 @@
     .price-row span { font-size: 9px; color: #666; text-transform: uppercase; }
     .price-row input { flex: 1; min-width: 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 10px; padding: 4px 6px; border-radius: 6px; outline: none; }
 
-    /* СЕТКА ПРЕДМЕТОВ */
+    /* СЕТКА */
     .item-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-    .grid-slot { background: #1c1c1c; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 8px 4px; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; }
+    .grid-slot { background: linear-gradient(160deg, #1c1c1c, #131313); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 8px 4px; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; }
     .grid-slot:active { transform: scale(0.96); }
-    .grid-slot.active { border-color: #fff; background: rgba(255,255,255,0.08); }
-    .grid-slot.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+    .grid-slot.selected { border-color: #fff; background: rgba(255,255,255,0.08); box-shadow: 0 0 15px rgba(255,255,255,0.25); }
     .grid-slot.disabled { opacity: 0.3; pointer-events: none; }
-    .grid-slot .slot-icon-sm { width: 44px; height: 44px; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center; position: relative; }
-    .grid-slot .slot-icon-sm .emoji-fb { font-size: 28px; line-height: 1; }
+    .grid-slot .slot-icon-sm { width: 48px; height: 48px; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .grid-slot .slot-icon-sm .emoji-fb { font-size: 30px; line-height: 1; }
     .grid-slot .slot-icon-sm img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
     .grid-slot .gname { font-size: 8px; color: #aaa; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .grid-slot .gval { font-size: 9px; color: #fff; font-weight: 700; margin-top: 2px; }
-    .grid-slot .count-badge { position: absolute; top: 3px; right: 3px; background: #fff; color: #000; font-size: 8px; font-weight: 800; padding: 1px 4px; border-radius: 6px; }
 
     .empty-msg { text-align: center; color: #555; font-size: 11px; padding: 20px 10px; }
 
     /* МОДАЛКА */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
     .modal-overlay.active { display: flex; }
-    .modal { background: #151515; border-radius: 16px; padding: 20px; max-width: 320px; width: 100%; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-    .modal .slot-icon { margin: 0 auto 10px; }
+    .modal { background: linear-gradient(160deg, #1c1c1c, #101010); border-radius: 16px; padding: 22px; max-width: 320px; width: 100%; border: 1px solid rgba(255,255,255,0.1); text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+    .modal .slot-icon { margin: 0 auto 12px; width: 100px; height: 100px; }
+    .modal .slot-icon .emoji-fb { font-size: 64px; }
     .modal h3 { font-size: 16px; margin-bottom: 6px; }
-    .modal .price { font-size: 20px; font-weight: 900; margin-bottom: 16px; }
+    .modal .price { font-size: 22px; font-weight: 900; margin-bottom: 18px; color: #fff; }
     .modal-btns { display: flex; gap: 8px; }
-    .modal-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .modal-btn { flex: 1; padding: 13px; border-radius: 10px; border: none; font-size: 13px; font-weight: 800; cursor: pointer; }
     .modal-btn.buy { background: #fff; color: #000; }
     .modal-btn.cancel { background: rgba(255,255,255,0.1); color: #fff; }
+    .modal-btn.buy:disabled { opacity: 0.4; }
+
+    /* КОНФЕТИ И ЭФФЕКТЫ */
+    .confetti {
+        position: fixed;
+        width: 10px; height: 10px;
+        border-radius: 2px;
+        pointer-events: none;
+        z-index: 999;
+        animation: confetti-burst 1.6s ease-out forwards;
+    }
+    @keyframes confetti-burst {
+        0% { transform: translate(0,0) rotate(0); opacity: 1; }
+        100% { transform: translate(var(--dx), var(--dy)) rotate(720deg); opacity: 0; }
+    }
+    .flash-red {
+        position: fixed; inset: 0;
+        background: transparent;
+        pointer-events: none;
+        z-index: 998;
+    }
+    .flash-red.active { animation: flash-red-anim 0.6s; }
+    @keyframes flash-red-anim {
+        0% { background: rgba(239,68,68,0); }
+        25% { background: rgba(239,68,68,0.4); }
+        100% { background: rgba(239,68,68,0); }
+    }
+    .shake { animation: shake-anim 0.5s; }
+    @keyframes shake-anim {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-10px); }
+        40% { transform: translateX(10px); }
+        60% { transform: translateX(-7px); }
+        80% { transform: translateX(7px); }
+    }
 
     .footer { text-align: center; margin-top: 14px; font-size: 9px; color: #555; padding-bottom: 8px; }
     .footer a { color: #fff; text-decoration: none; }
+
+    /* мобильная адаптация */
+    @media (max-width: 500px) {
+        .wheel-wrap { width: 220px; height: 220px; }
+        .wheel-col { min-width: 220px; }
+        .wheel-center { width: 126px; height: 126px; }
+        .wheel-percent { font-size: 30px; }
+        .item-slot { min-height: 220px; }
+        .slot-icon { width: 100px; height: 100px; }
+        .slot-icon .emoji-fb { font-size: 64px; }
+    }
 </style>
 </head>
 <body>
@@ -109,7 +236,7 @@
             <svg class="star-svg" viewBox="0 0 24 24" fill="#f5c518"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <span id="balance">1000</span>
         </div>
-        <button class="plus-btn" id="plus-btn" title="Добавить монеты">+</button>
+        <button class="plus-btn" id="plus-btn">+</button>
     </div>
 </div>
 
@@ -124,8 +251,14 @@
     <div class="wheel-col">
         <div class="wheel-wrap">
             <svg class="wheel-svg" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
-                <path id="win-arc" fill="#fff" opacity="0.85"/>
+                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
+                <path id="win-arc" fill="url(#winGrad)" opacity="0.95"/>
+                <defs>
+                    <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
+                        <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+                    </linearGradient>
+                </defs>
             </svg>
             <div class="wheel-pointer" id="wheel-pointer"></div>
             <div class="wheel-center">
@@ -186,7 +319,6 @@
     powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a>
 </div>
 
-<!-- МОДАЛКА ПОКУПКИ -->
 <div class="modal-overlay" id="buy-modal">
     <div class="modal">
         <div class="slot-icon" id="buy-icon"></div>
@@ -199,39 +331,40 @@
     </div>
 </div>
 
+<div class="flash-red" id="flash-red"></div>
+
 <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
 
-    // ====== КАТАЛОГ ГИФТОВ (правильные имена из api.changes.tg/gifts) ======
+    // ====== КАТАЛОГ (api = имя для API, slug = имя для Fragment CDN) ======
     const CATALOG = [
-        { api: 'Toy Bear',        name: 'Toy Bear',        value: 15,   emoji: '🧸' },
-        { api: 'Heart Locket',    name: 'Heart Locket',    value: 25,   emoji: '❤️' },
-        { api: 'Big Year',        name: 'Big Year',        value: 40,   emoji: '🎊' },
-        { api: 'Desk Calendar',   name: 'Desk Calendar',   value: 60,   emoji: '📅' },
-        { api: 'Jingle Bells',    name: 'Jingle Bells',    value: 80,   emoji: '🔔' },
-        { api: 'Homemade Cake',   name: 'Homemade Cake',   value: 110,  emoji: '🎂' },
-        { api: 'Eternal Rose',    name: 'Eternal Rose',    value: 150,  emoji: '🌹' },
-        { api: 'Magic Potion',    name: 'Magic Potion',    value: 200,  emoji: '🧪' },
-        { api: 'Crystal Ball',    name: 'Crystal Ball',    value: 280,  emoji: '🔮' },
-        { api: 'Top Hat',         name: 'Top Hat',         value: 380,  emoji: '🎩' },
-        { api: 'Durov\'s Cap',    name: 'Durov\'s Cap',    value: 500,  emoji: '🧢' },
-        { api: 'Diamond Ring',    name: 'Diamond Ring',    value: 700,  emoji: '💍' },
-        { api: 'Sakura Flower',   name: 'Sakura Flower',   value: 950,  emoji: '🌸' },
-        { api: 'Jolly Chimp',     name: 'Jolly Chimp',     value: 1300, emoji: '🐵' },
-        { api: 'Plush Pepe',      name: 'Plush Pepe',      value: 1800, emoji: '🐸' },
-        { api: 'Snoop Dogg',      name: 'Snoop Dogg',      value: 2500, emoji: '🐶' },
-        { api: 'Swiss Watch',     name: 'Swiss Watch',     value: 3500, emoji: '⌚' },
-        { api: 'Precious Peach',  name: 'Precious Peach',  value: 5000, emoji: '🍑' },
-        { api: 'Signet Ring',     name: 'Signet Ring',     value: 7000, emoji: '💎' },
-        { api: 'Santa Hat',       name: 'Santa Hat',       value: 10000, emoji: '🎅' }
+        { api: 'Toy Bear',       slug: 'toybear',      name: 'Toy Bear',       value: 15,    emoji: '🧸' },
+        { api: 'Heart Locket',   slug: 'heartlocket',  name: 'Heart Locket',   value: 25,    emoji: '❤️' },
+        { api: 'Big Year',       slug: 'bigyear',      name: 'Big Year',       value: 40,    emoji: '🎊' },
+        { api: 'Desk Calendar',  slug: 'deskcalendar', name: 'Desk Calendar',  value: 60,    emoji: '📅' },
+        { api: 'Jingle Bells',   slug: 'jinglebells',  name: 'Jingle Bells',   value: 80,    emoji: '🔔' },
+        { api: 'Homemade Cake',  slug: 'homemadecake', name: 'Homemade Cake',  value: 110,   emoji: '🎂' },
+        { api: 'Eternal Rose',   slug: 'eternalrose',  name: 'Eternal Rose',   value: 150,   emoji: '🌹' },
+        { api: 'Magic Potion',   slug: 'magicpotion',  name: 'Magic Potion',   value: 200,   emoji: '🧪' },
+        { api: 'Crystal Ball',   slug: 'crystalball',  name: 'Crystal Ball',   value: 280,   emoji: '🔮' },
+        { api: 'Top Hat',        slug: 'tophat',       name: 'Top Hat',        value: 380,   emoji: '🎩' },
+        { api: "Durov's Cap",    slug: 'durovscap',    name: "Durov's Cap",    value: 500,   emoji: '🧢' },
+        { api: 'Diamond Ring',   slug: 'diamondring',  name: 'Diamond Ring',   value: 700,   emoji: '💍' },
+        { api: 'Sakura Flower',  slug: 'sakuraflower', name: 'Sakura Flower',  value: 950,   emoji: '🌸' },
+        { api: 'Jolly Chimp',    slug: 'jollychimp',   name: 'Jolly Chimp',    value: 1300,  emoji: '🐵' },
+        { api: 'Plush Pepe',     slug: 'plushpepe',    name: 'Plush Pepe',     value: 1800,  emoji: '🐸' },
+        { api: 'Snoop Dogg',     slug: 'snoopdogg',    name: 'Snoop Dogg',     value: 2500,  emoji: '🐶' },
+        { api: 'Swiss Watch',    slug: 'swisswatch',   name: 'Swiss Watch',    value: 3500,  emoji: '⌚' },
+        { api: 'Precious Peach', slug: 'preciouspeach',name: 'Precious Peach', value: 5000,  emoji: '🍑' },
+        { api: 'Signet Ring',    slug: 'signetring',   name: 'Signet Ring',    value: 7000,  emoji: '💎' },
+        { api: 'Santa Hat',      slug: 'santahat',     name: 'Santa Hat',      value: 10000, emoji: '🎅' }
     ];
 
     const MULTIPLIERS = [1.2, 1.5, 2, 3, 5, 10, 25, 100];
     const SPIN_DURATION = 7500;
 
-    // ====== СОСТОЯНИЕ ======
     let balance = 1000;
     let inventory = [];
     let currentItem = null;
@@ -240,24 +373,31 @@
     let multiplier = 2;
     let isSpinning = false;
 
-    // Фильтры инвентаря
     let invSearch = '', invPriceMin = null, invPriceMax = null;
-    // Фильтры каталога
     let catSearch = '', catPriceMin = null, catPriceMax = null;
 
     const $ = id => document.getElementById(id);
 
-    // ====== ИКОНКА ======
-    function iconHTML(item, size = 128) {
-        // Кодируем пробелы и апострофы в URL
-        const encoded = encodeURIComponent(item.api);
-        const url = `https://api.changes.tg/original/${encoded}.png?size=${size}`;
-        return `<span class="emoji-fb">${item.emoji}</span>
-                <img src="${url}" onerror="this.style.display='none'" alt="">`;
+    // ====== ИКОНКИ С КАСКАДНЫМ FALLBACK ======
+    // Приоритет: Fragment CDN → api.changes.tg → эмодзи
+    function makeImgTag(url, item, onFail) {
+        return `<img src="${url}" onerror="${onFail}" alt="">`;
     }
 
-    function setSlotIcon(slotEl, item) {
-        slotEl.innerHTML = iconHTML(item, 128);
+    function iconHTML(item, size = 128) {
+        const emojiSize = size >= 128 ? 82 : (size >= 100 ? 64 : 30);
+        const fragmentUrl = `https://nft.fragment.com/gift/${item.slug}.${size >= 128 ? 500 : 200}.jpg`;
+        const changesUrl = `https://api.changes.tg/original/${encodeURIComponent(item.api)}.png?size=${size}`;
+        // Каскад: fragment → changes → эмодзи (эмодзи видно всегда, картинки поверх)
+        const uid = 'img_' + Math.random().toString(36).slice(2, 9);
+        return `<span class="emoji-fb" style="font-size:${emojiSize}px;">${item.emoji}</span>
+                <img id="${uid}" src="${fragmentUrl}"
+                     onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='${changesUrl}';}else{this.style.display='none';}"
+                     alt="">`;
+    }
+
+    function setSlotIcon(slotEl, item, size = 128) {
+        slotEl.innerHTML = iconHTML(item, size);
     }
 
     // ====== ВСПОМОГАТЕЛЬНЫЕ ======
@@ -279,7 +419,7 @@
         if (!currentItem || !targetItem) return;
         const ratio = targetItem.value / currentItem.value;
         chance = chanceFromRatio(ratio);
-        multiplier = Math.round((targetItem.value / currentItem.value) * 100) / 100;
+        multiplier = Math.round(ratio * 100) / 100;
         updatePercentUI();
     }
 
@@ -350,7 +490,7 @@
         $('to-card').className = 'item-slot';
     }
 
-    // ====== ИНВЕНТАРЬ С ФИЛЬТРАМИ ======
+    // ====== ИНВЕНТАРЬ ======
     function renderInventory() {
         const grid = $('inv-grid');
         grid.innerHTML = '';
@@ -390,7 +530,7 @@
         });
     }
 
-    // ====== КАТАЛОГ С ФИЛЬТРАМИ И ПОКУПКОЙ ======
+    // ====== КАТАЛОГ ======
     function renderCatalog() {
         const grid = $('cat-grid');
         grid.innerHTML = '';
@@ -426,16 +566,15 @@
         });
     }
 
-    // ====== МОДАЛКА ПОКУПКИ ======
+    // ====== МОДАЛКА ======
     let buyCandidate = null;
 
     function openBuyModal(item) {
         buyCandidate = item;
-        setSlotIcon($('buy-icon'), item);
+        setSlotIcon($('buy-icon'), item, 128);
         $('buy-name').textContent = item.name;
         $('buy-price').textContent = item.value + ' ⭐';
         $('buy-confirm').disabled = item.value > balance;
-        $('buy-confirm').style.opacity = item.value > balance ? '0.4' : '1';
         $('buy-modal').classList.add('active');
     }
 
@@ -446,12 +585,10 @@
 
     $('buy-cancel').onclick = closeBuyModal;
     $('buy-confirm').onclick = () => {
-        if (!buyCandidate) return;
-        if (buyCandidate.value > balance) return;
+        if (!buyCandidate || buyCandidate.value > balance) return;
         balance -= buyCandidate.value;
         $('balance').textContent = balance;
         inventory.push({ ...buyCandidate });
-        // Если это первая покупка — сразу выбрать
         if (!currentItem) currentItem = inventory[inventory.length - 1];
         closeBuyModal();
         renderInventory();
@@ -491,6 +628,44 @@
 
     function updateUpgradeBtn() {
         $('upgrade-btn').disabled = isSpinning || !currentItem || !targetItem;
+    }
+
+    // ====== ЭФФЕКТЫ ======
+    function burstConfetti() {
+        const colors = ['#fff', '#f5c518', '#22c55e', '#4a86ff', '#a855f7', '#ef4444'];
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        for (let i = 0; i < 60; i++) {
+            const p = document.createElement('div');
+            p.className = 'confetti';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.left = centerX + 'px';
+            p.style.top = centerY + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 150 + Math.random() * 350;
+            const dx = Math.cos(angle) * velocity;
+            const dy = Math.sin(angle) * velocity - 100;
+            p.style.setProperty('--dx', dx + 'px');
+            p.style.setProperty('--dy', dy + 'px');
+            p.style.animationDelay = (Math.random() * 0.15) + 's';
+            if (Math.random() > 0.5) p.style.borderRadius = '50%';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 2200);
+        }
+    }
+
+    function flashRed() {
+        const el = $('flash-red');
+        el.classList.remove('active');
+        void el.offsetWidth;
+        el.classList.add('active');
+    }
+
+    function shakeBody() {
+        document.body.classList.remove('shake');
+        void document.body.offsetWidth;
+        document.body.classList.add('shake');
+        setTimeout(() => document.body.classList.remove('shake'), 600);
     }
 
     // ====== КОЛЕСО ======
@@ -538,7 +713,6 @@
         $('to-card').className = 'item-slot';
 
         const win = await spinWheel(chance);
-
         const curIdx = inventory.indexOf(currentItem);
 
         if (win) {
@@ -547,12 +721,15 @@
             currentItem = newItem;
             $('to-card').classList.add('win');
             tg.HapticFeedback?.notificationOccurred('success');
+            burstConfetti();
         } else {
             inventory.splice(curIdx, 1);
             currentItem = inventory[0] || null;
             targetItem = null;
             $('to-card').classList.add('lose');
             tg.HapticFeedback?.notificationOccurred('error');
+            flashRed();
+            shakeBody();
         }
 
         renderInventory();
@@ -567,7 +744,7 @@
         }, 500);
     }
 
-    // ====== ПЛЮСИК ======
+    // ====== ПЛЮС ======
     $('plus-btn').onclick = () => {
         const input = prompt('Сколько монет добавить?', '1000');
         if (input === null) return;
@@ -579,7 +756,7 @@
         tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    // ====== ПОИСК / ФИЛЬТРЫ ======
+    // ====== ФИЛЬТРЫ ======
     $('inv-search').addEventListener('input', e => { invSearch = e.target.value; renderInventory(); });
     $('inv-price-min').addEventListener('input', e => {
         const v = e.target.value.trim();
@@ -591,7 +768,6 @@
         invPriceMax = v === '' ? null : (parseFloat(v) || 0);
         renderInventory();
     });
-
     $('cat-search').addEventListener('input', e => { catSearch = e.target.value; renderCatalog(); });
     $('cat-price-min').addEventListener('input', e => {
         const v = e.target.value.trim();
@@ -606,7 +782,6 @@
 
     // ====== СТАРТ ======
     function initGame() {
-        // Дать 8 случайных предметов из первых 12
         const pool = CATALOG.slice(0, 12);
         inventory = [];
         for (let i = 0; i < 8; i++) {
