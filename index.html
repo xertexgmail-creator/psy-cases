@@ -55,9 +55,7 @@
         display: flex; flex-direction: column;
         justify-content: center; align-items: center;
         position: relative;
-        cursor: pointer;
     }
-    .item-slot:active { transform: scale(0.98); }
     .item-slot.win { border-color: #22c55e; box-shadow: 0 0 25px rgba(34,197,94,0.4); }
     .item-slot.lose { border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.4); }
 
@@ -98,7 +96,7 @@
         display: flex; flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
         min-width: 170px;
     }
 
@@ -152,6 +150,47 @@
         margin-top: 3px;
     }
 
+    /* ШКАЛА ПРОЦЕНТОВ И КЭФОВ — маленькая под полоской */
+    .mini-scales {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-top: 6px;
+        width: 100%;
+    }
+    .mini-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 10px;
+    }
+    .mini-row .label {
+        color: #666;
+        min-width: 32px;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+    .mini-bar {
+        flex: 1;
+        height: 4px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    .mini-fill {
+        height: 100%;
+        background: #f5c518;
+        border-radius: 2px;
+        transition: width 0.25s;
+    }
+    .mini-value {
+        color: #f5c518;
+        font-weight: 700;
+        min-width: 36px;
+        text-align: right;
+    }
+
     .multiplier-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -203,55 +242,60 @@
     .action-btn:active { transform: scale(0.97); }
     .action-btn:disabled { opacity: 0.5; }
 
-    .inventory {
+    /* ДВЕ КОЛОНКИ: инвентарь слева, цели справа */
+    .two-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .col-block {
         background: #161616;
         border-radius: 14px;
-        padding: 12px;
+        padding: 10px;
         border: 1px solid rgba(255,255,255,0.05);
+        max-height: 240px;
+        overflow-y: auto;
     }
-    .inventory h4 {
-        font-size: 11px;
+    .col-block h4 {
+        font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 1px;
         color: #888;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
-    .inv-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-    }
-    .inv-item {
-        background: linear-gradient(160deg, #1c1c1c, #131313);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 10px;
-        padding: 10px 4px;
-        text-align: center;
+    .gift-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 6px;
+        border-radius: 8px;
+        margin-bottom: 4px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.04);
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.15s;
     }
-    .inv-item.active {
+    .gift-item.active {
         border-color: #f5c518;
-        box-shadow: 0 0 15px rgba(245,197,24,0.35);
+        background: rgba(245,197,24,0.08);
     }
-    .inv-item img {
-        width: 44px; height: 44px;
+    .gift-item img {
+        width: 26px; height: 26px;
         object-fit: contain;
-        display: block;
-        margin: 0 auto 4px;
+        flex-shrink: 0;
     }
-    .inv-item .iname {
-        font-size: 9px;
-        color: #aaa;
+    .gift-item .gname {
+        flex: 1;
+        font-size: 10px;
+        color: #ccc;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .inv-item .ival {
+    .gift-item .gval {
         font-size: 10px;
         color: #f5c518;
         font-weight: 700;
-        margin-top: 2px;
     }
 
     .footer {
@@ -272,7 +316,7 @@
 </div>
 
 <div class="arena">
-    <div class="item-slot" id="from-card" onclick="scrollToInventory()">
+    <div class="item-slot" id="from-card">
         <div class="slot-title">Твой гифт</div>
         <img class="item-img" id="from-img" src="" alt="">
         <div class="item-name" id="from-name">—</div>
@@ -283,20 +327,34 @@
         <div class="wheel-wrap">
             <svg class="wheel-svg" viewBox="0 0 100 100">
                 <!-- фон обода -->
-                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
                 <!-- жёлтый сектор победы: снизу, растёт вверх -->
-                <circle id="win-arc" cx="50" cy="50" r="46" fill="none"
-                        stroke="#f5c518" stroke-width="8"
+                <circle id="win-arc" cx="50" cy="50" r="44" fill="none"
+                        stroke="#f5c518" stroke-width="10"
                         stroke-linecap="butt"
                         transform="rotate(90 50 50)"
-                        stroke-dasharray="0 289.03"/>
-                <!-- тонкая обводка -->
-                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(245,197,24,0.15)" stroke-width="0.5"/>
+                        stroke-dasharray="0 276.46"/>
+                <!-- обводка -->
+                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(245,197,24,0.12)" stroke-width="0.5"/>
             </svg>
             <div class="wheel-pointer" id="wheel-pointer"></div>
             <div class="wheel-center">
                 <div class="wheel-percent" id="wheel-percent">65%</div>
                 <div class="wheel-chance-label" id="wheel-label">средний</div>
+            </div>
+        </div>
+
+        <!-- МИНИ-ШКАЛЫ под колесом -->
+        <div class="mini-scales">
+            <div class="mini-row">
+                <span class="label">%</span>
+                <div class="mini-bar"><div class="mini-fill" id="mini-chance-fill"></div></div>
+                <span class="mini-value" id="mini-chance-val">65%</span>
+            </div>
+            <div class="mini-row">
+                <span class="label">×</span>
+                <div class="mini-bar"><div class="mini-fill" id="mini-mult-fill"></div></div>
+                <span class="mini-value" id="mini-mult-val">1.5</span>
             </div>
         </div>
     </div>
@@ -313,9 +371,15 @@
 
 <button class="action-btn" id="upgrade-btn">Прокачать</button>
 
-<div class="inventory" id="inventory">
-    <h4>Твой инвентарь — выбери гифт</h4>
-    <div class="inv-grid" id="inv-grid"></div>
+<div class="two-cols">
+    <div class="col-block">
+        <h4>Мои гифты</h4>
+        <div id="my-gifts"></div>
+    </div>
+    <div class="col-block">
+        <h4>Доступные цели</h4>
+        <div id="target-gifts"></div>
+    </div>
 </div>
 
 <div class="footer">
@@ -327,23 +391,24 @@
     tg.ready();
     tg.expand();
 
+    // ====== ГИФТЫ: официальные API-имена ======
     const ITEMS = [
-        { api: 'Heart',      name: 'Heart',       value: 15    },
-        { api: 'TeddyBear',  name: 'Teddy Bear',  value: 15    },
-        { api: 'Present',    name: 'Present',     value: 25    },
-        { api: 'Rose',       name: 'Rose',        value: 25    },
-        { api: 'Cake',       name: 'Cake',        value: 50    },
-        { api: 'Bouquet',    name: 'Bouquet',     value: 50    },
-        { api: 'Rocket',     name: 'Rocket',      value: 50    },
-        { api: 'Champagne',  name: 'Champagne',   value: 50    },
-        { api: 'Trophy',     name: 'Trophy',      value: 100   },
-        { api: 'Crown',      name: 'Crown',       value: 100   },
-        { api: 'Ring',       name: 'Ring',        value: 100   },
-        { api: 'Diamond',    name: 'Diamond',     value: 100   },
-        { api: 'JollyChimp', name: 'Jolly Chimp', value: 250   },
-        { api: 'PlushPepe',  name: 'Plush Pepe',  value: 500   },
-        { api: 'SnoopDogg',  name: 'Snoop Dogg',  value: 1000  },
-        { api: 'Papakha',    name: 'Papakha',     value: 2500  }
+        { api: 'Heart',       name: 'Heart',        value: 15    },
+        { api: 'TeddyBear',   name: 'Teddy Bear',   value: 15    },
+        { api: 'Present',     name: 'Present',      value: 25    },
+        { api: 'Rose',        name: 'Rose',         value: 25    },
+        { api: 'Cake',        name: 'Cake',         value: 50    },
+        { api: 'Bouquet',     name: 'Bouquet',      value: 50    },
+        { api: 'Rocket',      name: 'Rocket',       value: 50    },
+        { api: 'Champagne',   name: 'Champagne',    value: 50    },
+        { api: 'Trophy',      name: 'Trophy',       value: 100   },
+        { api: 'Crown',       name: 'Crown',        value: 100   },
+        { api: 'Ring',        name: 'Ring',         value: 100   },
+        { api: 'Diamond',     name: 'Diamond',      value: 100   },
+        { api: 'JollyChimp',  name: 'Jolly Chimp',  value: 250   },
+        { api: 'PlushPepe',   name: 'Plush Pepe',   value: 500   },
+        { api: 'SnoopDogg',   name: 'Snoop Dogg',   value: 1000  },
+        { api: 'Papakha',     name: 'Papakha',      value: 2500  }
     ];
 
     const MULTIPLIERS = [
@@ -357,8 +422,8 @@
         { mult: 100, chance: 1  }
     ];
 
-    // Длина окружности радиуса 46 = 2 * π * 46 ≈ 289.03
-    const CIRCUMFERENCE = 2 * Math.PI * 46;
+    // Длина окружности радиуса 44 = 2 * π * 44 ≈ 276.46
+    const CIRCUMFERENCE = 2 * Math.PI * 44;
 
     function giftImage(apiName, size = 128) {
         return `https://api.changes.tg/original/${apiName}.png?size=${size}`;
@@ -378,7 +443,9 @@
         return 'безумие';
     }
 
-    // Обновляем жёлтый сектор победы на ободе
+    // ===== ЖЁЛТЫЙ СЕКТОР ПОБЕДЫ =====
+    // Сектор начинается снизу (180° в SVG) и растёт симметрично вверх.
+    // Чем выше шанс — тем больше жёлтая дуга.
     function updateWinArc() {
         const arc = $('win-arc');
         const winLength = (currentMult.chance / 100) * CIRCUMFERENCE;
@@ -388,6 +455,10 @@
     function updatePercentUI() {
         $('wheel-percent').textContent = currentMult.chance + '%';
         $('wheel-label').textContent = chanceLabel(currentMult.chance);
+        $('mini-chance-fill').style.width = currentMult.chance + '%';
+        $('mini-chance-val').textContent = currentMult.chance + '%';
+        $('mini-mult-fill').style.width = Math.min(100, (currentMult.mult / 100) * 100) + '%';
+        $('mini-mult-val').textContent = '×' + currentMult.mult;
         updateWinArc();
     }
 
@@ -420,6 +491,7 @@
         $('to-name').textContent = targetItem.name;
         $('to-value').textContent = targetItem.value + ' ⭐';
         $('to-card').className = 'item-slot';
+        renderTargets();
     }
 
     function updateFromCard() {
@@ -430,59 +502,67 @@
         updatePreview();
     }
 
-    function renderInventory() {
-        const grid = $('inv-grid');
-        grid.innerHTML = '';
-        ITEMS.forEach(it => {
+    function renderMyGifts() {
+        const el = $('my-gifts');
+        el.innerHTML = '';
+        const idx = ITEMS.indexOf(currentItem);
+        const pool = ITEMS.slice(Math.max(0, idx - 2), idx + 3);
+        pool.forEach(it => {
             const div = document.createElement('div');
-            div.className = 'inv-item' + (it === currentItem ? ' active' : '');
+            div.className = 'gift-item' + (it === currentItem ? ' active' : '');
             div.innerHTML = `
                 <img src="${giftImage(it.api, 64)}" alt="">
-                <div class="iname">${it.name}</div>
-                <div class="ival">${it.value}⭐</div>
+                <span class="gname">${it.name}</span>
+                <span class="gval">${it.value}⭐</span>
             `;
             div.onclick = () => {
                 if (isSpinning) return;
                 currentItem = it;
-                document.querySelectorAll('.inv-item').forEach(i => i.classList.remove('active'));
-                div.classList.add('active');
                 updateFromCard();
+                renderMyGifts();
             };
-            grid.appendChild(div);
+            el.appendChild(div);
         });
     }
 
-    function scrollToInventory() {
-        $('inventory').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    function renderTargets() {
+        const el = $('target-gifts');
+        el.innerHTML = '';
+        const idx = ITEMS.indexOf(currentItem);
+        const targets = ITEMS.slice(idx + 1, idx + 6);
+        targets.forEach(it => {
+            const div = document.createElement('div');
+            div.className = 'gift-item';
+            div.innerHTML = `
+                <img src="${giftImage(it.api, 64)}" alt="">
+                <span class="gname">${it.name}</span>
+                <span class="gval">${it.value}⭐</span>
+            `;
+            el.appendChild(div);
+        });
     }
 
     // ===== КОЛЕСО =====
     // Сектор победы: снизу, растёт вверх симметрично.
-    // В SVG: 0° = верх, 90° = право, 180° = низ, 270° = лево.
-    // Сектор победы центрируется на 180° (низ).
-    // Угол стрелки: 0° = верх (стрелка указывает вверх).
-    // Стрелка попадает в сектор победы, если её угол в диапазоне:
-    //   180° - (chance*3.6/2) ... 180° + (chance*3.6/2)
-    // (с учётом нормализации 0-360)
+    // Стрелка: 0° = верх. Сектор победы центрируется на 180° (низ).
+    // Стрелка попадает в сектор, если угол в диапазоне:
+    //   180 - (chance*3.6/2) ... 180 + (chance*3.6/2)
     function spinWheel(chance) {
         return new Promise(resolve => {
             const pointer = $('wheel-pointer');
 
             const isWin = Math.random() * 100 < chance;
-            const sectorSize = chance * 3.6; // размер сектора в градусах
-            const centerAngle = 180; // центр сектора — низ
+            const sectorSize = chance * 3.6;
+            const centerAngle = 180;
 
             let targetAngle;
             if (isWin) {
-                // Внутри сектора победы
                 const half = sectorSize / 2;
                 targetAngle = centerAngle + (Math.random() * 2 - 1) * (half * 0.9);
             } else {
-                // Вне сектора — случайно по остальному кругу
                 const half = sectorSize / 2;
                 const outsideSize = 360 - sectorSize;
                 let offset = Math.random() * outsideSize;
-                // Идём от конца сектора
                 targetAngle = centerAngle + half + offset;
             }
 
@@ -537,10 +617,10 @@
             $('balance').textContent = balance;
         }
 
-        renderInventory();
-
         setTimeout(() => {
             updateFromCard();
+            renderMyGifts();
+            renderTargets();
             isSpinning = false;
             $('upgrade-btn').disabled = false;
         }, 600);
@@ -549,7 +629,8 @@
     renderMultipliers();
     updateFromCard();
     updatePercentUI();
-    renderInventory();
+    renderMyGifts();
+    renderTargets();
     $('upgrade-btn').onclick = doUpgrade;
 </script>
 </body>
