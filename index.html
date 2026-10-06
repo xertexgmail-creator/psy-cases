@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PSY Upgrader</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body {
+            background: radial-gradient(circle at top, #1e1e3f 0%, #0d0d1f 100%);
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-size: 20px; font-weight: 800; letter-spacing: 1px;
+            background: linear-gradient(90deg, #4a86ff, #a855f7);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .balance {
+            background: rgba(74, 134, 255, 0.15);
+            border: 1px solid rgba(74, 134, 255, 0.4);
+            padding: 6px 14px; border-radius: 20px;
+            font-size: 14px; font-weight: 600;
+        }
+
+        .vs-container {
+            display: flex; gap: 12px; margin-bottom: 20px;
+        }
+        .item-card {
+            flex: 1;
+            background: linear-gradient(145deg, #1a1a35, #12122a);
+            border-radius: 16px; padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+        .item-card.win { border-color: #22c55e; box-shadow: 0 0 30px rgba(34,197,94,0.4); }
+        .item-card.lose { border-color: #ef4444; box-shadow: 0 0 30px rgba(239,68,68,0.4); }
+
+        .item-emoji { font-size: 48px; margin-bottom: 8px; display: block; }
+        .item-name { font-size: 13px; color: #a0a0c0; margin-bottom: 4px; }
+        .item-value { font-size: 18px; font-weight: 700; color: #4a86ff; }
+
+        .arrow {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; color: #4a86ff; padding: 0 4px;
+        }
+
+        .multiplier-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px; padding: 16px; margin-bottom: 16px;
+        }
+        .section-label {
+            font-size: 12px; text-transform: uppercase;
+            letter-spacing: 1px; color: #8080a0; margin-bottom: 12px;
+        }
+        .multiplier-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+        }
+        .mult-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 12px 4px;
+            border-radius: 10px; font-size: 14px;
+            font-weight: 600; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mult-btn.active {
+            background: linear-gradient(135deg, #4a86ff, #a855f7);
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(74,134,255,0.5);
+        }
+        .mult-btn .chance {
+            display: block; font-size: 10px;
+            color: #a0a0c0; font-weight: 400; margin-top: 2px;
+        }
+        .mult-btn.active .chance { color: rgba(255,255,255,0.85); }
+
+        .action-btn {
+            width: 100%; padding: 18px;
+            background: linear-gradient(135deg, #4a86ff, #a855f7);
+            border: none; border-radius: 16px;
+            color: #fff; font-size: 17px; font-weight: 700;
+            cursor: pointer; letter-spacing: 0.5px;
+            box-shadow: 0 8px 30px rgba(74,134,255,0.4);
+            transition: transform 0.1s;
+        }
+        .action-btn:active { transform: scale(0.97); }
+        .action-btn:disabled { opacity: 0.5; }
+
+        .history {
+            margin-top: 20px;
+        }
+        .history-title {
+            font-size: 12px; text-transform: uppercase;
+            letter-spacing: 1px; color: #8080a0; margin-bottom: 8px;
+        }
+        .history-item {
+            display: flex; justify-content: space-between;
+            padding: 10px 14px; background: rgba(255,255,255,0.03);
+            border-radius: 10px; margin-bottom: 6px;
+            font-size: 13px;
+        }
+        .history-item .win-text { color: #22c55e; }
+        .history-item .lose-text { color: #ef4444; }
+
+        .spinner-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; z-index: 100;
+        }
+        .spinner-overlay.active { display: flex; }
+        .spinner {
+            width: 80px; height: 80px;
+            border: 4px solid rgba(74,134,255,0.2);
+            border-top-color: #4a86ff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner-text { margin-top: 20px; font-size: 14px; color: #a0a0c0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">PSY UPGRADER</div>
+        <div class="balance">💰 <span id="balance">1000</span></div>
+    </div>
+
+    <div class="vs-container">
+        <div class="item-card" id="from-card">
+            <span class="item-emoji" id="from-emoji">🔫</span>
+            <div class="item-name" id="from-name">Выбери предмет</div>
+            <div class="item-value" id="from-value">—</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="item-card" id="to-card">
+            <span class="item-emoji" id="to-emoji">❓</span>
+            <div class="item-name">Результат</div>
+            <div class="item-value" id="to-value">—</div>
+        </div>
+    </div>
+
+    <div class="multiplier-section">
+        <div class="section-label">Множитель</div>
+        <div class="multiplier-grid" id="mult-grid"></div>
+    </div>
+
+    <button class="action-btn" id="upgrade-btn">АПГРЕЙД</button>
+
+    <div class="history">
+        <div class="history-title">История</div>
+        <div id="history-list"></div>
+    </div>
+
+    <div class="spinner-overlay" id="spinner">
+        <div class="spinner"></div>
+        <div class="spinner-text">Крутим...</div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // ====== ПРЕДМЕТЫ (от дешёвых к дорогим) ======
+        const ITEMS = [
+            { emoji: '🪙', name: 'Монета',      value: 10    },
+            { emoji: '🔪', name: 'Нож-бабочка', value: 50    },
+            { emoji: '🧤', name: 'Перчатки',    value: 150   },
+            { emoji: '🔫', name: 'AK-47',       value: 400   },
+            { emoji: '🗡️', name: 'Керамбит',    value: 1200  },
+            { emoji: '👑', name: 'Корона',      value: 3000  },
+            { emoji: '💎', name: 'Алмаз',       value: 8000  },
+            { emoji: '🐉', name: 'Дракон',      value: 25000 }
+        ];
+
+        // ====== МНОЖИТЕЛИ и ЧЕСТНЫЕ ШАНСЫ ======
+        // Чем выше множитель — тем ниже шанс (математика честная)
+        const MULTIPLIERS = [
+            { mult: 1.2, chance: 80 },
+            { mult: 1.5, chance: 65 },
+            { mult: 2.0, chance: 50 },
+            { mult: 3.0, chance: 33 },
+            { mult: 5.0, chance: 20 },
+            { mult: 10,  chance: 10 },
+            { mult: 25,  chance: 4  },
+            { mult: 100, chance: 1  }
+        ];
+
+        let balance = 1000;
+        let currentItem = ITEMS[0];
+        let currentMult = MULTIPLIERS[0];
+        let isSpinning = false;
+
+        const $ = id => document.getElementById(id);
+
+        // ====== ИНИЦИАЛИЗАЦИЯ UI ======
+        function renderMultipliers() {
+            const grid = $('mult-grid');
+            grid.innerHTML = '';
+            MULTIPLIERS.forEach((m, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'mult-btn' + (i === 0 ? ' active' : '');
+                btn.innerHTML = `×${m.mult}<span class="chance">${m.chance}%</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentMult = m;
+                    updatePreview();
+                };
+                grid.appendChild(btn);
+            });
+        }
+
+        function updatePreview() {
+            const targetValue = Math.round(currentItem.value * currentMult.mult);
+            $('to-value').textContent = `~${targetValue} 💰`;
+            $('to-emoji').textContent = '❓';
+            $('to-card').className = 'item-card';
+        }
+
+        function selectRandomItem() {
+            // Случайный предмет из пула, но не самый дорогой
+            const pool = ITEMS.slice(0, ITEMS.length - 2);
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function updateFromCard() {
+            $('from-emoji').textContent = currentItem.emoji;
+            $('from-name').textContent = currentItem.name;
+            $('from-value').textContent = currentItem.value + ' 💰';
+            updatePreview();
+        }
+
+        // ====== ЛОГИКА АПГРЕЙДА ======
+        function doUpgrade() {
+            if (isSpinning) return;
+            const targetValue = Math.round(currentItem.value * currentMult.mult);
+
+            if (balance < 0) {
+                showToast('Недостаточно средств');
+                return;
+            }
+
+            isSpinning = true;
+            $('spinner').classList.add('active');
+            $('upgrade-btn').disabled = true;
+
+            setTimeout(() => {
+                const success = Math.random() * 100 < currentMult.chance;
+                $('spinner').classList.remove('active');
+
+                if (success) {
+                    // Находим ближайший предмет к целевой цене
+                    const newItem = ITEMS.reduce((prev, curr) =>
+                        Math.abs(curr.value - targetValue) < Math.abs(prev.value - targetValue) ? curr : prev
+                    );
+
+                    $('to-emoji').textContent = newItem.emoji;
+                    $('to-name') && ($('to-name').textContent = newItem.name);
+                    $('to-value').textContent = newItem.value + ' 💰';
+                    $('to-card').classList.add('win');
+
+                    currentItem = newItem;
+                    balance -= 0;
+                    tg.HapticFeedback?.notificationOccurred('success');
+                    addHistory(true, `${currentItem.name} → ${newItem.name}`);
+                } else {
+                    $('to-emoji').textContent = '💥';
+                    $('to-value').textContent = 'Провал';
+                    $('to-card').classList.add('lose');
+
+                    balance -= currentItem.value;
+                    tg.HapticFeedback?.notificationOccurred('error');
+                    addHistory(false, `${currentItem.name} → провал`);
+                    currentItem = selectRandomItem();
+                }
+
+                $('balance').textContent = Math.max(0, balance);
+
+                setTimeout(() => {
+                    updateFromCard();
+                    isSpinning = false;
+                    $('upgrade-btn').disabled = false;
+                }, 800);
+            }, 1500);
+        }
+
+        // ====== ИСТОРИЯ ======
+        function addHistory(win, text) {
+            const list = $('history-list');
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `<span>${text}</span><span class="${win ? 'win-text' : 'lose-text'}">${win ? '✅' : '❌'}</span>`;
+            list.prepend(div);
+            if (list.children.length > 10) list.removeChild(list.lastChild);
+        }
+
+        // ====== СТАРТ ======
+        currentItem = selectRandomItem();
+        renderMultipliers();
+        updateFromCard();
+        $('upgrade-btn').onclick = doUpgrade;
+    </script>
+</body>
+</html>
