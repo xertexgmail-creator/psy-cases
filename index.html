@@ -32,82 +32,78 @@
             font-size: 14px; font-weight: 600;
         }
 
-        /* ===== ЗОНА С ПРЕДМЕТАМИ И КОЛЕСОМ ===== */
+        /* ===== АРЕНА ===== */
         .arena {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
             margin-bottom: 18px;
         }
 
         .item-slot {
             background: linear-gradient(145deg, #1a1a35, #12122a);
-            border-radius: 16px; padding: 14px 10px;
+            border-radius: 16px; padding: 14px 8px;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.05);
             transition: all 0.3s;
-            min-height: 120px;
-            display: flex; flex-direction: column; justify-content: center;
+            min-height: 130px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
         .item-slot.win { border-color: #22c55e; box-shadow: 0 0 25px rgba(34,197,94,0.4); }
         .item-slot.lose { border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.4); }
 
-        .item-emoji { font-size: 40px; display: block; margin-bottom: 6px; }
-        .item-name { font-size: 12px; color: #a0a0c0; margin-bottom: 4px; }
-        .item-value { font-size: 15px; font-weight: 700; color: #4a86ff; }
+        .item-img {
+            width: 56px; height: 56px;
+            object-fit: contain;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 0 8px rgba(74,134,255,0.3));
+        }
+        .item-name { font-size: 11px; color: #a0a0c0; margin-bottom: 4px; line-height: 1.2; }
+        .item-value { font-size: 14px; font-weight: 700; color: #4a86ff; }
 
         /* ===== КОЛЕСО ===== */
         .wheel-wrap {
             position: relative;
-            width: 110px; height: 110px;
-            display: flex; align-items: center; justify-content: center;
+            width: 100px; height: 100px;
         }
-        .wheel-circle {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(
-                #22c55e 0deg 180deg,
-                #ef4444 180deg 360deg
-            );
-            position: relative;
-            box-shadow: 0 0 25px rgba(74,134,255,0.3);
-        }
-        .wheel-circle::before {
-            content: '';
-            position: absolute;
-            inset: 8px;
-            border-radius: 50%;
-            background: #12122a;
-        }
+        .wheel-svg { width: 100%; height: 100%; }
         .wheel-pointer {
             position: absolute;
-            top: 50%; left: 50%;
-            transform-origin: center;
-            transform: translate(-50%, -50%) rotate(0deg);
+            top: 0; left: 0;
             width: 100%; height: 100%;
-            pointer-events: none;
-            transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1);
         }
         .wheel-pointer::before {
-            content: '▲';
+            content: '';
             position: absolute;
-            top: -14px; left: 50%;
+            top: -6px; left: 50%;
             transform: translateX(-50%);
-            font-size: 16px;
-            color: #fff;
-            text-shadow: 0 0 8px #4a86ff;
+            width: 0; height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 12px solid #fff;
+            filter: drop-shadow(0 0 6px #4a86ff);
         }
-        .wheel-center {
+        .wheel-hub {
             position: absolute;
-            z-index: 5;
-            font-size: 13px; font-weight: 800;
-            color: #fff;
-            text-align: center;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1a1a35, #0d0d1f);
+            border: 2px solid #4a86ff;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 800;
             letter-spacing: 0.5px;
+            z-index: 3;
+            box-shadow: 0 0 15px rgba(74,134,255,0.5);
         }
+        .wheel-hub .win-txt { color: #22c55e; font-size: 9px; }
+        .wheel-hub .lose-txt { color: #ef4444; font-size: 9px; }
 
-        /* ===== БЛОК МНОЖИТЕЛЯ ===== */
+        /* ===== МНОЖИТЕЛИ ===== */
         .multiplier-section {
             background: rgba(255,255,255,0.03);
             border-radius: 16px; padding: 14px; margin-bottom: 14px;
@@ -150,66 +146,72 @@
         .action-btn:active { transform: scale(0.97); }
         .action-btn:disabled { opacity: 0.5; }
 
-        /* ===== ИСТОРИЯ ===== */
-        .history { margin-top: 18px; }
-        .history-title {
-            font-size: 11px; text-transform: uppercase;
-            letter-spacing: 1px; color: #8080a0; margin-bottom: 8px;
-        }
-        .history-item {
-            display: flex; justify-content: space-between;
-            padding: 9px 12px; background: rgba(255,255,255,0.03);
-            border-radius: 10px; margin-bottom: 5px;
-            font-size: 12px;
-        }
-        .history-item .win-text { color: #22c55e; }
-        .history-item .lose-text { color: #ef4444; }
-
         /* ===== СПИСКИ ГИФТОВ ===== */
         .gifts-row {
             display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-            margin-top: 14px;
+            margin-top: 16px;
         }
         .gifts-block {
             background: rgba(255,255,255,0.03);
             border-radius: 14px; padding: 10px;
-            max-height: 160px; overflow-y: auto;
+            max-height: 170px; overflow-y: auto;
         }
         .gifts-block h4 {
             font-size: 10px; text-transform: uppercase;
             letter-spacing: 1px; color: #8080a0; margin-bottom: 8px;
         }
         .gift-chip {
-            display: flex; justify-content: space-between;
+            display: flex; align-items: center; gap: 8px;
             padding: 6px 8px; border-radius: 8px;
             font-size: 11px; margin-bottom: 4px;
             background: rgba(255,255,255,0.04);
         }
+        .gift-chip img {
+            width: 22px; height: 22px; object-fit: contain;
+        }
+        .gift-chip .gname { flex: 1; color: #d0d0e0; }
         .gift-chip .gval { color: #4a86ff; font-weight: 600; }
+
+        /* ===== ФУТЕР ===== */
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 10px;
+            color: #50507a;
+            padding-bottom: 10px;
+        }
+        .footer a { color: #4a86ff; text-decoration: none; }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="logo">PSY GIFTS UPGRADER</div>
-        <div class="balance">💰 <span id="balance">1000</span></div>
+        <div class="balance">⭐ <span id="balance">1000</span></div>
     </div>
 
-    <!-- АРЕНА: слева предмет, по центру колесо, справа цель -->
     <div class="arena">
         <div class="item-slot" id="from-card">
-            <span class="item-emoji" id="from-emoji">🎁</span>
+            <img class="item-img" id="from-img" src="" alt="">
             <div class="item-name" id="from-name">—</div>
             <div class="item-value" id="from-value">—</div>
         </div>
 
         <div class="wheel-wrap">
-            <div class="wheel-circle"></div>
+            <svg class="wheel-svg" viewBox="0 0 100 100">
+                <!-- колесо: верхняя половина зелёная, нижняя красная -->
+                <path d="M 50 50 L 50 5 A 45 45 0 0 1 50 95 Z" fill="#ef4444" opacity="0.9"/>
+                <path d="M 50 50 L 50 95 A 45 45 0 0 1 50 5 Z" fill="#22c55e" opacity="0.9"/>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#4a86ff" stroke-width="1.5" opacity="0.6"/>
+            </svg>
             <div class="wheel-pointer" id="wheel-pointer"></div>
-            <div class="wheel-center" id="wheel-center">ДА<br>НЕТ</div>
+            <div class="wheel-hub">
+                <span class="win-txt">ДА</span>
+                <span class="lose-txt">НЕТ</span>
+            </div>
         </div>
 
         <div class="item-slot" id="to-card">
-            <span class="item-emoji" id="to-emoji">❓</span>
+            <img class="item-img" id="to-img" src="" alt="" style="opacity:0.4;">
             <div class="item-name">Результат</div>
             <div class="item-value" id="to-value">—</div>
         </div>
@@ -222,7 +224,6 @@
 
     <button class="action-btn" id="upgrade-btn">АПГРЕЙД</button>
 
-    <!-- Списки гифтов -->
     <div class="gifts-row">
         <div class="gifts-block">
             <h4>У тебя сейчас</h4>
@@ -234,9 +235,8 @@
         </div>
     </div>
 
-    <div class="history">
-        <div class="history-title">История</div>
-        <div id="history-list"></div>
+    <div class="footer">
+        powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a> (api.changes.tg)
     </div>
 
     <script>
@@ -244,27 +244,26 @@
         tg.ready();
         tg.expand();
 
-        // ====== ГИФТЫ TELEGRAM (популярные, с приблизительной ценой в Stars) ======
+        // ====== ГИФТЫ TELEGRAM (официальные имена для API) ======
         const ITEMS = [
-            { emoji: '❤️', name: 'Heart',        value: 15    },
-            { emoji: '🧸', name: 'Teddy Bear',   value: 15    },
-            { emoji: '🎁', name: 'Present',      value: 25    },
-            { emoji: '🌹', name: 'Rose',         value: 25    },
-            { emoji: '🎂', name: 'Cake',         value: 50    },
-            { emoji: '💐', name: 'Bouquet',      value: 50    },
-            { emoji: '🚀', name: 'Rocket',       value: 50    },
-            { emoji: '🍾', name: 'Champagne',    value: 50    },
-            { emoji: '🏆', name: 'Trophy',       value: 100   },
-            { emoji: '👑', name: 'Crown',        value: 100   },
-            { emoji: '💍', name: 'Ring',         value: 100   },
-            { emoji: '💎', name: 'Diamond',      value: 100   },
-            { emoji: '🔥', name: 'Jolly Chimp',  value: 250   },
-            { emoji: '🐸', name: 'Plush Pepe',   value: 500   },
-            { emoji: '🐶', name: 'Snoop Dogg',   value: 1000  },
-            { emoji: '🎩', name: 'Papakha',      value: 2500  }
+            { api: 'Heart',       name: 'Heart',       value: 15    },
+            { api: 'TeddyBear',   name: 'Teddy Bear',  value: 15    },
+            { api: 'Present',     name: 'Present',     value: 25    },
+            { api: 'Rose',        name: 'Rose',        value: 25    },
+            { api: 'Cake',        name: 'Cake',        value: 50    },
+            { api: 'Bouquet',     name: 'Bouquet',     value: 50    },
+            { api: 'Rocket',      name: 'Rocket',      value: 50    },
+            { api: 'Champagne',   name: 'Champagne',   value: 50    },
+            { api: 'Trophy',      name: 'Trophy',      value: 100   },
+            { api: 'Crown',       name: 'Crown',       value: 100   },
+            { api: 'Ring',        name: 'Ring',        value: 100   },
+            { api: 'Diamond',     name: 'Diamond',     value: 100   },
+            { api: 'JollyChimp',  name: 'Jolly Chimp', value: 250   },
+            { api: 'PlushPepe',   name: 'Plush Pepe',  value: 500   },
+            { api: 'SnoopDogg',   name: 'Snoop Dogg',  value: 1000  },
+            { api: 'Papakha',     name: 'Papakha',     value: 2500  }
         ];
 
-        // ====== МНОЖИТЕЛИ (чем выше — тем ниже шанс) ======
         const MULTIPLIERS = [
             { mult: 1.2, chance: 80 },
             { mult: 1.5, chance: 65 },
@@ -276,14 +275,19 @@
             { mult: 100, chance: 1  }
         ];
 
+        // ====== ФУНКЦИЯ ПОЛУЧЕНИЯ КАРТИНКИ ГИФТА ======
+        function giftImage(apiName, size = 128) {
+            return `https://api.changes.tg/original/${apiName}.png?size=${size}`;
+        }
+
         let balance = 1000;
-        let currentItem = ITEMS[1];
+        let currentItem = ITEMS[3];
         let currentMult = MULTIPLIERS[1];
         let isSpinning = false;
 
         const $ = id => document.getElementById(id);
 
-        // ====== UI: множители ======
+        // ====== МНОЖИТЕЛИ ======
         function renderMultipliers() {
             const grid = $('mult-grid');
             grid.innerHTML = '';
@@ -305,46 +309,60 @@
         function updatePreview() {
             const targetValue = Math.round(currentItem.value * currentMult.mult);
             $('to-value').textContent = `~${targetValue} ⭐`;
-            $('to-emoji').textContent = '❓';
+            $('to-img').src = giftImage(currentItem.api);
+            $('to-img').style.opacity = '0.4';
             $('to-card').className = 'item-slot';
         }
 
         function updateFromCard() {
-            $('from-emoji').textContent = currentItem.emoji;
+            $('from-img').src = giftImage(currentItem.api);
+            $('from-img').style.opacity = '1';
             $('from-name').textContent = currentItem.name;
             $('from-value').textContent = currentItem.value + ' ⭐';
             updatePreview();
         }
 
         function selectRandomItem() {
-            const pool = ITEMS.slice(0, ITEMS.length - 4); // без топовых
+            const pool = ITEMS.slice(0, ITEMS.length - 4);
             return pool[Math.floor(Math.random() * pool.length)];
         }
 
-        // ====== ЛОГИКА КОЛЕСА ======
+        // ====== КОЛЕСО ======
+        // Колесо разделено пополам: верх = НЕТ (красный), низ = ДА (зелёный) визуально.
+        // Стрелка стартует сверху и вращается по часовой стрелке.
+        // Шанс win определяет, в какую половину она попадёт.
         function spinWheel(chance) {
             return new Promise(resolve => {
                 const pointer = $('wheel-pointer');
-                // Крутим на несколько оборотов
-                const extraTurns = 3 + Math.floor(Math.random() * 2);
-                const finalAngle = Math.random() * 360;
 
+                // Сначала выбираем: win или lose по вероятности
+                const isWin = Math.random() * 100 < chance;
+
+                // Сектор выигрыша — верхняя половина (0-180°).
+                // Сектор проигрыша — нижняя (180-360°).
+                let angle;
+                if (isWin) {
+                    // угол в верхней половине (0–180), но не ровно на границе
+                    angle = 5 + Math.random() * 170;
+                } else {
+                    // угол в нижней половине (180–360)
+                    angle = 185 + Math.random() * 170;
+                }
+
+                // Добавляем 3–5 оборотов для азарта
+                const turns = 3 + Math.floor(Math.random() * 3);
+                const totalAngle = turns * 360 + angle;
+
+                // Сброс без анимации
                 pointer.style.transition = 'none';
-                pointer.style.transform = `translate(-50%, -50%) rotate(0deg)`;
-
-                // force reflow
+                pointer.style.transform = 'rotate(0deg)';
                 void pointer.offsetWidth;
 
-                pointer.style.transition = 'transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
-                pointer.style.transform = `translate(-50%, -50%) rotate(${extraTurns * 360 + finalAngle}deg)`;
+                // Крутим
+                pointer.style.transition = 'transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1)';
+                pointer.style.transform = `rotate(${totalAngle}deg)`;
 
-                setTimeout(() => {
-                    // Стрелка указывает на верх колеса (0deg = верх).
-                    // Верх — это грань между секторами. Считаем, куда попали.
-                    const normalized = (360 - finalAngle) % 360;
-                    const isWin = normalized < (360 * (chance / 100));
-                    resolve(isWin);
-                }, 3100);
+                setTimeout(() => resolve(isWin), 3300);
             });
         }
 
@@ -364,22 +382,20 @@
                     Math.abs(curr.value - targetValue) < Math.abs(prev.value - targetValue) ? curr : prev
                 );
 
-                $('to-emoji').textContent = newItem.emoji;
+                $('to-img').src = giftImage(newItem.api);
+                $('to-img').style.opacity = '1';
                 $('to-value').textContent = newItem.value + ' ⭐';
                 $('to-card').classList.add('win');
 
                 tg.HapticFeedback?.notificationOccurred('success');
-                addHistory(true, `${currentItem.name} → ${newItem.name}`);
-
                 currentItem = newItem;
             } else {
-                $('to-emoji').textContent = '💥';
+                $('to-img').src = giftImage(currentItem.api);
+                $('to-img').style.opacity = '0.15';
                 $('to-value').textContent = 'Провал';
                 $('to-card').classList.add('lose');
 
                 tg.HapticFeedback?.notificationOccurred('error');
-                addHistory(false, `${currentItem.name} → провал`);
-
                 balance = Math.max(0, balance - currentItem.value);
                 $('balance').textContent = balance;
                 currentItem = selectRandomItem();
@@ -394,44 +410,31 @@
             }, 900);
         }
 
-        // ====== ИСТОРИЯ ======
-        function addHistory(win, text) {
-            const list = $('history-list');
-            const div = document.createElement('div');
-            div.className = 'history-item';
-            div.innerHTML = `<span>${text}</span><span class="${win ? 'win-text' : 'lose-text'}">${win ? '✅' : '❌'}</span>`;
-            list.prepend(div);
-            if (list.children.length > 8) list.removeChild(list.lastChild);
-        }
-
-        // ====== СПИСКИ ГИФТОВ ВНИЗУ ======
+        // ====== СПИСКИ ГИФТОВ ======
         function renderGiftLists() {
-            // Слева — "у тебя сейчас" (текущий + пара соседей)
             const my = $('my-gifts');
             my.innerHTML = '';
-            const myPool = ITEMS.slice(Math.max(0, ITEMS.indexOf(currentItem) - 2), ITEMS.indexOf(currentItem) + 3);
+            const idx = ITEMS.indexOf(currentItem);
+            const myPool = ITEMS.slice(Math.max(0, idx - 2), idx + 3);
             myPool.forEach(it => {
                 const div = document.createElement('div');
                 div.className = 'gift-chip';
-                div.innerHTML = `<span>${it.emoji} ${it.name}</span><span class="gval">${it.value}⭐</span>`;
+                div.innerHTML = `<img src="${giftImage(it.api, 64)}" alt=""><span class="gname">${it.name}</span><span class="gval">${it.value}⭐</span>`;
                 my.appendChild(div);
             });
 
-            // Справа — цели (следующие по цене)
             const target = $('target-gifts');
             target.innerHTML = '';
-            const idx = ITEMS.indexOf(currentItem);
             const targets = ITEMS.slice(idx + 1, idx + 6);
             targets.forEach(it => {
                 const div = document.createElement('div');
                 div.className = 'gift-chip';
-                div.innerHTML = `<span>${it.emoji} ${it.name}</span><span class="gval">${it.value}⭐</span>`;
+                div.innerHTML = `<img src="${giftImage(it.api, 64)}" alt=""><span class="gname">${it.name}</span><span class="gval">${it.value}⭐</span>`;
                 target.appendChild(div);
             });
         }
 
         // ====== СТАРТ ======
-        currentItem = ITEMS[7];
         renderMultipliers();
         updateFromCard();
         renderGiftLists();
