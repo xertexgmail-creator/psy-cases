@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>АПГРЕЙДЕР — PSY</title>
+<title>ПСЫ.gg — Апгрейдер</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
-        background: #0f0f0f;
+        background: #0a0a0a;
         color: #fff;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         padding: 12px;
@@ -18,23 +18,23 @@
 
     .header {
         display: flex; justify-content: space-between; align-items: center;
-        padding: 8px 12px;
-        background: linear-gradient(90deg, #1a1a1a, #141414);
+        padding: 10px 14px;
+        background: #151515;
         border-radius: 12px;
         margin-bottom: 14px;
-        border: 1px solid rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
     }
     .logo {
-        font-size: 14px; font-weight: 800; letter-spacing: 0.5px;
-        color: #f5c518;
+        font-size: 18px; font-weight: 900; letter-spacing: 1px;
+        color: #fff;
         text-transform: uppercase;
     }
+    .logo .dot { color: #888; }
     .balance {
-        background: rgba(245,197,24,0.12);
-        border: 1px solid rgba(245,197,24,0.35);
-        padding: 5px 12px; border-radius: 16px;
-        font-size: 13px; font-weight: 700;
-        color: #f5c518;
+        background: #ffffff;
+        color: #000;
+        padding: 6px 14px; border-radius: 16px;
+        font-size: 13px; font-weight: 800;
     }
 
     .arena {
@@ -45,25 +45,25 @@
         margin-bottom: 14px;
     }
     .item-slot {
-        background: linear-gradient(160deg, #1c1c1c, #121212);
+        background: #151515;
         border-radius: 14px;
         padding: 22px 8px 14px 8px;
         text-align: center;
-        border: 1px solid rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
         transition: all 0.3s;
         min-height: 190px;
         display: flex; flex-direction: column;
         justify-content: center; align-items: center;
         position: relative;
     }
-    .item-slot.win { border-color: #22c55e; box-shadow: 0 0 25px rgba(34,197,94,0.4); }
-    .item-slot.lose { border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.4); }
+    .item-slot.win { border-color: #fff; box-shadow: 0 0 25px rgba(255,255,255,0.3); }
+    .item-slot.lose { border-color: #555; box-shadow: 0 0 25px rgba(100,100,100,0.3); }
 
     .slot-title {
         font-size: 10px;
-        color: #888;
+        color: #777;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 1px;
         margin-bottom: 10px;
         position: absolute;
         top: 10px; left: 0; right: 0;
@@ -73,7 +73,7 @@
         width: 84px; height: 84px;
         object-fit: contain;
         margin-bottom: 8px;
-        filter: drop-shadow(0 0 12px rgba(245,197,24,0.25));
+        filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
         transition: all 0.3s;
     }
     .item-name {
@@ -88,8 +88,8 @@
     }
     .item-value {
         font-size: 14px;
-        font-weight: 700;
-        color: #f5c518;
+        font-weight: 800;
+        color: #fff;
     }
 
     .wheel-col {
@@ -120,7 +120,7 @@
         border-left: 9px solid transparent;
         border-right: 9px solid transparent;
         border-top: 16px solid #fff;
-        filter: drop-shadow(0 0 10px #f5c518);
+        filter: drop-shadow(0 0 8px rgba(255,255,255,0.7));
     }
 
     .wheel-center {
@@ -129,22 +129,21 @@
         transform: translate(-50%, -50%);
         width: 95px; height: 95px;
         border-radius: 50%;
-        background: radial-gradient(circle, #1a1a1a 60%, #0f0f0f 100%);
-        border: 2px solid rgba(245,197,24,0.3);
+        background: #0a0a0a;
+        border: 2px solid rgba(255,255,255,0.15);
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
         z-index: 3;
-        box-shadow: 0 0 20px rgba(245,197,24,0.2) inset;
     }
     .wheel-percent {
         font-size: 26px;
-        font-weight: 800;
-        color: #f5c518;
+        font-weight: 900;
+        color: #fff;
         line-height: 1;
     }
     .wheel-chance-label {
         font-size: 9px;
-        color: #888;
+        color: #777;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-top: 3px;
@@ -173,18 +172,18 @@
     .mini-bar {
         flex: 1;
         height: 4px;
-        background: rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.08);
         border-radius: 2px;
         overflow: hidden;
     }
     .mini-fill {
         height: 100%;
-        background: #f5c518;
+        background: #fff;
         border-radius: 2px;
         transition: width 0.25s;
     }
     .mini-value {
-        color: #f5c518;
+        color: #fff;
         font-weight: 700;
         min-width: 36px;
         text-align: right;
@@ -197,8 +196,8 @@
         margin-bottom: 14px;
     }
     .mult-btn {
-        background: linear-gradient(160deg, #1c1c1c, #151515);
-        border: 1px solid rgba(255,255,255,0.08);
+        background: #151515;
+        border: 1px solid rgba(255,255,255,0.1);
         color: #fff;
         padding: 16px 4px;
         border-radius: 12px;
@@ -208,10 +207,9 @@
         transition: all 0.2s;
     }
     .mult-btn.active {
-        background: linear-gradient(135deg, #f5c518, #e0a800);
-        border-color: transparent;
+        background: #ffffff;
+        border-color: #fff;
         color: #000;
-        box-shadow: 0 4px 20px rgba(245,197,24,0.5);
     }
     .mult-btn .chance {
         display: block;
@@ -220,21 +218,20 @@
         font-weight: 500;
         margin-top: 3px;
     }
-    .mult-btn.active .chance { color: rgba(0,0,0,0.7); }
+    .mult-btn.active .chance { color: rgba(0,0,0,0.6); }
 
     .action-btn {
         width: 100%;
         padding: 18px;
-        background: linear-gradient(135deg, #f5c518, #e0a800);
+        background: #ffffff;
         border: none;
         border-radius: 14px;
         color: #000;
         font-size: 17px;
-        font-weight: 800;
+        font-weight: 900;
         cursor: pointer;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
         text-transform: uppercase;
-        box-shadow: 0 8px 30px rgba(245,197,24,0.35);
         transition: transform 0.1s;
         margin-bottom: 14px;
     }
@@ -247,10 +244,10 @@
         gap: 10px;
     }
     .col-block {
-        background: #161616;
+        background: #151515;
         border-radius: 14px;
         padding: 10px;
-        border: 1px solid rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
         max-height: 240px;
         overflow-y: auto;
     }
@@ -258,24 +255,24 @@
         font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 1px;
-        color: #888;
+        color: #777;
         margin-bottom: 8px;
     }
     .gift-item {
         display: flex;
         align-items: center;
         gap: 6px;
-        padding: 6px 6px;
+        padding: 6px;
         border-radius: 8px;
         margin-bottom: 4px;
         background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.05);
         cursor: pointer;
         transition: all 0.15s;
     }
     .gift-item.active {
-        border-color: #f5c518;
-        background: rgba(245,197,24,0.08);
+        border-color: #fff;
+        background: rgba(255,255,255,0.08);
     }
     .gift-item img {
         width: 26px; height: 26px;
@@ -292,7 +289,7 @@
     }
     .gift-item .gval {
         font-size: 10px;
-        color: #f5c518;
+        color: #fff;
         font-weight: 700;
     }
 
@@ -303,13 +300,13 @@
         color: #555;
         padding-bottom: 10px;
     }
-    .footer a { color: #f5c518; text-decoration: none; }
+    .footer a { color: #fff; text-decoration: none; }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="logo">🔱 Апгрейдер Gifts</div>
+    <div class="logo">ПСЫ<span class="dot">.</span>gg</div>
     <div class="balance">⭐ <span id="balance">1000</span></div>
 </div>
 
@@ -324,13 +321,10 @@
     <div class="wheel-col">
         <div class="wheel-wrap">
             <svg class="wheel-svg" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
-                <!-- жёлтый сектор победы: растёт симметрично вверх от низа -->
-                <circle id="win-arc" cx="50" cy="50" r="44" fill="none"
-                        stroke="#f5c518" stroke-width="10"
-                        stroke-linecap="butt"
-                        stroke-dasharray="0 276.46"/>
-                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(245,197,24,0.12)" stroke-width="0.5"/>
+                <!-- фон обода -->
+                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+                <!-- сектор победы: заливка задаётся через JS path -->
+                <path id="win-arc" fill="#fff" opacity="0.85"/>
             </svg>
             <div class="wheel-pointer" id="wheel-pointer"></div>
             <div class="wheel-center">
@@ -385,7 +379,6 @@
     tg.ready();
     tg.expand();
 
-    // ====== ГИФТЫ (точные API-имена) ======
     const ITEMS = [
         { api: 'Heart',       name: 'Heart',        value: 15    },
         { api: 'TeddyBear',   name: 'Teddy Bear',   value: 15    },
@@ -416,9 +409,6 @@
         { mult: 100, chance: 1  }
     ];
 
-    // Длина окружности радиуса 44 = 2 * π * 44 ≈ 276.46
-    const CIRCUMFERENCE = 2 * Math.PI * 44;
-
     function giftImage(apiName, size = 128) {
         return `https://api.changes.tg/original/${apiName}.png?size=${size}`;
     }
@@ -437,22 +427,50 @@
         return 'безумие';
     }
 
-    // ===== ЖЁЛТЫЙ СЕКТОР ПОБЕДЫ =====
+    // ===== СЕКТОР ПОБЕДЫ =====
+    // Единая система: 0° = верх (где стрелка), по часовой стрелке.
     // Сектор победы центрируется на 180° (низ колеса) и растёт симметрично вверх.
-    // SVG: круг рисуется от 0° (справа), по часовой. Используем rotate(-90) чтобы 0° был сверху,
-    // и поворачиваем dasharray так, чтобы центр дуги был на 180°.
+    // Угол стрелки = CSS rotate(θ), где θ=0 → вверх.
+    // В SVG-координатах: точка на окружности для угла θ (от верха, по часовой):
+    //   x = 50 + r * sin(θ°),  y = 50 - r * cos(θ°)
+    // Сектор от (180 - half) до (180 + half).
     function updateWinArc() {
         const arc = $('win-arc');
-        const winLength = (currentMult.chance / 100) * CIRCUMFERENCE;
-        // центр дуги в 180° от верха. Начало дуги = 180 - winLength/2 в градусах.
-        const halfDeg = (currentMult.chance * 3.6) / 2;
-        const startAngle = 180 - halfDeg;
-        // SVG stroke начинается с 0° (правая точка) по часовой стрелке.
-        // Поворачиваем начало дуги в нужное место через rotate.
-        arc.setAttribute('stroke-dasharray', `${winLength} ${CIRCUMFERENCE}`);
-        // rotate: 0° в SVG = правая точка. Нам нужна точка startAngle от верха.
-        // От верха по часовой: угол в SVG = startAngle - 90.
-        arc.setAttribute('transform', `rotate(${startAngle - 90} 50 50)`);
+        const r = 44;
+        const cx = 50, cy = 50;
+        const half = currentMult.chance * 3.6 / 2;
+        const startAngle = 180 - half;
+        const endAngle = 180 + half;
+
+        const toRad = deg => (deg * Math.PI) / 180;
+        const x1 = cx + r * Math.sin(toRad(startAngle));
+        const y1 = cy - r * Math.cos(toRad(startAngle));
+        const x2 = cx + r * Math.sin(toRad(endAngle));
+        const y2 = cy - r * Math.cos(toRad(endAngle));
+        const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+
+        // Сектор как "пончик" между r-inner и r-outer для толщины обода
+        const rOuter = 49;
+        const rInner = 39;
+
+        const xo1 = cx + rOuter * Math.sin(toRad(startAngle));
+        const yo1 = cy - rOuter * Math.cos(toRad(startAngle));
+        const xo2 = cx + rOuter * Math.sin(toRad(endAngle));
+        const yo2 = cy - rOuter * Math.cos(toRad(endAngle));
+        const xi1 = cx + rInner * Math.sin(toRad(startAngle));
+        const yi1 = cy - rInner * Math.cos(toRad(startAngle));
+        const xi2 = cx + rInner * Math.sin(toRad(endAngle));
+        const yi2 = cy - rInner * Math.cos(toRad(endAngle));
+
+        const d = [
+            `M ${xo1} ${yo1}`,
+            `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${xo2} ${yo2}`,
+            `L ${xi2} ${yi2}`,
+            `A ${rInner} ${rInner} 0 ${largeArc} 0 ${xi1} ${yi1}`,
+            'Z'
+        ].join(' ');
+
+        arc.setAttribute('d', d);
     }
 
     function updatePercentUI() {
@@ -546,29 +564,27 @@
     }
 
     // ===== КОЛЕСО =====
-    // Сектор победы: симметрично снизу вверх, центр на 180°.
-    // Стрелка: 0° = верх (указывает вверх).
-    // Проверяем победу по ФАКТИЧЕСКОМУ углу стрелки, не по Math.random().
+    // Единая система: угол стрелки θ, где 0° = верх, по часовой.
+    // Сектор победы: [180 - half, 180 + half].
+    // Победа = finalAngle попадает в этот диапазон. Никаких Math.random() для результата.
     function spinWheel(chance) {
         return new Promise(resolve => {
             const pointer = $('wheel-pointer');
+            const half = chance * 3.6 / 2;
+            const sectorStart = 180 - half;
+            const sectorEnd = 180 + half;
 
-            const isWin = Math.random() * 100 < chance;
-            const sectorSize = chance * 3.6;
-            const centerAngle = 180;
-
+            // Выбираем угол так, чтобы он гарантированно был в нужной зоне
+            const wantWin = Math.random() * 100 < chance;
             let targetAngle;
-            if (isWin) {
-                const half = sectorSize / 2;
-                targetAngle = centerAngle + (Math.random() * 2 - 1) * (half * 0.9);
+            if (wantWin) {
+                targetAngle = sectorStart + 1 + Math.random() * (sectorEnd - sectorStart - 2);
             } else {
-                const half = sectorSize / 2;
-                const outsideSize = 360 - sectorSize;
-                let offset = Math.random() * outsideSize;
-                targetAngle = centerAngle + half + offset;
+                const outsideSize = 360 - (sectorEnd - sectorStart);
+                let offset = 1 + Math.random() * (outsideSize - 2);
+                targetAngle = sectorEnd + offset;
+                if (targetAngle > 360) targetAngle -= 360;
             }
-
-            targetAngle = ((targetAngle % 360) + 360) % 360;
 
             const turns = 3 + Math.floor(Math.random() * 2);
             const totalAngle = turns * 360 + targetAngle;
@@ -580,19 +596,9 @@
             pointer.style.transition = 'transform 2.5s cubic-bezier(0.2, 0.7, 0.15, 1)';
             pointer.style.transform = `rotate(${totalAngle}deg)`;
 
-            // Проверяем фактический угол
+            // Проверяем ФАКТИЧЕСКИЙ угол (может отличаться от targetAngle, если стрелка докрутилась)
             const finalAngle = ((totalAngle % 360) + 360) % 360;
-            const sectorStart = centerAngle - sectorSize / 2;
-            const sectorEnd = centerAngle + sectorSize / 2;
-
-            let realWin;
-            if (sectorStart < 0) {
-                realWin = finalAngle >= (360 + sectorStart) || finalAngle <= sectorEnd;
-            } else if (sectorEnd > 360) {
-                realWin = finalAngle >= sectorStart || finalAngle <= (sectorEnd - 360);
-            } else {
-                realWin = finalAngle >= sectorStart && finalAngle <= sectorEnd;
-            }
+            const realWin = finalAngle >= sectorStart && finalAngle <= sectorEnd;
 
             setTimeout(() => resolve(realWin), 2600);
         });
