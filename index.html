@@ -8,36 +8,11 @@
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { overflow-x: hidden; }
-    body {
-        background: #0a0a0a;
-        color: #fff;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        padding: 10px;
-        min-height: 100vh;
-        position: relative;
-    }
-    /* ГРАДИЕНТЫ ФОНА */
-    body::before {
-        content: '';
-        position: fixed;
-        top: -20%; left: -20%;
-        width: 140%; height: 60%;
-        background: radial-gradient(ellipse at center, rgba(74,134,255,0.15) 0%, transparent 60%);
-        pointer-events: none;
-        z-index: 0;
-    }
-    body::after {
-        content: '';
-        position: fixed;
-        bottom: -20%; right: -20%;
-        width: 140%; height: 60%;
-        background: radial-gradient(ellipse at center, rgba(168,85,247,0.12) 0%, transparent 60%);
-        pointer-events: none;
-        z-index: 0;
-    }
+    body { background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 10px; min-height: 100vh; position: relative; }
+    body::before { content: ''; position: fixed; top: -20%; left: -20%; width: 140%; height: 60%; background: radial-gradient(ellipse at center, rgba(74,134,255,0.15) 0%, transparent 60%); pointer-events: none; z-index: 0; }
+    body::after { content: ''; position: fixed; bottom: -20%; right: -20%; width: 140%; height: 60%; background: radial-gradient(ellipse at center, rgba(168,85,247,0.12) 0%, transparent 60%); pointer-events: none; z-index: 0; }
     body > * { position: relative; z-index: 1; }
 
-    /* ХЕДЕР */
     .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: linear-gradient(135deg, #1a1a1a, #121212); border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
     .logo { font-size: 18px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .logo .dot { color: #888; -webkit-text-fill-color: #888; }
@@ -47,101 +22,41 @@
     .plus-btn { width: 32px; height: 32px; border-radius: 50%; background: #fff; color: #000; border: none; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 0 15px rgba(255,255,255,0.25); }
     .plus-btn:active { transform: scale(0.92); }
 
-    /* АРЕНА */
     .arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; margin-bottom: 12px; }
-    .item-slot {
-        background: linear-gradient(160deg, #1c1c1c, #121212);
-        border-radius: 16px;
-        padding: 26px 10px 16px 10px;
-        text-align: center;
-        border: 1px solid rgba(255,255,255,0.08);
-        transition: all 0.3s;
-        min-height: 260px;
-        display: flex; flex-direction: column;
-        justify-content: center; align-items: center;
-        position: relative;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-    }
+    .item-slot { background: linear-gradient(160deg, #1c1c1c, #121212); border-radius: 16px; padding: 26px 10px 16px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s; min-height: 260px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
     .item-slot.win { border-color: #22c55e; box-shadow: 0 0 40px rgba(34,197,94,0.5), inset 0 0 30px rgba(34,197,94,0.15); }
     .item-slot.lose { border-color: #ef4444; box-shadow: 0 0 40px rgba(239,68,68,0.4), inset 0 0 30px rgba(239,68,68,0.15); }
     .slot-title { font-size: 10px; color: #777; text-transform: uppercase; letter-spacing: 1px; position: absolute; top: 10px; left: 0; right: 0; }
     .slot-icon { width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; position: relative; }
-    .slot-icon .emoji-fb { font-size: 82px; line-height: 1; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
-    .slot-icon img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
+    .slot-icon img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
     .item-name { font-size: 13px; color: #ccc; margin-bottom: 5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .item-value { font-size: 17px; font-weight: 800; color: #fff; }
 
-    /* КОЛЕСО — УВЕЛИЧЕНО */
     .wheel-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-width: 280px; }
     .wheel-wrap { position: relative; width: 280px; height: 280px; }
-    .wheel-wrap::before {
-        content: '';
-        position: absolute;
-        inset: -20px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-        pointer-events: none;
-    }
+    .wheel-wrap::before { content: ''; position: absolute; inset: -20px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); pointer-events: none; }
     .wheel-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
     .wheel-pointer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: transform 7.5s cubic-bezier(0.15, 0.7, 0.15, 1); }
-    .wheel-pointer::before {
-        content: '';
-        position: absolute;
-        top: -8px; left: 50%;
-        transform: translateX(-50%);
-        width: 0; height: 0;
-        border-left: 13px solid transparent;
-        border-right: 13px solid transparent;
-        border-top: 22px solid #fff;
-        filter: drop-shadow(0 0 12px rgba(255,255,255,0.9));
-    }
-    .wheel-center {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        width: 158px; height: 158px;
-        border-radius: 50%;
-        background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
-        border: 2px solid rgba(255,255,255,0.18);
-        display: flex; flex-direction: column;
-        align-items: center; justify-content: center;
-        z-index: 3;
-        box-shadow: 0 0 30px rgba(255,255,255,0.1), inset 0 0 30px rgba(0,0,0,0.5);
-    }
+    .wheel-pointer::before { content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 22px solid #fff; filter: drop-shadow(0 0 12px rgba(255,255,255,0.9)); }
+    .wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 158px; height: 158px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); border: 2px solid rgba(255,255,255,0.18); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3; box-shadow: 0 0 30px rgba(255,255,255,0.1), inset 0 0 30px rgba(0,0,0,0.5); }
     .wheel-percent { font-size: 38px; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 15px rgba(255,255,255,0.5); }
     .wheel-chance-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-    /* КНОПКИ × */
     .multiplier-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-bottom: 12px; max-width: 420px; margin-left: auto; margin-right: auto; }
     .mult-btn { background: linear-gradient(160deg, #1c1c1c, #121212); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 2px; border-radius: 6px; font-size: 9px; font-weight: 800; cursor: pointer; transition: all 0.2s; line-height: 1.1; }
     .mult-btn.active { background: #fff; border-color: #fff; color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
     .mult-btn .chance { display: block; font-size: 7px; color: #888; font-weight: 500; margin-top: 1px; }
     .mult-btn.active .chance { color: rgba(0,0,0,0.6); }
 
-    /* КНОПКА АПГРЕЙДА */
-    .action-btn {
-        display: block;
-        width: 55%;
-        margin: 0 auto 14px auto;
-        padding: 15px;
-        background: linear-gradient(135deg, #ffffff, #d0d0d0);
-        border: none; border-radius: 14px;
-        color: #000; font-size: 15px; font-weight: 900;
-        cursor: pointer; letter-spacing: 1px;
-        text-transform: uppercase;
-        transition: transform 0.1s, box-shadow 0.2s;
-        box-shadow: 0 0 25px rgba(255,255,255,0.25);
-    }
+    .action-btn { display: block; width: 55%; margin: 0 auto 14px auto; padding: 15px; background: linear-gradient(135deg, #ffffff, #d0d0d0); border: none; border-radius: 14px; color: #000; font-size: 15px; font-weight: 900; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 0 25px rgba(255,255,255,0.25); }
     .action-btn:active { transform: scale(0.97); }
     .action-btn:disabled { opacity: 0.35; box-shadow: none; }
 
-    /* ПАНЕЛИ */
     .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .panel { background: linear-gradient(160deg, #1a1a1a, #101010); border-radius: 14px; padding: 10px; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; max-height: 400px; }
     .panel h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #777; margin-bottom: 8px; flex-shrink: 0; }
     .panel-body { overflow-y: auto; flex: 1; }
 
-    /* ПОИСК + ФИЛЬТР */
     .search-row { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; }
     .search-row svg { width: 12px; height: 12px; flex-shrink: 0; opacity: 0.5; }
     .search-row input { background: transparent; border: none; color: #fff; font-size: 11px; width: 100%; outline: none; }
@@ -150,26 +65,22 @@
     .price-row span { font-size: 9px; color: #666; text-transform: uppercase; }
     .price-row input { flex: 1; min-width: 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 10px; padding: 4px 6px; border-radius: 6px; outline: none; }
 
-    /* СЕТКА */
     .item-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
     .grid-slot { background: linear-gradient(160deg, #1c1c1c, #131313); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 8px 4px; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; }
     .grid-slot:active { transform: scale(0.96); }
     .grid-slot.selected { border-color: #fff; background: rgba(255,255,255,0.08); box-shadow: 0 0 15px rgba(255,255,255,0.25); }
     .grid-slot.disabled { opacity: 0.3; pointer-events: none; }
     .grid-slot .slot-icon-sm { width: 48px; height: 48px; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center; position: relative; }
-    .grid-slot .slot-icon-sm .emoji-fb { font-size: 30px; line-height: 1; }
-    .grid-slot .slot-icon-sm img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .grid-slot .slot-icon-sm img { width: 100%; height: 100%; object-fit: contain; }
     .grid-slot .gname { font-size: 8px; color: #aaa; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .grid-slot .gval { font-size: 9px; color: #fff; font-weight: 700; margin-top: 2px; }
 
     .empty-msg { text-align: center; color: #555; font-size: 11px; padding: 20px 10px; }
 
-    /* МОДАЛКА */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
     .modal-overlay.active { display: flex; }
     .modal { background: linear-gradient(160deg, #1c1c1c, #101010); border-radius: 16px; padding: 22px; max-width: 320px; width: 100%; border: 1px solid rgba(255,255,255,0.1); text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
     .modal .slot-icon { margin: 0 auto 12px; width: 100px; height: 100px; }
-    .modal .slot-icon .emoji-fb { font-size: 64px; }
     .modal h3 { font-size: 16px; margin-bottom: 6px; }
     .modal .price { font-size: 22px; font-weight: 900; margin-bottom: 18px; color: #fff; }
     .modal-btns { display: flex; gap: 8px; }
@@ -178,44 +89,17 @@
     .modal-btn.cancel { background: rgba(255,255,255,0.1); color: #fff; }
     .modal-btn.buy:disabled { opacity: 0.4; }
 
-    /* КОНФЕТИ И ЭФФЕКТЫ */
-    .confetti {
-        position: fixed;
-        width: 10px; height: 10px;
-        border-radius: 2px;
-        pointer-events: none;
-        z-index: 999;
-        animation: confetti-burst 1.6s ease-out forwards;
-    }
-    @keyframes confetti-burst {
-        0% { transform: translate(0,0) rotate(0); opacity: 1; }
-        100% { transform: translate(var(--dx), var(--dy)) rotate(720deg); opacity: 0; }
-    }
-    .flash-red {
-        position: fixed; inset: 0;
-        background: transparent;
-        pointer-events: none;
-        z-index: 998;
-    }
+    .confetti { position: fixed; width: 10px; height: 10px; border-radius: 2px; pointer-events: none; z-index: 999; animation: confetti-burst 1.6s ease-out forwards; }
+    @keyframes confetti-burst { 0% { transform: translate(0,0) rotate(0); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) rotate(720deg); opacity: 0; } }
+    .flash-red { position: fixed; inset: 0; background: transparent; pointer-events: none; z-index: 998; }
     .flash-red.active { animation: flash-red-anim 0.6s; }
-    @keyframes flash-red-anim {
-        0% { background: rgba(239,68,68,0); }
-        25% { background: rgba(239,68,68,0.4); }
-        100% { background: rgba(239,68,68,0); }
-    }
+    @keyframes flash-red-anim { 0% { background: rgba(239,68,68,0); } 25% { background: rgba(239,68,68,0.4); } 100% { background: rgba(239,68,68,0); } }
     .shake { animation: shake-anim 0.5s; }
-    @keyframes shake-anim {
-        0%, 100% { transform: translateX(0); }
-        20% { transform: translateX(-10px); }
-        40% { transform: translateX(10px); }
-        60% { transform: translateX(-7px); }
-        80% { transform: translateX(7px); }
-    }
+    @keyframes shake-anim { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-7px); } 80% { transform: translateX(7px); } }
 
     .footer { text-align: center; margin-top: 14px; font-size: 9px; color: #555; padding-bottom: 8px; }
     .footer a { color: #fff; text-decoration: none; }
 
-    /* мобильная адаптация */
     @media (max-width: 500px) {
         .wheel-wrap { width: 220px; height: 220px; }
         .wheel-col { min-width: 220px; }
@@ -223,7 +107,6 @@
         .wheel-percent { font-size: 30px; }
         .item-slot { min-height: 220px; }
         .slot-icon { width: 100px; height: 100px; }
-        .slot-icon .emoji-fb { font-size: 64px; }
     }
 </style>
 </head>
@@ -338,28 +221,27 @@
     tg.ready();
     tg.expand();
 
-    // ====== КАТАЛОГ (api = имя для API, slug = имя для Fragment CDN) ======
     const CATALOG = [
-        { api: 'Toy Bear',       slug: 'toybear',      name: 'Toy Bear',       value: 15,    emoji: '🧸' },
-        { api: 'Heart Locket',   slug: 'heartlocket',  name: 'Heart Locket',   value: 25,    emoji: '❤️' },
-        { api: 'Big Year',       slug: 'bigyear',      name: 'Big Year',       value: 40,    emoji: '🎊' },
-        { api: 'Desk Calendar',  slug: 'deskcalendar', name: 'Desk Calendar',  value: 60,    emoji: '📅' },
-        { api: 'Jingle Bells',   slug: 'jinglebells',  name: 'Jingle Bells',   value: 80,    emoji: '🔔' },
-        { api: 'Homemade Cake',  slug: 'homemadecake', name: 'Homemade Cake',  value: 110,   emoji: '🎂' },
-        { api: 'Eternal Rose',   slug: 'eternalrose',  name: 'Eternal Rose',   value: 150,   emoji: '🌹' },
-        { api: 'Magic Potion',   slug: 'magicpotion',  name: 'Magic Potion',   value: 200,   emoji: '🧪' },
-        { api: 'Crystal Ball',   slug: 'crystalball',  name: 'Crystal Ball',   value: 280,   emoji: '🔮' },
-        { api: 'Top Hat',        slug: 'tophat',       name: 'Top Hat',        value: 380,   emoji: '🎩' },
-        { api: "Durov's Cap",    slug: 'durovscap',    name: "Durov's Cap",    value: 500,   emoji: '🧢' },
-        { api: 'Diamond Ring',   slug: 'diamondring',  name: 'Diamond Ring',   value: 700,   emoji: '💍' },
-        { api: 'Sakura Flower',  slug: 'sakuraflower', name: 'Sakura Flower',  value: 950,   emoji: '🌸' },
-        { api: 'Jolly Chimp',    slug: 'jollychimp',   name: 'Jolly Chimp',    value: 1300,  emoji: '🐵' },
-        { api: 'Plush Pepe',     slug: 'plushpepe',    name: 'Plush Pepe',     value: 1800,  emoji: '🐸' },
-        { api: 'Snoop Dogg',     slug: 'snoopdogg',    name: 'Snoop Dogg',     value: 2500,  emoji: '🐶' },
-        { api: 'Swiss Watch',    slug: 'swisswatch',   name: 'Swiss Watch',    value: 3500,  emoji: '⌚' },
-        { api: 'Precious Peach', slug: 'preciouspeach',name: 'Precious Peach', value: 5000,  emoji: '🍑' },
-        { api: 'Signet Ring',    slug: 'signetring',   name: 'Signet Ring',    value: 7000,  emoji: '💎' },
-        { api: 'Santa Hat',      slug: 'santahat',     name: 'Santa Hat',      value: 10000, emoji: '🎅' }
+        { name: 'Toy Bear',        slug: 'toybear',      value: 15    },
+        { name: 'Heart Locket',    slug: 'heartlocket',  value: 25    },
+        { name: 'Big Year',        slug: 'bigyear',      value: 40    },
+        { name: 'Desk Calendar',   slug: 'deskcalendar', value: 60    },
+        { name: 'Jingle Bells',    slug: 'jinglebells',  value: 80    },
+        { name: 'Homemade Cake',   slug: 'homemadecake', value: 110   },
+        { name: 'Eternal Rose',    slug: 'eternalrose',  value: 150   },
+        { name: 'Magic Potion',    slug: 'magicpotion',  value: 200   },
+        { name: 'Crystal Ball',    slug: 'crystalball',  value: 280   },
+        { name: 'Top Hat',         slug: 'tophat',       value: 380   },
+        { name: "Durov's Cap",     slug: 'durovscap',    value: 500   },
+        { name: 'Diamond Ring',    slug: 'diamondring',  value: 700   },
+        { name: 'Sakura Flower',   slug: 'sakuraflower', value: 950   },
+        { name: 'Jolly Chimp',     slug: 'jollychimp',   value: 1300  },
+        { name: 'Plush Pepe',      slug: 'plushpepe',    value: 1800  },
+        { name: 'Snoop Dogg',      slug: 'snoopdogg',    value: 2500  },
+        { name: 'Swiss Watch',     slug: 'swisswatch',   value: 3500  },
+        { name: 'Precious Peach',  slug: 'preciouspeach',value: 5000  },
+        { name: 'Signet Ring',     slug: 'signetring',   value: 7000  },
+        { name: 'Santa Hat',       slug: 'santahat',     value: 10000 }
     ];
 
     const MULTIPLIERS = [1.2, 1.5, 2, 3, 5, 10, 25, 100];
@@ -378,29 +260,19 @@
 
     const $ = id => document.getElementById(id);
 
-    // ====== ИКОНКИ С КАСКАДНЫМ FALLBACK ======
-    // Приоритет: Fragment CDN → api.changes.tg → эмодзи
-    function makeImgTag(url, item, onFail) {
-        return `<img src="${url}" onerror="${onFail}" alt="">`;
+    function giftImageUrl(item, size = 128) {
+        return `https://nft.fragment.com/gift/${item.slug}.${size >= 128 ? 500 : 200}.webp`;
     }
 
     function iconHTML(item, size = 128) {
-        const emojiSize = size >= 128 ? 82 : (size >= 100 ? 64 : 30);
-        const fragmentUrl = `https://nft.fragment.com/gift/${item.slug}.${size >= 128 ? 500 : 200}.jpg`;
-        const changesUrl = `https://api.changes.tg/original/${encodeURIComponent(item.api)}.png?size=${size}`;
-        // Каскад: fragment → changes → эмодзи (эмодзи видно всегда, картинки поверх)
-        const uid = 'img_' + Math.random().toString(36).slice(2, 9);
-        return `<span class="emoji-fb" style="font-size:${emojiSize}px;">${item.emoji}</span>
-                <img id="${uid}" src="${fragmentUrl}"
-                     onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='${changesUrl}';}else{this.style.display='none';}"
-                     alt="">`;
+        const url = giftImageUrl(item, size);
+        return `<img src="${url}" loading="lazy" alt="${item.name}">`;
     }
 
     function setSlotIcon(slotEl, item, size = 128) {
         slotEl.innerHTML = iconHTML(item, size);
     }
 
-    // ====== ВСПОМОГАТЕЛЬНЫЕ ======
     function chanceFromRatio(ratio) {
         let c = 100 / ratio;
         if (c > 99) c = 99;
@@ -466,14 +338,13 @@
         arc.setAttribute('d', d);
     }
 
-    // ====== АРЕНА ======
     function renderArena() {
         if (currentItem) {
             setSlotIcon($('from-icon'), currentItem);
             $('from-name').textContent = currentItem.name;
             $('from-value').textContent = currentItem.value + ' ⭐';
         } else {
-            $('from-icon').innerHTML = '<span class="emoji-fb">❓</span>';
+            $('from-icon').innerHTML = '';
             $('from-name').textContent = 'Выбери из инвентаря';
             $('from-value').textContent = '—';
         }
@@ -482,7 +353,7 @@
             $('to-name').textContent = targetItem.name;
             $('to-value').textContent = targetItem.value + ' ⭐';
         } else {
-            $('to-icon').innerHTML = '<span class="emoji-fb">🎯</span>';
+            $('to-icon').innerHTML = '';
             $('to-name').textContent = 'Выбери цель';
             $('to-value').textContent = '—';
         }
@@ -490,7 +361,6 @@
         $('to-card').className = 'item-slot';
     }
 
-    // ====== ИНВЕНТАРЬ ======
     function renderInventory() {
         const grid = $('inv-grid');
         grid.innerHTML = '';
@@ -530,7 +400,6 @@
         });
     }
 
-    // ====== КАТАЛОГ ======
     function renderCatalog() {
         const grid = $('cat-grid');
         grid.innerHTML = '';
@@ -566,7 +435,6 @@
         });
     }
 
-    // ====== МОДАЛКА ======
     let buyCandidate = null;
 
     function openBuyModal(item) {
@@ -598,7 +466,6 @@
         tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    // ====== МНОЖИТЕЛИ ======
     function renderMultipliers() {
         const grid = $('mult-grid');
         grid.innerHTML = '';
@@ -630,7 +497,6 @@
         $('upgrade-btn').disabled = isSpinning || !currentItem || !targetItem;
     }
 
-    // ====== ЭФФЕКТЫ ======
     function burstConfetti() {
         const colors = ['#fff', '#f5c518', '#22c55e', '#4a86ff', '#a855f7', '#ef4444'];
         const centerX = window.innerWidth / 2;
@@ -668,7 +534,6 @@
         setTimeout(() => document.body.classList.remove('shake'), 600);
     }
 
-    // ====== КОЛЕСО ======
     function spinWheel(chanceVal) {
         return new Promise(resolve => {
             const pointer = $('wheel-pointer');
@@ -744,7 +609,6 @@
         }, 500);
     }
 
-    // ====== ПЛЮС ======
     $('plus-btn').onclick = () => {
         const input = prompt('Сколько монет добавить?', '1000');
         if (input === null) return;
@@ -756,7 +620,6 @@
         tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    // ====== ФИЛЬТРЫ ======
     $('inv-search').addEventListener('input', e => { invSearch = e.target.value; renderInventory(); });
     $('inv-price-min').addEventListener('input', e => {
         const v = e.target.value.trim();
@@ -780,7 +643,6 @@
         renderCatalog();
     });
 
-    // ====== СТАРТ ======
     function initGame() {
         const pool = CATALOG.slice(0, 12);
         inventory = [];
