@@ -6,6 +6,14 @@
 <title>ПСЫ.gg</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+    /* Убираем светлый фон у иконок подарков */
+.slot-icon-sm img,
+.slot-icon img,
+.menu-card-icon .gicon img,
+.bet-gift-icon img,
+.history-icon img {
+    mix-blend-mode: screen;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
     --bg: #08080c; --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.14);
