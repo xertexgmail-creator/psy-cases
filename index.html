@@ -32,8 +32,45 @@
         min-height: 100vh;
         position: relative;
         -webkit-font-smoothing: antialiased;
+    }
+
+    /* ЗУМ-КОНТЕЙНЕР: в него оборачивается весь контент для эффекта приближения */
+    .zoom-stage {
         display: flex;
         flex-direction: column;
+        min-height: calc(100vh - 12px);
+        transform-origin: 50% 40%;
+        transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+        will-change: transform;
+        position: relative;
+        z-index: 1;
+    }
+    .zoom-stage.zooming {
+        transform: scale(1.12);
+        transition: transform 6s cubic-bezier(0.25, 0.1, 0.3, 1);
+    }
+    .zoom-stage.zoom-back {
+        transform: scale(1);
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Пульсирующий ореол во время вращения */
+    .spin-aura {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 0;
+        transition: opacity 0.6s;
+        background:
+            radial-gradient(circle at 50% 45%, rgba(74,134,255,0.28) 0%, transparent 40%),
+            radial-gradient(circle at 50% 45%, rgba(168,85,247,0.22) 0%, transparent 60%);
+        animation: auraPulse 1.4s ease-in-out infinite;
+    }
+    .spin-aura.active { opacity: 1; }
+    @keyframes auraPulse {
+        0%, 100% { transform: scale(1); opacity: 0.85; }
+        50% { transform: scale(1.08); opacity: 1; }
     }
 
     body::before {
@@ -234,6 +271,10 @@
     .wheel-wrap {
         position: relative;
         width: 140px; height: 140px;
+        transition: filter 0.5s;
+    }
+    .wheel-wrap.spinning {
+        filter: drop-shadow(0 0 40px rgba(168,85,247,0.9)) drop-shadow(0 0 20px rgba(74,134,255,0.8));
     }
     .wheel-wrap::before {
         content: '';
@@ -250,6 +291,11 @@
         animation: spinGlow 6s linear infinite;
         pointer-events: none;
         z-index: 0;
+    }
+    .wheel-wrap.spinning::before {
+        animation-duration: 0.7s;
+        opacity: 1;
+        filter: blur(20px);
     }
     @keyframes spinGlow { to { transform: rotate(360deg); } }
     .wheel-svg {
@@ -604,24 +650,9 @@
     }
     .modal-btn.buy:disabled { opacity: 0.35; cursor: not-allowed; }
 
-    /* ПРОМО МОДАЛКА */
-    .promo-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        margin-bottom: 4px;
-    }
-    .promo-title .gift-icon {
-        font-size: 22px;
-        filter: drop-shadow(0 0 10px rgba(245,197,24,0.6));
-    }
-    .promo-sub {
-        font-size: 10px;
-        color: var(--text-dim);
-        margin-bottom: 14px;
-        line-height: 1.3;
-    }
+    .promo-title { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px; }
+    .promo-title .gift-icon { font-size: 22px; filter: drop-shadow(0 0 10px rgba(245,197,24,0.6)); }
+    .promo-sub { font-size: 10px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.3; }
     .promo-input {
         width: 100%;
         padding: 11px 12px;
@@ -639,23 +670,9 @@
         text-transform: uppercase;
         font-family: inherit;
     }
-    .promo-input:focus {
-        border-color: rgba(245,197,24,0.6);
-        box-shadow: 0 0 20px rgba(245,197,24,0.3);
-    }
-    .promo-input::placeholder {
-        color: var(--text-mute);
-        letter-spacing: 0.5px;
-        text-transform: none;
-        font-weight: 500;
-    }
-    .promo-message {
-        font-size: 11px;
-        font-weight: 700;
-        min-height: 16px;
-        margin-bottom: 10px;
-        transition: color 0.2s;
-    }
+    .promo-input:focus { border-color: rgba(245,197,24,0.6); box-shadow: 0 0 20px rgba(245,197,24,0.3); }
+    .promo-input::placeholder { color: var(--text-mute); letter-spacing: 0.5px; text-transform: none; font-weight: 500; }
+    .promo-message { font-size: 11px; font-weight: 700; min-height: 16px; margin-bottom: 10px; transition: color 0.2s; }
     .promo-message.ok { color: var(--green); }
     .promo-message.err { color: var(--red); }
 
@@ -691,6 +708,27 @@
         40% { transform: translateX(7px); }
         60% { transform: translateX(-4px); }
         80% { transform: translateX(4px); }
+    }
+
+    /* ТРЯСКА ВО ВРЕМЯ ПОСЛЕДНИХ СЕКУНД ВРАЩЕНИЯ */
+    .tension-shake {
+        animation: tensionShake 0.15s ease-in-out infinite;
+    }
+    @keyframes tensionShake {
+        0%, 100% { transform: scale(1.12) translate(0, 0); }
+        25% { transform: scale(1.12) translate(-1.5px, 1px); }
+        50% { transform: scale(1.12) translate(1.5px, -1px); }
+        75% { transform: scale(1.12) translate(-1px, -1px); }
+    }
+
+    /* РЕЗКИЙ ВОЗВРАТ */
+    .snap-back {
+        animation: snapBack 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+    @keyframes snapBack {
+        0% { transform: scale(1.12); }
+        40% { transform: scale(0.92); }
+        100% { transform: scale(1); }
     }
 
     .footer {
@@ -747,100 +785,106 @@
 </head>
 <body>
 
-<div class="header">
-    <div class="logo">ПСЫ<span class="dot">.</span>gg</div>
-    <div class="header-right">
-        <button class="promo-btn" id="promo-btn"><span class="gift">🎁</span> ПРОМО</button>
-        <div class="balance-wrap">
-            <div class="balance">
-                <svg class="star-svg" viewBox="0 0 24 24" fill="#f5c518"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <span id="balance">1000</span>
-            </div>
-            <button class="plus-btn" id="plus-btn">+</button>
-        </div>
-    </div>
-</div>
+<div class="spin-aura" id="spin-aura"></div>
 
-<div class="arena">
-    <div class="item-slot" id="from-card">
-        <div class="slot-title">Твой</div>
-        <div class="slot-icon" id="from-icon"></div>
-        <div class="item-name" id="from-name">—</div>
-        <div class="item-value" id="from-value">—</div>
-    </div>
-    <div class="wheel-col">
-        <div class="wheel-wrap">
-            <svg class="wheel-svg" viewBox="0 0 100 100">
-                <defs>
-                    <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-                        <stop offset="100%" stop-color="#a0b0ff" stop-opacity="1"/>
-                    </linearGradient>
-                    <linearGradient id="trackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#2a2a3a"/>
-                        <stop offset="100%" stop-color="#0e0e16"/>
-                    </linearGradient>
-                </defs>
-                <circle cx="50" cy="50" r="44" fill="none" stroke="url(#trackGrad)" stroke-width="10"/>
-                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="10"/>
-                <path id="win-arc" fill="url(#winGrad)" opacity="0.95"/>
-            </svg>
-            <div class="wheel-pointer" id="wheel-pointer"></div>
-            <div class="wheel-center">
-                <div class="wheel-percent" id="wheel-percent">50%</div>
-                <div class="wheel-chance-label" id="wheel-label">средний</div>
+<div class="zoom-stage" id="zoom-stage">
+
+    <div class="header">
+        <div class="logo">ПСЫ<span class="dot">.</span>gg</div>
+        <div class="header-right">
+            <button class="promo-btn" id="promo-btn"><span class="gift">🎁</span> ПРОМО</button>
+            <div class="balance-wrap">
+                <div class="balance">
+                    <svg class="star-svg" viewBox="0 0 24 24" fill="#f5c518"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <span id="balance">1000</span>
+                </div>
+                <button class="plus-btn" id="plus-btn">+</button>
             </div>
         </div>
     </div>
-    <div class="item-slot" id="to-card">
-        <div class="slot-title">Цель</div>
-        <div class="slot-icon" id="to-icon"></div>
-        <div class="item-name" id="to-name">—</div>
-        <div class="item-value" id="to-value">—</div>
-    </div>
-</div>
 
-<div class="multiplier-grid" id="mult-grid"></div>
-<button class="action-btn" id="upgrade-btn">Прокачать</button>
-
-<div class="tabs">
-    <button class="tab active" data-tab="inv">Инвентарь <span id="inv-count"></span></button>
-    <button class="tab" data-tab="shop">Магазин</button>
-</div>
-
-<div class="main-panel">
-    <div class="panel-content active" id="panel-inv">
-        <div class="panel-tools">
-            <div class="search-row">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                <input type="text" id="inv-search" placeholder="Поиск...">
+    <div class="arena">
+        <div class="item-slot" id="from-card">
+            <div class="slot-title">Твой</div>
+            <div class="slot-icon" id="from-icon"></div>
+            <div class="item-name" id="from-name">—</div>
+            <div class="item-value" id="from-value">—</div>
+        </div>
+        <div class="wheel-col">
+            <div class="wheel-wrap" id="wheel-wrap">
+                <svg class="wheel-svg" viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#a0b0ff" stop-opacity="1"/>
+                        </linearGradient>
+                        <linearGradient id="trackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#2a2a3a"/>
+                            <stop offset="100%" stop-color="#0e0e16"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="44" fill="none" stroke="url(#trackGrad)" stroke-width="10"/>
+                    <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="10"/>
+                    <path id="win-arc" fill="url(#winGrad)" opacity="0.95"/>
+                </svg>
+                <div class="wheel-pointer" id="wheel-pointer"></div>
+                <div class="wheel-center">
+                    <div class="wheel-percent" id="wheel-percent">50%</div>
+                    <div class="wheel-chance-label" id="wheel-label">средний</div>
+                </div>
             </div>
-            <input type="number" class="price-input" id="inv-price-min" placeholder="От">
-            <input type="number" class="price-input" id="inv-price-max" placeholder="До">
         </div>
-        <div class="items-scroll">
-            <div class="item-grid" id="inv-grid"></div>
+        <div class="item-slot" id="to-card">
+            <div class="slot-title">Цель</div>
+            <div class="slot-icon" id="to-icon"></div>
+            <div class="item-name" id="to-name">—</div>
+            <div class="item-value" id="to-value">—</div>
         </div>
     </div>
 
-    <div class="panel-content" id="panel-shop">
-        <div class="panel-tools">
-            <div class="search-row">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                <input type="text" id="cat-search" placeholder="Поиск...">
+    <div class="multiplier-grid" id="mult-grid"></div>
+    <button class="action-btn" id="upgrade-btn">Прокачать</button>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="inv">Инвентарь <span id="inv-count"></span></button>
+        <button class="tab" data-tab="shop">Магазин</button>
+    </div>
+
+    <div class="main-panel">
+        <div class="panel-content active" id="panel-inv">
+            <div class="panel-tools">
+                <div class="search-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                    <input type="text" id="inv-search" placeholder="Поиск...">
+                </div>
+                <input type="number" class="price-input" id="inv-price-min" placeholder="От">
+                <input type="number" class="price-input" id="inv-price-max" placeholder="До">
             </div>
-            <input type="number" class="price-input" id="cat-price-min" placeholder="От">
-            <input type="number" class="price-input" id="cat-price-max" placeholder="До">
+            <div class="items-scroll">
+                <div class="item-grid" id="inv-grid"></div>
+            </div>
         </div>
-        <div class="items-scroll">
-            <div class="item-grid" id="cat-grid"></div>
+
+        <div class="panel-content" id="panel-shop">
+            <div class="panel-tools">
+                <div class="search-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                    <input type="text" id="cat-search" placeholder="Поиск...">
+                </div>
+                <input type="number" class="price-input" id="cat-price-min" placeholder="От">
+                <input type="number" class="price-input" id="cat-price-max" placeholder="До">
+            </div>
+            <div class="items-scroll">
+                <div class="item-grid" id="cat-grid"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="footer">
-    powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a>
-</div>
+    <div class="footer">
+        powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a>
+    </div>
+
+</div><!-- /.zoom-stage -->
 
 <div class="modal-overlay" id="buy-modal">
     <div class="modal">
@@ -854,7 +898,6 @@
     </div>
 </div>
 
-<!-- МОДАЛКА ПРОМОКОДА -->
 <div class="modal-overlay" id="promo-modal">
     <div class="modal">
         <div class="promo-title">
@@ -878,21 +921,15 @@
     tg.ready();
     tg.expand();
 
-    // ====== ПРОМОКОДЫ (стек: что дают) ======
     const PROMO_CODES = {
         'ROMANARMATURA777': { type: 'stars', amount: 10, label: '10 бесплатных ⭐' },
         'CHIHARDEDEP':      { type: 'topup', amount: 20, label: '20 к пополнению ⭐' }
     };
 
-    // ====== ЗАЩИТА ОТ АБУЗА ======
-    // localStorage хранит список использованных кодов.
-    // В проде нужно ещё и серверную проверку по user_id Telegram.
     const USED_CODES_KEY = 'psygg_used_promos';
     function getUsedCodes() {
-        try {
-            const raw = localStorage.getItem(USED_CODES_KEY);
-            return raw ? JSON.parse(raw) : [];
-        } catch { return []; }
+        try { const raw = localStorage.getItem(USED_CODES_KEY); return raw ? JSON.parse(raw) : []; }
+        catch { return []; }
     }
     function markCodeUsed(code) {
         const used = getUsedCodes();
@@ -901,9 +938,7 @@
             localStorage.setItem(USED_CODES_KEY, JSON.stringify(used));
         }
     }
-    function isCodeUsed(code) {
-        return getUsedCodes().includes(code);
-    }
+    function isCodeUsed(code) { return getUsedCodes().includes(code); }
 
     const FALLBACK_CATALOG = [
         { name: 'Toy Bear', slug: 'toybear', value: 15 },
@@ -1124,7 +1159,6 @@
         tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    // ====== ПРОМОКОД ======
     function openPromoModal() {
         $('promo-modal').classList.add('active');
         $('promo-input').value = '';
@@ -1132,63 +1166,32 @@
         $('promo-message').className = 'promo-message';
         setTimeout(() => $('promo-input').focus(), 200);
     }
-    function closePromoModal() {
-        $('promo-modal').classList.remove('active');
-    }
+    function closePromoModal() { $('promo-modal').classList.remove('active'); }
     function activatePromo() {
         const code = $('promo-input').value.trim().toUpperCase();
         const msg = $('promo-message');
         msg.className = 'promo-message';
-
-        if (!code) {
-            msg.textContent = 'Введи промокод';
-            msg.classList.add('err');
-            return;
-        }
-
+        if (!code) { msg.textContent = 'Введи промокод'; msg.classList.add('err'); return; }
         const promo = PROMO_CODES[code];
+        if (!promo) { msg.textContent = '❌ Неверный промокод'; msg.classList.add('err'); tg.HapticFeedback?.notificationOccurred('error'); return; }
+        if (isCodeUsed(code)) { msg.textContent = '⚠️ Ты уже активировал этот код'; msg.classList.add('err'); tg.HapticFeedback?.notificationOccurred('error'); return; }
 
-        if (!promo) {
-            msg.textContent = '❌ Неверный промокод';
-            msg.classList.add('err');
-            tg.HapticFeedback?.notificationOccurred('error');
-            return;
-        }
-
-        if (isCodeUsed(code)) {
-            msg.textContent = '⚠️ Ты уже активировал этот код';
-            msg.classList.add('err');
-            tg.HapticFeedback?.notificationOccurred('error');
-            return;
-        }
-
-        // Применяем награду
         balance += promo.amount;
         $('balance').textContent = balance;
         markCodeUsed(code);
-
         msg.textContent = `✅ Активировано! +${promo.amount} ⭐`;
         msg.classList.add('ok');
         tg.HapticFeedback?.notificationOccurred('success');
         burstConfetti();
-
         renderCatalog();
         updateUpgradeBtn();
-
-        setTimeout(() => {
-            closePromoModal();
-        }, 1500);
+        setTimeout(() => closePromoModal(), 1500);
     }
     $('promo-btn').onclick = openPromoModal;
     $('promo-cancel').onclick = closePromoModal;
     $('promo-activate').onclick = activatePromo;
-    $('promo-input').addEventListener('keydown', e => {
-        if (e.key === 'Enter') activatePromo();
-    });
-    // Авто-uppercase
-    $('promo-input').addEventListener('input', e => {
-        e.target.value = e.target.value.toUpperCase();
-    });
+    $('promo-input').addEventListener('keydown', e => { if (e.key === 'Enter') activatePromo(); });
+    $('promo-input').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
 
     function renderMultipliers() {
         const grid = $('mult-grid');
@@ -1217,15 +1220,15 @@
     function burstConfetti() {
         const colors = ['#fff', '#f5c518', '#22c55e', '#4a86ff', '#a855f7', '#ef4444', '#ff6b9d'];
         const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 70; i++) {
             const p = document.createElement('div');
             p.className = 'confetti';
             p.style.background = colors[Math.floor(Math.random() * colors.length)];
             p.style.left = cx + 'px'; p.style.top = cy + 'px';
             const a = Math.random() * Math.PI * 2;
-            const v = 150 + Math.random() * 350;
+            const v = 180 + Math.random() * 400;
             p.style.setProperty('--dx', Math.cos(a) * v + 'px');
-            p.style.setProperty('--dy', (Math.sin(a) * v - 100) + 'px');
+            p.style.setProperty('--dy', (Math.sin(a) * v - 120) + 'px');
             p.style.animationDelay = (Math.random() * 0.15) + 's';
             if (Math.random() > 0.5) p.style.borderRadius = '50%';
             document.body.appendChild(p);
@@ -1234,6 +1237,61 @@
     }
     function flashRed() { const el = $('flash-red'); el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
     function shakeBody() { document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 600); }
+
+    /* ====== АЗАРТНЫЕ ЭФФЕКТЫ ====== */
+    let heartbeatInterval = null;
+    let tensionTimeout = null;
+
+    function startAzaartEffects() {
+        // 1. Плавный зум всего экрана
+        const stage = $('zoom-stage');
+        stage.classList.remove('zoom-back');
+        stage.classList.remove('tension-shake');
+        // Небольшая задержка, чтобы transition применился
+        requestAnimationFrame(() => {
+            stage.classList.add('zooming');
+        });
+
+        // 2. Аура вокруг колеса
+        $('spin-aura').classList.add('active');
+        $('wheel-wrap').classList.add('spinning');
+
+        // 3. Вибрации: редкие в начале, чаще к концу
+        let hapticCount = 0;
+        heartbeatInterval = setInterval(() => {
+            hapticCount++;
+            tg.HapticFeedback?.impactOccurred('light');
+        }, 600);
+
+        // 4. За 2.5 сек до конца — тряска всего экрана + частые вибрации
+        tensionTimeout = setTimeout(() => {
+            const stageEl = $('zoom-stage');
+            stageEl.classList.add('tension-shake');
+            clearInterval(heartbeatInterval);
+            heartbeatInterval = setInterval(() => {
+                tg.HapticFeedback?.impactOccurred('medium');
+            }, 150);
+        }, SPIN_DURATION - 2500);
+    }
+
+    function endAzaartEffects() {
+        clearInterval(heartbeatInterval);
+        clearTimeout(tensionTimeout);
+        heartbeatInterval = null;
+        tensionTimeout = null;
+
+        const stage = $('zoom-stage');
+        stage.classList.remove('zooming', 'tension-shake');
+        // Резкий снап-бэк
+        void stage.offsetWidth;
+        stage.classList.add('snap-back');
+        setTimeout(() => stage.classList.remove('snap-back'), 600);
+
+        $('spin-aura').classList.remove('active');
+        $('wheel-wrap').classList.remove('spinning');
+
+        tg.HapticFeedback?.impactOccurred('heavy');
+    }
 
     function spinWheel(chanceVal) {
         return new Promise(resolve => {
@@ -1259,19 +1317,31 @@
 
     async function doUpgrade() {
         if (isSpinning || !currentItem || !targetItem) return;
-        isSpinning = true; $('upgrade-btn').disabled = true;
-        $('from-card').className = 'item-slot'; $('to-card').className = 'item-slot';
+        isSpinning = true;
+        $('upgrade-btn').disabled = true;
+        $('from-card').className = 'item-slot';
+        $('to-card').className = 'item-slot';
+
+        // Азартный эффект: зум + аура + вибрации
+        startAzaartEffects();
+
         const win = await spinWheel(chance);
+
+        // Снап-бэк + стоп эффектов
+        endAzaartEffects();
+
         const curIdx = inventory.indexOf(currentItem);
         if (win) {
             const newItem = { ...targetItem };
             inventory[curIdx] = newItem; currentItem = newItem;
             $('to-card').classList.add('win');
-            tg.HapticFeedback?.notificationOccurred('success'); burstConfetti();
+            tg.HapticFeedback?.notificationOccurred('success');
+            burstConfetti();
         } else {
             inventory.splice(curIdx, 1); currentItem = inventory[0] || null; targetItem = null;
             $('to-card').classList.add('lose');
-            tg.HapticFeedback?.notificationOccurred('error'); flashRed(); shakeBody();
+            tg.HapticFeedback?.notificationOccurred('error');
+            flashRed(); shakeBody();
         }
         renderInventory(); renderArena(); renderCatalog();
         if (currentItem && targetItem) recomputeChance();
@@ -1279,7 +1349,6 @@
         setTimeout(() => { isSpinning = false; updateUpgradeBtn(); }, 500);
     }
 
-    // ТАБЫ
     document.querySelectorAll('.tab').forEach(tab => {
         tab.onclick = () => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1323,4 +1392,4 @@
     $('upgrade-btn').onclick = doUpgrade;
 </script>
 </body>
-</html>
+   </html>
