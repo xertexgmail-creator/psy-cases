@@ -12,22 +12,13 @@
     --text: #f5f5f7; --text-dim: #8a8a95; --text-mute: #55555f;
     --accent: #ffffff; --green: #2ecc71; --red: #ff4757; --gold: #ffd93d;
 }
-.slot-icon-sm,
-.slot-icon,
-.menu-card-icon .gicon,
-.bet-gift-icon,
-.history-icon {
-    border-radius: 12px;
-    overflow: hidden;
-}
-.slot-icon-sm img,
-.slot-icon img,
-.menu-card-icon .gicon img,
-.bet-gift-icon img,
-.history-icon img {
-    border-radius: 12px;
-    transform: scale(1.05);
-}
+.slot-icon-sm img { width: 100%; height: 100%; object-fit: contain; }
+.slot-icon img { width: 100%; height: 100%; object-fit: contain; }
+.menu-card-icon .gicon img { width: 100%; height: 100%; object-fit: contain; }
+.bet-gift-icon img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.history-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+    
 html, body { overflow-x: hidden; }
 body { background: var(--bg); color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
