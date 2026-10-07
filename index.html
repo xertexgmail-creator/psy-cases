@@ -12,14 +12,13 @@
         --bg: #06060a;
         --panel: rgba(22, 22, 32, 0.72);
         --panel-border: rgba(255, 255, 255, 0.08);
-        --accent-1: #4a86ff;
-        --accent-2: #a855f7;
-        --accent-3: #f5c518;
         --text: #ffffff;
         --text-dim: #9aa0b0;
         --text-mute: #5a6070;
         --green: #22c55e;
         --red: #ef4444;
+        --accent-1: #4a86ff;
+        --accent-2: #a855f7;
     }
 
     html, body { overflow-x: hidden; }
@@ -131,23 +130,24 @@
 
     .header-right { display: flex; align-items: center; gap: 4px; }
 
-    .promo-btn {
-        background: linear-gradient(135deg, rgba(245,197,24,0.9), rgba(255,150,50,0.9));
+    /* СТИЛЬ КНОПОК КАК У БАЛАНСА */
+    .pill-btn {
+        display: flex; align-items: center; gap: 4px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(220,220,240,0.9));
         color: #000;
         border: none;
-        padding: 5px 8px;
-        border-radius: 10px;
-        font-size: 9px;
-        font-weight: 900;
-        letter-spacing: 0.3px;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 800;
+        box-shadow: 0 3px 15px rgba(255,255,255,0.25);
+        letter-spacing: 0.2px;
         cursor: pointer;
-        box-shadow: 0 3px 12px rgba(245,197,24,0.4);
         transition: transform 0.15s;
-        display: flex; align-items: center; gap: 3px;
         white-space: nowrap;
     }
-    .promo-btn:active { transform: scale(0.94); }
-    .promo-btn .gift { font-size: 11px; }
+    .pill-btn:active { transform: scale(0.94); }
+    .pill-btn .gift { font-size: 12px; }
 
     .balance-wrap { display: flex; align-items: center; gap: 4px; }
     .balance {
@@ -177,6 +177,21 @@
         transition: transform 0.15s;
     }
     .plus-btn:active { transform: scale(0.9); }
+
+    .settings-btn {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        color: var(--text-dim);
+        width: 24px; height: 24px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        font-size: 14px;
+        transition: transform 0.15s, color 0.2s;
+        flex-shrink: 0;
+    }
+    .settings-btn:active { transform: scale(0.9); }
+    .settings-btn:hover { color: #fff; }
 
     /* АРЕНА */
     .arena {
@@ -752,6 +767,7 @@
         .item-name { font-size: 9px; }
         .item-value { font-size: 11px; }
         .slot-title { font-size: 8px; }
+        .pill-btn { font-size: 11px; padding: 5px 12px; }
     }
 
     @media (min-width: 600px) {
@@ -769,8 +785,9 @@
         .logo { font-size: 18px; }
         .balance { font-size: 13px; padding: 6px 12px; }
         .plus-btn { width: 28px; height: 28px; font-size: 18px; }
-        .promo-btn { font-size: 11px; padding: 7px 10px; }
-        .promo-btn .gift { font-size: 13px; }
+        .pill-btn { font-size: 13px; padding: 7px 14px; }
+        .pill-btn .gift { font-size: 14px; }
+        .settings-btn { width: 28px; height: 28px; font-size: 16px; }
         .mult-btn { padding: 7px 2px; font-size: 9px; border-radius: 8px; }
         .mult-btn .chance { font-size: 6px; }
         .action-btn { padding: 12px; font-size: 13px; width: 65%; }
@@ -792,13 +809,14 @@
     <div class="header">
         <div class="logo">ПСЫ<span class="dot">.</span>gg</div>
         <div class="header-right">
-            <button class="promo-btn" id="promo-btn"><span class="gift">🎁</span> ПРОМО</button>
+            <button class="pill-btn" id="promo-btn"><span class="gift">🎁</span> ПРОМО</button>
             <div class="balance-wrap">
                 <div class="balance">
                     <svg class="star-svg" viewBox="0 0 24 24" fill="#f5c518"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     <span id="balance">1000</span>
                 </div>
                 <button class="plus-btn" id="plus-btn">+</button>
+                <button class="settings-btn" id="settings-btn">⚙️</button>
             </div>
         </div>
     </div>
@@ -914,12 +932,32 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="settings-modal">
+    <div class="modal">
+        <h3 style="margin-bottom: 12px;">Настройки</h3>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px 14px 4px;">
+            <span style="font-size: 12px; color: var(--text-dim);">Вибрация</span>
+            <label class="switch">
+                <input type="checkbox" id="vibration-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="modal-btns">
+            <button class="modal-btn buy" id="settings-close" style="flex: 1;">ОК</button>
+        </div>
+    </div>
+</div>
+
 <div class="flash-red" id="flash-red"></div>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
+
+    /* ================== НАСТРОЙКИ (ВИБРАЦИЯ) ================== */
+    const VIBRATION_KEY = 'psygg_vibration_enabled';
+    let vibrationEnabled = localStorage.getItem(VIBRATION_KEY) !== 'false';
 
     const PROMO_CODES = {
         'ROMANARMATURA777': { type: 'stars', amount: 10, label: '10 бесплатных ⭐' },
@@ -940,27 +978,23 @@
     }
     function isCodeUsed(code) { return getUsedCodes().includes(code); }
 
+    /* ================== РЕАЛЬНЫЕ ЦЕНЫ И НАЗВАНИЯ ================== */
     const FALLBACK_CATALOG = [
-        { name: 'Toy Bear', slug: 'toybear', value: 15 },
-        { name: 'Heart Locket', slug: 'heartlocket', value: 25 },
-        { name: 'Big Year', slug: 'bigyear', value: 40 },
-        { name: 'Desk Calendar', slug: 'deskcalendar', value: 60 },
-        { name: 'Jingle Bells', slug: 'jinglebells', value: 80 },
-        { name: 'Homemade Cake', slug: 'homemadecake', value: 110 },
-        { name: 'Eternal Rose', slug: 'eternalrose', value: 150 },
-        { name: 'Magic Potion', slug: 'magicpotion', value: 200 },
-        { name: 'Crystal Ball', slug: 'crystalball', value: 280 },
-        { name: 'Top Hat', slug: 'tophat', value: 380 },
-        { name: "Durov's Cap", slug: 'durovscap', value: 500 },
-        { name: 'Diamond Ring', slug: 'diamondring', value: 700 },
-        { name: 'Sakura Flower', slug: 'sakuraflower', value: 950 },
-        { name: 'Jolly Chimp', slug: 'jollychimp', value: 1300 },
-        { name: 'Plush Pepe', slug: 'plushpepe', value: 1800 },
+        { name: 'Heart', slug: 'heart', value: 15 },
+        { name: 'Teddy Bear', slug: 'teddybear', value: 15 },
+        { name: 'Rose', slug: 'rose', value: 25 },
+        { name: 'Rocket', slug: 'rocket', value: 50 },
+        { name: 'Homemade Cake', slug: 'homemadecake', value: 100 },
+        { name: 'Precious Peach', slug: 'preciouspeach', value: 1000 },
+        { name: 'Toy Bear', slug: 'toybear', value: 1500 },
+        { name: 'Swiss Watch', slug: 'swisswatch', value: 2000 },
         { name: 'Snoop Dogg', slug: 'snoopdogg', value: 2500 },
-        { name: 'Swiss Watch', slug: 'swisswatch', value: 3500 },
-        { name: 'Precious Peach', slug: 'preciouspeach', value: 5000 },
-        { name: 'Signet Ring', slug: 'signetring', value: 7000 },
-        { name: 'Santa Hat', slug: 'santahat', value: 10000 }
+        { name: 'Scared Cat', slug: 'scaredcat', value: 3000 },
+        { name: 'Heart Locket', slug: 'heartlocket', value: 5000 },
+        { name: 'Loot Bag', slug: 'lootbag', value: 5500 },
+        { name: 'Durov\'s Cap', slug: 'durovscap', value: 10000 },
+        { name: 'Plush Pepe', slug: 'plushpepe', value: 25000 },
+        { name: 'Astral Shard', slug: 'astralshard', value: 50000 }
     ];
 
     const MULTIPLIERS = [1.2, 1.5, 2, 3, 5, 10, 25, 100];
@@ -979,6 +1013,7 @@
 
     const $ = id => document.getElementById(id);
 
+    /* ================== ЗАГРУЗКА ГИФТОВ ================== */
     async function loadGiftCatalog() {
         try {
             const response = await fetch('https://api.changes.tg/gifts');
@@ -994,6 +1029,7 @@
         }
     }
 
+    /* ================== ИКОНКИ (БЕЗ ЭМОДЗИ-ПОДЛОЖКИ) ================== */
     function giftImageUrl(item, size = 128) {
         return `https://nft.fragment.com/gift/${item.slug}.${size >= 128 ? 500 : 200}.webp`;
     }
@@ -1005,6 +1041,7 @@
         slotEl.innerHTML = iconHTML(item, size);
     }
 
+    /* ================== ВСПОМОГАТЕЛЬНЫЕ ================== */
     function chanceFromRatio(ratio) {
         let c = 100 / ratio;
         if (c > 99) c = 99;
@@ -1060,6 +1097,7 @@
         arc.setAttribute('d', d);
     }
 
+    /* ================== АРЕНА ================== */
     function renderArena() {
         if (currentItem) {
             setSlotIcon($('from-icon'), currentItem);
@@ -1083,6 +1121,7 @@
         $('to-card').className = 'item-slot';
     }
 
+    /* ================== ИНВЕНТАРЬ ================== */
     function renderInventory() {
         const grid = $('inv-grid');
         grid.innerHTML = '';
@@ -1113,6 +1152,7 @@
         });
     }
 
+    /* ================== КАТАЛОГ ================== */
     function renderCatalog() {
         const grid = $('cat-grid');
         grid.innerHTML = '';
@@ -1138,6 +1178,7 @@
         });
     }
 
+    /* ================== МОДАЛКА ПОКУПКИ ================== */
     let buyCandidate = null;
     function openBuyModal(item) {
         buyCandidate = item;
@@ -1156,9 +1197,10 @@
         inventory.push({ ...buyCandidate });
         if (!currentItem) currentItem = inventory[inventory.length - 1];
         closeBuyModal(); renderInventory(); renderArena(); renderCatalog(); updateUpgradeBtn();
-        tg.HapticFeedback?.notificationOccurred('success');
+        if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
+    /* ================== ПРОМОКОД ================== */
     function openPromoModal() {
         $('promo-modal').classList.add('active');
         $('promo-input').value = '';
@@ -1173,15 +1215,15 @@
         msg.className = 'promo-message';
         if (!code) { msg.textContent = 'Введи промокод'; msg.classList.add('err'); return; }
         const promo = PROMO_CODES[code];
-        if (!promo) { msg.textContent = '❌ Неверный промокод'; msg.classList.add('err'); tg.HapticFeedback?.notificationOccurred('error'); return; }
-        if (isCodeUsed(code)) { msg.textContent = '⚠️ Ты уже активировал этот код'; msg.classList.add('err'); tg.HapticFeedback?.notificationOccurred('error'); return; }
+        if (!promo) { msg.textContent = '❌ Неверный промокод'; msg.classList.add('err'); if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error'); return; }
+        if (isCodeUsed(code)) { msg.textContent = '⚠️ Ты уже активировал этот код'; msg.classList.add('err'); if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error'); return; }
 
         balance += promo.amount;
         $('balance').textContent = balance;
         markCodeUsed(code);
         msg.textContent = `✅ Активировано! +${promo.amount} ⭐`;
         msg.classList.add('ok');
-        tg.HapticFeedback?.notificationOccurred('success');
+        if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
         burstConfetti();
         renderCatalog();
         updateUpgradeBtn();
@@ -1193,6 +1235,22 @@
     $('promo-input').addEventListener('keydown', e => { if (e.key === 'Enter') activatePromo(); });
     $('promo-input').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
 
+    /* ================== НАСТРОЙКИ ================== */
+    const settingsBtn = $('settings-btn');
+    const settingsModal = $('settings-modal');
+    const vibrationToggle = $('vibration-toggle');
+
+    settingsBtn.onclick = () => {
+        vibrationToggle.checked = vibrationEnabled;
+        settingsModal.classList.add('active');
+    };
+    $('settings-close').onclick = () => settingsModal.classList.remove('active');
+    vibrationToggle.onchange = () => {
+        vibrationEnabled = vibrationToggle.checked;
+        localStorage.setItem(VIBRATION_KEY, vibrationEnabled);
+    };
+
+    /* ================== МНОЖИТЕЛИ ================== */
     function renderMultipliers() {
         const grid = $('mult-grid');
         grid.innerHTML = '';
@@ -1217,6 +1275,7 @@
 
     function updateUpgradeBtn() { $('upgrade-btn').disabled = isSpinning || !currentItem || !targetItem; }
 
+    /* ================== ЭФФЕКТЫ ================== */
     function burstConfetti() {
         const colors = ['#fff', '#f5c518', '#22c55e', '#4a86ff', '#a855f7', '#ef4444', '#ff6b9d'];
         const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
@@ -1238,38 +1297,33 @@
     function flashRed() { const el = $('flash-red'); el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
     function shakeBody() { document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 600); }
 
-    /* ====== АЗАРТНЫЕ ЭФФЕКТЫ ====== */
+    /* ================== АЗАРТНЫЕ ЭФФЕКТЫ ================== */
     let heartbeatInterval = null;
     let tensionTimeout = null;
 
     function startAzaartEffects() {
-        // 1. Плавный зум всего экрана
         const stage = $('zoom-stage');
         stage.classList.remove('zoom-back');
         stage.classList.remove('tension-shake');
-        // Небольшая задержка, чтобы transition применился
         requestAnimationFrame(() => {
             stage.classList.add('zooming');
         });
 
-        // 2. Аура вокруг колеса
         $('spin-aura').classList.add('active');
         $('wheel-wrap').classList.add('spinning');
 
-        // 3. Вибрации: редкие в начале, чаще к концу
         let hapticCount = 0;
         heartbeatInterval = setInterval(() => {
             hapticCount++;
-            tg.HapticFeedback?.impactOccurred('light');
+            if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('light');
         }, 600);
 
-        // 4. За 2.5 сек до конца — тряска всего экрана + частые вибрации
         tensionTimeout = setTimeout(() => {
             const stageEl = $('zoom-stage');
             stageEl.classList.add('tension-shake');
             clearInterval(heartbeatInterval);
             heartbeatInterval = setInterval(() => {
-                tg.HapticFeedback?.impactOccurred('medium');
+                if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('medium');
             }, 150);
         }, SPIN_DURATION - 2500);
     }
@@ -1282,7 +1336,6 @@
 
         const stage = $('zoom-stage');
         stage.classList.remove('zooming', 'tension-shake');
-        // Резкий снап-бэк
         void stage.offsetWidth;
         stage.classList.add('snap-back');
         setTimeout(() => stage.classList.remove('snap-back'), 600);
@@ -1290,7 +1343,7 @@
         $('spin-aura').classList.remove('active');
         $('wheel-wrap').classList.remove('spinning');
 
-        tg.HapticFeedback?.impactOccurred('heavy');
+        if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('heavy');
     }
 
     function spinWheel(chanceVal) {
@@ -1322,12 +1375,10 @@
         $('from-card').className = 'item-slot';
         $('to-card').className = 'item-slot';
 
-        // Азартный эффект: зум + аура + вибрации
         startAzaartEffects();
 
         const win = await spinWheel(chance);
 
-        // Снап-бэк + стоп эффектов
         endAzaartEffects();
 
         const curIdx = inventory.indexOf(currentItem);
@@ -1335,12 +1386,12 @@
             const newItem = { ...targetItem };
             inventory[curIdx] = newItem; currentItem = newItem;
             $('to-card').classList.add('win');
-            tg.HapticFeedback?.notificationOccurred('success');
+            if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
             burstConfetti();
         } else {
             inventory.splice(curIdx, 1); currentItem = inventory[0] || null; targetItem = null;
             $('to-card').classList.add('lose');
-            tg.HapticFeedback?.notificationOccurred('error');
+            if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
             flashRed(); shakeBody();
         }
         renderInventory(); renderArena(); renderCatalog();
@@ -1349,6 +1400,7 @@
         setTimeout(() => { isSpinning = false; updateUpgradeBtn(); }, 500);
     }
 
+    /* ================== ТАБЫ ================== */
     document.querySelectorAll('.tab').forEach(tab => {
         tab.onclick = () => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1358,15 +1410,17 @@
         };
     });
 
+    /* ================== ПЛЮС ================== */
     $('plus-btn').onclick = () => {
         const input = prompt('Сколько монет добавить?', '1000');
         if (input === null) return;
         const amount = parseInt(input, 10);
         if (isNaN(amount) || amount <= 0) return;
         balance += amount; $('balance').textContent = balance; renderCatalog();
-        tg.HapticFeedback?.notificationOccurred('success');
+        if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
+    /* ================== ФИЛЬТРЫ ================== */
     $('inv-search').addEventListener('input', e => { invSearch = e.target.value; renderInventory(); });
     $('inv-price-min').addEventListener('input', e => { const v = e.target.value.trim(); invPriceMin = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
     $('inv-price-max').addEventListener('input', e => { const v = e.target.value.trim(); invPriceMax = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
@@ -1374,6 +1428,7 @@
     $('cat-price-min').addEventListener('input', e => { const v = e.target.value.trim(); catPriceMin = v === '' ? null : (parseFloat(v) || 0); renderCatalog(); });
     $('cat-price-max').addEventListener('input', e => { const v = e.target.value.trim(); catPriceMax = v === '' ? null : (parseFloat(v) || 0); renderCatalog(); });
 
+    /* ================== СТАРТ ================== */
     async function initGame() {
         await loadGiftCatalog();
         const pool = CATALOG.slice(0, Math.min(12, CATALOG.length));
