@@ -9,16 +9,18 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     :root {
-        --bg: #06060a;
-        --panel: rgba(22, 22, 32, 0.72);
-        --panel-border: rgba(255, 255, 255, 0.08);
-        --text: #ffffff;
-        --text-dim: #9aa0b0;
-        --text-mute: #5a6070;
-        --green: #22c55e;
-        --red: #ef4444;
-        --accent-1: #4a86ff;
-        --accent-2: #a855f7;
+        --bg: #0a0a0c;
+        --bg-elevated: #14141a;
+        --bg-hover: #1c1c24;
+        --border: rgba(255, 255, 255, 0.06);
+        --border-strong: rgba(255, 255, 255, 0.12);
+        --text: #f5f5f7;
+        --text-dim: #8a8a95;
+        --text-mute: #55555f;
+        --accent: #ffffff;
+        --green: #2ecc71;
+        --red: #ff4757;
+        --gold: #ffd93d;
     }
 
     html, body { overflow-x: hidden; }
@@ -26,425 +28,337 @@
     body {
         background: var(--bg);
         color: var(--text);
-        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-        padding: 6px;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
+        padding: 8px;
         min-height: 100vh;
         position: relative;
         -webkit-font-smoothing: antialiased;
-    }
-
-    /* ЗУМ-КОНТЕЙНЕР: в него оборачивается весь контент для эффекта приближения */
-    .zoom-stage {
+        letter-spacing: -0.01em;
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - 12px);
-        transform-origin: 50% 40%;
-        transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
-        will-change: transform;
-        position: relative;
-        z-index: 1;
-    }
-    .zoom-stage.zooming {
-        transform: scale(1.12);
-        transition: transform 6s cubic-bezier(0.25, 0.1, 0.3, 1);
-    }
-    .zoom-stage.zoom-back {
-        transform: scale(1);
-        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* Пульсирующий ореол во время вращения */
-    .spin-aura {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        opacity: 0;
-        z-index: 0;
-        transition: opacity 0.6s;
-        background:
-            radial-gradient(circle at 50% 45%, rgba(74,134,255,0.28) 0%, transparent 40%),
-            radial-gradient(circle at 50% 45%, rgba(168,85,247,0.22) 0%, transparent 60%);
-        animation: auraPulse 1.4s ease-in-out infinite;
-    }
-    .spin-aura.active { opacity: 1; }
-    @keyframes auraPulse {
-        0%, 100% { transform: scale(1); opacity: 0.85; }
-        50% { transform: scale(1.08); opacity: 1; }
-    }
-
+    /* Мягкий градиент на фоне — минималистично */
     body::before {
         content: '';
         position: fixed;
-        inset: 0;
-        background:
-            radial-gradient(ellipse 80% 50% at 20% 0%, rgba(74,134,255,0.22) 0%, transparent 50%),
-            radial-gradient(ellipse 70% 50% at 100% 30%, rgba(168,85,247,0.18) 0%, transparent 50%),
-            radial-gradient(ellipse 90% 60% at 50% 100%, rgba(245,197,24,0.08) 0%, transparent 50%);
-        z-index: -2;
+        top: -40%; left: 50%;
+        transform: translateX(-50%);
+        width: 600px; height: 600px;
+        background: radial-gradient(circle, rgba(120, 100, 255, 0.08) 0%, transparent 60%);
         pointer-events: none;
-        animation: bgShift 20s ease-in-out infinite alternate;
-    }
-    @keyframes bgShift {
-        0% { transform: scale(1) translate(0, 0); }
-        100% { transform: scale(1.15) translate(-2%, 2%); }
+        z-index: 0;
     }
 
-    body::after {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.35'/></svg>");
-        opacity: 0.04;
-        z-index: -1;
-        pointer-events: none;
+    .stage {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 16px);
+        transform-origin: 50% 40%;
+        transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+        will-change: transform;
+    }
+    .stage.zooming {
+        transform: scale(1.05);
+        transition: transform 6s cubic-bezier(0.25, 0.1, 0.3, 1);
+    }
+    .stage.tension {
+        animation: tensionShake 0.15s ease-in-out infinite;
+    }
+    @keyframes tensionShake {
+        0%, 100% { transform: scale(1.05) translate(0, 0); }
+        25% { transform: scale(1.05) translate(-1px, 1px); }
+        50% { transform: scale(1.05) translate(1px, -1px); }
+        75% { transform: scale(1.05) translate(-1px, -1px); }
+    }
+    .stage.snap {
+        animation: snapBack 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes snapBack {
+        0% { transform: scale(1.05); }
+        40% { transform: scale(0.96); }
+        100% { transform: scale(1); }
     }
 
-    /* ХЕДЕР */
+    /* ============== ХЕДЕР ============== */
     .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 7px 10px;
-        background: var(--panel);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border-radius: 12px;
-        margin-bottom: 6px;
-        border: 1px solid var(--panel-border);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: var(--bg-elevated);
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        margin-bottom: 8px;
         flex-shrink: 0;
-        gap: 6px;
+        gap: 8px;
     }
+
     .logo {
-        font-size: 14px;
-        font-weight: 900;
-        letter-spacing: 1.2px;
-        background: linear-gradient(135deg, #fff 0%, #b0b8ff 40%, #a855f7 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-transform: uppercase;
-        filter: drop-shadow(0 0 8px rgba(168,85,247,0.4));
-        flex-shrink: 0;
-    }
-    .logo .dot { -webkit-text-fill-color: rgba(255,255,255,0.4); }
-
-    .header-right { display: flex; align-items: center; gap: 4px; }
-
-    /* СТИЛЬ КНОПОК КАК У БАЛАНСА */
-    .pill-btn {
-        display: flex; align-items: center; gap: 4px;
-        background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(220,220,240,0.9));
-        color: #000;
-        border: none;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 10px;
-        font-weight: 800;
-        box-shadow: 0 3px 15px rgba(255,255,255,0.25);
-        letter-spacing: 0.2px;
-        cursor: pointer;
-        transition: transform 0.15s;
-        white-space: nowrap;
-    }
-    .pill-btn:active { transform: scale(0.94); }
-    .pill-btn .gift { font-size: 12px; }
-
-    .balance-wrap { display: flex; align-items: center; gap: 4px; }
-    .balance {
-        display: flex; align-items: center; gap: 3px;
-        background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(220,220,240,0.9));
-        color: #000;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 11px;
-        font-weight: 800;
-        box-shadow: 0 3px 15px rgba(255,255,255,0.25);
-        letter-spacing: 0.2px;
-    }
-    .star-svg { width: 10px; height: 10px; }
-    .plus-btn {
-        width: 24px; height: 24px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #4a86ff, #a855f7);
-        color: #fff;
-        border: none;
         font-size: 15px;
-        font-weight: 900;
-        cursor: pointer;
-        display: flex; align-items: center; justify-content: center;
-        line-height: 1;
-        box-shadow: 0 3px 15px rgba(74,134,255,0.5);
-        transition: transform 0.15s;
-    }
-    .plus-btn:active { transform: scale(0.9); }
-
-    .settings-btn {
-        background: var(--panel);
-        border: 1px solid var(--panel-border);
-        color: var(--text-dim);
-        width: 24px; height: 24px;
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
-        font-size: 14px;
-        transition: transform 0.15s, color 0.2s;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--text);
         flex-shrink: 0;
     }
-    .settings-btn:active { transform: scale(0.9); }
-    .settings-btn:hover { color: #fff; }
+    .logo .dot { color: var(--text-mute); }
 
-    /* АРЕНА */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+
+    .icon-btn {
+        width: 34px; height: 34px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text-dim);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        padding: 0;
+    }
+    .icon-btn:hover { border-color: var(--border-strong); color: var(--text); }
+    .icon-btn:active { transform: scale(0.94); }
+    .icon-btn svg { width: 16px; height: 16px; }
+
+    .balance-chip {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: var(--accent);
+        color: #000;
+        padding: 6px 11px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        cursor: pointer;
+        transition: transform 0.15s;
+    }
+    .balance-chip:active { transform: scale(0.95); }
+    .balance-chip svg { width: 12px; height: 12px; }
+
+    /* ============== АРЕНА ============== */
     .arena {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
-        gap: 5px;
+        gap: 6px;
         align-items: stretch;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         flex-shrink: 0;
     }
 
     .item-slot {
-        background: var(--panel);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 12px;
-        padding: 14px 5px 8px 5px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 6px 10px;
         text-align: center;
-        border: 1px solid var(--panel-border);
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        min-height: 130px;
-        display: flex; flex-direction: column;
-        justify-content: center; align-items: center;
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         position: relative;
-        overflow: hidden;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .item-slot::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 60%);
-        pointer-events: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
     }
     .item-slot.win {
-        border-color: rgba(34,197,94,0.6);
-        box-shadow: 0 0 30px rgba(34,197,94,0.5), inset 0 0 20px rgba(34,197,94,0.12);
+        border-color: rgba(46, 204, 113, 0.5);
+        box-shadow: 0 0 20px rgba(46, 204, 113, 0.15);
     }
     .item-slot.lose {
-        border-color: rgba(239,68,68,0.6);
-        box-shadow: 0 0 30px rgba(239,68,68,0.4), inset 0 0 20px rgba(239,68,68,0.12);
+        border-color: rgba(255, 71, 87, 0.5);
+        box-shadow: 0 0 20px rgba(255, 71, 87, 0.15);
     }
 
     .slot-title {
-        font-size: 7px;
+        position: absolute;
+        top: 8px; left: 0; right: 0;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
         color: var(--text-mute);
         text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 700;
-        position: absolute;
-        top: 6px; left: 0; right: 0;
     }
+
     .slot-icon {
-        width: 58px; height: 58px;
-        display: flex; align-items: center; justify-content: center;
-        margin-bottom: 4px;
+        width: 64px; height: 64px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: relative;
-        filter: drop-shadow(0 6px 15px rgba(0,0,0,0.6));
     }
     .slot-icon img {
         width: 100%; height: 100%;
         object-fit: contain;
-        animation: floaty 3s ease-in-out infinite;
+        animation: floaty 4s ease-in-out infinite;
     }
     @keyframes floaty {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-3px); }
-    }
-    .item-name {
-        font-size: 8px;
-        color: #bcc2d4;
-        margin-bottom: 2px;
-        font-weight: 500;
-        max-width: 100%;
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .item-value {
-        font-size: 10px;
-        font-weight: 900;
-        background: linear-gradient(135deg, #fff, #c0c8ff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        50% { transform: translateY(-2px); }
     }
 
-    /* КОЛЕСО */
-    .wheel-col {
-        display: flex; flex-direction: column;
-        align-items: center; justify-content: center;
-        gap: 4px;
-        min-width: 140px;
+    .item-name {
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--text-dim);
+        margin-bottom: 2px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
+
+    .item-value {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: -0.02em;
+    }
+
+    /* ============== КОЛЕСО ============== */
+    .wheel-col {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 150px;
+        position: relative;
+    }
+
     .wheel-wrap {
         position: relative;
-        width: 140px; height: 140px;
-        transition: filter 0.5s;
+        width: 150px;
+        height: 150px;
+        transition: filter 0.4s;
     }
     .wheel-wrap.spinning {
-        filter: drop-shadow(0 0 40px rgba(168,85,247,0.9)) drop-shadow(0 0 20px rgba(74,134,255,0.8));
+        filter: drop-shadow(0 0 20px rgba(120, 100, 255, 0.6));
     }
-    .wheel-wrap::before {
-        content: '';
-        position: absolute;
-        inset: -12px;
-        border-radius: 50%;
-        background: conic-gradient(from 0deg,
-            rgba(74,134,255,0.35),
-            rgba(168,85,247,0.35),
-            rgba(245,197,24,0.3),
-            rgba(74,134,255,0.35));
-        filter: blur(14px);
-        opacity: 0.7;
-        animation: spinGlow 6s linear infinite;
-        pointer-events: none;
-        z-index: 0;
-    }
-    .wheel-wrap.spinning::before {
-        animation-duration: 0.7s;
-        opacity: 1;
-        filter: blur(20px);
-    }
-    @keyframes spinGlow { to { transform: rotate(360deg); } }
-    .wheel-svg {
-        width: 100%; height: 100%;
-        position: relative;
-        z-index: 1;
-        filter: drop-shadow(0 0 15px rgba(74,134,255,0.4));
-    }
+
+    .wheel-svg { width: 100%; height: 100%; }
+
     .wheel-pointer {
         position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
+        inset: 0;
         transition: transform 7.5s cubic-bezier(0.15, 0.7, 0.15, 1);
-        z-index: 2;
+        will-change: transform;
     }
     .wheel-pointer::before {
         content: '';
         position: absolute;
-        top: -5px; left: 50%;
+        top: -2px; left: 50%;
         transform: translateX(-50%);
         width: 0; height: 0;
-        border-left: 7px solid transparent;
-        border-right: 7px solid transparent;
-        border-top: 12px solid #fff;
-        filter: drop-shadow(0 0 8px rgba(255,255,255,1)) drop-shadow(0 0 15px rgba(168,85,247,0.8));
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 10px solid var(--text);
     }
+
     .wheel-center {
         position: absolute;
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        width: 82px; height: 82px;
+        width: 88px; height: 88px;
         border-radius: 50%;
-        background: radial-gradient(circle at 30% 20%, #1c1c2a 0%, #06060a 100%);
-        border: 1.5px solid rgba(255,255,255,0.15);
-        display: flex; flex-direction: column;
-        align-items: center; justify-content: center;
+        background: var(--bg);
+        border: 1px solid var(--border-strong);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         z-index: 3;
-        box-shadow:
-            0 0 25px rgba(74,134,255,0.3),
-            inset 0 0 18px rgba(0,0,0,0.8),
-            inset 0 1px 0 rgba(255,255,255,0.15);
-    }
-    .wheel-percent {
-        font-size: 21px;
-        font-weight: 900;
-        background: linear-gradient(135deg, #fff 0%, #8fb0ff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 1;
-        letter-spacing: -0.5px;
-        filter: drop-shadow(0 0 8px rgba(74,134,255,0.6));
-    }
-    .wheel-chance-label {
-        font-size: 6px;
-        color: var(--text-mute);
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        margin-top: 2px;
-        font-weight: 700;
     }
 
-    /* МНОЖИТЕЛИ */
-    .multiplier-grid {
+    .wheel-percent {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        line-height: 1;
+    }
+
+    .wheel-label {
+        font-size: 7px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--text-mute);
+        text-transform: uppercase;
+        margin-top: 3px;
+    }
+
+    /* ============== МНОЖИТЕЛИ ============== */
+    .mult-grid {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
-        gap: 2px;
-        margin-bottom: 6px;
+        gap: 3px;
+        margin-bottom: 8px;
         flex-shrink: 0;
     }
+
     .mult-btn {
-        background: var(--panel);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--panel-border);
-        color: #fff;
-        padding: 5px 0;
-        border-radius: 6px;
-        font-size: 7px;
-        font-weight: 800;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 7px 0;
+        border-radius: 8px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
         cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.15s ease;
         line-height: 1;
     }
-    .mult-btn:active { transform: scale(0.94); }
+    .mult-btn:hover { border-color: var(--border-strong); }
     .mult-btn.active {
-        background: linear-gradient(135deg, #fff, #b0b8ff);
-        border-color: #fff;
+        background: var(--accent);
+        border-color: var(--accent);
         color: #000;
-        box-shadow: 0 3px 15px rgba(255,255,255,0.4), 0 0 20px rgba(74,134,255,0.4);
     }
-    .mult-btn .chance {
+    .mult-btn .c {
         display: block;
-        font-size: 5px;
+        font-size: 6px;
         color: var(--text-mute);
-        font-weight: 600;
-        margin-top: 1px;
+        font-weight: 500;
+        margin-top: 2px;
     }
-    .mult-btn.active .chance { color: rgba(0,0,0,0.65); }
+    .mult-btn.active .c { color: rgba(0, 0, 0, 0.55); }
 
-    /* КНОПКА АПГРЕЙДА */
-    .action-btn {
-        display: block;
-        width: 75%;
-        margin: 0 auto 6px auto;
-        padding: 10px;
-        background: linear-gradient(135deg, #ffffff 0%, #d0d4ff 100%);
+    /* ============== КНОПКА АПГРЕЙДА ============== */
+    .upgrade-btn {
+        width: 60%;
+        margin: 0 auto 8px;
+        padding: 12px;
+        background: var(--accent);
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         color: #000;
-        font-size: 11px;
-        font-weight: 900;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
         cursor: pointer;
-        letter-spacing: 1.2px;
-        text-transform: uppercase;
-        transition: all 0.2s;
-        box-shadow:
-            0 6px 25px rgba(74,134,255,0.4),
-            0 0 40px rgba(168,85,247,0.2);
-        position: relative;
-        overflow: hidden;
+        transition: all 0.2s ease;
         flex-shrink: 0;
+        font-family: inherit;
     }
-    .action-btn::before {
-        content: '';
-        position: absolute;
-        top: 0; left: -100%;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-        transition: left 0.6s;
+    .upgrade-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15); }
+    .upgrade-btn:active { transform: scale(0.97); }
+    .upgrade-btn:disabled {
+        opacity: 0.25;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
     }
-    .action-btn:active { transform: scale(0.97); }
-    .action-btn:disabled { opacity: 0.35; box-shadow: none; cursor: not-allowed; }
 
-    /* ТАБЫ */
+    /* ============== ТАБЫ ============== */
     .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -452,372 +366,596 @@
         margin-bottom: 6px;
         flex-shrink: 0;
     }
+
     .tab {
-        background: var(--panel);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--panel-border);
+        background: transparent;
+        border: 1px solid var(--border);
         color: var(--text-dim);
-        padding: 8px;
+        padding: 9px;
         border-radius: 10px;
         font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 0.8px;
-        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.02em;
         cursor: pointer;
-        transition: all 0.25s;
+        transition: all 0.2s ease;
+        font-family: inherit;
+        text-transform: uppercase;
     }
-    .tab:active { transform: scale(0.97); }
     .tab.active {
-        background: linear-gradient(135deg, #fff, #d0d4ff);
-        color: #000;
-        border-color: #fff;
-        box-shadow: 0 4px 20px rgba(255,255,255,0.3);
+        background: var(--bg-elevated);
+        color: var(--text);
+        border-color: var(--border-strong);
     }
 
-    /* ПАНЕЛЬ */
-    .main-panel {
-        background: var(--panel);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 12px;
-        padding: 8px;
-        border: 1px solid var(--panel-border);
-        display: flex; flex-direction: column;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+    /* ============== ПАНЕЛЬ ============== */
+    .panel {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
         flex: 1;
         min-height: 200px;
-        max-height: 320px;
+        max-height: 340px;
         overflow: hidden;
     }
-    .panel-content { display: none; flex-direction: column; height: 100%; overflow: hidden; }
-    .panel-content.active { display: flex; }
+
+    .panel-view { display: none; flex-direction: column; height: 100%; }
+    .panel-view.active { display: flex; }
 
     .panel-tools {
         display: grid;
-        grid-template-columns: 1.5fr 1fr 1fr;
-        gap: 4px;
-        margin-bottom: 6px;
+        grid-template-columns: 1.6fr 1fr 1fr;
+        gap: 5px;
+        margin-bottom: 8px;
         flex-shrink: 0;
     }
-    .search-row {
-        display: flex; align-items: center; gap: 3px;
-        background: rgba(0,0,0,0.3);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 7px;
-        padding: 5px 7px;
-        transition: border 0.2s, box-shadow 0.2s;
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 6px 9px;
+        transition: border-color 0.15s;
     }
-    .search-row:focus-within {
-        border-color: rgba(74,134,255,0.6);
-        box-shadow: 0 0 12px rgba(74,134,255,0.3);
-    }
-    .search-row svg { width: 9px; height: 9px; flex-shrink: 0; opacity: 0.5; }
-    .search-row input {
-        background: transparent; border: none;
-        color: #fff; font-size: 10px;
-        width: 100%; outline: none;
+    .search-box:focus-within { border-color: var(--border-strong); }
+    .search-box svg { width: 10px; height: 10px; color: var(--text-mute); flex-shrink: 0; }
+    .search-box input {
+        background: transparent;
+        border: none;
+        color: var(--text);
+        font-size: 11px;
+        font-family: inherit;
+        width: 100%;
+        outline: none;
         min-width: 0;
     }
-    .search-row input::placeholder { color: var(--text-mute); }
-    .price-input {
-        background: rgba(0,0,0,0.3);
-        border: 1px solid rgba(255,255,255,0.08);
-        color: #fff;
-        font-size: 10px;
-        padding: 5px 6px;
-        border-radius: 7px;
-        outline: none;
+    .search-box input::placeholder { color: var(--text-mute); }
+
+    .num-input {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 11px;
+        font-family: inherit;
+        padding: 6px;
         width: 100%;
         min-width: 0;
+        outline: none;
         text-align: center;
+        transition: border-color 0.15s;
     }
-    .price-input::placeholder { color: var(--text-mute); }
-    .price-input:focus { border-color: rgba(74,134,255,0.6); }
+    .num-input:focus { border-color: var(--border-strong); }
+    .num-input::placeholder { color: var(--text-mute); }
 
-    /* СЕТКА */
     .items-scroll {
-        overflow-y: auto;
         flex: 1;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.1) transparent;
     }
     .items-scroll::-webkit-scrollbar { width: 3px; }
-    .items-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+    .items-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
     .item-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 4px;
+        gap: 5px;
     }
-    .grid-slot {
-        background: linear-gradient(160deg, rgba(30,30,42,0.9), rgba(18,18,26,0.9));
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 8px;
-        padding: 5px 2px;
-        text-align: center;
+
+    .slot {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 6px 3px;
         cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        text-align: center;
+        transition: all 0.15s ease;
         position: relative;
         overflow: hidden;
     }
-    .grid-slot::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.06), transparent 70%);
+    .slot:hover { border-color: var(--border-strong); }
+    .slot:active { transform: scale(0.95); }
+    .slot.selected {
+        border-color: var(--text);
+        background: rgba(255, 255, 255, 0.04);
+    }
+    .slot.disabled {
+        opacity: 0.25;
         pointer-events: none;
     }
-    .grid-slot:active { transform: scale(0.94); }
-    .grid-slot.selected {
-        border-color: #fff;
-        background: linear-gradient(160deg, rgba(74,134,255,0.2), rgba(168,85,247,0.15));
-        box-shadow: 0 0 15px rgba(255,255,255,0.3), inset 0 0 15px rgba(74,134,255,0.15);
+
+    .slot-icon-sm {
+        width: 34px; height: 34px;
+        margin: 0 auto 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    .grid-slot.disabled { opacity: 0.25; pointer-events: none; filter: grayscale(0.8); }
-    .grid-slot .slot-icon-sm {
-        width: 32px; height: 32px;
-        margin: 0 auto 2px;
-        display: flex; align-items: center; justify-content: center;
-        position: relative;
-        filter: drop-shadow(0 3px 8px rgba(0,0,0,0.6));
-    }
-    .grid-slot .slot-icon-sm img { width: 100%; height: 100%; object-fit: contain; }
-    .grid-slot .gname {
-        font-size: 6px;
-        color: #bcc2d4;
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    .slot-icon-sm img { width: 100%; height: 100%; object-fit: contain; }
+
+    .slot-name {
+        font-size: 7px;
+        color: var(--text-dim);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-weight: 500;
     }
-    .grid-slot .gval {
-        font-size: 7px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #fff, #a0b0ff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .slot-price {
+        font-size: 8px;
+        font-weight: 700;
+        color: var(--text);
         margin-top: 1px;
+        letter-spacing: -0.02em;
     }
 
-    .empty-msg {
+    .empty {
+        grid-column: 1 / -1;
         text-align: center;
         color: var(--text-mute);
-        font-size: 10px;
-        padding: 20px 8px;
-        grid-column: 1/-1;
+        font-size: 11px;
+        padding: 24px 8px;
     }
 
-    /* МОДАЛКА */
-    .modal-overlay {
-        position: fixed; inset: 0;
-        background: rgba(0,0,0,0.85);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+    /* ============== МОДАЛКИ ============== */
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         display: none;
-        align-items: center; justify-content: center;
+        align-items: center;
+        justify-content: center;
         z-index: 200;
         padding: 20px;
     }
-    .modal-overlay.active { display: flex; }
+    .overlay.active { display: flex; }
+
     .modal {
-        background: linear-gradient(160deg, #1c1c2a, #0e0e16);
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-strong);
         border-radius: 18px;
-        padding: 18px;
-        max-width: 260px; width: 100%;
-        border: 1px solid rgba(255,255,255,0.12);
-        text-align: center;
-        box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
-        animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        padding: 20px;
+        max-width: 300px;
+        width: 100%;
+        animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        max-height: 80vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
     }
-    @keyframes modalPop {
-        from { transform: scale(0.85); opacity: 0; }
+    @keyframes modalIn {
+        from { transform: scale(0.9); opacity: 0; }
         to { transform: scale(1); opacity: 1; }
     }
-    .modal .slot-icon { margin: 0 auto 10px; width: 76px; height: 76px; }
-    .modal h3 { font-size: 13px; margin-bottom: 4px; font-weight: 800; }
-    .modal .price {
-        font-size: 18px;
-        font-weight: 900;
-        margin-bottom: 14px;
-        background: linear-gradient(135deg, #fff, #a0b0ff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .modal-btns { display: flex; gap: 6px; }
-    .modal-btn {
-        flex: 1;
-        padding: 10px;
-        border-radius: 9px;
-        border: none;
-        font-size: 11px;
-        font-weight: 800;
-        cursor: pointer;
-        transition: transform 0.15s;
-    }
-    .modal-btn:active { transform: scale(0.96); }
-    .modal-btn.buy {
-        background: linear-gradient(135deg, #fff, #d0d4ff);
-        color: #000;
-        box-shadow: 0 4px 15px rgba(255,255,255,0.3);
-    }
-    .modal-btn.cancel {
-        background: rgba(255,255,255,0.08);
-        color: #fff;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
-    .modal-btn.buy:disabled { opacity: 0.35; cursor: not-allowed; }
 
-    .promo-title { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px; }
-    .promo-title .gift-icon { font-size: 22px; filter: drop-shadow(0 0 10px rgba(245,197,24,0.6)); }
-    .promo-sub { font-size: 10px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.3; }
-    .promo-input {
-        width: 100%;
-        padding: 11px 12px;
-        background: rgba(0,0,0,0.4);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 10px;
-        color: #fff;
-        font-size: 13px;
+    .modal-title {
+        font-size: 14px;
         font-weight: 700;
-        letter-spacing: 1px;
+        letter-spacing: -0.02em;
+        margin-bottom: 14px;
         text-align: center;
-        outline: none;
-        margin-bottom: 10px;
-        transition: border 0.2s, box-shadow 0.2s;
-        text-transform: uppercase;
-        font-family: inherit;
     }
-    .promo-input:focus { border-color: rgba(245,197,24,0.6); box-shadow: 0 0 20px rgba(245,197,24,0.3); }
-    .promo-input::placeholder { color: var(--text-mute); letter-spacing: 0.5px; text-transform: none; font-weight: 500; }
-    .promo-message { font-size: 11px; font-weight: 700; min-height: 16px; margin-bottom: 10px; transition: color 0.2s; }
-    .promo-message.ok { color: var(--green); }
-    .promo-message.err { color: var(--red); }
 
-    /* ЭФФЕКТЫ */
+    .modal-sub {
+        font-size: 11px;
+        color: var(--text-dim);
+        text-align: center;
+        margin-bottom: 14px;
+        line-height: 1.4;
+    }
+
+    .input-field {
+        width: 100%;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-size: 13px;
+        font-family: inherit;
+        font-weight: 600;
+        padding: 11px 12px;
+        text-align: center;
+        letter-spacing: 0.05em;
+        outline: none;
+        transition: border-color 0.15s;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+    .input-field:focus { border-color: var(--text); }
+    .input-field::placeholder {
+        color: var(--text-mute);
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .status-msg {
+        font-size: 11px;
+        font-weight: 600;
+        min-height: 16px;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+    .status-msg.ok { color: var(--green); }
+    .status-msg.err { color: var(--red); }
+
+    .btns-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 11px;
+        border-radius: 10px;
+        border: none;
+        font-size: 12px;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        transition: transform 0.1s;
+        letter-spacing: -0.01em;
+    }
+    .btn:active { transform: scale(0.96); }
+
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+    .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Настройки */
+    .settings-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-label {
+        font-size: 12px;
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .switch {
+        position: relative;
+        width: 40px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch .slider {
+        position: absolute;
+        inset: 0;
+        background: var(--bg);
+        border: 1px solid var(--border-strong);
+        border-radius: 11px;
+        cursor: pointer;
+        transition: 0.25s;
+    }
+    .switch .slider::before {
+        content: '';
+        position: absolute;
+        width: 16px; height: 16px;
+        left: 2px;
+        top: 2px;
+        background: var(--text-dim);
+        border-radius: 50%;
+        transition: 0.25s;
+    }
+    .switch input:checked + .slider { background: var(--accent); border-color: var(--accent); }
+    .switch input:checked + .slider::before {
+        transform: translateX(18px);
+        background: #000;
+    }
+
+    /* Профиль */
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 14px;
+    }
+
+    .avatar {
+        width: 46px; height: 46px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 1px solid var(--border-strong);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text);
+    }
+
+    .profile-info { flex: 1; min-width: 0; }
+    .profile-name {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        letter-spacing: -0.02em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .profile-stats {
+        font-size: 10px;
+        color: var(--text-dim);
+    }
+
+    .profile-tabs {
+        display: flex;
+        gap: 4px;
+        background: var(--bg);
+        border-radius: 9px;
+        padding: 3px;
+        margin-bottom: 12px;
+    }
+    .profile-tab {
+        flex: 1;
+        padding: 7px;
+        border-radius: 7px;
+        background: transparent;
+        border: none;
+        color: var(--text-dim);
+        font-size: 10px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.15s;
+        text-transform: uppercase;
+    }
+    .profile-tab.active {
+        background: var(--bg-elevated);
+        color: var(--text);
+    }
+
+    .profile-view {
+        display: none;
+        max-height: 240px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+    .profile-view.active { display: block; }
+
+    .history-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 4px;
+        border-bottom: 1px solid var(--border);
+        font-size: 11px;
+    }
+    .history-item:last-child { border-bottom: none; }
+
+    .history-icon {
+        width: 32px; height: 32px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .history-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+    .history-info { flex: 1; min-width: 0; }
+    .history-name {
+        font-weight: 600;
+        color: var(--text);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .history-sub {
+        font-size: 9px;
+        color: var(--text-mute);
+        margin-top: 1px;
+    }
+
+    .history-result {
+        font-size: 10px;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+    .history-result.win { color: var(--green); }
+    .history-result.lose { color: var(--red); }
+
+    .inv-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 4px;
+        border-bottom: 1px solid var(--border);
+    }
+    .inv-item:last-child { border-bottom: none; }
+
+    .inv-actions {
+        display: flex;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .mini-btn {
+        padding: 5px 9px;
+        border-radius: 7px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text);
+        font-size: 9px;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.15s;
+        white-space: nowrap;
+    }
+    .mini-btn:hover { border-color: var(--border-strong); }
+    .mini-btn:active { transform: scale(0.94); }
+    .mini-btn.sell { color: var(--gold); border-color: rgba(255, 217, 61, 0.3); }
+    .mini-btn.sell:hover { border-color: var(--gold); }
+    .mini-btn.withdraw { color: var(--text-mute); cursor: not-allowed; }
+    .mini-btn.withdraw:hover { border-color: var(--border); }
+
+    /* ============== ЭФФЕКТЫ ============== */
     .confetti {
         position: fixed;
-        width: 7px; height: 7px;
-        border-radius: 2px;
+        width: 6px; height: 6px;
+        border-radius: 1px;
         pointer-events: none;
         z-index: 999;
-        animation: confetti-burst 1.8s cubic-bezier(0.15, 0.9, 0.3, 1) forwards;
+        animation: confettiFly 1.6s cubic-bezier(0.15, 0.9, 0.3, 1) forwards;
     }
-    @keyframes confetti-burst {
-        0% { transform: translate(0,0) rotate(0) scale(1); opacity: 1; }
-        100% { transform: translate(var(--dx), var(--dy)) rotate(720deg) scale(0.3); opacity: 0; }
+    @keyframes confettiFly {
+        0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+        100% { transform: translate(var(--dx), var(--dy)) rotate(540deg) scale(0.2); opacity: 0; }
     }
+
     .flash-red {
-        position: fixed; inset: 0;
-        background: transparent;
+        position: fixed;
+        inset: 0;
         pointer-events: none;
         z-index: 998;
     }
-    .flash-red.active { animation: flash-red-anim 0.7s; }
-    @keyframes flash-red-anim {
-        0% { background: rgba(239,68,68,0); }
-        20% { background: rgba(239,68,68,0.5); }
-        100% { background: rgba(239,68,68,0); }
+    .flash-red.active { animation: flashRed 0.6s; }
+    @keyframes flashRed {
+        0% { background: rgba(255, 71, 87, 0); }
+        20% { background: rgba(255, 71, 87, 0.35); }
+        100% { background: rgba(255, 71, 87, 0); }
     }
-    .shake { animation: shake-anim 0.5s; }
-    @keyframes shake-anim {
+
+    .shake {
+        animation: shakeAnim 0.45s;
+    }
+    @keyframes shakeAnim {
         0%, 100% { transform: translateX(0); }
-        20% { transform: translateX(-7px); }
-        40% { transform: translateX(7px); }
+        20% { transform: translateX(-6px); }
+        40% { transform: translateX(6px); }
         60% { transform: translateX(-4px); }
         80% { transform: translateX(4px); }
     }
 
-    /* ТРЯСКА ВО ВРЕМЯ ПОСЛЕДНИХ СЕКУНД ВРАЩЕНИЯ */
-    .tension-shake {
-        animation: tensionShake 0.15s ease-in-out infinite;
-    }
-    @keyframes tensionShake {
-        0%, 100% { transform: scale(1.12) translate(0, 0); }
-        25% { transform: scale(1.12) translate(-1.5px, 1px); }
-        50% { transform: scale(1.12) translate(1.5px, -1px); }
-        75% { transform: scale(1.12) translate(-1px, -1px); }
-    }
-
-    /* РЕЗКИЙ ВОЗВРАТ */
-    .snap-back {
-        animation: snapBack 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-    }
-    @keyframes snapBack {
-        0% { transform: scale(1.12); }
-        40% { transform: scale(0.92); }
-        100% { transform: scale(1); }
-    }
-
+    /* ============== ФУТЕР ============== */
     .footer {
         text-align: center;
-        margin-top: 6px;
-        font-size: 7px;
+        margin-top: 8px;
+        font-size: 9px;
         color: var(--text-mute);
         padding-bottom: 4px;
         flex-shrink: 0;
+        letter-spacing: 0.01em;
     }
-    .footer a { color: var(--text-dim); text-decoration: none; font-weight: 700; }
+    .footer a {
+        color: var(--text-dim);
+        text-decoration: none;
+        font-weight: 500;
+    }
 
+    /* ============== АДАПТИВ ============== */
     @media (min-width: 420px) {
-        .wheel-wrap { width: 155px; height: 155px; }
-        .wheel-col { min-width: 155px; }
-        .wheel-center { width: 90px; height: 90px; }
-        .wheel-percent { font-size: 23px; }
-        .wheel-chance-label { font-size: 7px; }
-        .item-slot { min-height: 140px; }
-        .slot-icon { width: 62px; height: 62px; }
-        .item-name { font-size: 9px; }
-        .item-value { font-size: 11px; }
-        .slot-title { font-size: 8px; }
-        .pill-btn { font-size: 11px; padding: 5px 12px; }
+        .wheel-wrap { width: 170px; height: 170px; }
+        .wheel-col { min-width: 170px; }
+        .wheel-center { width: 100px; height: 100px; }
+        .wheel-percent { font-size: 25px; }
+        .wheel-label { font-size: 8px; }
+        .item-slot { min-height: 155px; }
+        .slot-icon { width: 72px; height: 72px; }
+        .item-name { font-size: 11px; }
+        .item-value { font-size: 13px; }
     }
 
     @media (min-width: 600px) {
-        body { padding: 12px; }
-        .wheel-wrap { width: 200px; height: 200px; }
-        .wheel-col { min-width: 200px; }
-        .wheel-center { width: 115px; height: 115px; }
-        .wheel-percent { font-size: 28px; }
-        .wheel-chance-label { font-size: 9px; }
-        .item-slot { min-height: 190px; padding: 20px 8px 12px 8px; }
-        .slot-icon { width: 90px; height: 90px; }
-        .item-name { font-size: 11px; }
-        .item-value { font-size: 14px; }
+        body { padding: 16px; }
+        .header { padding: 12px 16px; }
+        .logo { font-size: 17px; }
+        .wheel-wrap { width: 220px; height: 220px; }
+        .wheel-col { min-width: 220px; }
+        .wheel-center { width: 130px; height: 130px; }
+        .wheel-percent { font-size: 32px; }
+        .wheel-label { font-size: 9px; }
+        .item-slot { min-height: 210px; padding: 22px 10px 14px; }
+        .slot-icon { width: 100px; height: 100px; }
+        .item-name { font-size: 12px; }
+        .item-value { font-size: 15px; }
         .slot-title { font-size: 10px; }
-        .logo { font-size: 18px; }
-        .balance { font-size: 13px; padding: 6px 12px; }
-        .plus-btn { width: 28px; height: 28px; font-size: 18px; }
-        .pill-btn { font-size: 13px; padding: 7px 14px; }
-        .pill-btn .gift { font-size: 14px; }
-        .settings-btn { width: 28px; height: 28px; font-size: 16px; }
-        .mult-btn { padding: 7px 2px; font-size: 9px; border-radius: 8px; }
-        .mult-btn .chance { font-size: 6px; }
-        .action-btn { padding: 12px; font-size: 13px; width: 65%; }
-        .tab { font-size: 12px; padding: 10px; }
-        .main-panel { max-height: 400px; padding: 10px; }
-        .grid-slot .slot-icon-sm { width: 38px; height: 38px; }
-        .grid-slot .gname { font-size: 8px; }
-        .grid-slot .gval { font-size: 9px; }
+        .upgrade-btn { width: 50%; padding: 14px; font-size: 13px; }
         .item-grid { grid-template-columns: repeat(5, 1fr); }
+        .modal { max-width: 360px; padding: 24px; }
     }
 </style>
 </head>
 <body>
 
-<div class="spin-aura" id="spin-aura"></div>
-
-<div class="zoom-stage" id="zoom-stage">
+<div class="stage" id="stage">
 
     <div class="header">
         <div class="logo">ПСЫ<span class="dot">.</span>gg</div>
-        <div class="header-right">
-            <button class="pill-btn" id="promo-btn"><span class="gift">🎁</span> ПРОМО</button>
-            <div class="balance-wrap">
-                <div class="balance">
-                    <svg class="star-svg" viewBox="0 0 24 24" fill="#f5c518"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <span id="balance">1000</span>
-                </div>
-                <button class="plus-btn" id="plus-btn">+</button>
-                <button class="settings-btn" id="settings-btn">⚙️</button>
+        <div class="header-actions">
+            <!-- ПРОМО -->
+            <button class="icon-btn" id="promo-btn" title="Промокод">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                    <rect x="2" y="7" width="20" height="5"></rect>
+                    <line x1="12" y1="22" x2="12" y2="7"></line>
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
+            </button>
+            <!-- БАЛАНС -->
+            <div class="balance-chip" id="plus-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span id="balance">1000</span>
             </div>
+            <!-- НАСТРОЙКИ -->
+            <button class="icon-btn" id="settings-btn" title="Настройки">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+            <!-- ПРОФИЛЬ -->
+            <button class="icon-btn" id="profile-btn" title="Профиль">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -828,30 +966,27 @@
             <div class="item-name" id="from-name">—</div>
             <div class="item-value" id="from-value">—</div>
         </div>
+
         <div class="wheel-col">
             <div class="wheel-wrap" id="wheel-wrap">
                 <svg class="wheel-svg" viewBox="0 0 100 100">
                     <defs>
                         <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-                            <stop offset="100%" stop-color="#a0b0ff" stop-opacity="1"/>
-                        </linearGradient>
-                        <linearGradient id="trackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#2a2a3a"/>
-                            <stop offset="100%" stop-color="#0e0e16"/>
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#a0a0b0"/>
                         </linearGradient>
                     </defs>
-                    <circle cx="50" cy="50" r="44" fill="none" stroke="url(#trackGrad)" stroke-width="10"/>
-                    <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="10"/>
-                    <path id="win-arc" fill="url(#winGrad)" opacity="0.95"/>
+                    <circle cx="50" cy="50" r="44" fill="none" stroke="#1c1c24" stroke-width="10"/>
+                    <path id="win-arc" fill="url(#winGrad)"/>
                 </svg>
                 <div class="wheel-pointer" id="wheel-pointer"></div>
                 <div class="wheel-center">
                     <div class="wheel-percent" id="wheel-percent">50%</div>
-                    <div class="wheel-chance-label" id="wheel-label">средний</div>
+                    <div class="wheel-label" id="wheel-label">средний</div>
                 </div>
             </div>
         </div>
+
         <div class="item-slot" id="to-card">
             <div class="slot-title">Цель</div>
             <div class="slot-icon" id="to-icon"></div>
@@ -860,40 +995,47 @@
         </div>
     </div>
 
-    <div class="multiplier-grid" id="mult-grid"></div>
-    <button class="action-btn" id="upgrade-btn">Прокачать</button>
+    <div class="mult-grid" id="mult-grid"></div>
+
+    <button class="upgrade-btn" id="upgrade-btn">Прокачать</button>
 
     <div class="tabs">
         <button class="tab active" data-tab="inv">Инвентарь <span id="inv-count"></span></button>
         <button class="tab" data-tab="shop">Магазин</button>
     </div>
 
-    <div class="main-panel">
-        <div class="panel-content active" id="panel-inv">
+    <div class="panel">
+        <div class="panel-view active" id="view-inv">
             <div class="panel-tools">
-                <div class="search-row">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="M21 21l-4-4"/>
+                    </svg>
                     <input type="text" id="inv-search" placeholder="Поиск...">
                 </div>
-                <input type="number" class="price-input" id="inv-price-min" placeholder="От">
-                <input type="number" class="price-input" id="inv-price-max" placeholder="До">
+                <input type="number" class="num-input" id="inv-price-min" placeholder="От">
+                <input type="number" class="num-input" id="inv-price-max" placeholder="До">
             </div>
             <div class="items-scroll">
                 <div class="item-grid" id="inv-grid"></div>
             </div>
         </div>
 
-        <div class="panel-content" id="panel-shop">
+        <div class="panel-view" id="view-shop">
             <div class="panel-tools">
-                <div class="search-row">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                    <input type="text" id="cat-search" placeholder="Поиск...">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="M21 21l-4-4"/>
+                    </svg>
+                    <input type="text" id="shop-search" placeholder="Поиск...">
                 </div>
-                <input type="number" class="price-input" id="cat-price-min" placeholder="От">
-                <input type="number" class="price-input" id="cat-price-max" placeholder="До">
+                <input type="number" class="num-input" id="shop-price-min" placeholder="От">
+                <input type="number" class="num-input" id="shop-price-max" placeholder="До">
             </div>
             <div class="items-scroll">
-                <div class="item-grid" id="cat-grid"></div>
+                <div class="item-grid" id="shop-grid"></div>
             </div>
         </div>
     </div>
@@ -902,48 +1044,92 @@
         powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a>
     </div>
 
-</div><!-- /.zoom-stage -->
+</div>
 
-<div class="modal-overlay" id="buy-modal">
+<!-- ============== МОДАЛКА ПОКУПКИ ============== -->
+<div class="overlay" id="buy-modal">
     <div class="modal">
-        <div class="slot-icon" id="buy-icon"></div>
-        <h3 id="buy-name">—</h3>
-        <div class="price" id="buy-price">—</div>
-        <div class="modal-btns">
-            <button class="modal-btn cancel" id="buy-cancel">Отмена</button>
-            <button class="modal-btn buy" id="buy-confirm">Купить</button>
+        <div class="slot-icon" id="buy-icon" style="width: 80px; height: 80px; margin: 0 auto 12px;"></div>
+        <div class="modal-title" id="buy-name">—</div>
+        <div class="modal-sub" id="buy-price" style="font-size: 18px; font-weight: 800; color: var(--text);">—</div>
+        <div class="btns-row">
+            <button class="btn btn-secondary" id="buy-cancel">Отмена</button>
+            <button class="btn btn-primary" id="buy-confirm">Купить</button>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="promo-modal">
+<!-- ============== МОДАЛКА ПРОМО ============== -->
+<div class="overlay" id="promo-modal">
     <div class="modal">
-        <div class="promo-title">
-            <span class="gift-icon">🎁</span>
-            <h3>Промокод</h3>
-        </div>
-        <div class="promo-sub">Введи код и получи награду</div>
-        <input type="text" class="promo-input" id="promo-input" placeholder="ВВЕДИ ПРОМОКОД" autocomplete="off" autocorrect="off" spellcheck="false">
-        <div class="promo-message" id="promo-message"></div>
-        <div class="modal-btns">
-            <button class="modal-btn cancel" id="promo-cancel">Закрыть</button>
-            <button class="modal-btn buy" id="promo-activate">Активировать</button>
+        <div class="modal-title">Промокод</div>
+        <div class="modal-sub">Введи код и получи награду</div>
+        <input type="text" class="input-field" id="promo-input" placeholder="ВВЕДИ ПРОМОКОД" autocomplete="off" autocorrect="off" spellcheck="false">
+        <div class="status-msg" id="promo-message"></div>
+        <div class="btns-row">
+            <button class="btn btn-secondary" id="promo-cancel">Закрыть</button>
+            <button class="btn btn-primary" id="promo-activate">Активировать</button>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="settings-modal">
+<!-- ============== МОДАЛКА НАСТРОЕК ============== -->
+<div class="overlay" id="settings-modal">
     <div class="modal">
-        <h3 style="margin-bottom: 12px;">Настройки</h3>
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px 14px 4px;">
-            <span style="font-size: 12px; color: var(--text-dim);">Вибрация</span>
+        <div class="modal-title">Настройки</div>
+        <div class="settings-row">
+            <span class="settings-label">Вибрация</span>
             <label class="switch">
                 <input type="checkbox" id="vibration-toggle">
                 <span class="slider"></span>
             </label>
         </div>
-        <div class="modal-btns">
-            <button class="modal-btn buy" id="settings-close" style="flex: 1;">ОК</button>
+        <div class="btns-row" style="margin-top: 14px;">
+            <button class="btn btn-primary" id="settings-close">Готово</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============== МОДАЛКА ПРОФИЛЯ ============== -->
+<div class="overlay" id="profile-modal">
+    <div class="modal" style="max-width: 360px;">
+        <div class="profile-header">
+            <div class="avatar" id="profile-avatar">?</div>
+            <div class="profile-info">
+                <div class="profile-name" id="profile-name">Игрок</div>
+                <div class="profile-stats">
+                    <span id="profile-drops">0 дропов</span> · <span id="profile-inv">0 в инвентаре</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-tabs">
+            <button class="profile-tab active" data-pview="history">История</button>
+            <button class="profile-tab" data-pview="inventory">Инвентарь</button>
+        </div>
+
+        <div class="profile-view active" id="pview-history">
+            <div id="history-list"></div>
+        </div>
+        <div class="profile-view" id="pview-inventory">
+            <div id="profile-inv-list"></div>
+        </div>
+
+        <div class="btns-row" style="margin-top: 14px;">
+            <button class="btn btn-secondary" id="profile-close">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============== МОДАЛКА ПРОДАЖИ ============== -->
+<div class="overlay" id="sell-modal">
+    <div class="modal">
+        <div class="slot-icon" id="sell-icon" style="width: 70px; height: 70px; margin: 0 auto 12px;"></div>
+        <div class="modal-title" id="sell-name">—</div>
+        <div class="modal-sub" id="sell-info">—</div>
+        <div class="btns-row">
+            <button class="btn btn-secondary" id="sell-cancel">Отмена</button>
+            <button class="btn btn-primary" id="sell-confirm">Продать</button>
         </div>
     </div>
 </div>
@@ -955,95 +1141,93 @@
     tg.ready();
     tg.expand();
 
-    /* ================== НАСТРОЙКИ (ВИБРАЦИЯ) ================== */
-    const VIBRATION_KEY = 'psygg_vibration_enabled';
-    let vibrationEnabled = localStorage.getItem(VIBRATION_KEY) !== 'false';
+    /* ============== НАСТРОЙКИ ============== */
+    const VIB_KEY = 'psygg_vibration';
+    let vibrationEnabled = localStorage.getItem(VIB_KEY) !== 'false';
+
+    const USED_KEY = 'psygg_used_promos';
+    const HISTORY_KEY = 'psygg_history';
+    const INV_KEY = 'psygg_inventory';
 
     const PROMO_CODES = {
-        'ROMANARMATURA777': { type: 'stars', amount: 10, label: '10 бесплатных ⭐' },
-        'CHIHARDEDEP':      { type: 'topup', amount: 20, label: '20 к пополнению ⭐' }
+        'ROMANARMATURA777': { amount: 10 },
+        'CHIHARDEDEP':      { amount: 20 }
     };
 
-    const USED_CODES_KEY = 'psygg_used_promos';
     function getUsedCodes() {
-        try { const raw = localStorage.getItem(USED_CODES_KEY); return raw ? JSON.parse(raw) : []; }
+        try { return JSON.parse(localStorage.getItem(USED_KEY) || '[]'); }
         catch { return []; }
     }
     function markCodeUsed(code) {
-        const used = getUsedCodes();
-        if (!used.includes(code)) {
-            used.push(code);
-            localStorage.setItem(USED_CODES_KEY, JSON.stringify(used));
-        }
+        const u = getUsedCodes();
+        if (!u.includes(code)) { u.push(code); localStorage.setItem(USED_KEY, JSON.stringify(u)); }
     }
     function isCodeUsed(code) { return getUsedCodes().includes(code); }
 
-    /* ================== РЕАЛЬНЫЕ ЦЕНЫ И НАЗВАНИЯ ================== */
-    const FALLBACK_CATALOG = [
-        { name: 'Heart', slug: 'heart', value: 15 },
-        { name: 'Teddy Bear', slug: 'teddybear', value: 15 },
-        { name: 'Rose', slug: 'rose', value: 25 },
-        { name: 'Rocket', slug: 'rocket', value: 50 },
-        { name: 'Homemade Cake', slug: 'homemadecake', value: 100 },
-        { name: 'Precious Peach', slug: 'preciouspeach', value: 1000 },
-        { name: 'Toy Bear', slug: 'toybear', value: 1500 },
-        { name: 'Swiss Watch', slug: 'swisswatch', value: 2000 },
-        { name: 'Snoop Dogg', slug: 'snoopdogg', value: 2500 },
-        { name: 'Scared Cat', slug: 'scaredcat', value: 3000 },
-        { name: 'Heart Locket', slug: 'heartlocket', value: 5000 },
-        { name: 'Loot Bag', slug: 'lootbag', value: 5500 },
-        { name: 'Durov\'s Cap', slug: 'durovscap', value: 10000 },
-        { name: 'Plush Pepe', slug: 'plushpepe', value: 25000 },
-        { name: 'Astral Shard', slug: 'astralshard', value: 50000 }
+    /* ============== КАТАЛОГ ============== */
+    const FALLBACK = [
+        { name: 'Heart',        slug: 'heart',        value: 15 },
+        { name: 'Teddy Bear',   slug: 'teddybear',    value: 15 },
+        { name: 'Rose',         slug: 'rose',         value: 25 },
+        { name: 'Rocket',       slug: 'rocket',       value: 50 },
+        { name: 'Homemade Cake',slug: 'homemadecake', value: 100 },
+        { name: 'Precious Peach',slug:'preciouspeach',value: 1000 },
+        { name: 'Toy Bear',     slug: 'toybear',      value: 1500 },
+        { name: 'Swiss Watch',  slug: 'swisswatch',   value: 2000 },
+        { name: 'Snoop Dogg',   slug: 'snoopdogg',    value: 2500 },
+        { name: 'Scared Cat',   slug: 'scaredcat',    value: 3000 },
+        { name: 'Heart Locket', slug: 'heartlocket',  value: 5000 },
+        { name: 'Loot Bag',     slug: 'lootbag',      value: 5500 },
+        { name: "Durov's Cap",  slug: 'durovscap',    value: 10000 },
+        { name: 'Plush Pepe',   slug: 'plushpepe',    value: 25000 },
+        { name: 'Astral Shard', slug: 'astralshard',  value: 50000 }
     ];
 
     const MULTIPLIERS = [1.2, 1.5, 2, 3, 5, 10, 25, 100];
     const SPIN_DURATION = 7500;
 
+    /* ============== СОСТОЯНИЕ ============== */
     let CATALOG = [];
     let balance = 1000;
     let inventory = [];
+    let history = [];
     let currentItem = null;
     let targetItem = null;
     let chance = 50;
     let multiplier = 2;
     let isSpinning = false;
-    let invSearch = '', invPriceMin = null, invPriceMax = null;
-    let catSearch = '', catPriceMin = null, catPriceMax = null;
+    let invSearch = '', invMin = null, invMax = null;
+    let shopSearch = '', shopMin = null, shopMax = null;
 
     const $ = id => document.getElementById(id);
 
-    /* ================== ЗАГРУЗКА ГИФТОВ ================== */
-    async function loadGiftCatalog() {
+    /* ============== ЗАГРУЗКА КАТАЛОГА ============== */
+    async function loadCatalog() {
         try {
-            const response = await fetch('https://api.changes.tg/gifts');
-            if (!response.ok) throw new Error('API error');
-            const data = await response.json();
-            CATALOG = data.map((item, index) => ({
-                name: item.name || item.title || `Gift ${index}`,
-                slug: (item.slug || item.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''),
-                value: item.value || item.price || (index + 1) * 50
+            const r = await fetch('https://api.changes.tg/gifts');
+            if (!r.ok) throw new Error();
+            const d = await r.json();
+            CATALOG = d.map((it, i) => ({
+                name: it.name || `Gift ${i}`,
+                slug: (it.slug || it.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''),
+                value: it.value || it.price || (i + 1) * 50
             }));
-        } catch (e) {
-            CATALOG = [...FALLBACK_CATALOG];
+        } catch {
+            CATALOG = [...FALLBACK];
         }
     }
 
-    /* ================== ИКОНКИ (БЕЗ ЭМОДЗИ-ПОДЛОЖКИ) ================== */
-    function giftImageUrl(item, size = 128) {
+    /* ============== ИКОНКИ ============== */
+    function imgUrl(item, size = 128) {
         return `https://nft.fragment.com/gift/${item.slug}.${size >= 128 ? 500 : 200}.webp`;
     }
     function iconHTML(item, size = 128) {
-        const url = giftImageUrl(item, size);
-        return `<img src="${url}" loading="lazy" alt="${item.name}" onerror="this.style.display='none'">`;
-    }
-    function setSlotIcon(slotEl, item, size = 128) {
-        slotEl.innerHTML = iconHTML(item, size);
+        return `<img src="${imgUrl(item, size)}" loading="lazy" alt="${item.name}" onerror="this.style.display='none'">`;
     }
 
-    /* ================== ВСПОМОГАТЕЛЬНЫЕ ================== */
-    function chanceFromRatio(ratio) {
-        let c = 100 / ratio;
+    /* ============== ВСПОМОГАТЕЛЬНЫЕ ============== */
+    function chanceFromRatio(r) {
+        let c = 100 / r;
         if (c > 99) c = 99;
         if (c < 1) c = 1;
         return Math.round(c * 100) / 100;
@@ -1054,53 +1238,70 @@
         if (c >= 10) return 'низкий';
         return 'безумие';
     }
+
     function recomputeChance() {
         if (!currentItem || !targetItem) return;
-        const ratio = targetItem.value / currentItem.value;
-        chance = chanceFromRatio(ratio);
-        multiplier = Math.round(ratio * 100) / 100;
+        const r = targetItem.value / currentItem.value;
+        chance = chanceFromRatio(r);
+        multiplier = Math.round(r * 100) / 100;
         updatePercentUI();
     }
+
     function updatePercentUI() {
         $('wheel-percent').textContent = chance.toFixed(2).replace(/\.00$/, '') + '%';
         $('wheel-label').textContent = chanceLabel(chance);
-        updateWinArc();
-        highlightMultBtn();
+        updateArc();
+        highlightMult();
     }
-    function highlightMultBtn() {
+
+    function highlightMult() {
         document.querySelectorAll('.mult-btn').forEach(b => {
             const v = parseFloat(b.dataset.mult);
             b.classList.toggle('active', Math.abs(v - multiplier) < 0.15);
         });
     }
-    function updateWinArc() {
+
+    function updateArc() {
         const arc = $('win-arc');
         const cx = 50, cy = 50;
         const half = Math.min(179.9, chance * 3.6 / 2);
-        const startAngle = 180 - half;
-        const endAngle = 180 + half;
-        const toRad = deg => (deg * Math.PI) / 180;
-        const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
-        const rOuter = 49, rInner = 39;
-        const xo1 = cx + rOuter * Math.sin(toRad(startAngle));
-        const yo1 = cy - rOuter * Math.cos(toRad(startAngle));
-        const xo2 = cx + rOuter * Math.sin(toRad(endAngle));
-        const yo2 = cy - rOuter * Math.cos(toRad(endAngle));
-        const xi1 = cx + rInner * Math.sin(toRad(startAngle));
-        const yi1 = cy - rInner * Math.cos(toRad(startAngle));
-        const xi2 = cx + rInner * Math.sin(toRad(endAngle));
-        const yi2 = cy - rInner * Math.cos(toRad(endAngle));
-        const d = [
-            `M ${xo1} ${yo1}`, `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${xo2} ${yo2}`,
-            `L ${xi2} ${yi2}`, `A ${rInner} ${rInner} 0 ${largeArc} 0 ${xi1} ${yi1}`, 'Z'
-        ].join(' ');
-        arc.setAttribute('d', d);
+        const a0 = 180 - half, a1 = 180 + half;
+        const rad = d => d * Math.PI / 180;
+        const large = (a1 - a0) > 180 ? 1 : 0;
+        const ro = 49, ri = 39;
+        const xo1 = cx + ro * Math.sin(rad(a0)), yo1 = cy - ro * Math.cos(rad(a0));
+        const xo2 = cx + ro * Math.sin(rad(a1)), yo2 = cy - ro * Math.cos(rad(a1));
+        const xi1 = cx + ri * Math.sin(rad(a0)), yi1 = cy - ri * Math.cos(rad(a0));
+        const xi2 = cx + ri * Math.sin(rad(a1)), yi2 = cy - ri * Math.cos(rad(a1));
+        arc.setAttribute('d', [
+            `M ${xo1} ${yo1}`,
+            `A ${ro} ${ro} 0 ${large} 1 ${xo2} ${yo2}`,
+            `L ${xi2} ${yi2}`,
+            `A ${ri} ${ri} 0 ${large} 0 ${xi1} ${yi1}`,
+            'Z'
+        ].join(' '));
     }
 
-    /* ================== АРЕНА ================== */
+    /* ============== СОХРАНЕНИЕ ============== */
+    function saveState() {
+        try {
+            localStorage.setItem(INV_KEY, JSON.stringify(inventory));
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 50)));
+        } catch {}
+    }
+    function loadState() {
+        try {
+            const inv = JSON.parse(localStorage.getItem(INV_KEY) || 'null');
+            const his = JSON.parse(localStorage.getItem(HISTORY_KEY) || 'null');
+            if (inv) inventory = inv;
+            if (his) history = his;
+        } catch {}
+    }
+
+    /* ============== АРЕНА ============== */
     function renderArena() {
         if (currentItem) {
-            setSlotIcon($('from-icon'), currentItem);
+            $('from-icon').innerHTML = iconHTML(currentItem, 128);
             $('from-name').textContent = currentItem.name;
             $('from-value').textContent = currentItem.value + ' ⭐';
         } else {
@@ -1109,7 +1310,7 @@
             $('from-value').textContent = '—';
         }
         if (targetItem) {
-            setSlotIcon($('to-icon'), targetItem);
+            $('to-icon').innerHTML = iconHTML(targetItem, 128);
             $('to-name').textContent = targetItem.name;
             $('to-value').textContent = targetItem.value + ' ⭐';
         } else {
@@ -1121,250 +1322,371 @@
         $('to-card').className = 'item-slot';
     }
 
-    /* ================== ИНВЕНТАРЬ ================== */
+    /* ============== ИНВЕНТАРЬ ============== */
     function renderInventory() {
         const grid = $('inv-grid');
         grid.innerHTML = '';
         $('inv-count').textContent = `(${inventory.length})`;
-        const filtered = inventory.filter(it => {
+        const list = inventory.filter(it => {
             if (invSearch && !it.name.toLowerCase().includes(invSearch.toLowerCase())) return false;
-            if (invPriceMin !== null && it.value < invPriceMin) return false;
-            if (invPriceMax !== null && it.value > invPriceMax) return false;
+            if (invMin !== null && it.value < invMin) return false;
+            if (invMax !== null && it.value > invMax) return false;
             return true;
         });
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div class="empty-msg">' + (inventory.length === 0 ? 'Пусто' : 'Не найдено') + '</div>';
+        if (!list.length) {
+            grid.innerHTML = `<div class="empty">${inventory.length === 0 ? 'Пусто' : 'Не найдено'}</div>`;
             return;
         }
-        filtered.forEach(item => {
-            const slot = document.createElement('div');
-            slot.className = 'grid-slot' + (item === currentItem ? ' selected' : '');
-            slot.innerHTML = `<div class="slot-icon-sm">${iconHTML(item, 64)}</div><div class="gname">${item.name}</div><div class="gval">${item.value}⭐</div>`;
-            slot.onclick = () => {
+        list.forEach(item => {
+            const s = document.createElement('div');
+            s.className = 'slot' + (item === currentItem ? ' selected' : '');
+            s.innerHTML = `<div class="slot-icon-sm">${iconHTML(item, 64)}</div><div class="slot-name">${item.name}</div><div class="slot-price">${item.value}⭐</div>`;
+            s.onclick = () => {
                 if (isSpinning) return;
                 currentItem = item;
                 if (targetItem && targetItem.value <= currentItem.value) targetItem = null;
-                renderInventory(); renderArena();
+                renderInventory();
+                renderArena();
                 if (targetItem) recomputeChance();
-                updateUpgradeBtn();
+                updateBtn();
             };
-            grid.appendChild(slot);
+            grid.appendChild(s);
         });
     }
 
-    /* ================== КАТАЛОГ ================== */
-    function renderCatalog() {
-        const grid = $('cat-grid');
+    /* ============== МАГАЗИН ============== */
+    function renderShop() {
+        const grid = $('shop-grid');
         grid.innerHTML = '';
-        const filtered = CATALOG.filter(it => {
-            if (catSearch && !it.name.toLowerCase().includes(catSearch.toLowerCase())) return false;
-            if (catPriceMin !== null && it.value < catPriceMin) return false;
-            if (catPriceMax !== null && it.value > catPriceMax) return false;
+        const list = CATALOG.filter(it => {
+            if (shopSearch && !it.name.toLowerCase().includes(shopSearch.toLowerCase())) return false;
+            if (shopMin !== null && it.value < shopMin) return false;
+            if (shopMax !== null && it.value > shopMax) return false;
             return true;
         });
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div class="empty-msg">Не найдено</div>';
+        if (!list.length) {
+            grid.innerHTML = `<div class="empty">Не найдено</div>`;
             return;
         }
-        filtered.forEach(item => {
-            const slot = document.createElement('div');
-            const isSelected = targetItem === item;
-            const cantAfford = item.value > balance;
-            slot.className = 'grid-slot' + (isSelected ? ' selected' : '');
-            if (cantAfford) slot.classList.add('disabled');
-            slot.innerHTML = `<div class="slot-icon-sm">${iconHTML(item, 64)}</div><div class="gname">${item.name}</div><div class="gval">${item.value}⭐</div>`;
-            slot.onclick = () => { if (isSpinning) return; openBuyModal(item); };
-            grid.appendChild(slot);
+        list.forEach(item => {
+            const s = document.createElement('div');
+            s.className = 'slot' + (targetItem === item ? ' selected' : '') + (item.value > balance ? ' disabled' : '');
+            s.innerHTML = `<div class="slot-icon-sm">${iconHTML(item, 64)}</div><div class="slot-name">${item.name}</div><div class="slot-price">${item.value}⭐</div>`;
+            s.onclick = () => { if (isSpinning) return; openBuy(item); };
+            grid.appendChild(s);
         });
     }
 
-    /* ================== МОДАЛКА ПОКУПКИ ================== */
-    let buyCandidate = null;
-    function openBuyModal(item) {
-        buyCandidate = item;
-        setSlotIcon($('buy-icon'), item, 128);
+    /* ============== ПОКУПКА ============== */
+    let buyItem = null;
+    function openBuy(item) {
+        buyItem = item;
+        $('buy-icon').innerHTML = iconHTML(item, 128);
         $('buy-name').textContent = item.name;
         $('buy-price').textContent = item.value + ' ⭐';
         $('buy-confirm').disabled = item.value > balance;
         $('buy-modal').classList.add('active');
     }
-    function closeBuyModal() { $('buy-modal').classList.remove('active'); buyCandidate = null; }
-    $('buy-cancel').onclick = closeBuyModal;
+    function closeBuy() { $('buy-modal').classList.remove('active'); buyItem = null; }
+    $('buy-cancel').onclick = closeBuy;
     $('buy-confirm').onclick = () => {
-        if (!buyCandidate || buyCandidate.value > balance) return;
-        balance -= buyCandidate.value;
+        if (!buyItem || buyItem.value > balance) return;
+        balance -= buyItem.value;
         $('balance').textContent = balance;
-        inventory.push({ ...buyCandidate });
+        inventory.push({ ...buyItem });
         if (!currentItem) currentItem = inventory[inventory.length - 1];
-        closeBuyModal(); renderInventory(); renderArena(); renderCatalog(); updateUpgradeBtn();
+        saveState();
+        closeBuy();
+        renderInventory(); renderArena(); renderShop(); updateBtn();
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    /* ================== ПРОМОКОД ================== */
-    function openPromoModal() {
+    /* ============== ПРОМО ============== */
+    function openPromo() {
         $('promo-modal').classList.add('active');
         $('promo-input').value = '';
         $('promo-message').textContent = '';
-        $('promo-message').className = 'promo-message';
+        $('promo-message').className = 'status-msg';
         setTimeout(() => $('promo-input').focus(), 200);
     }
-    function closePromoModal() { $('promo-modal').classList.remove('active'); }
+    function closePromo() { $('promo-modal').classList.remove('active'); }
     function activatePromo() {
         const code = $('promo-input').value.trim().toUpperCase();
         const msg = $('promo-message');
-        msg.className = 'promo-message';
+        msg.className = 'status-msg';
         if (!code) { msg.textContent = 'Введи промокод'; msg.classList.add('err'); return; }
         const promo = PROMO_CODES[code];
-        if (!promo) { msg.textContent = '❌ Неверный промокод'; msg.classList.add('err'); if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error'); return; }
-        if (isCodeUsed(code)) { msg.textContent = '⚠️ Ты уже активировал этот код'; msg.classList.add('err'); if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error'); return; }
-
+        if (!promo) {
+            msg.textContent = 'Неверный промокод';
+            msg.classList.add('err');
+            if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
+            return;
+        }
+        if (isCodeUsed(code)) {
+            msg.textContent = 'Уже активирован';
+            msg.classList.add('err');
+            if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
+            return;
+        }
         balance += promo.amount;
         $('balance').textContent = balance;
         markCodeUsed(code);
-        msg.textContent = `✅ Активировано! +${promo.amount} ⭐`;
+        msg.textContent = `+${promo.amount} ⭐`;
         msg.classList.add('ok');
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
-        burstConfetti();
-        renderCatalog();
-        updateUpgradeBtn();
-        setTimeout(() => closePromoModal(), 1500);
+        confetti();
+        renderShop();
+        updateBtn();
+        setTimeout(closePromo, 1200);
     }
-    $('promo-btn').onclick = openPromoModal;
-    $('promo-cancel').onclick = closePromoModal;
+    $('promo-btn').onclick = openPromo;
+    $('promo-cancel').onclick = closePromo;
     $('promo-activate').onclick = activatePromo;
     $('promo-input').addEventListener('keydown', e => { if (e.key === 'Enter') activatePromo(); });
     $('promo-input').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
 
-    /* ================== НАСТРОЙКИ ================== */
-    const settingsBtn = $('settings-btn');
-    const settingsModal = $('settings-modal');
-    const vibrationToggle = $('vibration-toggle');
-
-    settingsBtn.onclick = () => {
-        vibrationToggle.checked = vibrationEnabled;
-        settingsModal.classList.add('active');
+    /* ============== НАСТРОЙКИ ============== */
+    $('settings-btn').onclick = () => {
+        $('vibration-toggle').checked = vibrationEnabled;
+        $('settings-modal').classList.add('active');
     };
-    $('settings-close').onclick = () => settingsModal.classList.remove('active');
-    vibrationToggle.onchange = () => {
-        vibrationEnabled = vibrationToggle.checked;
-        localStorage.setItem(VIBRATION_KEY, vibrationEnabled);
+    $('settings-close').onclick = () => $('settings-modal').classList.remove('active');
+    $('vibration-toggle').onchange = (e) => {
+        vibrationEnabled = e.target.checked;
+        localStorage.setItem(VIB_KEY, vibrationEnabled);
     };
 
-    /* ================== МНОЖИТЕЛИ ================== */
-    function renderMultipliers() {
+    /* ============== ПРОФИЛЬ ============== */
+    function openProfile() {
+        // Имя из Telegram
+        const user = tg.initDataUnsafe?.user;
+        const name = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'Игрок';
+        $('profile-name').textContent = name || 'Игрок';
+        $('profile-avatar').textContent = (name || 'И').charAt(0).toUpperCase();
+
+        const wins = history.filter(h => h.win).length;
+        $('profile-drops').textContent = `${history.length} дропов`;
+        $('profile-inv').textContent = `${inventory.length} в инвентаре`;
+
+        renderHistory();
+        renderProfileInventory();
+        $('profile-modal').classList.add('active');
+    }
+    $('profile-btn').onclick = openProfile;
+    $('profile-close').onclick = () => $('profile-modal').classList.remove('active');
+
+    document.querySelectorAll('.profile-tab').forEach(t => {
+        t.onclick = () => {
+            document.querySelectorAll('.profile-tab').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.profile-view').forEach(x => x.classList.remove('active'));
+            t.classList.add('active');
+            $('pview-' + t.dataset.pview).classList.add('active');
+        };
+    });
+
+    function renderHistory() {
+        const el = $('history-list');
+        if (!history.length) {
+            el.innerHTML = '<div class="empty">Пока пусто</div>';
+            return;
+        }
+        el.innerHTML = history.slice(0, 30).map(h => {
+            const time = new Date(h.time).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            const icon = h.win
+                ? (h.to ? iconHTML(h.to, 64) : '')
+                : (h.from ? iconHTML(h.from, 64) : '');
+            return `
+                <div class="history-item">
+                    <div class="history-icon">${icon}</div>
+                    <div class="history-info">
+                        <div class="history-name">${h.win ? h.to.name : h.from.name}</div>
+                        <div class="history-sub">${h.win ? `+${h.to.value - h.from.value}` : `-${h.from.value}`} ⭐ · ${time}</div>
+                    </div>
+                    <div class="history-result ${h.win ? 'win' : 'lose'}">${h.win ? 'WIN' : 'LOSE'}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderProfileInventory() {
+        const el = $('profile-inv-list');
+        if (!inventory.length) {
+            el.innerHTML = '<div class="empty">Пусто</div>';
+            return;
+        }
+        el.innerHTML = inventory.map((item, idx) => `
+            <div class="inv-item">
+                <div class="history-icon">${iconHTML(item, 64)}</div>
+                <div class="history-info">
+                    <div class="history-name">${item.name}</div>
+                    <div class="history-sub">${item.value} ⭐</div>
+                </div>
+                <div class="inv-actions">
+                    <button class="mini-btn sell" data-sell="${idx}">Продать</button>
+                    <button class="mini-btn withdraw" disabled title="Скоро">Вывод</button>
+                </div>
+            </div>
+        `).join('');
+
+        el.querySelectorAll('[data-sell]').forEach(btn => {
+            btn.onclick = () => {
+                const idx = parseInt(btn.dataset.sell, 10);
+                openSell(idx);
+            };
+        });
+    }
+
+    /* ============== ПРОДАЖА ============== */
+    let sellIdx = -1;
+    function openSell(idx) {
+        const item = inventory[idx];
+        if (!item) return;
+        sellIdx = idx;
+        $('sell-icon').innerHTML = iconHTML(item, 128);
+        $('sell-name').textContent = item.name;
+        const price = Math.floor(item.value * 0.7);
+        $('sell-info').innerHTML = `Продать за <b style="color: var(--gold);">${price} ⭐</b><br><span style="font-size: 9px;">(70% от стоимости)</span>`;
+        $('sell-modal').classList.add('active');
+    }
+    function closeSell() { $('sell-modal').classList.remove('active'); sellIdx = -1; }
+    $('sell-cancel').onclick = closeSell;
+    $('sell-confirm').onclick = () => {
+        if (sellIdx < 0) return;
+        const item = inventory[sellIdx];
+        const price = Math.floor(item.value * 0.7);
+        balance += price;
+        $('balance').textContent = balance;
+        if (currentItem === item) currentItem = null;
+        inventory.splice(sellIdx, 1);
+        saveState();
+        closeSell();
+        renderInventory(); renderArena(); renderShop(); updateBtn();
+        renderProfileInventory();
+        if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+    };
+
+    /* ============== МНОЖИТЕЛИ ============== */
+    function renderMult() {
         const grid = $('mult-grid');
         grid.innerHTML = '';
         MULTIPLIERS.forEach(m => {
-            const btn = document.createElement('button');
-            btn.className = 'mult-btn';
-            btn.dataset.mult = m;
+            const b = document.createElement('button');
+            b.className = 'mult-btn';
+            b.dataset.mult = m;
             const c = chanceFromRatio(m);
-            btn.innerHTML = `×${m}<span class="chance">${c.toFixed(c < 10 ? 1 : 0)}%</span>`;
-            btn.onclick = () => {
+            b.innerHTML = `×${m}<span class="c">${c.toFixed(c < 10 ? 1 : 0)}%</span>`;
+            b.onclick = () => {
                 if (isSpinning || !currentItem) return;
-                const targetValue = currentItem.value * m;
-                const candidates = CATALOG.filter(it => it.value > currentItem.value);
-                if (candidates.length === 0) return;
-                const best = candidates.reduce((prev, curr) => Math.abs(curr.value - targetValue) < Math.abs(prev.value - targetValue) ? curr : prev);
+                const target = currentItem.value * m;
+                const cands = CATALOG.filter(it => it.value > currentItem.value);
+                if (!cands.length) return;
+                const best = cands.reduce((p, c) => Math.abs(c.value - target) < Math.abs(p.value - target) ? c : p);
                 targetItem = best;
-                recomputeChance(); renderCatalog(); renderArena(); updateUpgradeBtn();
+                recomputeChance(); renderShop(); renderArena(); updateBtn();
             };
-            grid.appendChild(btn);
+            grid.appendChild(b);
         });
     }
 
-    function updateUpgradeBtn() { $('upgrade-btn').disabled = isSpinning || !currentItem || !targetItem; }
+    function updateBtn() {
+        $('upgrade-btn').disabled = isSpinning || !currentItem || !targetItem;
+    }
 
-    /* ================== ЭФФЕКТЫ ================== */
-    function burstConfetti() {
-        const colors = ['#fff', '#f5c518', '#22c55e', '#4a86ff', '#a855f7', '#ef4444', '#ff6b9d'];
+    /* ============== ЭФФЕКТЫ ============== */
+    function confetti() {
+        const colors = ['#fff', '#2ecc71', '#4a86ff', '#a855f7', '#ffd93d', '#ff4757'];
         const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-        for (let i = 0; i < 70; i++) {
+        for (let i = 0; i < 55; i++) {
             const p = document.createElement('div');
             p.className = 'confetti';
             p.style.background = colors[Math.floor(Math.random() * colors.length)];
-            p.style.left = cx + 'px'; p.style.top = cy + 'px';
+            p.style.left = cx + 'px';
+            p.style.top = cy + 'px';
             const a = Math.random() * Math.PI * 2;
-            const v = 180 + Math.random() * 400;
+            const v = 150 + Math.random() * 350;
             p.style.setProperty('--dx', Math.cos(a) * v + 'px');
-            p.style.setProperty('--dy', (Math.sin(a) * v - 120) + 'px');
-            p.style.animationDelay = (Math.random() * 0.15) + 's';
+            p.style.setProperty('--dy', (Math.sin(a) * v - 100) + 'px');
+            p.style.animationDelay = (Math.random() * 0.12) + 's';
             if (Math.random() > 0.5) p.style.borderRadius = '50%';
             document.body.appendChild(p);
-            setTimeout(() => p.remove(), 2400);
+            setTimeout(() => p.remove(), 2200);
         }
     }
-    function flashRed() { const el = $('flash-red'); el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
-    function shakeBody() { document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 600); }
+    function flashRed() {
+        const el = $('flash-red');
+        el.classList.remove('active');
+        void el.offsetWidth;
+        el.classList.add('active');
+    }
+    function shake() {
+        document.body.classList.remove('shake');
+        void document.body.offsetWidth;
+        document.body.classList.add('shake');
+        setTimeout(() => document.body.classList.remove('shake'), 600);
+    }
 
-    /* ================== АЗАРТНЫЕ ЭФФЕКТЫ ================== */
-    let heartbeatInterval = null;
-    let tensionTimeout = null;
+    /* ============== АЗАРТ ============== */
+    let hb = null, tensionTimer = null;
 
-    function startAzaartEffects() {
-        const stage = $('zoom-stage');
-        stage.classList.remove('zoom-back');
-        stage.classList.remove('tension-shake');
-        requestAnimationFrame(() => {
-            stage.classList.add('zooming');
-        });
-
-        $('spin-aura').classList.add('active');
+    function startSpin() {
+        const s = $('stage');
+        s.classList.remove('snap', 'tension');
+        requestAnimationFrame(() => s.classList.add('zooming'));
         $('wheel-wrap').classList.add('spinning');
 
-        let hapticCount = 0;
-        heartbeatInterval = setInterval(() => {
-            hapticCount++;
+        hb = setInterval(() => {
             if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('light');
         }, 600);
 
-        tensionTimeout = setTimeout(() => {
-            const stageEl = $('zoom-stage');
-            stageEl.classList.add('tension-shake');
-            clearInterval(heartbeatInterval);
-            heartbeatInterval = setInterval(() => {
+        tensionTimer = setTimeout(() => {
+            $('stage').classList.add('tension');
+            clearInterval(hb);
+            hb = setInterval(() => {
                 if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('medium');
-            }, 150);
-        }, SPIN_DURATION - 2500);
+            }, 140);
+        }, SPIN_DURATION - 2400);
     }
 
-    function endAzaartEffects() {
-        clearInterval(heartbeatInterval);
-        clearTimeout(tensionTimeout);
-        heartbeatInterval = null;
-        tensionTimeout = null;
+    function endSpin() {
+        clearInterval(hb);
+        clearTimeout(tensionTimer);
+        hb = null; tensionTimer = null;
 
-        const stage = $('zoom-stage');
-        stage.classList.remove('zooming', 'tension-shake');
-        void stage.offsetWidth;
-        stage.classList.add('snap-back');
-        setTimeout(() => stage.classList.remove('snap-back'), 600);
+        const s = $('stage');
+        s.classList.remove('zooming', 'tension');
+        void s.offsetWidth;
+        s.classList.add('snap');
+        setTimeout(() => s.classList.remove('snap'), 550);
 
-        $('spin-aura').classList.remove('active');
         $('wheel-wrap').classList.remove('spinning');
-
         if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('heavy');
     }
 
-    function spinWheel(chanceVal) {
+    function spin(ch) {
         return new Promise(resolve => {
-            const pointer = $('wheel-pointer');
-            const half = Math.min(179.9, chanceVal * 3.6 / 2);
-            const sectorStart = 180 - half;
-            const sectorEnd = 180 + half;
-            const wantWin = Math.random() * 100 < chanceVal;
-            let targetAngle;
-            if (wantWin) { targetAngle = sectorStart + 1 + Math.random() * (sectorEnd - sectorStart - 2); }
-            else { const outsideSize = 360 - (sectorEnd - sectorStart); let offset = 1 + Math.random() * (outsideSize - 2); targetAngle = sectorEnd + offset; if (targetAngle > 360) targetAngle -= 360; }
+            const p = $('wheel-pointer');
+            const half = Math.min(179.9, ch * 3.6 / 2);
+            const s0 = 180 - half, s1 = 180 + half;
+            const wantWin = Math.random() * 100 < ch;
+            let angle;
+            if (wantWin) {
+                angle = s0 + 1 + Math.random() * (s1 - s0 - 2);
+            } else {
+                const out = 360 - (s1 - s0);
+                let off = 1 + Math.random() * (out - 2);
+                angle = s1 + off;
+                if (angle > 360) angle -= 360;
+            }
             const turns = 8 + Math.floor(Math.random() * 4);
-            const totalAngle = turns * 360 + targetAngle;
-            pointer.style.transition = 'none'; pointer.style.transform = 'rotate(0deg)';
-            void pointer.offsetWidth;
-            pointer.style.transition = `transform ${SPIN_DURATION}ms cubic-bezier(0.15, 0.7, 0.15, 1)`;
-            pointer.style.transform = `rotate(${totalAngle}deg)`;
-            const finalAngle = ((totalAngle % 360) + 360) % 360;
-            const realWin = finalAngle >= sectorStart && finalAngle <= sectorEnd;
-            setTimeout(() => resolve(realWin), SPIN_DURATION + 100);
+            const total = turns * 360 + angle;
+            p.style.transition = 'none';
+            p.style.transform = 'rotate(0deg)';
+            void p.offsetWidth;
+            p.style.transition = `transform ${SPIN_DURATION}ms cubic-bezier(0.15, 0.7, 0.15, 1)`;
+            p.style.transform = `rotate(${total}deg)`;
+            const fin = ((total % 360) + 360) % 360;
+            const real = fin >= s0 && fin <= s1;
+            setTimeout(() => resolve(real), SPIN_DURATION + 100);
         });
     }
 
@@ -1375,75 +1697,91 @@
         $('from-card').className = 'item-slot';
         $('to-card').className = 'item-slot';
 
-        startAzaartEffects();
+        startSpin();
+        const win = await spin(chance);
+        endSpin();
 
-        const win = await spinWheel(chance);
+        const idx = inventory.indexOf(currentItem);
+        const fromCopy = { ...currentItem };
+        const toCopy = { ...targetItem };
 
-        endAzaartEffects();
-
-        const curIdx = inventory.indexOf(currentItem);
         if (win) {
             const newItem = { ...targetItem };
-            inventory[curIdx] = newItem; currentItem = newItem;
+            inventory[idx] = newItem;
+            currentItem = newItem;
             $('to-card').classList.add('win');
             if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
-            burstConfetti();
+            confetti();
+            history.unshift({ win: true, from: fromCopy, to: toCopy, time: Date.now() });
         } else {
-            inventory.splice(curIdx, 1); currentItem = inventory[0] || null; targetItem = null;
+            inventory.splice(idx, 1);
+            currentItem = inventory[0] || null;
+            targetItem = null;
             $('to-card').classList.add('lose');
             if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
-            flashRed(); shakeBody();
+            flashRed();
+            shake();
+            history.unshift({ win: false, from: fromCopy, to: null, time: Date.now() });
         }
-        renderInventory(); renderArena(); renderCatalog();
+        history = history.slice(0, 50);
+        saveState();
+
+        renderInventory(); renderArena(); renderShop();
         if (currentItem && targetItem) recomputeChance();
         else { chance = 50; multiplier = 2; updatePercentUI(); }
-        setTimeout(() => { isSpinning = false; updateUpgradeBtn(); }, 500);
+        setTimeout(() => { isSpinning = false; updateBtn(); }, 500);
     }
 
-    /* ================== ТАБЫ ================== */
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.onclick = () => {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.panel-content').forEach(p => p.classList.remove('active'));
-            tab.classList.add('active');
-            $('panel-' + tab.dataset.tab).classList.add('active');
+    /* ============== ТАБЫ ============== */
+    document.querySelectorAll('.tab').forEach(t => {
+        t.onclick = () => {
+            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.panel-view').forEach(x => x.classList.remove('active'));
+            t.classList.add('active');
+            $('view-' + t.dataset.tab).classList.add('active');
         };
     });
 
-    /* ================== ПЛЮС ================== */
+    /* ============== ПЛЮС ============== */
     $('plus-btn').onclick = () => {
         const input = prompt('Сколько монет добавить?', '1000');
         if (input === null) return;
-        const amount = parseInt(input, 10);
-        if (isNaN(amount) || amount <= 0) return;
-        balance += amount; $('balance').textContent = balance; renderCatalog();
+        const amt = parseInt(input, 10);
+        if (isNaN(amt) || amt <= 0) return;
+        balance += amt;
+        $('balance').textContent = balance;
+        renderShop();
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    /* ================== ФИЛЬТРЫ ================== */
+    /* ============== ФИЛЬТРЫ ============== */
     $('inv-search').addEventListener('input', e => { invSearch = e.target.value; renderInventory(); });
-    $('inv-price-min').addEventListener('input', e => { const v = e.target.value.trim(); invPriceMin = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
-    $('inv-price-max').addEventListener('input', e => { const v = e.target.value.trim(); invPriceMax = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
-    $('cat-search').addEventListener('input', e => { catSearch = e.target.value; renderCatalog(); });
-    $('cat-price-min').addEventListener('input', e => { const v = e.target.value.trim(); catPriceMin = v === '' ? null : (parseFloat(v) || 0); renderCatalog(); });
-    $('cat-price-max').addEventListener('input', e => { const v = e.target.value.trim(); catPriceMax = v === '' ? null : (parseFloat(v) || 0); renderCatalog(); });
+    $('inv-price-min').addEventListener('input', e => { const v = e.target.value.trim(); invMin = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
+    $('inv-price-max').addEventListener('input', e => { const v = e.target.value.trim(); invMax = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
+    $('shop-search').addEventListener('input', e => { shopSearch = e.target.value; renderShop(); });
+    $('shop-price-min').addEventListener('input', e => { const v = e.target.value.trim(); shopMin = v === '' ? null : (parseFloat(v) || 0); renderShop(); });
+    $('shop-price-max').addEventListener('input', e => { const v = e.target.value.trim(); shopMax = v === '' ? null : (parseFloat(v) || 0); renderShop(); });
 
-    /* ================== СТАРТ ================== */
-    async function initGame() {
-        await loadGiftCatalog();
-        const pool = CATALOG.slice(0, Math.min(12, CATALOG.length));
-        inventory = [];
-        for (let i = 0; i < 8; i++) {
-            const item = pool[Math.floor(Math.random() * pool.length)];
-            inventory.push({ ...item });
+    /* ============== СТАРТ ============== */
+    async function init() {
+        await loadCatalog();
+        loadState();
+        if (!inventory.length) {
+            const pool = CATALOG.slice(0, Math.min(12, CATALOG.length));
+            for (let i = 0; i < 8; i++) {
+                inventory.push({ ...pool[Math.floor(Math.random() * pool.length)] });
+            }
+            saveState();
         }
-        currentItem = inventory[0];
-        targetItem = null; chance = 50; multiplier = 2;
-        renderMultipliers(); renderInventory(); renderArena(); renderCatalog();
-        updatePercentUI(); updateUpgradeBtn();
+        currentItem = inventory[0] || null;
+        targetItem = null;
+        chance = 50;
+        multiplier = 2;
+        renderMult(); renderInventory(); renderArena(); renderShop();
+        updatePercentUI(); updateBtn();
     }
 
-    initGame();
+    init();
     $('upgrade-btn').onclick = doUpgrade;
 </script>
 </body>
