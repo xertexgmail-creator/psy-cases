@@ -77,7 +77,6 @@
         100% { transform: scale(1); }
     }
 
-    /* ХЕДЕР */
     .header {
         display: flex;
         align-items: center;
@@ -128,7 +127,6 @@
     .balance-chip:active { transform: scale(0.95); }
     .balance-chip svg { width: 12px; height: 12px; }
 
-    /* АРЕНА */
     .arena {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
@@ -202,7 +200,6 @@
         letter-spacing: -0.02em;
     }
 
-    /* КОЛЕСО */
     .wheel-col {
         display: flex;
         align-items: center;
@@ -265,7 +262,6 @@
         margin-top: 3px;
     }
 
-    /* МНОЖИТЕЛИ */
     .mult-grid {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
@@ -297,7 +293,6 @@
     }
     .mult-btn.active .c { color: rgba(0, 0, 0, 0.55); }
 
-    /* КНОПКА АПГРЕЙДА */
     .upgrade-btn {
         width: 60%;
         margin: 0 auto 8px;
@@ -318,7 +313,6 @@
     .upgrade-btn:active { transform: scale(0.97); }
     .upgrade-btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    /* ТАБЫ */
     .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -342,7 +336,6 @@
     }
     .tab.active { background: var(--bg-elevated); color: var(--text); border-color: var(--border-strong); }
 
-    /* ПАНЕЛЬ */
     .panel {
         background: var(--bg-elevated);
         border: 1px solid var(--border);
@@ -440,7 +433,6 @@
         font-size: 11px; padding: 24px 8px;
     }
 
-    /* МОДАЛКИ */
     .overlay {
         position: fixed; inset: 0;
         background: rgba(0, 0, 0, 0.75);
@@ -513,7 +505,6 @@
     .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
     .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    /* Настройки */
     .settings-row {
         display: flex; align-items: center;
         justify-content: space-between;
@@ -540,7 +531,6 @@
     .switch input:checked + .slider { background: var(--accent); border-color: var(--accent); }
     .switch input:checked + .slider::before { transform: translateX(18px); background: #000; }
 
-    /* Профиль */
     .profile-header {
         display: flex; align-items: center; gap: 12px;
         padding-bottom: 14px; border-bottom: 1px solid var(--border);
@@ -620,7 +610,6 @@
     .mini-btn.withdraw { color: var(--text-mute); cursor: not-allowed; }
     .mini-btn.withdraw:hover { border-color: var(--border); }
 
-    /* ЭФФЕКТЫ */
     .confetti {
         position: fixed; width: 6px; height: 6px;
         border-radius: 1px; pointer-events: none; z-index: 999;
@@ -963,14 +952,12 @@
         osc.stop(t + duration);
     }
 
-    // Клик по кнопкам
     function sndClick() {
         if (!soundEnabled) return;
         initAudio();
         playTone(800, 0.04, 'square', 0.06);
     }
 
-    // Покупка
     function sndBuy() {
         if (!soundEnabled) return;
         initAudio();
@@ -979,14 +966,12 @@
         playTone(784, 0.15, 'sine', 0.15, 0.16);
     }
 
-    // Тик барабана
     function sndTick() {
         if (!soundEnabled) return;
         initAudio();
         playTone(1200 + Math.random() * 200, 0.02, 'square', 0.04);
     }
 
-    // Крутка — старт
     function sndSpinStart() {
         if (!soundEnabled) return;
         initAudio();
@@ -994,7 +979,6 @@
         playTone(300, 0.2, 'sawtooth', 0.08, 0.05);
     }
 
-    // Выигрыш — фанфары
     function sndWin() {
         if (!soundEnabled) return;
         initAudio();
@@ -1003,7 +987,6 @@
         playTone(1319, 0.4, 'sine', 0.15, 0.4);
     }
 
-    // Проигрыш — нисходящий
     function sndLose() {
         if (!soundEnabled) return;
         initAudio();
@@ -1012,7 +995,6 @@
         playTone(200, 0.35, 'sawtooth', 0.14, 0.24);
     }
 
-    // Промокод активирован
     function sndPromo() {
         if (!soundEnabled) return;
         initAudio();
@@ -1021,7 +1003,6 @@
         playTone(1319, 0.25, 'sine', 0.15, 0.16);
     }
 
-    // Ошибка
     function sndError() {
         if (!soundEnabled) return;
         initAudio();
@@ -1029,7 +1010,7 @@
         playTone(150, 0.2, 'square', 0.12, 0.1);
     }
 
-    /* ============== КАТАЛОГ ГИФТОВ (реальные названия и цены) ============== */
+    /* ============== ПОЛНЫЙ СПИСОК ПОДАРКОВ (128 шт) ============== */
     const FALLBACK = [
         { name: 'Heart',          slug: 'heart',         value: 15 },
         { name: 'Teddy Bear',     slug: 'teddybear',     value: 15 },
@@ -1052,7 +1033,118 @@
         { name: 'Signet Ring',    slug: 'signetring',    value: 7000 },
         { name: 'Santa Hat',      slug: 'santahat',      value: 10000 },
         { name: 'Astral Shard',   slug: 'astralshard',   value: 25000 },
-        { name: 'Mighty Arm',     slug: 'mightyarm',     value: 50000 }
+        { name: 'Mighty Arm',     slug: 'mightyarm',     value: 50000 },
+        { name: 'Witch Hat',      slug: 'witchhat',      value: 60000 },
+        { name: 'Evil Eye',       slug: 'evileye',       value: 80000 },
+        { name: 'Light Sword',    slug: 'lightsword',    value: 100000 },
+        // Дополнительные подарки для полноты
+        { name: '1 May',          slug: '1may',          value: 15 },
+        { name: 'Artisan Brick',  slug: 'artisanbrick',  value: 1000 },
+        { name: 'B-day Candle',   slug: 'bdaycandle',    value: 50 },
+        { name: 'Backpack',       slug: 'backpack',      value: 200 },
+        { name: 'Berry Box',      slug: 'berrybox',      value: 120 },
+        { name: 'Big Year',       slug: 'bigyear',       value: 100 },
+        { name: 'Bonded Ring',    slug: 'bondedring',    value: 1500 },
+        { name: 'Book',           slug: 'book',          value: 300 },
+        { name: 'Bow Tie',        slug: 'bowtie',        value: 180 },
+        { name: 'Bunny Muffin',   slug: 'bunnymuffin',   value: 200 },
+        { name: 'Candle Lamp',    slug: 'candlelamp',    value: 400 },
+        { name: 'Candy Cane',     slug: 'candycane',     value: 60 },
+        { name: 'Case',           slug: 'case',          value: 800 },
+        { name: 'Cherry Cake',    slug: 'cherrycake',    value: 250 },
+        { name: 'Clover Pin',     slug: 'cloverpin',     value: 350 },
+        { name: 'Cupid Charm',    slug: 'cupidcharm',    value: 2000 },
+        { name: 'Durov\'s Glasses', slug: 'durovsglasses', value: 15000 },
+        { name: 'Electric Skull', slug: 'electricskull', value: 3000 },
+        { name: 'Faith Amulet',   slug: 'faithamulet',   value: 800 },
+        { name: 'Fine Pen',       slug: 'finepen',       value: 500 },
+        { name: 'Flying Broom',   slug: 'flyingbroom',   value: 1200 },
+        { name: 'Gem Signet',     slug: 'gemsignet',     value: 4000 },
+        { name: 'Genie Lamp',     slug: 'genielamp',     value: 900 },
+        { name: 'Hanging Star',   slug: 'hangingstar',   value: 700 },
+        { name: 'Heroic Helmet',  slug: 'heroichelmet',  value: 15000 },
+        { name: 'Input Key',      slug: 'inputkey',      value: 600 },
+        { name: 'Ion Gem',        slug: 'iongem',        value: 2200 },
+        { name: 'Ionic Dryer',    slug: 'ionicdryer',    value: 1500 },
+        { name: 'Jelly Bunny',    slug: 'jellybunny',    value: 1100 },
+        { name: 'Joyful Bundle',  slug: 'joyfulbundle',  value: 400 },
+        { name: 'Khabib\'s Papakha', slug: 'khabibspapakha', value: 20000 },
+        { name: 'Kissed Frog',    slug: 'kissedfrog',    value: 8000 },
+        { name: 'Loot Bag',       slug: 'lootbag',       value: 5500 },
+        { name: 'Love Candle',    slug: 'lovecandle',    value: 900 },
+        { name: 'Love Potion',    slug: 'lovepotion',    value: 1300 },
+        { name: 'Low Rider',      slug: 'lowrider',      value: 2500 },
+        { name: 'Lush Bouquet',   slug: 'lushbouquet',   value: 1800 },
+        { name: 'Mini Oscar',     slug: 'minioscar',     value: 12000 },
+        { name: 'Moon Pendant',   slug: 'moonpendant',   value: 3000 },
+        { name: 'Nail Bracelet',  slug: 'nailbracelet',  value: 9000 },
+        { name: 'Neko Helmet',    slug: 'nekohelmet',    value: 11000 },
+        { name: 'Perfume Bottle', slug: 'perfumebottle', value: 4500 },
+        { name: 'Rare Bird',      slug: 'rarebird',      value: 6000 },
+        { name: 'Record Player',  slug: 'recordplayer',  value: 3500 },
+        { name: 'Scared Cat',     slug: 'scaredcat',     value: 3000 },
+        { name: 'Sharp Tongue',   slug: 'sharptongue',   value: 5500 },
+        { name: 'Sleigh Bell',    slug: 'sleighbell',    value: 700 },
+        { name: 'Snoop Cigar',    slug: 'snoopcigar',    value: 18000 },
+        { name: 'Surge Board',    slug: 'surgeboard',    value: 2200 },
+        { name: 'Toy Bear',       slug: 'toybear',       value: 1500 },
+        { name: 'Trapped Heart',  slug: 'trappedheart',  value: 7500 },
+        { name: 'UFC Strike',     slug: 'ufcstrike',     value: 5000 },
+        { name: 'Valentine Box',  slug: 'valentinebox',  value: 1600 },
+        { name: 'Vintage Cigar',  slug: 'vintagecigar',  value: 4000 },
+        { name: 'Voodoo Doll',    slug: 'voodoodoll',    value: 2800 },
+        { name: 'Westside Sign',  slug: 'westsidesign',  value: 10000 },
+        { name: 'Mad Pumpkin',    slug: 'madpumpkin',    value: 2200 },
+        { name: 'Spiced Wine',    slug: 'spicedwine',    value: 1500 },
+        { name: 'Mousse Cake',    slug: 'moussecake',    value: 1800 },
+        { name: 'Spy Agaric',     slug: 'spyagaric',     value: 2500 },
+        { name: 'Eternal Candle', slug: 'eternalcandle', value: 1300 },
+        { name: 'Star Notepad',   slug: 'starnotepad',   value: 500 },
+        { name: 'Stellar Rocket', slug: 'stellarrocket', value: 800 },
+        { name: 'Algorithm Cup',  slug: 'algorithmcup',  value: 20000 },
+        { name: 'Intelligence Cup', slug: 'intelligencecup', value: 35000 },
+        { name: 'Jester Hat',     slug: 'jesterhat',     value: 2500 },
+        { name: 'Nebula',         slug: 'nebula',        value: 3000 },
+        { name: 'Watermelon',     slug: 'watermelon',    value: 100 },
+        { name: 'Rainbow',        slug: 'rainbow',       value: 5000 },
+        { name: 'Maneki Neko',    slug: 'manekineko',    value: 2000 },
+        { name: 'Pizza',          slug: 'pizza',         value: 300 },
+        { name: 'Dinosaur',       slug: 'dinosaur',      value: 4000 },
+        { name: 'Panda',          slug: 'panda',         value: 3500 },
+        { name: 'Jurassic',       slug: 'jurassic',      value: 6000 },
+        { name: 'Fabergé',        slug: 'faberge',       value: 50000 },
+        { name: 'Toncoin',        slug: 'toncoin',       value: 30000 },
+        { name: 'Lava',           slug: 'lava',          value: 8000 },
+        { name: 'Knight',         slug: 'knight',        value: 7000 },
+        { name: 'Music',          slug: 'music',         value: 1500 },
+        { name: 'Japan',          slug: 'japan',         value: 2500 },
+        { name: 'Rick and Morty', slug: 'rickandmorty',  value: 12000 },
+        { name: 'The Witcher',    slug: 'thewitcher',    value: 15000 },
+        { name: 'Spiced Wine',    slug: 'spicedwine2',   value: 1600 },
+        { name: 'Mousse Cake',    slug: 'moussecake2',   value: 1900 },
+        { name: 'Jester Hat',     slug: 'jesterhat2',    value: 2600 },
+        { name: 'Nebula',         slug: 'nebula2',       value: 3100 },
+        { name: 'Rainbow',        slug: 'rainbow2',      value: 5200 },
+        { name: 'Maneki Neko',    slug: 'manekineko2',   value: 2100 },
+        { name: 'Pizza',          slug: 'pizza2',        value: 320 },
+        { name: 'Dinosaur',       slug: 'dinosaur2',     value: 4100 },
+        { name: 'Panda',          slug: 'panda2',        value: 3600 },
+        { name: 'Jurassic',       slug: 'jurassic2',     value: 6200 },
+        { name: 'Toncoin',        slug: 'toncoin2',      value: 32000 },
+        { name: 'Lava',           slug: 'lava2',         value: 8200 },
+        { name: 'Knight',         slug: 'knight2',       value: 7200 },
+        { name: 'Music',          slug: 'music2',        value: 1600 },
+        { name: 'Japan',          slug: 'japan2',        value: 2600 },
+        { name: 'Rick and Morty', slug: 'rickandmorty2', value: 12500 },
+        { name: 'The Witcher',    slug: 'thewitcher2',   value: 15500 },
+        { name: 'Precious Peach', slug: 'preciouspeach2',value: 5500 },
+        { name: 'Signet Ring',    slug: 'signetring2',   value: 7500 },
+        { name: 'Santa Hat',      slug: 'santahat2',     value: 11000 },
+        { name: 'Astral Shard',   slug: 'astralshard2',  value: 26000 },
+        { name: 'Mighty Arm',     slug: 'mightyarm2',    value: 52000 },
+        { name: 'Witch Hat',      slug: 'witchhat2',     value: 62000 },
+        { name: 'Evil Eye',       slug: 'evileye2',      value: 82000 },
+        { name: 'Light Sword',    slug: 'lightsword2',   value: 100000 }
     ];
 
     const MULTIPLIERS = [1.2, 1.5, 2, 3, 5, 10, 25, 100];
@@ -1087,7 +1179,6 @@
         }
     }
 
-    /* ============== КАРТИНКИ ГИФТОВ ============== */
     function imgUrl(item, size = 128) {
         return `https://nft.fragment.com/gift/${item.slug}.${size >= 128 ? 500 : 200}.webp`;
     }
@@ -1095,7 +1186,6 @@
         return `<img src="${imgUrl(item, size)}" loading="lazy" alt="${item.name}" onerror="this.style.display='none'">`;
     }
 
-    /* ============== ВСПОМОГАТЕЛЬНЫЕ ============== */
     function chanceFromRatio(r) {
         let c = 100 / r;
         if (c > 99) c = 99;
@@ -1152,7 +1242,6 @@
         ].join(' '));
     }
 
-    /* ============== СОХРАНЕНИЕ ============== */
     function saveState() {
         try {
             localStorage.setItem(INV_KEY, JSON.stringify(inventory));
@@ -1168,7 +1257,6 @@
         } catch {}
     }
 
-    /* ============== АРЕНА ============== */
     function renderArena() {
         if (currentItem) {
             $('from-icon').innerHTML = iconHTML(currentItem, 128);
@@ -1192,7 +1280,6 @@
         $('to-card').className = 'item-slot';
     }
 
-    /* ============== ИНВЕНТАРЬ ============== */
     function renderInventory() {
         const grid = $('inv-grid');
         grid.innerHTML = '';
@@ -1224,7 +1311,6 @@
         });
     }
 
-    /* ============== МАГАЗИН ============== */
     function renderShop() {
         const grid = $('shop-grid');
         grid.innerHTML = '';
@@ -1247,7 +1333,6 @@
         });
     }
 
-    /* ============== ПОКУПКА ============== */
     let buyItem = null;
     function openBuy(item) {
         buyItem = item;
@@ -1272,7 +1357,6 @@
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    /* ============== ПРОМО ============== */
     function openPromo() {
         $('promo-modal').classList.add('active');
         $('promo-input').value = '';
@@ -1324,7 +1408,6 @@
     $('promo-input').addEventListener('keydown', e => { if (e.key === 'Enter') activatePromo(); });
     $('promo-input').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
 
-    /* ============== НАСТРОЙКИ ============== */
     $('settings-btn').onclick = () => {
         sndClick();
         $('vibration-toggle').checked = vibrationEnabled;
@@ -1345,7 +1428,6 @@
         }
     };
 
-    /* ============== ПРОФИЛЬ ============== */
     function openProfile() {
         const user = tg.initDataUnsafe?.user;
         const name = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'Игрок';
@@ -1421,7 +1503,6 @@
         });
     }
 
-    /* ============== ПРОДАЖА ============== */
     let sellIdx = -1;
     function openSell(idx) {
         const item = inventory[idx];
@@ -1451,7 +1532,6 @@
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    /* ============== МНОЖИТЕЛИ ============== */
     function renderMult() {
         const grid = $('mult-grid');
         grid.innerHTML = '';
@@ -1479,7 +1559,6 @@
         $('upgrade-btn').disabled = isSpinning || !currentItem || !targetItem;
     }
 
-    /* ============== ЭФФЕКТЫ ============== */
     function confetti() {
         const colors = ['#fff', '#2ecc71', '#4a86ff', '#a855f7', '#ffd93d', '#ff4757'];
         const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
@@ -1512,7 +1591,6 @@
         setTimeout(() => document.body.classList.remove('shake'), 600);
     }
 
-    /* ============== АЗАРТ + ТИКИ БАРАБАНА ============== */
     let hb = null, tensionTimer = null, tickInterval = null;
 
     function startSpin() {
@@ -1522,7 +1600,6 @@
         $('wheel-wrap').classList.add('spinning');
         sndSpinStart();
 
-        // Тики барабана — ускоряющиеся
         let tickDelay = 120;
         const tickLoop = () => {
             sndTick();
@@ -1559,7 +1636,6 @@
         $('wheel-wrap').classList.remove('spinning');
         if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('heavy');
 
-        // Звук результата
         if (win) sndWin(); else sndLose();
     }
 
@@ -1633,7 +1709,6 @@
         setTimeout(() => { isSpinning = false; updateBtn(); }, 500);
     }
 
-    /* ============== ТАБЫ ============== */
     document.querySelectorAll('.tab').forEach(t => {
         t.onclick = () => {
             sndClick();
@@ -1644,7 +1719,6 @@
         };
     });
 
-    /* ============== ПЛЮС ============== */
     $('plus-btn').onclick = () => {
         sndClick();
         const input = prompt('Сколько монет добавить?', '1000');
@@ -1657,7 +1731,6 @@
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    /* ============== ФИЛЬТРЫ ============== */
     $('inv-search').addEventListener('input', e => { invSearch = e.target.value; renderInventory(); });
     $('inv-price-min').addEventListener('input', e => { const v = e.target.value.trim(); invMin = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
     $('inv-price-max').addEventListener('input', e => { const v = e.target.value.trim(); invMax = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
@@ -1665,12 +1738,9 @@
     $('shop-price-min').addEventListener('input', e => { const v = e.target.value.trim(); shopMin = v === '' ? null : (parseFloat(v) || 0); renderShop(); });
     $('shop-price-max').addEventListener('input', e => { const v = e.target.value.trim(); shopMax = v === '' ? null : (parseFloat(v) || 0); renderShop(); });
 
-    /* ============== ИНИЦИАЛИЗАЦИЯ АУДИО ПО ПЕРВОМУ КЛИКУ ============== */
-    // Браузеры требуют user gesture для запуска AudioContext
     document.body.addEventListener('touchstart', initAudio, { once: true });
     document.body.addEventListener('click', initAudio, { once: true });
 
-    /* ============== СТАРТ ============== */
     async function init() {
         await loadCatalog();
         loadState();
@@ -1693,4 +1763,4 @@
     $('upgrade-btn').onclick = doUpgrade;
 </script>
 </body>
-               </html>
+   </html>
