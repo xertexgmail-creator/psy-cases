@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ПСЫ.gg</title>
+<title>ПСЫ.gg — Апгрейдер</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     :root {
-        --bg: #0a0a0c;
-        --bg-elevated: #14141a;
+        --bg: #08080c;
+        --bg-elevated: #101018;
+        --bg-card: #16161f;
         --border: rgba(255, 255, 255, 0.06);
-        --border-strong: rgba(255, 255, 255, 0.12);
+        --border-strong: rgba(255, 255, 255, 0.14);
         --text: #f5f5f7;
         --text-dim: #8a8a95;
         --text-mute: #55555f;
@@ -20,6 +21,13 @@
         --green: #2ecc71;
         --red: #ff4757;
         --gold: #ffd93d;
+
+        --r-common:    #4b69ff;
+        --r-uncommon:  #8847ff;
+        --r-rare:      #d32ce6;
+        --r-epic:      #eb4b4b;
+        --r-mythical:  #ffd700;
+        --r-legendary: #ff9500;
     }
 
     html, body { overflow-x: hidden; }
@@ -37,13 +45,26 @@
         flex-direction: column;
     }
 
+    /* ГРАДИЕНТНЫЙ ФОН */
     body::before {
         content: '';
         position: fixed;
-        top: -40%; left: 50%;
-        transform: translateX(-50%);
-        width: 600px; height: 600px;
-        background: radial-gradient(circle, rgba(120, 100, 255, 0.08) 0%, transparent 60%);
+        inset: 0;
+        background:
+            radial-gradient(ellipse 90% 60% at 50% -10%, rgba(120, 100, 255, 0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 70% 50% at 0% 50%, rgba(74, 134, 255, 0.08) 0%, transparent 60%),
+            radial-gradient(ellipse 70% 50% at 100% 50%, rgba(168, 85, 247, 0.08) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* ШУМ */
+    body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.4'/></svg>");
+        opacity: 0.035;
         pointer-events: none;
         z-index: 0;
     }
@@ -53,100 +74,102 @@
         z-index: 1;
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - 16px);
-        transform-origin: 50% 40%;
+        flex: 1;
+        transform-origin: 50% 45%;
         transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
         will-change: transform;
     }
-    .stage.zooming { transform: scale(1.05); transition: transform 6s cubic-bezier(0.25, 0.1, 0.3, 1); }
-    .stage.tension { animation: tensionShake 0.15s ease-in-out infinite; }
+    .stage.zooming {
+        transform: scale(1.06);
+        transition: transform 6s cubic-bezier(0.25, 0.1, 0.3, 1);
+    }
+    .stage.tension { animation: tensionShake 0.12s ease-in-out infinite; }
     @keyframes tensionShake {
-        0%, 100% { transform: scale(1.05) translate(0, 0); }
-        25% { transform: scale(1.05) translate(-1px, 1px); }
-        50% { transform: scale(1.05) translate(1px, -1px); }
-        75% { transform: scale(1.05) translate(-1px, -1px); }
+        0%, 100% { transform: scale(1.06) translate(0, 0); }
+        25% { transform: scale(1.06) translate(-1.2px, 1px); }
+        50% { transform: scale(1.06) translate(1.2px, -1px); }
+        75% { transform: scale(1.06) translate(-1px, -1px); }
     }
     .stage.snap { animation: snapBack 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
     @keyframes snapBack {
-        0% { transform: scale(1.05); }
-        40% { transform: scale(0.96); }
+        0% { transform: scale(1.06); }
+        40% { transform: scale(0.95); }
         100% { transform: scale(1); }
     }
 
     /* ХЕДЕР */
     .header {
-        display: flex; align-items: center; justify-content: space-between;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         padding: 10px 12px;
-        background: var(--bg-elevated);
-        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(16,16,24,0.7) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 16px;
         border: 1px solid var(--border);
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         flex-shrink: 0;
         gap: 6px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
     }
-    .logo { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; flex-shrink: 0; }
-    .logo .dot { color: var(--text-mute); }
-    .header-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .logo {
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, #fff 0%, #c0c8ff 50%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 12px rgba(168,85,247,0.3));
+    }
+    .logo .dot { -webkit-text-fill-color: var(--text-mute); }
+
+    .header-actions { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
 
     .icon-btn {
         width: 34px; height: 34px;
-        background: transparent;
+        background: rgba(255,255,255,0.03);
         border: 1px solid var(--border);
         border-radius: 10px;
         color: var(--text-dim);
         display: flex; align-items: center; justify-content: center;
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: all 0.2s ease;
         padding: 0;
+        position: relative;
+        overflow: hidden;
     }
+    .icon-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    .icon-btn:hover::before { opacity: 1; }
     .icon-btn:hover { border-color: var(--border-strong); color: var(--text); }
-    .icon-btn:active { transform: scale(0.94); }
-    .icon-btn svg { width: 16px; height: 16px; }
+    .icon-btn:active { transform: scale(0.92); }
+    .icon-btn svg { width: 16px; height: 16px; position: relative; z-index: 1; }
 
     .balance-chip {
         display: flex; align-items: center; gap: 5px;
-        background: var(--accent); color: #000;
-        padding: 6px 11px; border-radius: 10px;
-        font-size: 12px; font-weight: 700;
+        background: linear-gradient(135deg, #ffffff, #d0d4ff);
+        color: #000;
+        padding: 7px 12px;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 800;
         letter-spacing: -0.02em;
         cursor: pointer;
-        transition: transform 0.15s;
+        transition: all 0.15s;
+        box-shadow: 0 4px 16px rgba(255,255,255,0.15), inset 0 1px 0 rgba(255,255,255,0.6);
     }
     .balance-chip:active { transform: scale(0.95); }
     .balance-chip svg { width: 12px; height: 12px; }
 
-    /* ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ */
-    .mode-switcher {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 4px;
-        margin-bottom: 8px;
-        flex-shrink: 0;
-    }
-    .mode-tab {
-        padding: 9px;
-        background: transparent;
-        border: none;
-        color: var(--text-dim);
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        border-radius: 9px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: inherit;
-    }
-    .mode-tab.active { background: var(--accent); color: #000; }
-
-    .mode-view { display: none; flex-direction: column; flex: 1; }
-    .mode-view.active { display: flex; }
-
-    /* ==================== АПГРЕЙДЕР ==================== */
+    /* АРЕНА */
     .arena {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
@@ -155,32 +178,65 @@
         margin-bottom: 8px;
         flex-shrink: 0;
     }
+
     .item-slot {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 16px 6px 10px;
+        background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(12,12,18,0.95) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 16px;
+        padding: 18px 6px 12px;
         text-align: center;
-        min-height: 140px;
+        border: 1px solid var(--border);
+        min-height: 155px;
         display: flex; flex-direction: column;
         justify-content: center; align-items: center;
         position: relative;
-        transition: border-color 0.3s, box-shadow 0.3s;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .item-slot.win { border-color: rgba(46, 204, 113, 0.5); box-shadow: 0 0 20px rgba(46, 204, 113, 0.15); }
-    .item-slot.lose { border-color: rgba(255, 71, 87, 0.5); box-shadow: 0 0 20px rgba(255, 71, 87, 0.15); }
+
+    .item-slot::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 0%, var(--slot-glow, transparent) 0%, transparent 65%);
+        opacity: 0.7;
+        pointer-events: none;
+        transition: opacity 0.4s;
+    }
+
+    .item-slot.win {
+        border-color: rgba(46, 204, 113, 0.55);
+        box-shadow: 0 0 30px rgba(46, 204, 113, 0.35), 0 8px 32px rgba(0,0,0,0.5), inset 0 0 30px rgba(46, 204, 113, 0.1);
+    }
+    .item-slot.win::before {
+        background: radial-gradient(circle at 50% 50%, rgba(46, 204, 113, 0.3) 0%, transparent 65%);
+    }
+    .item-slot.lose {
+        border-color: rgba(255, 71, 87, 0.55);
+        box-shadow: 0 0 30px rgba(255, 71, 87, 0.35), 0 8px 32px rgba(0,0,0,0.5), inset 0 0 30px rgba(255, 71, 87, 0.1);
+    }
+    .item-slot.lose::before {
+        background: radial-gradient(circle at 50% 50%, rgba(255, 71, 87, 0.3) 0%, transparent 65%);
+    }
+
     .slot-title {
-        position: absolute; top: 8px; left: 0; right: 0;
-        font-size: 9px; font-weight: 600;
-        letter-spacing: 0.06em;
+        position: absolute; top: 9px; left: 0; right: 0;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
         color: var(--text-mute);
         text-transform: uppercase;
+        z-index: 1;
     }
     .slot-icon {
-        width: 64px; height: 64px;
+        width: 70px; height: 70px;
         margin-bottom: 6px;
         display: flex; align-items: center; justify-content: center;
         position: relative;
+        z-index: 1;
+        filter: drop-shadow(0 6px 20px rgba(0,0,0,0.7));
     }
     .slot-icon img {
         width: 100%; height: 100%;
@@ -189,115 +245,219 @@
     }
     @keyframes floaty {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-2px); }
+        50% { transform: translateY(-3px); }
     }
     .item-name {
-        font-size: 10px; font-weight: 500; color: var(--text-dim);
-        margin-bottom: 2px;
-        max-width: 100%; overflow: hidden;
-        text-overflow: ellipsis; white-space: nowrap;
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--text-dim);
+        margin-bottom: 3px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        z-index: 1;
     }
     .item-value {
-        font-size: 12px; font-weight: 700; color: var(--text);
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--text);
         letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
+    }
+    .item-value .star {
+        display: inline-block;
+        width: 9px; height: 9px;
+        vertical-align: middle;
+        margin-left: 2px;
+        opacity: 0.5;
     }
 
+    /* КОЛЕСО */
     .wheel-col {
         display: flex; align-items: center; justify-content: center;
-        min-width: 150px; position: relative;
+        min-width: 155px; position: relative;
     }
     .wheel-wrap {
         position: relative;
-        width: 150px; height: 150px;
+        width: 155px; height: 155px;
         transition: filter 0.4s;
     }
-    .wheel-wrap.spinning { filter: drop-shadow(0 0 20px rgba(120, 100, 255, 0.6)); }
+    .wheel-wrap::before {
+        content: '';
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg,
+            rgba(120, 100, 255, 0),
+            rgba(120, 100, 255, 0.4),
+            rgba(168, 85, 247, 0.4),
+            rgba(120, 100, 255, 0));
+        filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.5s;
+        pointer-events: none;
+    }
+    .wheel-wrap.spinning::before {
+        opacity: 1;
+        animation: spinGlowFast 1.2s linear infinite;
+    }
+    @keyframes spinGlowFast {
+        to { transform: rotate(360deg); }
+    }
+    .wheel-wrap.spinning { filter: drop-shadow(0 0 24px rgba(120, 100, 255, 0.5)); }
+
     .wheel-svg { width: 100%; height: 100%; }
+
     .wheel-pointer {
-        position: absolute; inset: 0;
+        position: absolute;
+        inset: 0;
         transition: transform 7.5s cubic-bezier(0.15, 0.7, 0.15, 1);
         will-change: transform;
     }
     .wheel-pointer::before {
         content: '';
         position: absolute;
-        top: -2px; left: 50%;
+        top: -3px; left: 50%;
         transform: translateX(-50%);
         width: 0; height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 10px solid var(--text);
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-top: 12px solid #fff;
+        filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)) drop-shadow(0 0 16px rgba(168,85,247,0.6));
     }
+
     .wheel-center {
         position: absolute;
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        width: 88px; height: 88px;
+        width: 92px; height: 92px;
         border-radius: 50%;
-        background: var(--bg);
+        background: radial-gradient(circle at 30% 25%, #1a1a26 0%, #08080c 100%);
         border: 1px solid var(--border-strong);
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
         z-index: 3;
+        box-shadow:
+            inset 0 0 24px rgba(0,0,0,0.8),
+            inset 0 1px 0 rgba(255,255,255,0.1),
+            0 0 24px rgba(120,100,255,0.15);
     }
     .wheel-percent {
-        font-size: 22px; font-weight: 800;
-        letter-spacing: -0.03em; line-height: 1;
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        background: linear-gradient(135deg, #fff 0%, #b0b8ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 10px rgba(120,100,255,0.4));
     }
     .wheel-label {
-        font-size: 7px; font-weight: 600;
-        letter-spacing: 0.08em;
+        font-size: 7px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
         color: var(--text-mute);
         text-transform: uppercase;
         margin-top: 3px;
     }
 
+    /* МНОЖИТЕЛИ */
     .mult-grid {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
-        gap: 3px;
+        gap: 4px;
         margin-bottom: 8px;
         flex-shrink: 0;
     }
     .mult-btn {
-        background: var(--bg-elevated);
+        background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(14,14,20,0.9) 100%);
         border: 1px solid var(--border);
         color: var(--text);
-        padding: 7px 0;
-        border-radius: 8px;
-        font-size: 9px; font-weight: 700;
+        padding: 8px 0;
+        border-radius: 9px;
+        font-size: 9px;
+        font-weight: 800;
         letter-spacing: -0.02em;
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         line-height: 1;
+        position: relative;
+        overflow: hidden;
+        font-family: inherit;
     }
-    .mult-btn:hover { border-color: var(--border-strong); }
-    .mult-btn.active { background: var(--accent); border-color: var(--accent); color: #000; }
+    .mult-btn:hover {
+        border-color: var(--border-strong);
+        transform: translateY(-1px);
+    }
+    .mult-btn:active { transform: scale(0.94); }
+    .mult-btn.active {
+        background: linear-gradient(135deg, #ffffff 0%, #d0d4ff 100%);
+        border-color: transparent;
+        color: #000;
+        box-shadow: 0 4px 20px rgba(255,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.7);
+    }
     .mult-btn .c {
         display: block;
         font-size: 6px;
         color: var(--text-mute);
-        font-weight: 500;
-        margin-top: 2px;
+        font-weight: 600;
+        margin-top: 3px;
+        letter-spacing: 0;
     }
     .mult-btn.active .c { color: rgba(0, 0, 0, 0.55); }
 
+    /* КНОПКА АПГРЕЙДА */
     .upgrade-btn {
-        width: 60%; margin: 0 auto 8px;
-        padding: 12px;
-        background: var(--accent);
-        border: none; border-radius: 12px;
-        color: #000; font-size: 12px; font-weight: 800;
-        letter-spacing: 0.02em;
+        width: 65%;
+        margin: 0 auto 10px;
+        padding: 14px;
+        background: linear-gradient(135deg, #ffffff 0%, #d0d4ff 100%);
+        border: none;
+        border-radius: 13px;
+        color: #000;
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
         font-family: inherit;
+        box-shadow:
+            0 8px 28px rgba(120,100,255,0.35),
+            0 0 50px rgba(168,85,247,0.15),
+            inset 0 1px 0 rgba(255,255,255,0.8);
+        position: relative;
+        overflow: hidden;
     }
-    .upgrade-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15); }
-    .upgrade-btn:active { transform: scale(0.97); }
-    .upgrade-btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none; box-shadow: none; }
+    .upgrade-btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+        transition: left 0.6s;
+    }
+    .upgrade-btn:hover:not(:disabled)::before { left: 100%; }
+    .upgrade-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow:
+            0 12px 36px rgba(120,100,255,0.5),
+            0 0 70px rgba(168,85,247,0.25),
+            inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+    .upgrade-btn:active:not(:disabled) { transform: scale(0.97) translateY(0); }
+    .upgrade-btn:disabled {
+        opacity: 0.28;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
 
+    /* ТАБЫ */
     .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -306,30 +466,41 @@
         flex-shrink: 0;
     }
     .tab {
-        background: transparent;
+        background: rgba(255,255,255,0.02);
         border: 1px solid var(--border);
         color: var(--text-dim);
-        padding: 9px;
-        border-radius: 10px;
-        font-size: 10px; font-weight: 600;
-        letter-spacing: 0.02em;
+        padding: 10px;
+        border-radius: 11px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
         cursor: pointer;
         transition: all 0.2s ease;
         font-family: inherit;
         text-transform: uppercase;
     }
-    .tab.active { background: var(--bg-elevated); color: var(--text); border-color: var(--border-strong); }
+    .tab:hover { color: var(--text); border-color: var(--border-strong); }
+    .tab.active {
+        background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(14,14,20,0.9) 100%);
+        color: var(--text);
+        border-color: var(--border-strong);
+    }
 
+    /* ПАНЕЛЬ */
     .panel {
-        background: var(--bg-elevated);
+        background: linear-gradient(180deg, rgba(22,22,32,0.85) 0%, rgba(12,12,18,0.9) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--border);
-        border-radius: 14px;
+        border-radius: 16px;
         padding: 10px;
-        display: flex; flex-direction: column;
+        display: flex;
+        flex-direction: column;
         flex: 1;
-        min-height: 200px;
+        min-height: 220px;
         max-height: 340px;
         overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
     }
     .panel-view { display: none; flex-direction: column; height: 100%; }
     .panel-view.active { display: flex; }
@@ -343,13 +514,16 @@
     }
     .search-box {
         display: flex; align-items: center; gap: 5px;
-        background: var(--bg);
+        background: rgba(0,0,0,0.35);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 6px 9px;
-        transition: border-color 0.15s;
+        border-radius: 9px;
+        padding: 7px 10px;
+        transition: all 0.2s;
     }
-    .search-box:focus-within { border-color: var(--border-strong); }
+    .search-box:focus-within {
+        border-color: var(--border-strong);
+        background: rgba(0,0,0,0.5);
+    }
     .search-box svg { width: 10px; height: 10px; color: var(--text-mute); flex-shrink: 0; }
     .search-box input {
         background: transparent; border: none; color: var(--text);
@@ -358,16 +532,25 @@
     }
     .search-box input::placeholder { color: var(--text-mute); }
     .num-input {
-        background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-        color: var(--text); font-size: 11px; font-family: inherit; padding: 6px;
-        width: 100%; min-width: 0; outline: none; text-align: center;
-        transition: border-color 0.15s;
+        background: rgba(0,0,0,0.35);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        color: var(--text);
+        font-size: 11px;
+        font-family: inherit;
+        padding: 7px;
+        width: 100%;
+        min-width: 0;
+        outline: none;
+        text-align: center;
+        transition: all 0.2s;
     }
-    .num-input:focus { border-color: var(--border-strong); }
+    .num-input:focus { border-color: var(--border-strong); background: rgba(0,0,0,0.5); }
     .num-input::placeholder { color: var(--text-mute); }
 
     .items-scroll {
-        flex: 1; overflow-y: auto;
+        flex: 1;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: thin;
         scrollbar-color: rgba(255,255,255,0.1) transparent;
@@ -381,34 +564,60 @@
         gap: 5px;
     }
     .slot {
-        background: var(--bg);
+        background: linear-gradient(180deg, rgba(22,22,32,0.7) 0%, rgba(12,12,18,0.7) 100%);
         border: 1px solid var(--border);
-        border-radius: 9px;
-        padding: 6px 3px;
+        border-bottom: 2px solid var(--rar-color, transparent);
+        border-radius: 10px;
+        padding: 7px 3px 6px;
         cursor: pointer;
         text-align: center;
         transition: all 0.15s ease;
         position: relative;
         overflow: hidden;
     }
-    .slot:hover { border-color: var(--border-strong); }
+    .slot::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 100%, var(--rar-color, transparent) 0%, transparent 60%);
+        opacity: 0.08;
+        pointer-events: none;
+        transition: opacity 0.2s;
+    }
+    .slot:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+    .slot:hover::before { opacity: 0.18; }
     .slot:active { transform: scale(0.95); }
-    .slot.selected { border-color: var(--text); background: rgba(255, 255, 255, 0.04); }
-    .slot.disabled { opacity: 0.25; pointer-events: none; }
+    .slot.selected {
+        border-color: var(--accent);
+        background: linear-gradient(180deg, rgba(50,50,70,0.7) 0%, rgba(20,20,30,0.7) 100%);
+        box-shadow: 0 0 16px rgba(255,255,255,0.15), inset 0 0 16px rgba(255,255,255,0.05);
+    }
+    .slot.selected::before { opacity: 0.25; }
+    .slot.disabled { opacity: 0.25; pointer-events: none; filter: grayscale(0.7); }
     .slot-icon-sm {
-        width: 34px; height: 34px;
+        width: 38px; height: 38px;
         margin: 0 auto 3px;
         display: flex; align-items: center; justify-content: center;
+        position: relative;
+        z-index: 1;
     }
     .slot-icon-sm img { width: 100%; height: 100%; object-fit: contain; }
     .slot-name {
-        font-size: 7px; color: var(--text-dim);
+        font-size: 7px;
+        color: var(--text-dim);
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-        font-weight: 500;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
     }
     .slot-price {
-        font-size: 8px; font-weight: 700; color: var(--text);
-        margin-top: 1px; letter-spacing: -0.02em;
+        font-size: 8px;
+        font-weight: 800;
+        color: var(--text);
+        margin-top: 2px;
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
     }
     .empty {
         grid-column: 1 / -1;
@@ -418,375 +627,40 @@
         padding: 24px 8px;
     }
 
-    /* ==================== КЕЙСЫ — ВЫБОР ==================== */
-    .cases-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        flex-shrink: 0;
-    }
-    .case-tile {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 14px 10px 12px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-    }
-    .case-tile:hover { border-color: var(--border-strong); transform: translateY(-2px); }
-    .case-tile:active { transform: scale(0.97); }
-
-    .case-tile::before {
-        content: '';
-        position: absolute;
-        top: -30px; left: 50%;
-        transform: translateX(-50%);
-        width: 120px; height: 120px;
-        background: radial-gradient(circle, var(--case-color-a, rgba(255,255,255,0.08)) 0%, transparent 70%);
-        opacity: 0.6;
-        pointer-events: none;
-    }
-
-    .case-tile-icon {
-        width: 72px; height: 72px;
-        margin: 0 auto 8px;
-        position: relative;
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        filter: drop-shadow(0 6px 20px var(--case-color-a, rgba(255,255,255,0.2)));
-    }
-    .case-tile-icon svg { width: 100%; height: 100%; }
-
-    .case-tile-name {
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: -0.01em;
-        margin-bottom: 3px;
-        position: relative;
-        z-index: 1;
-    }
-    .case-tile-range {
-        font-size: 9px;
-        color: var(--text-mute);
-        margin-bottom: 8px;
-        position: relative;
-        z-index: 1;
-    }
-    .case-tile-price {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        background: var(--accent);
-        color: #000;
-        padding: 5px 10px;
-        border-radius: 8px;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: -0.01em;
-        position: relative;
-        z-index: 1;
-    }
-    .case-tile-price svg { width: 10px; height: 10px; }
-
-    .case-tile.disabled {
-        opacity: 0.4;
-        pointer-events: none;
-    }
-
-    /* ==================== КЕЙС — ОТКРЫТИЕ ==================== */
-    .case-back-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        background: transparent;
-        border: 1px solid var(--border);
-        color: var(--text-dim);
-        padding: 6px 10px;
-        border-radius: 8px;
-        font-size: 10px;
-        font-weight: 600;
-        font-family: inherit;
-        cursor: pointer;
-        margin-bottom: 8px;
-        align-self: flex-start;
-        transition: all 0.15s;
-    }
-    .case-back-btn:hover { border-color: var(--border-strong); color: var(--text); }
-    .case-back-btn:active { transform: scale(0.95); }
-    .case-back-btn svg { width: 12px; height: 12px; }
-
-    .case-header {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 14px;
-        margin-bottom: 8px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-    .case-header::before {
-        content: '';
-        position: absolute;
-        top: -60px; left: 50%;
-        transform: translateX(-50%);
-        width: 200px; height: 200px;
-        background: radial-gradient(circle, var(--case-color-a, rgba(255,255,255,0.15)) 0%, transparent 70%);
-        pointer-events: none;
-    }
-    .case-header-icon {
-        width: 90px; height: 90px;
-        margin: 0 auto 10px;
-        position: relative;
-        z-index: 1;
-        animation: floaty 4s ease-in-out infinite;
-        filter: drop-shadow(0 8px 24px var(--case-color-a, rgba(255,255,255,0.3)));
-    }
-    .case-header-icon svg { width: 100%; height: 100%; }
-    .case-header-name {
-        font-size: 16px;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        margin-bottom: 3px;
-        position: relative;
-        z-index: 1;
-    }
-    .case-header-desc {
-        font-size: 10px;
-        color: var(--text-mute);
-        margin-bottom: 10px;
-        line-height: 1.4;
-        position: relative;
-        z-index: 1;
-    }
-    .case-header-price {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 14px;
-        font-weight: 800;
-        color: var(--gold);
-        margin-bottom: 12px;
-        position: relative;
-        z-index: 1;
-    }
-    .case-header-price svg { width: 13px; height: 13px; }
-    .case-header-open-btn {
-        width: 70%;
-        padding: 13px;
-        background: var(--accent);
-        border: none; border-radius: 12px;
-        color: #000; font-size: 13px; font-weight: 800;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: inherit;
-        position: relative;
-        z-index: 1;
-    }
-    .case-header-open-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2); }
-    .case-header-open-btn:active { transform: scale(0.97); }
-    .case-header-open-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    /* REEL */
-    .case-reel-wrap {
-        background: #050507;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        height: 106px;
-        overflow: hidden;
-        position: relative;
-        margin-bottom: 8px;
-        flex-shrink: 0;
-        display: none;
-    }
-    .case-reel-wrap.active { display: block; }
-    .case-reel-wrap::before,
-    .case-reel-wrap::after {
-        content: '';
-        position: absolute;
-        top: 0; bottom: 0;
-        width: 40px;
-        z-index: 3;
-        pointer-events: none;
-    }
-    .case-reel-wrap::before { left: 0; background: linear-gradient(90deg, #050507 0%, transparent 100%); }
-    .case-reel-wrap::after { right: 0; background: linear-gradient(270deg, #050507 0%, transparent 100%); }
-    .case-marker {
-        position: absolute;
-        top: 0; bottom: 0;
-        left: 50%;
-        width: 2px;
-        background: var(--accent);
-        z-index: 4;
-        transform: translateX(-50%);
-        box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-        pointer-events: none;
-    }
-    .case-marker::before,
-    .case-marker::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0; height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-    }
-    .case-marker::before { top: 0; border-top: 7px solid var(--accent); }
-    .case-marker::after { bottom: 0; border-bottom: 7px solid var(--accent); }
-    .case-reel {
-        display: flex;
-        gap: 6px;
-        padding: 6px 0;
-        will-change: transform;
-    }
-    .case-item {
-        flex-shrink: 0;
-        width: 80px;
-        height: 92px;
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-bottom: 3px solid var(--rarity-color, #4b69ff);
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 4px;
-        position: relative;
-        overflow: hidden;
-    }
-    .case-item::before {
-        content: '';
-        position: absolute;
-        bottom: 0; left: 0; right: 0;
-        height: 30px;
-        background: linear-gradient(to top, var(--rarity-color, #4b69ff), transparent);
-        opacity: 0.15;
-        pointer-events: none;
-    }
-    .case-item-icon {
-        width: 44px; height: 44px;
-        display: flex; align-items: center; justify-content: center;
-        margin-bottom: 4px;
-        position: relative;
-        z-index: 1;
-    }
-    .case-item-icon img { width: 100%; height: 100%; object-fit: contain; }
-    .case-item-name {
-        font-size: 7px;
-        color: var(--text-dim);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 100%;
-        text-align: center;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Дроп-лист */
-    .case-contents {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 10px;
-        flex: 1;
-        min-height: 100px;
-        max-height: 300px;
-        overflow-y: auto;
-        scrollbar-width: thin;
-    }
-    .case-contents-title {
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        color: var(--text-mute);
-        text-transform: uppercase;
-        margin-bottom: 8px;
-        position: sticky;
-        top: 0;
-        background: var(--bg-elevated);
-        padding-bottom: 4px;
-    }
-    .rarity-group { margin-bottom: 10px; }
-    .rarity-group:last-child { margin-bottom: 0; }
-    .rarity-label {
-        font-size: 8px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-        padding-left: 6px;
-        border-left: 3px solid var(--rarity-color);
-        color: var(--text-dim);
-    }
-    .rarity-items {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
-    }
-    .rarity-item {
-        background: var(--bg);
-        border: 1px solid var(--border);
-        border-bottom: 2px solid var(--rarity-color);
-        border-radius: 8px;
-        padding: 5px 3px;
-        text-align: center;
-    }
-    .rarity-item-icon {
-        width: 32px; height: 32px;
-        margin: 0 auto 3px;
-    }
-    .rarity-item-icon img { width: 100%; height: 100%; object-fit: contain; }
-    .rarity-item-name {
-        font-size: 6px;
-        color: var(--text-dim);
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .rarity-item-value {
-        font-size: 7px;
-        font-weight: 700;
-        color: var(--text);
-        margin-top: 1px;
-    }
-
-    /* ==================== МОДАЛКИ ==================== */
+    /* МОДАЛКИ */
     .overlay {
         position: fixed; inset: 0;
-        background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         display: none;
         align-items: center; justify-content: center;
         z-index: 200;
         padding: 20px;
+        animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
     .overlay.active { display: flex; }
     .modal {
-        background: var(--bg-elevated);
+        background: linear-gradient(180deg, #1a1a26 0%, #0e0e16 100%);
         border: 1px solid var(--border-strong);
-        border-radius: 18px;
-        padding: 20px;
+        border-radius: 20px;
+        padding: 22px;
         max-width: 300px; width: 100%;
-        animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         max-height: 80vh; overflow-y: auto;
         scrollbar-width: thin;
+        box-shadow: 0 24px 64px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08);
     }
     @keyframes modalIn {
         from { transform: scale(0.9); opacity: 0; }
         to { transform: scale(1); opacity: 1; }
     }
     .modal-title {
-        font-size: 14px; font-weight: 700;
+        font-size: 15px; font-weight: 800;
         letter-spacing: -0.02em;
         margin-bottom: 14px;
         text-align: center;
@@ -799,22 +673,25 @@
     }
     .input-field {
         width: 100%;
-        background: var(--bg);
+        background: rgba(0,0,0,0.4);
         border: 1px solid var(--border);
-        border-radius: 10px;
+        border-radius: 11px;
         color: var(--text);
         font-size: 13px;
         font-family: inherit;
-        font-weight: 600;
-        padding: 11px 12px;
+        font-weight: 700;
+        padding: 12px 14px;
         text-align: center;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
         outline: none;
-        transition: border-color 0.15s;
+        transition: all 0.2s;
         text-transform: uppercase;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
-    .input-field:focus { border-color: var(--text); }
+    .input-field:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(255,255,255,0.06);
+    }
     .input-field::placeholder {
         color: var(--text-mute);
         font-weight: 400;
@@ -822,7 +699,7 @@
         letter-spacing: 0;
     }
     .status-msg {
-        font-size: 11px; font-weight: 600;
+        font-size: 11px; font-weight: 700;
         min-height: 16px;
         text-align: center;
         margin-bottom: 12px;
@@ -832,68 +709,101 @@
 
     .btns-row { display: flex; gap: 8px; }
     .btn {
-        flex: 1; padding: 11px;
-        border-radius: 10px; border: none;
-        font-size: 12px; font-weight: 700;
+        flex: 1; padding: 12px;
+        border-radius: 11px; border: none;
+        font-size: 12px; font-weight: 800;
         font-family: inherit; cursor: pointer;
-        transition: transform 0.1s;
+        transition: all 0.15s;
         letter-spacing: -0.01em;
     }
     .btn:active { transform: scale(0.96); }
-    .btn-primary { background: var(--accent); color: #000; }
-    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-primary {
+        background: linear-gradient(135deg, #ffffff 0%, #d0d4ff 100%);
+        color: #000;
+        box-shadow: 0 4px 16px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+    .btn-secondary {
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+    .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
 
     .settings-row {
         display: flex; align-items: center;
         justify-content: space-between;
-        padding: 12px 0;
+        padding: 14px 0;
         border-bottom: 1px solid var(--border);
     }
     .settings-row:last-child { border-bottom: none; }
-    .settings-label { font-size: 12px; color: var(--text); font-weight: 500; }
+    .settings-label {
+        font-size: 13px;
+        color: var(--text);
+        font-weight: 600;
+    }
 
-    .switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+    .switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .switch .slider {
         position: absolute; inset: 0;
-        background: var(--bg);
+        background: rgba(0,0,0,0.5);
         border: 1px solid var(--border-strong);
-        border-radius: 11px;
+        border-radius: 12px;
         cursor: pointer;
         transition: 0.25s;
     }
     .switch .slider::before {
         content: '';
         position: absolute;
-        width: 16px; height: 16px;
+        width: 18px; height: 18px;
         left: 2px; top: 2px;
         background: var(--text-dim);
         border-radius: 50%;
-        transition: 0.25s;
+        transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .switch input:checked + .slider { background: var(--accent); border-color: var(--accent); }
-    .switch input:checked + .slider::before { transform: translateX(18px); background: #000; }
+    .switch input:checked + .slider {
+        background: linear-gradient(135deg, #fff, #d0d4ff);
+        border-color: transparent;
+    }
+    .switch input:checked + .slider::before {
+        transform: translateX(18px);
+        background: #000;
+    }
 
+    /* ПРОФИЛЬ */
     .profile-header {
-        display: flex; align-items: center; gap: 12px;
-        padding-bottom: 14px;
+        display: flex; align-items: center; gap: 14px;
+        padding-bottom: 16px;
         border-bottom: 1px solid var(--border);
-        margin-bottom: 14px;
+        margin-bottom: 16px;
     }
     .avatar {
-        width: 46px; height: 46px;
+        width: 54px; height: 54px;
         border-radius: 50%;
-        background: var(--bg);
-        border: 1px solid var(--border-strong);
+        background: linear-gradient(135deg, #4a86ff, #a855f7);
+        border: 2px solid rgba(255,255,255,0.15);
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
-        font-size: 18px; font-weight: 800;
+        font-size: 20px; font-weight: 800;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(120,100,255,0.35);
+    }
+    .avatar img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+    }
+    .avatar .initial {
+        background: linear-gradient(135deg, #4a86ff, #a855f7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
     }
     .profile-info { flex: 1; min-width: 0; }
     .profile-name {
-        font-size: 14px; font-weight: 700;
-        margin-bottom: 2px;
+        font-size: 15px; font-weight: 800;
+        margin-bottom: 3px;
         letter-spacing: -0.02em;
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
@@ -901,102 +811,113 @@
 
     .profile-tabs {
         display: flex; gap: 4px;
-        background: var(--bg);
-        border-radius: 9px;
+        background: rgba(0,0,0,0.35);
+        border-radius: 11px;
         padding: 3px;
         margin-bottom: 12px;
     }
     .profile-tab {
         flex: 1;
-        padding: 7px;
-        border-radius: 7px;
+        padding: 8px;
+        border-radius: 8px;
         background: transparent;
         border: none;
         color: var(--text-dim);
         font-size: 10px;
-        font-weight: 600;
+        font-weight: 700;
         font-family: inherit;
         cursor: pointer;
-        transition: all 0.15s;
+        transition: all 0.2s;
         text-transform: uppercase;
+        letter-spacing: 0.06em;
     }
-    .profile-tab.active { background: var(--bg-elevated); color: var(--text); }
+    .profile-tab.active {
+        background: linear-gradient(180deg, rgba(34,34,48,0.9) 0%, rgba(20,20,30,0.9) 100%);
+        color: var(--text);
+    }
 
-    .profile-view { display: none; max-height: 240px; overflow-y: auto; scrollbar-width: thin; }
+    .profile-view { display: none; max-height: 280px; overflow-y: auto; scrollbar-width: thin; }
     .profile-view.active { display: block; }
 
     .history-item, .inv-item {
         display: flex; align-items: center; gap: 10px;
-        padding: 8px 4px;
+        padding: 9px 6px;
         border-bottom: 1px solid var(--border);
         font-size: 11px;
     }
     .history-item:last-child, .inv-item:last-child { border-bottom: none; }
     .history-icon {
-        width: 32px; height: 32px;
+        width: 34px; height: 34px;
         flex-shrink: 0;
         display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.03);
+        border-radius: 8px;
+        border: 1px solid var(--border);
     }
     .history-icon img { width: 100%; height: 100%; object-fit: contain; }
     .history-info { flex: 1; min-width: 0; }
     .history-name {
-        font-weight: 600; color: var(--text);
+        font-weight: 700; color: var(--text);
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        font-size: 11px;
     }
-    .history-sub { font-size: 9px; color: var(--text-mute); margin-top: 1px; }
-    .history-result { font-size: 10px; font-weight: 700; flex-shrink: 0; }
-    .history-result.win { color: var(--green); }
-    .history-result.lose { color: var(--red); }
+    .history-sub { font-size: 9px; color: var(--text-mute); margin-top: 2px; }
+    .history-result {
+        font-size: 9px;
+        font-weight: 800;
+        flex-shrink: 0;
+        padding: 3px 7px;
+        border-radius: 5px;
+        letter-spacing: 0.05em;
+    }
+    .history-result.win {
+        color: var(--green);
+        background: rgba(46, 204, 113, 0.12);
+        border: 1px solid rgba(46, 204, 113, 0.25);
+    }
+    .history-result.lose {
+        color: var(--red);
+        background: rgba(255, 71, 87, 0.12);
+        border: 1px solid rgba(255, 71, 87, 0.25);
+    }
 
     .inv-actions { display: flex; gap: 5px; flex-shrink: 0; }
     .mini-btn {
-        padding: 5px 9px;
+        padding: 6px 10px;
         border-radius: 7px;
         border: 1px solid var(--border);
         background: transparent;
         color: var(--text);
         font-size: 9px;
-        font-weight: 700;
+        font-weight: 800;
         font-family: inherit;
         cursor: pointer;
         transition: all 0.15s;
         white-space: nowrap;
+        letter-spacing: 0.03em;
     }
-    .mini-btn:hover { border-color: var(--border-strong); }
+    .mini-btn:hover { border-color: var(--border-strong); background: rgba(255,255,255,0.03); }
     .mini-btn:active { transform: scale(0.94); }
-    .mini-btn.sell { color: var(--gold); border-color: rgba(255, 217, 61, 0.3); }
-    .mini-btn.sell:hover { border-color: var(--gold); }
+    .mini-btn.sell {
+        color: var(--gold);
+        border-color: rgba(255, 217, 61, 0.3);
+        background: rgba(255, 217, 61, 0.05);
+    }
+    .mini-btn.sell:hover { border-color: var(--gold); background: rgba(255, 217, 61, 0.1); }
     .mini-btn.withdraw { color: var(--text-mute); cursor: not-allowed; }
 
-    .case-result-icon {
-        width: 100px; height: 100px;
-        margin: 0 auto 12px;
-        padding-bottom: 4px;
-        border-bottom: 4px solid var(--rarity-color, #4b69ff);
-        display: flex; align-items: center; justify-content: center;
-    }
-    .case-result-icon img { width: 100%; height: 100%; object-fit: contain; }
-    .case-result-rarity {
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--rarity-color, #4b69ff);
-        margin-bottom: 6px;
-        text-align: center;
-    }
-
+    /* ЭФФЕКТЫ */
     .confetti {
         position: fixed;
-        width: 6px; height: 6px;
-        border-radius: 1px;
+        width: 7px; height: 7px;
+        border-radius: 2px;
         pointer-events: none;
         z-index: 999;
-        animation: confettiFly 1.6s cubic-bezier(0.15, 0.9, 0.3, 1) forwards;
+        animation: confettiFly 1.8s cubic-bezier(0.15, 0.9, 0.3, 1) forwards;
     }
     @keyframes confettiFly {
         0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
-        100% { transform: translate(var(--dx), var(--dy)) rotate(540deg) scale(0.2); opacity: 0; }
+        100% { transform: translate(var(--dx), var(--dy)) rotate(720deg) scale(0.2); opacity: 0; }
     }
     .flash-red {
         position: fixed; inset: 0;
@@ -1005,16 +926,28 @@
     .flash-red.active { animation: flashRed 0.6s; }
     @keyframes flashRed {
         0% { background: rgba(255, 71, 87, 0); }
-        20% { background: rgba(255, 71, 87, 0.35); }
+        20% { background: rgba(255, 71, 87, 0.4); }
         100% { background: rgba(255, 71, 87, 0); }
     }
-    .shake { animation: shakeAnim 0.45s; }
+    .shake { animation: shakeAnim 0.5s; }
     @keyframes shakeAnim {
         0%, 100% { transform: translateX(0); }
-        20% { transform: translateX(-6px); }
-        40% { transform: translateX(6px); }
+        20% { transform: translateX(-7px); }
+        40% { transform: translateX(7px); }
         60% { transform: translateX(-4px); }
         80% { transform: translateX(4px); }
+    }
+
+    /* Победная вспышка */
+    .flash-win {
+        position: fixed; inset: 0;
+        pointer-events: none; z-index: 998;
+    }
+    .flash-win.active { animation: flashWin 0.6s; }
+    @keyframes flashWin {
+        0% { background: rgba(46, 204, 113, 0); }
+        20% { background: rgba(46, 204, 113, 0.35); }
+        100% { background: rgba(46, 204, 113, 0); }
     }
 
     .footer {
@@ -1024,43 +957,40 @@
         color: var(--text-mute);
         padding-bottom: 4px;
         flex-shrink: 0;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.02em;
     }
-    .footer a { color: var(--text-dim); text-decoration: none; font-weight: 500; }
+    .footer a { color: var(--text-dim); text-decoration: none; font-weight: 600; }
 
     @media (min-width: 420px) {
-        .wheel-wrap { width: 170px; height: 170px; }
-        .wheel-col { min-width: 170px; }
-        .wheel-center { width: 100px; height: 100px; }
-        .wheel-percent { font-size: 25px; }
+        .wheel-wrap { width: 175px; height: 175px; }
+        .wheel-col { min-width: 175px; }
+        .wheel-center { width: 104px; height: 104px; }
+        .wheel-percent { font-size: 27px; }
         .wheel-label { font-size: 8px; }
-        .item-slot { min-height: 155px; }
-        .slot-icon { width: 72px; height: 72px; }
+        .item-slot { min-height: 170px; }
+        .slot-icon { width: 80px; height: 80px; }
         .item-name { font-size: 11px; }
-        .item-value { font-size: 13px; }
+        .item-value { font-size: 14px; }
+        .slot-title { font-size: 10px; }
     }
 
     @media (min-width: 600px) {
         body { padding: 16px; }
         .header { padding: 12px 16px; }
-        .logo { font-size: 17px; }
+        .logo { font-size: 18px; }
         .wheel-wrap { width: 220px; height: 220px; }
         .wheel-col { min-width: 220px; }
         .wheel-center { width: 130px; height: 130px; }
-        .wheel-percent { font-size: 32px; }
+        .wheel-percent { font-size: 34px; }
         .wheel-label { font-size: 9px; }
-        .item-slot { min-height: 210px; padding: 22px 10px 14px; }
-        .slot-icon { width: 100px; height: 100px; }
+        .item-slot { min-height: 220px; padding: 24px 10px 16px; }
+        .slot-icon { width: 105px; height: 105px; }
         .item-name { font-size: 12px; }
-        .item-value { font-size: 15px; }
+        .item-value { font-size: 16px; }
         .slot-title { font-size: 10px; }
-        .upgrade-btn { width: 50%; padding: 14px; font-size: 13px; }
+        .upgrade-btn { width: 50%; padding: 16px; font-size: 14px; }
         .item-grid { grid-template-columns: repeat(5, 1fr); }
-        .modal { max-width: 360px; padding: 24px; }
-        .case-reel-wrap { height: 122px; }
-        .case-item { width: 90px; height: 104px; }
-        .case-item-icon { width: 50px; height: 50px; }
-        .case-tile-icon { width: 84px; height: 84px; }
+        .modal { max-width: 380px; padding: 26px; }
     }
 </style>
 </head>
@@ -1099,117 +1029,78 @@
         </div>
     </div>
 
-    <div class="mode-switcher">
-        <button class="mode-tab active" data-mode="upgrader">Апгрейдер</button>
-        <button class="mode-tab" data-mode="cases">Кейсы</button>
-    </div>
+    <div class="arena">
+        <div class="item-slot" id="from-card">
+            <div class="slot-title">Твой</div>
+            <div class="slot-icon" id="from-icon"></div>
+            <div class="item-name" id="from-name">—</div>
+            <div class="item-value" id="from-value">—</div>
+        </div>
 
-    <!-- ============ РЕЖИМ: АПГРЕЙДЕР ============ -->
-    <div class="mode-view active" id="mode-upgrader">
-        <div class="arena">
-            <div class="item-slot" id="from-card">
-                <div class="slot-title">Твой</div>
-                <div class="slot-icon" id="from-icon"></div>
-                <div class="item-name" id="from-name">—</div>
-                <div class="item-value" id="from-value">—</div>
-            </div>
-            <div class="wheel-col">
-                <div class="wheel-wrap" id="wheel-wrap">
-                    <svg class="wheel-svg" viewBox="0 0 100 100">
-                        <defs>
-                            <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#ffffff"/>
-                                <stop offset="100%" stop-color="#a0a0b0"/>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="50" cy="50" r="44" fill="none" stroke="#1c1c24" stroke-width="10"/>
-                        <path id="win-arc" fill="url(#winGrad)"/>
-                    </svg>
-                    <div class="wheel-pointer" id="wheel-pointer"></div>
-                    <div class="wheel-center">
-                        <div class="wheel-percent" id="wheel-percent">50%</div>
-                        <div class="wheel-label" id="wheel-label">средний</div>
-                    </div>
+        <div class="wheel-col">
+            <div class="wheel-wrap" id="wheel-wrap">
+                <svg class="wheel-svg" viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#b0b8ff"/>
+                        </linearGradient>
+                        <linearGradient id="trackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#1f1f2a"/>
+                            <stop offset="100%" stop-color="#0e0e16"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="44" fill="none" stroke="url(#trackGrad)" stroke-width="10"/>
+                    <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="10"/>
+                    <path id="win-arc" fill="url(#winGrad)"/>
+                </svg>
+                <div class="wheel-pointer" id="wheel-pointer"></div>
+                <div class="wheel-center">
+                    <div class="wheel-percent" id="wheel-percent">50%</div>
+                    <div class="wheel-label" id="wheel-label">средний</div>
                 </div>
-            </div>
-            <div class="item-slot" id="to-card">
-                <div class="slot-title">Цель</div>
-                <div class="slot-icon" id="to-icon"></div>
-                <div class="item-name" id="to-name">—</div>
-                <div class="item-value" id="to-value">—</div>
             </div>
         </div>
 
-        <div class="mult-grid" id="mult-grid"></div>
-        <button class="upgrade-btn" id="upgrade-btn">Прокачать</button>
-
-        <div class="tabs">
-            <button class="tab active" data-tab="inv">Инвентарь <span id="inv-count"></span></button>
-            <button class="tab" data-tab="shop">Магазин</button>
-        </div>
-
-        <div class="panel">
-            <div class="panel-view active" id="view-inv">
-                <div class="panel-tools">
-                    <div class="search-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                        <input type="text" id="inv-search" placeholder="Поиск...">
-                    </div>
-                    <input type="number" class="num-input" id="inv-price-min" placeholder="От">
-                    <input type="number" class="num-input" id="inv-price-max" placeholder="До">
-                </div>
-                <div class="items-scroll"><div class="item-grid" id="inv-grid"></div></div>
-            </div>
-            <div class="panel-view" id="view-shop">
-                <div class="panel-tools">
-                    <div class="search-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                        <input type="text" id="shop-search" placeholder="Поиск...">
-                    </div>
-                    <input type="number" class="num-input" id="shop-price-min" placeholder="От">
-                    <input type="number" class="num-input" id="shop-price-max" placeholder="До">
-                </div>
-                <div class="items-scroll"><div class="item-grid" id="shop-grid"></div></div>
-            </div>
+        <div class="item-slot" id="to-card">
+            <div class="slot-title">Цель</div>
+            <div class="slot-icon" id="to-icon"></div>
+            <div class="item-name" id="to-name">—</div>
+            <div class="item-value" id="to-value">—</div>
         </div>
     </div>
 
-    <!-- ============ РЕЖИМ: КЕЙСЫ ============ -->
-    <div class="mode-view" id="mode-cases">
+    <div class="mult-grid" id="mult-grid"></div>
 
-        <!-- Экран выбора кейса -->
-        <div id="cases-list-view">
-            <div class="cases-grid" id="cases-grid"></div>
-        </div>
+    <button class="upgrade-btn" id="upgrade-btn">Прокачать</button>
 
-        <!-- Экран открытия кейса -->
-        <div id="case-open-view" style="display: none; flex-direction: column; flex: 1;">
-            <button class="case-back-btn" id="case-back-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                Назад
-            </button>
+    <div class="tabs">
+        <button class="tab active" data-tab="inv">Инвентарь <span id="inv-count"></span></button>
+        <button class="tab" data-tab="shop">Магазин</button>
+    </div>
 
-            <div class="case-header" id="case-header">
-                <div class="case-header-icon" id="case-header-icon"></div>
-                <div class="case-header-name" id="case-header-name">—</div>
-                <div class="case-header-desc" id="case-header-desc">—</div>
-                <div class="case-header-price">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <span id="case-header-price-val">—</span>
+    <div class="panel">
+        <div class="panel-view active" id="view-inv">
+            <div class="panel-tools">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                    <input type="text" id="inv-search" placeholder="Поиск...">
                 </div>
-                <br>
-                <button class="case-header-open-btn" id="case-open-btn">Открыть</button>
+                <input type="number" class="num-input" id="inv-price-min" placeholder="От">
+                <input type="number" class="num-input" id="inv-price-max" placeholder="До">
             </div>
-
-            <div class="case-reel-wrap" id="case-reel-wrap">
-                <div class="case-marker"></div>
-                <div class="case-reel" id="case-reel"></div>
+            <div class="items-scroll"><div class="item-grid" id="inv-grid"></div></div>
+        </div>
+        <div class="panel-view" id="view-shop">
+            <div class="panel-tools">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                    <input type="text" id="shop-search" placeholder="Поиск...">
+                </div>
+                <input type="number" class="num-input" id="shop-price-min" placeholder="От">
+                <input type="number" class="num-input" id="shop-price-max" placeholder="До">
             </div>
-
-            <div class="case-contents">
-                <div class="case-contents-title">Возможный дроп</div>
-                <div id="case-contents-list"></div>
-            </div>
+            <div class="items-scroll"><div class="item-grid" id="shop-grid"></div></div>
         </div>
     </div>
 
@@ -1222,9 +1113,9 @@
 <!-- МОДАЛКА ПОКУПКИ -->
 <div class="overlay" id="buy-modal">
     <div class="modal">
-        <div class="slot-icon" id="buy-icon" style="width: 80px; height: 80px; margin: 0 auto 12px;"></div>
+        <div class="slot-icon" id="buy-icon" style="width: 90px; height: 90px; margin: 0 auto 14px;"></div>
         <div class="modal-title" id="buy-name">—</div>
-        <div class="modal-sub" id="buy-price" style="font-size: 18px; font-weight: 800; color: var(--text);">—</div>
+        <div class="modal-sub" id="buy-price" style="font-size: 20px; font-weight: 900; color: var(--text);">—</div>
         <div class="btns-row">
             <button class="btn btn-secondary" id="buy-cancel">Отмена</button>
             <button class="btn btn-primary" id="buy-confirm">Купить</button>
@@ -1258,7 +1149,7 @@
             <span class="settings-label">Звук</span>
             <label class="switch"><input type="checkbox" id="sound-toggle"><span class="slider"></span></label>
         </div>
-        <div class="btns-row" style="margin-top: 14px;">
+        <div class="btns-row" style="margin-top: 16px;">
             <button class="btn btn-primary" id="settings-close">Готово</button>
         </div>
     </div>
@@ -1266,7 +1157,7 @@
 
 <!-- МОДАЛКА ПРОФИЛЯ -->
 <div class="overlay" id="profile-modal">
-    <div class="modal" style="max-width: 360px;">
+    <div class="modal" style="max-width: 380px;">
         <div class="profile-header">
             <div class="avatar" id="profile-avatar">?</div>
             <div class="profile-info">
@@ -1282,7 +1173,7 @@
         </div>
         <div class="profile-view active" id="pview-history"><div id="history-list"></div></div>
         <div class="profile-view" id="pview-inventory"><div id="profile-inv-list"></div></div>
-        <div class="btns-row" style="margin-top: 14px;">
+        <div class="btns-row" style="margin-top: 16px;">
             <button class="btn btn-secondary" id="profile-close">Закрыть</button>
         </div>
     </div>
@@ -1291,7 +1182,7 @@
 <!-- МОДАЛКА ПРОДАЖИ -->
 <div class="overlay" id="sell-modal">
     <div class="modal">
-        <div class="slot-icon" id="sell-icon" style="width: 70px; height: 70px; margin: 0 auto 12px;"></div>
+        <div class="slot-icon" id="sell-icon" style="width: 80px; height: 80px; margin: 0 auto 14px;"></div>
         <div class="modal-title" id="sell-name">—</div>
         <div class="modal-sub" id="sell-info">—</div>
         <div class="btns-row">
@@ -1301,20 +1192,8 @@
     </div>
 </div>
 
-<!-- МОДАЛКА РЕЗУЛЬТАТА КЕЙСА -->
-<div class="overlay" id="case-result-modal">
-    <div class="modal">
-        <div class="case-result-icon" id="case-result-icon"></div>
-        <div class="case-result-rarity" id="case-result-rarity">—</div>
-        <div class="modal-title" id="case-result-name" style="margin-bottom: 4px;">—</div>
-        <div class="modal-sub" id="case-result-value" style="font-size: 16px; font-weight: 800; color: var(--text);">—</div>
-        <div class="btns-row">
-            <button class="btn btn-primary" id="case-result-ok" style="flex: 1;">Забрать</button>
-        </div>
-    </div>
-</div>
-
 <div class="flash-red" id="flash-red"></div>
+<div class="flash-win" id="flash-win"></div>
 
 <script>
     const tg = window.Telegram.WebApp;
@@ -1376,9 +1255,8 @@
     function sndLose() { if (!soundEnabled) return; initAudio(); playTone(400, 0.15, 'sawtooth', 0.12, 0); playTone(300, 0.15, 'sawtooth', 0.12, 0.12); playTone(200, 0.35, 'sawtooth', 0.14, 0.24); }
     function sndPromo() { if (!soundEnabled) return; initAudio(); playTone(784, 0.1, 'sine', 0.15, 0); playTone(1047, 0.1, 'sine', 0.15, 0.08); playTone(1319, 0.25, 'sine', 0.15, 0.16); }
     function sndError() { if (!soundEnabled) return; initAudio(); playTone(200, 0.1, 'square', 0.12, 0); playTone(150, 0.2, 'square', 0.12, 0.1); }
-    function sndCaseOpen() { if (!soundEnabled) return; initAudio(); playTone(150, 0.3, 'sawtooth', 0.12); playTone(220, 0.3, 'sawtooth', 0.1, 0.05); }
 
-    /* ============== ПОЛНЫЙ КАТАЛОГ ПОДАРКОВ ============== */
+    /* ============== КАТАЛОГ ============== */
     const FALLBACK = [
         { name: 'Heart',           slug: 'heart',           value: 15 },
         { name: 'Teddy Bear',      slug: 'teddybear',       value: 15 },
@@ -1491,104 +1369,6 @@
     const MULTIPLIERS = [1.2, 1.5, 2, 3, 5, 10, 25, 100];
     const SPIN_DURATION = 7500;
 
-    /* ============== КОНФИГ КЕЙСОВ ============== */
-    const CASES = [
-        {
-            id: 'bald',
-            name: 'Лысый пёс',
-            desc: 'Пробный кейс для новичков',
-            price: 25,
-            minValue: 0,
-            maxValue: 50,
-            color: '#8a8a95',
-            colorA: 'rgba(138,138,149,0.4)',
-            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="50" cy="52" rx="26" ry="28" fill="#b8a78a"/>
-                <ellipse cx="50" cy="58" rx="18" ry="16" fill="#e8dcc4"/>
-                <ellipse cx="24" cy="38" rx="6" ry="10" fill="#a89878" transform="rotate(-20 24 38)"/>
-                <ellipse cx="76" cy="38" rx="6" ry="10" fill="#a89878" transform="rotate(20 76 38)"/>
-                <ellipse cx="42" cy="48" rx="3" ry="3.5" fill="#1a1a1a"/>
-                <ellipse cx="58" cy="48" rx="3" ry="3.5" fill="#1a1a1a"/>
-                <ellipse cx="50" cy="60" rx="4" ry="3" fill="#1a1a1a"/>
-                <path d="M 44 66 Q 50 72 56 66" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <ellipse cx="42" cy="63" rx="3" ry="2" fill="#c98a8a" opacity="0.6"/>
-                <ellipse cx="58" cy="63" rx="3" ry="2" fill="#c98a8a" opacity="0.6"/>
-            </svg>`
-        },
-        {
-            id: 'pug',
-            name: 'Мопс',
-            desc: 'Средний кейс с редкими призами',
-            price: 150,
-            minValue: 0,
-            maxValue: 400,
-            color: '#c8956c',
-            colorA: 'rgba(200,149,108,0.4)',
-            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="50" cy="52" rx="28" ry="30" fill="#c9a275"/>
-                <ellipse cx="50" cy="50" rx="20" ry="18" fill="#3d2b1f"/>
-                <ellipse cx="50" cy="60" rx="16" ry="13" fill="#d4b48c"/>
-                <ellipse cx="22" cy="40" rx="7" ry="11" fill="#a88560" transform="rotate(-30 22 40)"/>
-                <ellipse cx="78" cy="40" rx="7" ry="11" fill="#a88560" transform="rotate(30 78 40)"/>
-                <circle cx="42" cy="48" r="3.5" fill="#1a1a1a"/>
-                <circle cx="58" cy="48" r="3.5" fill="#1a1a1a"/>
-                <circle cx="43" cy="47" r="1" fill="#fff"/>
-                <circle cx="59" cy="47" r="1" fill="#fff"/>
-                <ellipse cx="50" cy="60" rx="5" ry="4" fill="#1a1a1a"/>
-                <path d="M 46 70 Q 50 73 54 70" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            </svg>`
-        },
-        {
-            id: 'bulldog',
-            name: 'Бульдог',
-            desc: 'Мощный кейс с топовыми призами',
-            price: 800,
-            minValue: 100,
-            maxValue: 5000,
-            color: '#c97a5a',
-            colorA: 'rgba(201,122,90,0.4)',
-            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="50" cy="55" rx="30" ry="28" fill="#d4a880"/>
-                <ellipse cx="50" cy="65" rx="22" ry="16" fill="#e8cba8"/>
-                <ellipse cx="20" cy="35" rx="6" ry="9" fill="#a88560" transform="rotate(-35 20 35)"/>
-                <ellipse cx="80" cy="35" rx="6" ry="9" fill="#a88560" transform="rotate(35 80 35)"/>
-                <ellipse cx="38" cy="48" rx="3" ry="3" fill="#1a1a1a"/>
-                <ellipse cx="62" cy="48" rx="3" ry="3" fill="#1a1a1a"/>
-                <path d="M 32 42 Q 38 40 42 42" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
-                <path d="M 58 42 Q 62 40 68 42" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
-                <ellipse cx="50" cy="65" rx="6" ry="4.5" fill="#1a1a1a"/>
-                <path d="M 44 74 L 44 78 M 56 74 L 56 78" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M 40 78 Q 50 84 60 78" stroke="#1a1a1a" stroke-width="1" fill="none" opacity="0.5"/>
-            </svg>`
-        },
-        {
-            id: 'major',
-            name: 'Мажор пёс',
-            desc: 'VIP кейс — только топ дропы',
-            price: 8000,
-            minValue: 3000,
-            maxValue: 50000,
-            color: '#ffd93d',
-            colorA: 'rgba(255,217,61,0.5)',
-            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="50" cy="54" rx="28" ry="29" fill="#e0b878"/>
-                <ellipse cx="50" cy="60" rx="20" ry="16" fill="#f0d8a8"/>
-                <ellipse cx="22" cy="38" rx="7" ry="11" fill="#c8a068" transform="rotate(-25 22 38)"/>
-                <ellipse cx="78" cy="38" rx="7" ry="11" fill="#c8a068" transform="rotate(25 78 38)"/>
-                <circle cx="40" cy="48" r="3.5" fill="#1a1a1a"/>
-                <circle cx="60" cy="48" r="3.5" fill="#1a1a1a"/>
-                <circle cx="41" cy="47" r="1" fill="#fff"/>
-                <circle cx="61" cy="47" r="1" fill="#fff"/>
-                <ellipse cx="50" cy="60" rx="5" ry="4" fill="#1a1a1a"/>
-                <path d="M 46 70 Q 50 73 54 70" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M 20 40 Q 30 30 45 32 L 45 24 Q 30 22 20 34 Z" fill="#1a1a1a"/>
-                <path d="M 80 40 Q 70 30 55 32 L 55 24 Q 70 22 80 34 Z" fill="#1a1a1a"/>
-                <rect x="40" y="24" width="20" height="4" fill="#ffd93d"/>
-                <path d="M 20 60 Q 15 65 15 70 L 25 70 Q 25 65 22 62 Z" fill="#ffd93d" opacity="0.9"/>
-            </svg>`
-        }
-    ];
-
     let CATALOG = [];
     let balance = 1000;
     let inventory = [];
@@ -1598,47 +1378,25 @@
     let chance = 50;
     let multiplier = 2;
     let isSpinning = false;
-    let isCaseSpinning = false;
     let invSearch = '', invMin = null, invMax = null;
     let shopSearch = '', shopMin = null, shopMax = null;
-    let currentCase = null;
 
     const $ = id => document.getElementById(id);
 
-    function getRarityByValue(value, minV, maxV) {
-        const range = maxV - minV;
-        if (range <= 0) return { id: 'common', name: 'Обычный', color: '#4b69ff' };
-        const pct = (value - minV) / range;
-        if (pct < 0.5)    return { id: 'common',    name: 'Обычный',     color: '#4b69ff' };
-        if (pct < 0.75)   return { id: 'uncommon',  name: 'Необычный',   color: '#8847ff' };
-        if (pct < 0.9)    return { id: 'rare',      name: 'Редкий',      color: '#d32ce6' };
-        if (pct < 0.97)   return { id: 'epic',      name: 'Эпический',   color: '#eb4b4b' };
-        if (pct < 0.995)  return { id: 'mythical',  name: 'Мифический',  color: '#ffd700' };
-        return                    { id: 'legendary',name: 'Легендарный', color: '#ff9500' };
+    /* ============== РЕДКОСТЬ ============== */
+    function getRarity(value) {
+        if (value < 100)      return { color: 'var(--r-common)',    raw: '#4b69ff' };
+        if (value < 500)      return { color: 'var(--r-uncommon)',  raw: '#8847ff' };
+        if (value < 2000)     return { color: 'var(--r-rare)',      raw: '#d32ce6' };
+        if (value < 10000)    return { color: 'var(--r-epic)',      raw: '#eb4b4b' };
+        if (value < 30000)    return { color: 'var(--r-mythical)',  raw: '#ffd700' };
+        return                       { color: 'var(--r-legendary)', raw: '#ff9500' };
     }
 
-    function getCaseRarities(caseObj) {
-        const minV = caseObj.minValue;
-        const maxV = caseObj.maxValue;
-        const range = maxV - minV;
-        return [
-            { id: 'common',    name: 'Обычный',     color: '#4b69ff', min: minV,                  max: minV + range * 0.5,  weight: 55   },
-            { id: 'uncommon',  name: 'Необычный',   color: '#8847ff', min: minV + range * 0.5,    max: minV + range * 0.75, weight: 25   },
-            { id: 'rare',      name: 'Редкий',      color: '#d32ce6', min: minV + range * 0.75,   max: minV + range * 0.9,  weight: 12   },
-            { id: 'epic',      name: 'Эпический',   color: '#eb4b4b', min: minV + range * 0.9,    max: minV + range * 0.97, weight: 6    },
-            { id: 'mythical',  name: 'Мифический',  color: '#ffd700', min: minV + range * 0.97,   max: minV + range * 0.995,weight: 1.8  },
-            { id: 'legendary', name: 'Легендарный', color: '#ff9500', min: minV + range * 0.995,  max: maxV + 1,            weight: 0.2  }
-        ];
-    }
-
-    /* ============== КАТАЛОГ ============== */
     async function loadCatalog() {
         CATALOG = [...FALLBACK];
         try {
-            const r = await fetch('https://api.changes.tg/gifts');
-            if (r.ok) {
-                // Не заменяем, просто игнорируем — у нас полный каталог
-            }
+            await fetch('https://api.changes.tg/gifts');
         } catch (e) {}
     }
 
@@ -1719,25 +1477,39 @@
 
     function renderArena() {
         if (currentItem) {
+            const rar = getRarity(currentItem.value);
             $('from-icon').innerHTML = iconHTML(currentItem, 128);
             $('from-name').textContent = currentItem.name;
             $('from-value').textContent = currentItem.value + ' ⭐';
+            $('from-card').style.setProperty('--slot-glow', rar.raw.replace('var(--', '').replace(')', '') ? hexToRgba(rar.raw, 0.35) : 'transparent');
         } else {
             $('from-icon').innerHTML = '';
             $('from-name').textContent = 'Выбери';
             $('from-value').textContent = '—';
+            $('from-card').style.setProperty('--slot-glow', 'transparent');
         }
         if (targetItem) {
+            const rar = getRarity(targetItem.value);
             $('to-icon').innerHTML = iconHTML(targetItem, 128);
             $('to-name').textContent = targetItem.name;
             $('to-value').textContent = targetItem.value + ' ⭐';
+            $('to-card').style.setProperty('--slot-glow', hexToRgba(rar.raw, 0.35));
         } else {
             $('to-icon').innerHTML = '';
             $('to-name').textContent = 'Выбери цель';
             $('to-value').textContent = '—';
+            $('to-card').style.setProperty('--slot-glow', 'transparent');
         }
         $('from-card').className = 'item-slot';
         $('to-card').className = 'item-slot';
+    }
+
+    function hexToRgba(hex, alpha) {
+        const h = hex.replace('#', '');
+        const r = parseInt(h.substring(0, 2), 16);
+        const g = parseInt(h.substring(2, 4), 16);
+        const b = parseInt(h.substring(4, 6), 16);
+        return `rgba(${r},${g},${b},${alpha})`;
     }
 
     function renderInventory() {
@@ -1755,8 +1527,10 @@
             return;
         }
         list.forEach(item => {
+            const rar = getRarity(item.value);
             const s = document.createElement('div');
             s.className = 'slot' + (item === currentItem ? ' selected' : '');
+            s.style.setProperty('--rar-color', rar.raw);
             s.innerHTML = `<div class="slot-icon-sm">${iconHTML(item, 64)}</div><div class="slot-name">${item.name}</div><div class="slot-price">${item.value}⭐</div>`;
             s.onclick = () => {
                 if (isSpinning) return;
@@ -1785,8 +1559,10 @@
             return;
         }
         list.forEach(item => {
+            const rar = getRarity(item.value);
             const s = document.createElement('div');
             s.className = 'slot' + (targetItem === item ? ' selected' : '') + (item.value > balance ? ' disabled' : '');
+            s.style.setProperty('--rar-color', rar.raw);
             s.innerHTML = `<div class="slot-icon-sm">${iconHTML(item, 64)}</div><div class="slot-name">${item.name}</div><div class="slot-price">${item.value}⭐</div>`;
             s.onclick = () => { if (isSpinning) return; sndClick(); openBuy(item); };
             grid.appendChild(s);
@@ -1861,11 +1637,20 @@
     $('vibration-toggle').onchange = (e) => { vibrationEnabled = e.target.checked; localStorage.setItem(VIB_KEY, vibrationEnabled); };
     $('sound-toggle').onchange = (e) => { soundEnabled = e.target.checked; localStorage.setItem(SND_KEY, soundEnabled); if (soundEnabled) { initAudio(); sndClick(); } };
 
+    /* ============== ПРОФИЛЬ С АВАТАРКОЙ ИЗ TELEGRAM ============== */
     function openProfile() {
         const user = tg.initDataUnsafe?.user;
         const name = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'Игрок';
         $('profile-name').textContent = name || 'Игрок';
-        $('profile-avatar').textContent = (name || 'И').charAt(0).toUpperCase();
+
+        // Аватарка из Telegram, если есть
+        const avatarEl = $('profile-avatar');
+        if (user && user.photo_url) {
+            avatarEl.innerHTML = `<img src="${user.photo_url}" alt="" onerror="this.parentNode.textContent='${(name || 'И').charAt(0).toUpperCase()}';">`;
+        } else {
+            avatarEl.innerHTML = `<span class="initial">${(name || 'И').charAt(0).toUpperCase()}</span>`;
+        }
+
         $('profile-drops').textContent = `${history.length} дропов`;
         $('profile-inv').textContent = `${inventory.length} в инвентаре`;
         renderHistory();
@@ -1891,8 +1676,6 @@
         el.innerHTML = history.slice(0, 30).map(h => {
             const time = new Date(h.time).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
             const icon = h.win ? iconHTML(h.to, 64) : iconHTML(h.from, 64);
-            const label = h.case ? 'КЕЙС' : (h.win ? 'WIN' : 'LOSE');
-            const cls = h.win ? 'win' : 'lose';
             return `
                 <div class="history-item">
                     <div class="history-icon">${icon}</div>
@@ -1900,7 +1683,7 @@
                         <div class="history-name">${h.win ? h.to.name : h.from.name}</div>
                         <div class="history-sub">${h.win ? `+${h.to.value - h.from.value}` : `-${h.from.value}`} ⭐ · ${time}</div>
                     </div>
-                    <div class="history-result ${cls}">${label}</div>
+                    <div class="history-result ${h.win ? 'win' : 'lose'}">${h.win ? 'WIN' : 'LOSE'}</div>
                 </div>
             `;
         }).join('');
@@ -1984,28 +1767,30 @@
     }
 
     function confetti() {
-        const colors = ['#fff', '#2ecc71', '#4a86ff', '#a855f7', '#ffd93d', '#ff4757'];
+        const colors = ['#fff', '#2ecc71', '#4a86ff', '#a855f7', '#ffd93d', '#ff4757', '#ff9500'];
         const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-        for (let i = 0; i < 55; i++) {
+        for (let i = 0; i < 80; i++) {
             const p = document.createElement('div');
             p.className = 'confetti';
             p.style.background = colors[Math.floor(Math.random() * colors.length)];
             p.style.left = cx + 'px';
             p.style.top = cy + 'px';
             const a = Math.random() * Math.PI * 2;
-            const v = 150 + Math.random() * 350;
+            const v = 180 + Math.random() * 420;
             p.style.setProperty('--dx', Math.cos(a) * v + 'px');
-            p.style.setProperty('--dy', (Math.sin(a) * v - 100) + 'px');
-            p.style.animationDelay = (Math.random() * 0.12) + 's';
+            p.style.setProperty('--dy', (Math.sin(a) * v - 120) + 'px');
+            p.style.animationDelay = (Math.random() * 0.15) + 's';
             if (Math.random() > 0.5) p.style.borderRadius = '50%';
+            if (Math.random() > 0.7) p.style.boxShadow = `0 0 10px ${p.style.background}`;
             document.body.appendChild(p);
-            setTimeout(() => p.remove(), 2200);
+            setTimeout(() => p.remove(), 2400);
         }
     }
     function flashRed() { const el = $('flash-red'); el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
+    function flashWin() { const el = $('flash-win'); el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
     function shake() { document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 600); }
 
-    /* ============== АПГРЕЙДЕР ============== */
+    /* ============== СПИН ============== */
     let hb = null, tensionTimer = null, tickInterval = null;
 
     function startSpin() {
@@ -2088,6 +1873,7 @@
             currentItem = newItem;
             $('to-card').classList.add('win');
             if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+            flashWin();
             confetti();
             history.unshift({ win: true, from: fromCopy, to: toCopy, time: Date.now() });
         } else {
@@ -2106,244 +1892,6 @@
         else { chance = 50; multiplier = 2; updatePercentUI(); }
         setTimeout(() => { isSpinning = false; updateBtn(); }, 500);
     }
-
-    /* ============== КЕЙСЫ ============== */
-    function renderCasesGrid() {
-        const grid = $('cases-grid');
-        grid.innerHTML = '';
-        CASES.forEach(c => {
-            const tile = document.createElement('div');
-            tile.className = 'case-tile' + (balance < c.price ? ' disabled' : '');
-            tile.style.setProperty('--case-color-a', c.colorA);
-            tile.innerHTML = `
-                <div class="case-tile-icon">${c.svg}</div>
-                <div class="case-tile-name">${c.name}</div>
-                <div class="case-tile-range">до ${c.maxValue.toLocaleString('ru-RU')} ⭐</div>
-                <div class="case-tile-price">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    ${c.price}
-                </div>
-            `;
-            tile.onclick = () => { sndClick(); openCase(c); };
-            grid.appendChild(tile);
-        });
-    }
-
-    function openCase(c) {
-        currentCase = c;
-        $('cases-list-view').style.display = 'none';
-        $('case-open-view').style.display = 'flex';
-
-        $('case-header').style.setProperty('--case-color-a', c.colorA);
-        $('case-header-icon').innerHTML = c.svg;
-        $('case-header-name').textContent = c.name;
-        $('case-header-desc').textContent = c.desc;
-        $('case-header-price-val').textContent = c.price.toLocaleString('ru-RU');
-
-        $('case-open-btn').disabled = balance < c.price;
-
-        renderCaseContents(c);
-    }
-
-    function closeCaseOpenView() {
-        currentCase = null;
-        $('cases-list-view').style.display = 'block';
-        $('case-open-view').style.display = 'none';
-        $('case-reel-wrap').classList.remove('active');
-    }
-    $('case-back-btn').onclick = () => { sndClick(); closeCaseOpenView(); };
-
-    function pickRarity(rarities) {
-        const totalW = rarities.reduce((s, r) => s + r.weight, 0);
-        let r = Math.random() * totalW;
-        for (const rar of rarities) {
-            r -= rar.weight;
-            if (r <= 0) return rar;
-        }
-        return rarities[0];
-    }
-
-    function pickItemFromRarity(rar) {
-        const pool = CATALOG.filter(it => it.value >= rar.min && it.value < rar.max);
-        if (!pool.length) {
-            // Fallback — ближайший по стоимости
-            const sorted = [...CATALOG].sort((a, b) => Math.abs(a.value - rar.min) - Math.abs(b.value - rar.min));
-            return sorted[0];
-        }
-        return pool[Math.floor(Math.random() * pool.length)];
-    }
-
-    function renderCaseContents(c) {
-        const el = $('case-contents-list');
-        el.innerHTML = '';
-        const rarities = getCaseRarities(c);
-        rarities.forEach(rar => {
-            const items = CATALOG.filter(it => it.value >= rar.min && it.value < rar.max).slice(0, 8);
-            if (!items.length) return;
-            const group = document.createElement('div');
-            group.className = 'rarity-group';
-            group.innerHTML = `
-                <div class="rarity-label" style="--rarity-color: ${rar.color}">${rar.name} · ${rar.weight}%</div>
-                <div class="rarity-items">
-                    ${items.map(it => `
-                        <div class="rarity-item" style="--rarity-color: ${rar.color}">
-                            <div class="rarity-item-icon">${iconHTML(it, 64)}</div>
-                            <div class="rarity-item-name">${it.name}</div>
-                            <div class="rarity-item-value">${it.value}⭐</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            el.appendChild(group);
-        });
-    }
-
-    function openCaseSpin() {
-        if (isCaseSpinning || !currentCase) return;
-        if (balance < currentCase.price) {
-            sndError();
-            if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
-            return;
-        }
-
-        isCaseSpinning = true;
-        $('case-open-btn').disabled = true;
-
-        const rarities = getCaseRarities(currentCase);
-        const rar = pickRarity(rarities);
-        const target = pickItemFromRarity(rar);
-
-        const reel = $('case-reel');
-        const wrap = $('case-reel-wrap');
-        wrap.classList.add('active');
-        reel.style.transition = 'none';
-        reel.style.transform = 'translateX(0)';
-        reel.innerHTML = '';
-
-        const TARGET_INDEX = 45;
-        const TOTAL = 55;
-
-        for (let i = 0; i < TOTAL; i++) {
-            let item;
-            if (i === TARGET_INDEX) {
-                item = target;
-            } else {
-                const r = pickRarity(rarities);
-                item = pickItemFromRarity(r);
-            }
-            const itemRar = getRarityByValue(item.value, currentCase.minValue, currentCase.maxValue);
-            const el = document.createElement('div');
-            el.className = 'case-item';
-            el.style.setProperty('--rarity-color', itemRar.color);
-            el.innerHTML = `
-                <div class="case-item-icon">${iconHTML(item, 64)}</div>
-                <div class="case-item-name">${item.name}</div>
-            `;
-            reel.appendChild(el);
-        }
-
-        const itemW = 80 + 6;
-        const wrapWidth = wrap.offsetWidth;
-        const targetX = TARGET_INDEX * itemW + 80 / 2 + 6;
-        const jitter = (Math.random() - 0.5) * 50;
-        const offset = targetX - wrapWidth / 2 + jitter;
-
-        sndCaseOpen();
-
-        const duration = 6000;
-        let elapsed = 0;
-        let tickDelay = 40;
-        const tickLoopFn = () => {
-            sndTick();
-            elapsed += tickDelay;
-            tickDelay = 40 + 400 * Math.pow(elapsed / duration, 3);
-            if (elapsed < duration) {
-                tickInterval = setTimeout(tickLoopFn, tickDelay);
-            }
-        };
-        tickLoopFn();
-
-        let hapticE = 0;
-        const hapticLoop = () => {
-            if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('light');
-            hapticE += 300;
-            if (hapticE < duration) {
-                hb = setTimeout(hapticLoop, 300 + hapticE / 6);
-            }
-        };
-        hapticLoop();
-
-        setTimeout(() => {
-            reel.style.transition = `transform ${duration}ms cubic-bezier(0.15, 0.7, 0.15, 1)`;
-            reel.style.transform = `translateX(-${offset}px)`;
-        }, 50);
-
-        setTimeout(() => {
-            clearTimeout(tickInterval);
-            clearTimeout(hb);
-            isCaseSpinning = false;
-            $('case-open-btn').disabled = false;
-
-            balance -= currentCase.price;
-            $('balance').textContent = balance;
-
-            inventory.push({ ...target });
-            if (!currentItem) currentItem = inventory[inventory.length - 1];
-            saveState();
-            renderInventory();
-            renderArena();
-            renderShop();
-            updateBtn();
-            renderCasesGrid();
-
-            history.unshift({ win: true, from: { name: 'Кейс ' + currentCase.name, value: currentCase.price }, to: target, time: Date.now(), case: true });
-            history = history.slice(0, 50);
-            saveState();
-
-            const resRar = getRarityByValue(target.value, currentCase.minValue, currentCase.maxValue);
-            $('case-result-icon').innerHTML = iconHTML(target, 128);
-            $('case-result-icon').style.setProperty('--rarity-color', resRar.color);
-            $('case-result-rarity').textContent = resRar.name;
-            $('case-result-rarity').style.setProperty('--rarity-color', resRar.color);
-            $('case-result-name').textContent = target.name;
-            $('case-result-value').textContent = target.value + ' ⭐';
-            $('case-result-modal').classList.add('active');
-
-            if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
-            if (target.value >= currentCase.price * 5) {
-                sndWin();
-                confetti();
-            } else {
-                sndBuy();
-            }
-
-            setTimeout(() => {
-                wrap.classList.remove('active');
-                reel.style.transition = 'none';
-                reel.style.transform = 'translateX(0)';
-                reel.innerHTML = '';
-            }, 500);
-        }, duration + 200);
-    }
-
-    $('case-open-btn').onclick = () => { sndClick(); openCaseSpin(); };
-    $('case-result-ok').onclick = () => { sndClick(); $('case-result-modal').classList.remove('active'); };
-
-    /* ============== ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ ============== */
-    document.querySelectorAll('.mode-tab').forEach(tab => {
-        tab.onclick = () => {
-            sndClick();
-            const mode = tab.dataset.mode;
-            document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.mode-view').forEach(v => v.classList.remove('active'));
-            tab.classList.add('active');
-            $('mode-' + mode).classList.add('active');
-            if (mode === 'cases') {
-                closeCaseOpenView();
-                renderCasesGrid();
-            }
-        };
-    });
 
     document.querySelectorAll('.tab').forEach(t => {
         t.onclick = () => {
@@ -2364,7 +1912,6 @@
         balance += amt;
         $('balance').textContent = balance;
         renderShop();
-        renderCasesGrid();
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
@@ -2393,7 +1940,6 @@
         chance = 50;
         multiplier = 2;
         renderMult(); renderInventory(); renderArena(); renderShop();
-        renderCasesGrid();
         updatePercentUI(); updateBtn();
     }
 
