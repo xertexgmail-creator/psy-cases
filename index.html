@@ -68,9 +68,10 @@ body::before {
     border-radius: 9px; color: var(--text-dim);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; padding: 0; flex-shrink: 0;
+    transition: all 0.15s;
 }
-.icon-btn:active { transform: scale(0.92); }
-.icon-btn svg { width: 14px; height: 14px; }
+.icon-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.08); }
+.icon-btn svg { width: 15px; height: 15px; }
 .balance-chip {
     display: flex; align-items: center; gap: 3px;
     background: linear-gradient(135deg, #ffffff, #d0d4ff);
@@ -113,13 +114,21 @@ body::before {
     display: flex; align-items: center; justify-content: center;
     gap: 4px; position: relative; z-index: 1;
 }
-.menu-card-icon img {
-    height: 58px; width: auto; max-width: 78px; object-fit: contain;
+.menu-card-icon .gicon {
+    height: 58px; width: 58px; position: relative; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
     filter: drop-shadow(0 4px 12px var(--card-glow, rgba(120,100,255,0.5)));
 }
-.menu-card-icon .emoji-fallback {
+.menu-card-icon .gicon img {
+    width: 100%; height: 100%; object-fit: contain;
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.4s;
+}
+.menu-card-icon .gicon img.loaded { opacity: 1; }
+.menu-card-icon .gicon .emoji-fallback {
     font-size: 52px; line-height: 1;
-    filter: drop-shadow(0 4px 12px var(--card-glow, rgba(120,100,255,0.5)));
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
 }
 .menu-card-icon .arrow {
     color: #2ecc71; font-size: 20px; font-weight: 900; flex-shrink: 0;
@@ -159,8 +168,20 @@ body::before {
     display: flex; align-items: center; justify-content: center;
     position: relative; z-index: 1;
 }
-.slot-icon img { width: 100%; height: 100%; object-fit: contain; }
-.slot-icon .emoji-fallback { font-size: 56px; line-height: 1; }
+.slot-icon .gicon {
+    width: 100%; height: 100%; position: relative;
+}
+.slot-icon .gicon img {
+    width: 100%; height: 100%; object-fit: contain;
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.4s;
+}
+.slot-icon .gicon img.loaded { opacity: 1; }
+.slot-icon .gicon .emoji-fallback {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 56px; line-height: 1;
+}
 .item-name { font-size: 10px; font-weight: 600; color: var(--text-dim); margin-bottom: 3px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: relative; z-index: 1; }
 .item-value { font-size: 13px; font-weight: 800; position: relative; z-index: 1; }
 
@@ -253,9 +274,19 @@ body::before {
 .slot:active { transform: scale(0.95); }
 .slot.selected { border-color: var(--accent); box-shadow: 0 0 16px rgba(255,255,255,0.15); }
 .slot.disabled { opacity: 0.25; pointer-events: none; }
-.slot-icon-sm { width: 38px; height: 38px; margin: 0 auto 3px; display: flex; align-items: center; justify-content: center; }
-.slot-icon-sm img { width: 100%; height: 100%; object-fit: contain; }
-.slot-icon-sm .emoji-fallback { font-size: 28px; line-height: 1; }
+.slot-icon-sm { width: 38px; height: 38px; margin: 0 auto 3px; position: relative; }
+.slot-icon-sm .gicon { width: 100%; height: 100%; position: relative; }
+.slot-icon-sm .gicon img {
+    width: 100%; height: 100%; object-fit: contain;
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.4s;
+}
+.slot-icon-sm .gicon img.loaded { opacity: 1; }
+.slot-icon-sm .gicon .emoji-fallback {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; line-height: 1;
+}
 .slot-name { font-size: 7px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .slot-price { font-size: 8px; font-weight: 800; margin-top: 2px; }
 .empty { grid-column: 1/-1; text-align: center; color: var(--text-mute); font-size: 11px; padding: 24px 8px; }
@@ -336,12 +367,21 @@ body::before {
     content: '+'; font-size: 16px; color: #8fb0ff; font-weight: 900;
 }
 .bet-gift-icon {
-    width: 44px; height: 44px;
-    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; position: relative;
     background: rgba(0,0,0,0.3); border-radius: 8px; flex-shrink: 0;
 }
-.bet-gift-icon img { width: 100%; height: 100%; object-fit: contain; }
-.bet-gift-icon .emoji-fallback { font-size: 30px; line-height: 1; }
+.bet-gift-icon .gicon { width: 100%; height: 100%; position: relative; }
+.bet-gift-icon .gicon img {
+    width: 100%; height: 100%; object-fit: contain;
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.4s;
+}
+.bet-gift-icon .gicon img.loaded { opacity: 1; }
+.bet-gift-icon .gicon .emoji-fallback {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; line-height: 1;
+}
 .bet-gift-info { flex: 1; min-width: 0; }
 .bet-gift-name { font-size: 12px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bet-gift-value { font-size: 10px; color: var(--gold); font-weight: 700; margin-top: 2px; }
@@ -474,7 +514,7 @@ body::before {
     position: fixed; inset: 0; background: rgba(0,0,0,0.85);
     backdrop-filter: blur(10px); display: none;
     align-items: center; justify-content: center;
-    z-index: 200; padding: 20px;
+    z-index: 300; padding: 20px;
 }
 .overlay.active { display: flex; }
 .modal {
@@ -553,9 +593,19 @@ body::before {
 .profile-view.active { display: block; }
 .history-item, .inv-item { display: flex; align-items: center; gap: 10px; padding: 9px 6px; border-bottom: 1px solid var(--border); font-size: 11px; }
 .history-item:last-child, .inv-item:last-child { border-bottom: none; }
-.history-icon { width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border); }
-.history-icon img { width: 100%; height: 100%; object-fit: contain; }
-.history-icon .emoji-fallback { font-size: 24px; line-height: 1; }
+.history-icon { width: 34px; height: 34px; flex-shrink: 0; position: relative; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border); }
+.history-icon .gicon { width: 100%; height: 100%; position: relative; }
+.history-icon .gicon img {
+    width: 100%; height: 100%; object-fit: contain;
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.4s;
+}
+.history-icon .gicon img.loaded { opacity: 1; }
+.history-icon .gicon .emoji-fallback {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; line-height: 1;
+}
 .history-info { flex: 1; min-width: 0; }
 .history-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .history-sub { font-size: 9px; color: var(--text-mute); margin-top: 2px; }
@@ -591,7 +641,7 @@ body::before {
     .balance-chip { font-size: 10px; padding: 4px 7px; }
     .icon-btn { width: 28px; height: 28px; }
     .icon-btn svg { width: 13px; height: 13px; }
-    .menu-card-icon img { height: 48px; }
+    .menu-card-icon .gicon { height: 48px; width: 48px; }
     .menu-card-title { font-size: 12px; }
     .menu-card-desc { font-size: 9px; }
 }
@@ -600,7 +650,7 @@ body::before {
     .wheel-col { min-width: 175px; }
     .wheel-center { width: 104px; height: 104px; }
     .wheel-percent { font-size: 27px; }
-    .menu-card-icon img { height: 68px; max-width: 92px; }
+    .menu-card-icon .gicon { height: 68px; width: 68px; }
     .menu-card-title { font-size: 15px; }
     .rocket-mult { font-size: 56px; }
 }
@@ -636,25 +686,24 @@ body::before {
                 <span class="test-badge">TEST</span>
                 <span class="plus-sign" id="plus-sign" style="display:none;">+</span>
             </div>
-            <button class="icon-btn" id="promo-btn">
+            <button class="icon-btn" id="promo-btn" type="button" title="Промокод">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="7" width="20" height="5"></rect>
-                    <line x1="12" y1="22" x2="12" y2="7"></line>
-                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
                 </svg>
             </button>
-            <button class="icon-btn" id="star-btn">
+            <button class="icon-btn" id="star-btn" type="button" title="Stars">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/>
                 </svg>
             </button>
-            <button class="icon-btn" id="settings-btn">
+            <button class="icon-btn" id="settings-btn" type="button" title="Настройки">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
             </button>
-            <button class="icon-btn" id="profile-btn">
+            <button class="icon-btn" id="profile-btn" type="button" title="Профиль">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
@@ -670,36 +719,27 @@ body::before {
         <div class="menu-title">Выбери режим</div>
         <div class="menu-subtitle">Играй и выигрывай</div>
         <div class="menu-grid">
-            <button class="menu-card" data-mode="upgrader" style="--card-glow: rgba(120,100,255,0.4);">
+            <button class="menu-card" data-mode="upgrader" type="button" style="--card-glow: rgba(120,100,255,0.4);">
                 <div class="menu-card-icon">
-                    <img src="https://nft.fragment.com/gift/heart.500.webp" alt="Heart"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                    <span class="emoji-fallback" style="display:none;">❤️</span>
+                    <div class="gicon" data-slug="heart" data-emoji="❤️"></div>
                     <span class="arrow">→</span>
-                    <img src="https://nft.fragment.com/gift/mini-oscar.500.webp" alt="Mini Oscar"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                    <span class="emoji-fallback" style="display:none;">🏆</span>
+                    <div class="gicon" data-slug="mini-oscar" data-emoji="🏆"></div>
                 </div>
                 <div class="menu-card-title">Апгрейдер</div>
                 <div class="menu-card-desc">Прокачивай гифты</div>
             </button>
 
-            <button class="menu-card" data-mode="rocket" style="--card-glow: rgba(46,204,113,0.5);">
+            <button class="menu-card" data-mode="rocket" type="button" style="--card-glow: rgba(46,204,113,0.5);">
                 <div class="menu-card-icon">
-                    <img src="https://nft.fragment.com/gift/rocket.500.webp" alt="Rocket"
-                         style="transform: rotate(-25deg); height: 66px;"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                    <span class="emoji-fallback" style="display:none;">🚀</span>
+                    <div class="gicon" data-slug="rocket" data-emoji="🚀" style="transform: rotate(-25deg);"></div>
                 </div>
                 <div class="menu-card-title">Рокетка</div>
                 <div class="menu-card-desc">Ставь гифт — забирай ×N</div>
             </button>
 
-            <button class="menu-card" data-mode="saper" style="--card-glow: rgba(255,217,61,0.4);">
+            <button class="menu-card" data-mode="saper" type="button" style="--card-glow: rgba(255,217,61,0.4);">
                 <div class="menu-card-icon">
-                    <img src="https://nft.fragment.com/gift/trophy.500.webp" alt="Trophy"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                    <span class="emoji-fallback" style="display:none;">🏆</span>
+                    <div class="gicon" data-slug="trophy" data-emoji="🏆"></div>
                 </div>
                 <div class="menu-card-title">Сапёр</div>
                 <div class="menu-card-desc">Открывай клетки</div>
@@ -748,11 +788,11 @@ body::before {
         </div>
 
         <div class="mult-grid" id="mult-grid"></div>
-        <button class="upgrade-btn" id="upgrade-btn">Прокачать</button>
+        <button class="upgrade-btn" id="upgrade-btn" type="button">Прокачать</button>
 
         <div class="tabs">
-            <button class="tab active" data-tab="inv">Инвентарь <span id="inv-count"></span></button>
-            <button class="tab" data-tab="shop">Магазин</button>
+            <button class="tab active" data-tab="inv" type="button">Инвентарь <span id="inv-count"></span></button>
+            <button class="tab" data-tab="shop" type="button">Магазин</button>
         </div>
 
         <div class="panel">
@@ -803,7 +843,7 @@ body::before {
             <div class="bg-label" id="rocket-bet-label">Нажми чтобы выбрать гифт</div>
         </div>
 
-        <button class="rocket-btn" id="rocket-btn">Старт</button>
+        <button class="rocket-btn" id="rocket-btn" type="button">Старт</button>
 
         <div class="rocket-history" id="rocket-history"></div>
     </div>
@@ -834,8 +874,8 @@ body::before {
         </div>
 
         <div class="saper-btn-row">
-            <button class="saper-start-btn" id="saper-start-btn">Старт</button>
-            <button class="saper-cash-btn" id="saper-cash-btn" disabled>Забрать</button>
+            <button class="saper-start-btn" id="saper-start-btn" type="button">Старт</button>
+            <button class="saper-cash-btn" id="saper-cash-btn" type="button" disabled>Забрать</button>
         </div>
     </div>
 
@@ -850,7 +890,7 @@ body::before {
         <div class="modal-title">Выбери гифт для ставки</div>
         <div class="saper-picker" id="gift-picker-grid"></div>
         <div class="btns-row" style="margin-top:14px;">
-            <button class="btn btn-secondary" id="gift-picker-cancel">Отмена</button>
+            <button class="btn btn-secondary" id="gift-picker-cancel" type="button">Отмена</button>
         </div>
     </div>
 </div>
@@ -861,8 +901,8 @@ body::before {
         <div class="modal-title" id="buy-name">—</div>
         <div class="modal-sub" id="buy-price" style="font-size:20px;font-weight:900;">—</div>
         <div class="btns-row">
-            <button class="btn btn-secondary" id="buy-cancel">Отмена</button>
-            <button class="btn btn-primary" id="buy-confirm">Купить</button>
+            <button class="btn btn-secondary" id="buy-cancel" type="button">Отмена</button>
+            <button class="btn btn-primary" id="buy-confirm" type="button">Купить</button>
         </div>
     </div>
 </div>
@@ -874,8 +914,8 @@ body::before {
         <input type="text" class="input-field" id="promo-input" placeholder="ВВЕДИ ПРОМОКОД">
         <div class="status-msg" id="promo-message"></div>
         <div class="btns-row">
-            <button class="btn btn-secondary" id="promo-cancel">Закрыть</button>
-            <button class="btn btn-primary" id="promo-activate">Активировать</button>
+            <button class="btn btn-secondary" id="promo-cancel" type="button">Закрыть</button>
+            <button class="btn btn-primary" id="promo-activate" type="button">Активировать</button>
         </div>
     </div>
 </div>
@@ -894,13 +934,13 @@ body::before {
         <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:6px;">
             <span class="settings-label">Язык</span>
             <div class="lang-grid">
-                <button class="lang-btn" data-lang="ru">RU</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="ru" type="button">RU</button>
+                <button class="lang-btn" data-lang="en" type="button">EN</button>
+                <button class="lang-btn" data-lang="de" type="button">DE</button>
             </div>
         </div>
         <div class="btns-row" style="margin-top:14px;">
-            <button class="btn btn-primary" id="settings-close">Готово</button>
+            <button class="btn btn-primary" id="settings-close" type="button">Готово</button>
         </div>
     </div>
 </div>
@@ -921,13 +961,13 @@ body::before {
             <div class="stat-cell"><div class="stat-label">Лучший дроп</div><div class="stat-value gold" id="stat-best">—</div></div>
         </div>
         <div class="profile-tabs">
-            <button class="profile-tab active" data-pview="history">История</button>
-            <button class="profile-tab" data-pview="inventory">Инвентарь</button>
+            <button class="profile-tab active" data-pview="history" type="button">История</button>
+            <button class="profile-tab" data-pview="inventory" type="button">Инвентарь</button>
         </div>
         <div class="profile-view active" id="pview-history"><div id="history-list"></div></div>
         <div class="profile-view" id="pview-inventory"><div id="profile-inv-list"></div></div>
         <div class="btns-row" style="margin-top:14px;">
-            <button class="btn btn-secondary" id="profile-close">Закрыть</button>
+            <button class="btn btn-secondary" id="profile-close" type="button">Закрыть</button>
         </div>
     </div>
 </div>
@@ -938,8 +978,8 @@ body::before {
         <div class="modal-title" id="sell-name">—</div>
         <div class="modal-sub" id="sell-info">—</div>
         <div class="btns-row">
-            <button class="btn btn-secondary" id="sell-cancel">Отмена</button>
-            <button class="btn btn-primary" id="sell-confirm">Продать</button>
+            <button class="btn btn-secondary" id="sell-cancel" type="button">Отмена</button>
+            <button class="btn btn-primary" id="sell-confirm" type="button">Продать</button>
         </div>
     </div>
 </div>
@@ -949,21 +989,21 @@ body::before {
         <div class="modal-title">Пополнение звёздами</div>
         <div class="modal-sub">Выбери пакет. Оплата через Telegram Stars.</div>
         <div class="packs-grid">
-            <button class="pack-btn" data-pack="100">
+            <button class="pack-btn" data-pack="100" type="button">
                 <div><div class="pack-stars">⭐ 100</div><div class="pack-price">≈ 1.99 $</div></div>
                 <div class="pack-arrow">→</div>
             </button>
-            <button class="pack-btn" data-pack="500">
+            <button class="pack-btn" data-pack="500" type="button">
                 <div><div class="pack-stars">⭐ 500</div><div class="pack-price">≈ 9.99 $</div></div>
                 <div class="pack-arrow">→</div>
             </button>
-            <button class="pack-btn" data-pack="1000">
+            <button class="pack-btn" data-pack="1000" type="button">
                 <div><div class="pack-stars">⭐ 1000</div><div class="pack-price">≈ 19.99 $</div></div>
                 <div class="pack-arrow">→</div>
             </button>
         </div>
         <div class="status-msg" id="stars-message"></div>
-        <div class="btns-row"><button class="btn btn-secondary" id="stars-close">Закрыть</button></div>
+        <div class="btns-row"><button class="btn btn-secondary" id="stars-close" type="button">Закрыть</button></div>
     </div>
 </div>
 
@@ -971,6 +1011,8 @@ body::before {
 <div class="flash-win" id="flash-win"></div>
 
 <script>
+(function(){
+"use strict";
 const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand();
 
@@ -1166,16 +1208,47 @@ function getRarity(v){
     return '#ff9500';
 }
 
-function iconHTML(item, size=128){
-    const api = `https://api.changes.tg/original/${encodeURIComponent(item.name)}.png?size=${size}`;
-    const frag = `https://nft.fragment.com/gift/${item.slug}.${size>=128?500:200}.webp`;
-    const giftasset = `https://giftasset.pro/api/v1/data/models/${item.slug.replace(/-/g,'_')}.png`;
-    const sf = frag.replace(/'/g,"\\'");
-    const sa = api.replace(/'/g,"\\'");
+/* Кэш загруженных картинок — чтобы не грузить заново */
+const imgCache = {};
+function fragmentUrl(slug, size){
+    const px = size>=128 ? 300 : 150;
+    return `https://nft.fragment.com/gift/${slug}.${px}.webp`;
+}
+
+/* Возвращает HTML иконки с эмодзи-фоллбэком и плавной подгрузкой картинки */
+function iconHTML(item, size){
+    size = size || 128;
     const emoji = item.emoji || '🎁';
-    return `<img src="${frag}" loading="lazy" alt="${item.name}"
-        onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${sa}';}else if(this.dataset.fb==='1'){this.dataset.fb='2';this.src='${giftasset}';}else{this.style.display='none';this.parentNode.querySelector('.emoji-fallback').style.display='block';}">
-        <span class="emoji-fallback" style="display:none;">${emoji}</span>`;
+    const url = fragmentUrl(item.slug, size);
+    const cacheKey = item.slug+'_'+size;
+    if (imgCache[cacheKey] === false) {
+        // Уже пробовали — не грузится, сразу эмодзи
+        return `<div class="gicon"><span class="emoji-fallback">${emoji}</span></div>`;
+    }
+    // Проверяем, уже загружена?
+    if (imgCache[cacheKey] === true) {
+        return `<div class="gicon"><img src="${url}" class="loaded" alt="${item.name}"><span class="emoji-fallback" style="display:none;">${emoji}</span></div>`;
+    }
+    // Грузим через JS Image чтобы поймать onload
+    const uid = 'gimg_'+Math.random().toString(36).slice(2,9);
+    setTimeout(()=>{
+        const img = new Image();
+        img.onload = ()=>{
+            imgCache[cacheKey] = true;
+            const el = document.getElementById(uid);
+            if(el && el.parentNode){
+                el.src = url;
+                el.classList.add('loaded');
+                const fb = el.parentNode.querySelector('.emoji-fallback');
+                if(fb) fb.style.display = 'none';
+            }
+        };
+        img.onerror = ()=>{
+            imgCache[cacheKey] = false;
+        };
+        img.src = url;
+    }, 0);
+    return `<div class="gicon"><img id="${uid}" alt="${item.name}" style="opacity:0;"><span class="emoji-fallback">${emoji}</span></div>`;
 }
 
 function chanceFromRatio(r){ let c=100/r; if(c>99)c=99; if(c<1)c=1; return Math.round(c*100)/100; }
@@ -1260,22 +1333,63 @@ function updateLogo(){
     $('logo').classList.toggle('disabled', currentScreen==='menu');
 }
 
+/* Меню карточки */
 document.querySelectorAll('.menu-card').forEach(card=>{
-    card.onclick=()=>{
+    card.addEventListener('click', function(e){
+        e.preventDefault();
         sndClick();
-        const m=card.dataset.mode;
+        const m=this.dataset.mode;
         if(m==='upgrader')goToScreen('upgrader');
         else if(m==='rocket'){ goToScreen('rocket'); resetRocketUI(); }
         else if(m==='saper'){ goToScreen('saper'); resetSaperUI(); }
-    };
+    });
 });
-$('logo').onclick=()=>{
+
+/* Меню-иконки (заполнение gicon из data-slug) */
+function fillMenuIcons(){
+    document.querySelectorAll('.menu-card-icon .gicon').forEach(el=>{
+        const slug = el.dataset.slug;
+        const emoji = el.dataset.emoji;
+        if(!slug) return;
+        el.innerHTML = `<img alt="" style="opacity:0;"><span class="emoji-fallback">${emoji}</span>`;
+        const img = el.querySelector('img');
+        const fb = el.querySelector('.emoji-fallback');
+        const cacheKey = 'menu_'+slug;
+        if(imgCache[cacheKey] === false){
+            img.style.display='none';
+            return;
+        }
+        const url = fragmentUrl(slug, 128);
+        if(imgCache[cacheKey] === true){
+            img.src = url;
+            img.style.opacity = 1;
+            fb.style.display = 'none';
+            return;
+        }
+        const testImg = new Image();
+        testImg.onload = ()=>{
+            imgCache[cacheKey] = true;
+            img.src = url;
+            img.style.opacity = 1;
+            fb.style.display = 'none';
+        };
+        testImg.onerror = ()=>{
+            imgCache[cacheKey] = false;
+        };
+        testImg.src = url;
+    });
+}
+
+/* Логотип */
+$('logo').addEventListener('click', function(e){
     if(currentScreen==='menu')return;
     if((currentScreen==='rocket'&&rocketState==='flying')||(currentScreen==='saper'&&saperState==='playing'))return;
+    e.preventDefault();
     sndClick();
     goToMenu();
-};
+});
 
+/* Рендер арены */
 function renderArena(){
     if(currentItem){
         $('from-icon').innerHTML=iconHTML(currentItem,128);
@@ -1315,7 +1429,7 @@ function renderInventory(){
         s.className='slot'+(item===currentItem?' selected':'');
         s.style.setProperty('--rar-color',getRarity(item.value));
         s.innerHTML=`<div class="slot-icon-sm">${iconHTML(item,64)}</div><div class="slot-name">${item.name}</div><div class="slot-price">${item.value}⭐</div>`;
-        s.onclick=()=>{
+        s.addEventListener('click', ()=>{
             if(isSpinning)return;
             sndClick();
             currentItem=item;
@@ -1323,7 +1437,7 @@ function renderInventory(){
             renderInventory(); renderArena();
             if(targetItem)recomputeChance();
             updateBtn();
-        };
+        });
         grid.appendChild(s);
     });
 }
@@ -1342,7 +1456,7 @@ function renderShop(){
         s.className='slot'+(targetItem===item?' selected':'')+(item.value>balance?' disabled':'');
         s.style.setProperty('--rar-color',getRarity(item.value));
         s.innerHTML=`<div class="slot-icon-sm">${iconHTML(item,64)}</div><div class="slot-name">${item.name}</div><div class="slot-price">${item.value}⭐</div>`;
-        s.onclick=()=>{ if(isSpinning)return; sndClick(); openBuy(item); };
+        s.addEventListener('click', ()=>{ if(isSpinning)return; sndClick(); openBuy(item); });
         grid.appendChild(s);
     });
 }
@@ -1357,8 +1471,8 @@ function openBuy(item){
     $('buy-modal').classList.add('active');
 }
 function closeBuy(){ $('buy-modal').classList.remove('active'); buyItem=null; }
-$('buy-cancel').onclick=()=>{ sndClick(); closeBuy(); };
-$('buy-confirm').onclick=()=>{
+$('buy-cancel').addEventListener('click', ()=>{ sndClick(); closeBuy(); });
+$('buy-confirm').addEventListener('click', ()=>{
     if(!buyItem||buyItem.value>balance)return;
     balance-=buyItem.value;
     $('balance').textContent=balance;
@@ -1367,16 +1481,17 @@ $('buy-confirm').onclick=()=>{
     saveState(); sndBuy(); closeBuy();
     renderInventory(); renderArena(); renderShop(); updateBtn(); checkTestEnd();
     if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
-};
+});
 
 function renderMult(){
     const grid=$('mult-grid'); grid.innerHTML='';
     MULTIPLIERS.forEach(m=>{
         const b=document.createElement('button');
+        b.type='button';
         b.className='mult-btn'; b.dataset.mult=m;
         const c=chanceFromRatio(m);
         b.innerHTML=`×${m}<span class="c">${c.toFixed(c<10?1:0)}%</span>`;
-        b.onclick=()=>{
+        b.addEventListener('click', ()=>{
             if(isSpinning||!currentItem)return;
             sndClick();
             const target=currentItem.value*m;
@@ -1385,7 +1500,7 @@ function renderMult(){
             const best=cands.reduce((p,c2)=>Math.abs(c2.value-target)<Math.abs(p.value-target)?c2:p);
             targetItem=best;
             recomputeChance(); renderShop(); renderArena(); updateBtn();
-        };
+        });
         grid.appendChild(b);
     });
 }
@@ -1525,16 +1640,16 @@ async function doUpgrade(){
 }
 
 document.querySelectorAll('.tab').forEach(tb=>{
-    tb.onclick=()=>{
+    tb.addEventListener('click', ()=>{
         sndClick();
         document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
         document.querySelectorAll('.panel-view').forEach(x=>x.classList.remove('active'));
         tb.classList.add('active');
         $('view-'+tb.dataset.tab).classList.add('active');
-    };
+    });
 });
 
-/* ============ ROCKET ============ */
+/* ROCKET */
 function generateCrashPoint(){
     if(Math.random()<0.05)return 1.00;
     const u=Math.random();
@@ -1743,18 +1858,18 @@ function cashOutRocket(){
     },1500);
 }
 
-$('rocket-btn').onclick=()=>{
+$('rocket-btn').addEventListener('click', ()=>{
     sndClick();
     if(rocketState==='idle')startRocketFlight();
     else if(rocketState==='flying')cashOutRocket();
-};
-$('rocket-bet-row').onclick=()=>{
+});
+$('rocket-bet-row').addEventListener('click', ()=>{
     if(rocketState!=='idle')return;
     sndClick();
     openGiftPicker('rocket');
-};
+});
 
-/* ============ SAPER ============ */
+/* SAPER */
 function saperMultiplier(k){
     if(k===0)return 1;
     const N=SAPER_SIZE, M=saperMineCount;
@@ -1823,7 +1938,7 @@ function renderSaperGrid(){
                 cell.textContent='💣';
             }
         }
-        cell.onclick=()=>clickSaperCell(i);
+        cell.addEventListener('click', ()=>clickSaperCell(i));
         grid.appendChild(cell);
     }
 }
@@ -1918,49 +2033,49 @@ function resetSaperUI(){
     updateSaperButtons();
 }
 
-$('saper-start-btn').onclick=()=>{ sndClick(); startSaper(); };
-$('saper-cash-btn').onclick=()=>{ sndClick(); cashOutSaper(); };
-$('saper-bet-row').onclick=()=>{
+$('saper-start-btn').addEventListener('click', ()=>{ sndClick(); startSaper(); });
+$('saper-cash-btn').addEventListener('click', ()=>{ sndClick(); cashOutSaper(); });
+$('saper-bet-row').addEventListener('click', ()=>{
     if(saperState!=='idle')return;
     sndClick();
     openGiftPicker('saper');
-};
+});
 
 /* GIFT PICKER */
 let giftPickerMode=null;
 function openGiftPicker(mode){
     if(!inventory.length){
         sndError();
-        alert('У тебя нет гифтов');
         return;
     }
     giftPickerMode=mode;
     const grid=$('gift-picker-grid');
     grid.innerHTML='';
-    inventory.forEach((item,idx)=>{
+    inventory.forEach((item)=>{
         const s=document.createElement('div');
         s.className='slot';
         s.style.setProperty('--rar-color',getRarity(item.value));
         s.innerHTML=`<div class="slot-icon-sm">${iconHTML(item,64)}</div><div class="slot-name">${item.name}</div><div class="slot-price">${item.value}⭐</div>`;
-        s.onclick=()=>{
+        s.addEventListener('click', ()=>{
             sndClick();
-            if(mode==='rocket'){ rocketBetGift={name:item.name, value:item.value, slug:item.slug, emoji:item.emoji}; }
-            else if(mode==='saper'){ saperBetGift={name:item.name, value:item.value, slug:item.slug, emoji:item.emoji}; }
+            const simple = {name:item.name, value:item.value, slug:item.slug, emoji:item.emoji};
+            if(mode==='rocket'){ rocketBetGift=simple; }
+            else if(mode==='saper'){ saperBetGift=simple; }
             closeGiftPicker();
             if(mode==='rocket')updateRocketButtonLabel();
             else updateSaperButtons();
-        };
+        });
         grid.appendChild(s);
     });
     $('gift-picker').classList.add('active');
 }
 function closeGiftPicker(){ $('gift-picker').classList.remove('active'); giftPickerMode=null; }
-$('gift-picker-cancel').onclick=()=>{ sndClick(); closeGiftPicker(); };
+$('gift-picker-cancel').addEventListener('click', ()=>{ sndClick(); closeGiftPicker(); });
 
 /* MODALS */
-$('promo-btn').onclick=()=>{ sndClick(); $('promo-modal').classList.add('active'); $('promo-input').value=''; $('promo-message').textContent=''; $('promo-message').className='status-msg'; };
-$('promo-cancel').onclick=()=>{ sndClick(); $('promo-modal').classList.remove('active'); };
-$('promo-activate').onclick=()=>{
+$('promo-btn').addEventListener('click', (e)=>{ e.preventDefault(); sndClick(); $('promo-modal').classList.add('active'); $('promo-input').value=''; $('promo-message').textContent=''; $('promo-message').className='status-msg'; });
+$('promo-cancel').addEventListener('click', ()=>{ sndClick(); $('promo-modal').classList.remove('active'); });
+$('promo-activate').addEventListener('click', ()=>{
     const code=$('promo-input').value.trim().toUpperCase();
     const msg=$('promo-message'); msg.className='status-msg';
     if(!code){ msg.textContent='Введи промокод'; msg.classList.add('err'); sndError(); return; }
@@ -1974,58 +2089,70 @@ $('promo-activate').onclick=()=>{
     sndPromo(); if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
     confetti(); renderShop(); updateBtn(); checkTestEnd();
     setTimeout(()=>$('promo-modal').classList.remove('active'),1200);
-};
+});
 $('promo-input').addEventListener('keydown',e=>{ if(e.key==='Enter')$('promo-activate').click(); });
 $('promo-input').addEventListener('input',e=>{ e.target.value=e.target.value.toUpperCase(); });
 
-$('star-btn').onclick=()=>{ sndClick(); $('stars-message').textContent=''; $('stars-message').className='status-msg'; $('stars-modal').classList.add('active'); };
-$('stars-close').onclick=()=>{ sndClick(); $('stars-modal').classList.remove('active'); };
+$('star-btn').addEventListener('click', (e)=>{ e.preventDefault(); sndClick(); $('stars-message').textContent=''; $('stars-message').className='status-msg'; $('stars-modal').classList.add('active'); });
+$('stars-close').addEventListener('click', ()=>{ sndClick(); $('stars-modal').classList.remove('active'); });
 document.querySelectorAll('.pack-btn').forEach(b=>{
-    b.onclick=()=>{ sndClick(); const m=$('stars-message'); m.textContent='Оплата скоро. Нужен бэкенд.'; m.classList.add('ok'); };
+    b.addEventListener('click', ()=>{ sndClick(); const m=$('stars-message'); m.textContent='Оплата скоро. Нужен бэкенд.'; m.classList.add('ok'); });
 });
 
-$('settings-btn').onclick=()=>{
+$('settings-btn').addEventListener('click', (e)=>{
+    e.preventDefault();
     sndClick();
     $('vibration-toggle').checked=vibrationEnabled;
     $('sound-toggle').checked=soundEnabled;
     document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===(localStorage.getItem('psygg_lang')||'ru')));
     $('settings-modal').classList.add('active');
-};
-$('settings-close').onclick=()=>{ sndClick(); $('settings-modal').classList.remove('active'); };
-$('vibration-toggle').onchange=(e)=>{ vibrationEnabled=e.target.checked; localStorage.setItem(VIB_KEY,vibrationEnabled); };
-$('sound-toggle').onchange=(e)=>{ soundEnabled=e.target.checked; localStorage.setItem(SND_KEY,soundEnabled); if(soundEnabled){initAudio();sndClick();} };
+});
+$('settings-close').addEventListener('click', ()=>{ sndClick(); $('settings-modal').classList.remove('active'); });
+$('vibration-toggle').addEventListener('change', (e)=>{ vibrationEnabled=e.target.checked; localStorage.setItem(VIB_KEY,vibrationEnabled); });
+$('sound-toggle').addEventListener('change', (e)=>{ soundEnabled=e.target.checked; localStorage.setItem(SND_KEY,soundEnabled); if(soundEnabled){initAudio();sndClick();} });
 document.querySelectorAll('.lang-btn').forEach(b=>{
-    b.onclick=()=>{ sndClick(); localStorage.setItem('psygg_lang',b.dataset.lang); document.querySelectorAll('.lang-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); };
+    b.addEventListener('click', ()=>{ sndClick(); localStorage.setItem('psygg_lang',b.dataset.lang); document.querySelectorAll('.lang-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); });
 });
 
-$('profile-btn').onclick=()=>{
-    sndClick();
-    const name=TG_USER?[TG_USER.first_name,TG_USER.last_name].filter(Boolean).join(' '):'Игрок';
-    $('profile-name').textContent=name||'Игрок';
-    const av=$('profile-avatar');
-    if(TG_USER&&TG_USER.photo_url){
-        av.innerHTML=`<img src="${TG_USER.photo_url}" alt="" onerror="this.parentNode.innerHTML='<span class=\\'initial\\'>${(name||'И').charAt(0).toUpperCase()}</span>';">`;
-    }else{
-        av.innerHTML=`<span class="initial">${(name||'И').charAt(0).toUpperCase()}</span>`;
+/* PROFILE — самый важный фикс */
+function openProfileModal(){
+    const name = TG_USER ? [TG_USER.first_name,TG_USER.last_name].filter(Boolean).join(' ') : 'Игрок';
+    $('profile-name').textContent = name || 'Игрок';
+    const av = $('profile-avatar');
+    if(TG_USER && TG_USER.photo_url){
+        av.innerHTML = `<img src="${TG_USER.photo_url}" alt="" onerror="this.parentNode.innerHTML='<span class=&quot;initial&quot;>${(name||'И').charAt(0).toUpperCase()}</span>';">`;
+    } else {
+        av.innerHTML = `<span class="initial">${(name||'И').charAt(0).toUpperCase()}</span>`;
     }
-    $('profile-drops').textContent=`${history.length} дропов`;
-    $('profile-inv').textContent=`${inventory.length} в инвентаре`;
-    $('stat-wins').textContent=stats.wins;
-    $('stat-losses').textContent=stats.losses;
-    $('stat-wagered').textContent=stats.wagered;
-    $('stat-best').textContent=stats.bestDrop>0?stats.bestDrop+'⭐':'—';
-    renderHistory(); renderProfileInventory();
+    $('profile-drops').textContent = `${history.length} дропов`;
+    $('profile-inv').textContent = `${inventory.length} в инвентаре`;
+    $('stat-wins').textContent = stats.wins;
+    $('stat-losses').textContent = stats.losses;
+    $('stat-wagered').textContent = stats.wagered;
+    $('stat-best').textContent = stats.bestDrop>0 ? stats.bestDrop+'⭐' : '—';
+    renderHistory();
+    renderProfileInventory();
     $('profile-modal').classList.add('active');
-};
-$('profile-close').onclick=()=>{ sndClick(); $('profile-modal').classList.remove('active'); };
+}
+function closeProfileModal(){
+    $('profile-modal').classList.remove('active');
+}
+$('profile-btn').addEventListener('click', (e)=>{
+    e.preventDefault();
+    e.stopPropagation();
+    sndClick();
+    openProfileModal();
+});
+$('profile-close').addEventListener('click', ()=>{ sndClick(); closeProfileModal(); });
+
 document.querySelectorAll('.profile-tab').forEach(tb=>{
-    tb.onclick=()=>{
+    tb.addEventListener('click', ()=>{
         sndClick();
         document.querySelectorAll('.profile-tab').forEach(x=>x.classList.remove('active'));
         document.querySelectorAll('.profile-view').forEach(x=>x.classList.remove('active'));
         tb.classList.add('active');
         $('pview-'+tb.dataset.pview).classList.add('active');
-    };
+    });
 });
 
 function renderHistory(){
@@ -2033,11 +2160,12 @@ function renderHistory(){
     if(!history.length){ el.innerHTML='<div class="empty">—</div>'; return; }
     el.innerHTML=history.slice(0,30).map(h=>{
         const tm=new Date(h.time).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
-        const icon=h.win&&h.to?iconHTML(h.to,64):(h.from?iconHTML(h.from,64):'');
+        const item = h.win && h.to ? h.to : h.from;
+        const iconHTMLStr = item ? iconHTML(item,64) : '';
         const name=h.win?(h.to?.name||'—'):(h.from?.name||'—');
         const sub=h.win?`+${(h.to?.value||0)-(h.from?.value||0)}`:`-${h.from?.value||0}`;
         return `<div class="history-item">
-            <div class="history-icon">${icon}</div>
+            <div class="history-icon">${iconHTMLStr}</div>
             <div class="history-info">
                 <div class="history-name">${name}</div>
                 <div class="history-sub">${sub} ⭐ · ${tm}</div>
@@ -2058,12 +2186,12 @@ function renderProfileInventory(){
                 <div class="history-sub">${item.value} ⭐</div>
             </div>
             <div class="inv-actions">
-                <button class="mini-btn sell" data-sell="${idx}">Продать</button>
-                <button class="mini-btn withdraw" disabled>Вывод</button>
+                <button class="mini-btn sell" data-sell="${idx}" type="button">Продать</button>
+                <button class="mini-btn withdraw" type="button" disabled>Вывод</button>
             </div>
         </div>`).join('');
     el.querySelectorAll('[data-sell]').forEach(btn=>{
-        btn.onclick=()=>{ const idx=parseInt(btn.dataset.sell,10); sndClick(); openSell(idx); };
+        btn.addEventListener('click', ()=>{ const idx=parseInt(btn.dataset.sell,10); sndClick(); openSell(idx); });
     });
 }
 
@@ -2078,8 +2206,8 @@ function openSell(idx){
     $('sell-info').innerHTML=`Продать <b style="color:var(--gold)">${price} ⭐</b><br><span style="font-size:9px">(-10%)</span>`;
     $('sell-modal').classList.add('active');
 }
-$('sell-cancel').onclick=()=>{ sndClick(); $('sell-modal').classList.remove('active'); sellIdx=-1; };
-$('sell-confirm').onclick=()=>{
+$('sell-cancel').addEventListener('click', ()=>{ sndClick(); $('sell-modal').classList.remove('active'); sellIdx=-1; });
+$('sell-confirm').addEventListener('click', ()=>{
     if(sellIdx<0)return;
     const item=inventory[sellIdx];
     const price=Math.floor(item.value*0.9);
@@ -2092,7 +2220,7 @@ $('sell-confirm').onclick=()=>{
     renderInventory(); renderArena(); renderShop(); updateBtn();
     renderProfileInventory();
     if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
-};
+});
 
 function setupAdminPanel(){
     const admin=isAdmin();
@@ -2101,7 +2229,7 @@ function setupAdminPanel(){
     if(admin){
         chip.classList.add('admin');
         sign.style.display='inline';
-        chip.onclick=()=>{
+        chip.addEventListener('click', ()=>{
             sndClick();
             const input=prompt('Add coins (max '+MAX_BALANCE+'):','10000');
             if(!input)return;
@@ -2111,7 +2239,7 @@ function setupAdminPanel(){
             $('balance').textContent=balance;
             saveState(); renderShop(); checkTestEnd();
             if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
-        };
+        });
     }else{
         chip.classList.remove('admin');
         sign.style.display='none';
@@ -2153,6 +2281,7 @@ async function init(){
     currentItem=inventory[0]||null;
     targetItem=null;
     chance=50; multiplier=2;
+    fillMenuIcons();
     renderMult(); renderInventory(); renderArena(); renderShop();
     updatePercentUI(); updateBtn();
     setupAdminPanel();
@@ -2164,7 +2293,9 @@ async function init(){
 }
 
 init();
-$('upgrade-btn').onclick=doUpgrade;
+$('upgrade-btn').addEventListener('click', doUpgrade);
+
+})();
 </script>
 </body>
-    </html>
+</html>
