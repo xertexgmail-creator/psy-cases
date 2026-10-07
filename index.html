@@ -1902,3 +1902,445 @@ function startSpin() {
     requestAnimationFrame(() => s.classList.add('zooming'));
     $('wheel-wrap').classList.add('spinning');
     sndSpinStart();
+    const TICK_START = 150, TICK_END = 35, EFF = SPIN_DURATION - 500;
+    let elapsed = 0;
+    const loop = () => {
+        sndTick();
+        elapsed += TICK_START - (TICK_START - TICK_END) * Math.min(1, elapsed / EFF);
+        const prog = Math.min(1, elapsed / EFF);
+        const delay = TICK_START - (TICK_START - TICK_END) * prog;
+        if (elapsed < EFF) tickInterval = setTimeout(loop, delay);
+    };
+    loop();
+    hb = setInterval(() => { if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('light'); }, 600);
+    tensionTimer = setTimeout(() => {
+        $('stage').classList.add('tension');
+        clearInterval(hb);
+        hb = setInterval(() => { if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('medium'); }, 140);
+    }, SPIN_DURATION - 2400);
+}
+
+function endSpin(win) {
+    clearInterval(hb); clearTimeout(tensionTimer); clearTimeout(tickInterval);
+    const s = $('stage');
+    s.classList.remove('zooming', 'tension');
+    void s.offsetWidth;
+    s.classList.add('snap');
+    setTimeout(() => s.classList.remove('snap'), 550);
+    $('wheel-wrap').classList.remove('spinning');
+    if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('heavy');
+    if (win) sndWin(); else sndLose();
+}
+
+function spin(ch, predetWin) {
+    return new Promise(resolve => {
+        const p = $('wheel-pointer');
+        const half = Math.min(179.9, ch * 3.6 / 2);
+        const s0 = 180 - half, s1 = 180 + half;
+        let angle;
+        if (predetWin) angle = s0 + 1 + Math.random() * (s1 - s0 - 2);
+        else {
+            const out = 360 - (s1 - s0);
+            let off = 1 + Math.random() * (out - 2);
+            angle = s1 + off;
+            if (angle > 360) angle -= 360;
+        }
+        const turns = 8 + Math.floor(Math.random() * 4);
+        const total = turns * 360 + angle;
+        p.style.transition = 'none';
+        p.style.transform = 'rotate(0deg)';
+        void p.offsetWidth;
+        p.style.transition = `transform ${SPIN_DURATION}ms cubic-bezier(0.15,0.7,0.15,1)`;
+        p.style.transform = `rotate(${total}deg)`;
+        const fin = ((total % 360) + 360) % 360;
+        const real = fin >= s0 && fin <= s1;
+        setTimeout(() => resolve(real), SPIN_DURATION + 100);
+    });
+}
+
+async function doUpgrade() {
+    if (isSpinning || !currentItem || !targetItem || testEnded) return;
+    isSpinning = true;
+    $('upgrade-btn').disabled = true;
+    $('from-card').className = 'item-slot';
+    $('to-card').className = 'item-slot';
+
+    const wantWin = Math.random() * 100 < chance;
+    const idx = inventory.indexOf(currentItem);
+    const fromCopy = { ...currentItem };
+    const toCopy = { ...targetItem };
+    stats.wagered += fromCopy.value;
+
+    if (wantWin) {
+        const newItem = { ...targetItem };
+        inventory[idx] = newItem;
+        currentItem = newItem;
+        stats.wins++;
+        if (newItem.value > stats.bestDrop) stats.bestDrop = newItem.value;
+        history.unshift({ win: true, from: fromCopy, to: toCopy, time: Date.now() });
+    } else {
+        inventory.splice(idx, 1);
+        currentItem = inventory[0] || null;
+        targetItem = null;
+        stats.losses++;
+        history.unshift({ win: false, from: fromCopy, to: null, time: Date.now() });
+    }
+    history = history.slice(0, 50);
+    saveState();
+
+    startSpin();
+    const win = await spin(chance, wantWin);
+    endSpin(win);
+
+    if (win) {
+        $('to-card').classList.add('win');
+        if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+        flashWin(); confetti();
+    } else {
+        $('to-card').classList.add('lose');
+        if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
+        flashRed(); shake();
+    }
+
+    renderInventory(); renderArena(); renderShop();
+    if (currentItem && targetItem) recomputeChance();
+    else { chance = 50; multiplier = 2; if (currentItem) updatePercentUI(); }
+    setTimeout(() => { isSpinning = false; updateBtn(); checkTestEnd(); }, 500);
+}
+
+document.querySelectorAll('.tab').forEach(tb => {
+    tb.onclick = () => {
+        sndClick();
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        document.querySelectorAll('.panel-view').forEach(x => x.classList.remove('active'));
+        tb.classList.add('active');
+        $('view-' + tb.dataset.tab).classList.add('active');
+    };
+});
+
+/* ============== РОКЕТКА ============== */
+function generateCrashPoint() {
+    const houseEdge = 0.05;
+    if (Math.random() < houseEdge) return 1.00;
+    const u = Math.random();
+    const result = (1 - houseEdge) / (1 - u);
+    return Math.max(1.00, Math.min(100, result));
+}
+
+function multAt(elapsed) {
+    return Math.pow(1.15, elapsed);
+}
+
+function updateRocketButtonLabel() {
+    const btn = $('rocket-btn');
+    if (rocketState === 'idle') {
+        btn.textContent = t('start');
+        btn.classList.remove('cashout');
+        btn.disabled = testEnded || balance <= 0;
+    } else if (rocketState === 'flying') {
+        btn.textContent = `${t('cashOut')} ${rocketCurrentMult.toFixed(2)}x`;
+        btn.classList.add('cashout');
+        btn.disabled = false;
+    } else {
+        btn.textContent = t('start');
+        btn.classList.remove('cashout');
+        btn.disabled = true;
+        setTimeout(() => {
+            if (rocketState !== 'flying') {
+                rocketState = 'idle';
+                updateRocketButtonLabel();
+            }
+        }, 1500);
+    }
+}
+
+function renderRocketHistory() {
+    const el = $('rocket-history');
+    el.innerHTML = rocketHistory.slice(0, 12).map(h => {
+        let cls = '';
+        if (h < 1.1) cls = 'instant';
+        else if (h < 2) cls = 'low';
+        else if (h < 10) cls = 'mid';
+        else cls = 'high';
+        return `<div class="rh-item ${cls}">${h.toFixed(2)}x</div>`;
+    }).join('');
+}
+
+function resetRocketUI() {
+    $('rocket-trail-path').setAttribute('d', '');
+    $('rocket-emoji').style.display = 'none';
+    $('rocket-emoji').style.left = '0%';
+    $('rocket-emoji').style.top = '100%';
+    $('rocket-mult').className = 'rocket-mult';
+    $('rocket-mult').textContent = '1.00x';
+    $('rocket-status').textContent = t('readyToFly');
+}
+
+function startRocketFlight() {
+    if (rocketState === 'flying' || testEnded) return;
+    const betInput = $('rocket-bet');
+    let bet = parseInt(betInput.value, 10);
+    if (isNaN(bet) || bet < 1) bet = 100;
+    if (bet > balance) {
+        sndError();
+        $('rocket-status').textContent = t('betTooHigh');
+        $('rocket-status').style.color = 'var(--red)';
+        setTimeout(() => { $('rocket-status').style.color = ''; $('rocket-status').textContent = t('readyToFly'); }, 1500);
+        return;
+    }
+    if (bet > MAX_BALANCE) bet = MAX_BALANCE;
+    betInput.value = bet;
+    rocketBet = bet;
+
+    balance -= bet;
+    $('balance').textContent = balance;
+    saveState();
+    checkTestEnd();
+
+    rocketCrashAt = generateCrashPoint();
+    rocketCurrentMult = 1.00;
+    rocketStartTime = performance.now();
+    rocketState = 'flying';
+
+    // Audio ticks
+    sndRocketStart();
+    let tickDelay = 250;
+    const tickLoop = () => {
+        if (rocketState !== 'flying') return;
+        sndRocketTick();
+        tickDelay = Math.max(40, tickDelay * 0.96);
+        rocketTickTimer = setTimeout(tickLoop, tickDelay);
+    };
+    tickLoop();
+
+    $('rocket-mult').className = 'rocket-mult growing';
+    $('rocket-status').textContent = t('flying');
+    $('rocket-emoji').style.display = 'block';
+
+    updateRocketButtonLabel();
+    requestAnimationFrame(rocketLoop);
+}
+
+function rocketLoop(now) {
+    if (rocketState !== 'flying') return;
+    const elapsed = (now - rocketStartTime) / 1000;
+    const m = multAt(elapsed);
+    rocketCurrentMult = m;
+
+    if (m >= rocketCrashAt) {
+        // CRASH
+        rocketCurrentMult = rocketCrashAt;
+        renderRocketFrame(rocketCrashAt);
+        rocketCrash();
+        return;
+    }
+    renderRocketFrame(m);
+    updateRocketButtonLabel();
+    rocketAnimId = requestAnimationFrame(rocketLoop);
+}
+
+function renderRocketFrame(m) {
+    const progress = Math.min(0.95, 1 - 1 / m);
+    const xPct = progress * 100;
+    const yPct = (1 - progress) * 100;
+
+    $('rocket-emoji').style.left = xPct + '%';
+    $('rocket-emoji').style.top = yPct + '%';
+    $('rocket-mult').textContent = m.toFixed(2) + 'x';
+
+    // Trail path: bottom-left (0,100) to (xPct, yPct) as quadratic curve
+    const path = `M 0 100 Q ${xPct * 0.4} 100 ${xPct} ${yPct}`;
+    $('rocket-trail-path').setAttribute('d', path);
+}
+
+function rocketCrash() {
+    clearTimeout(rocketTickTimer);
+    cancelAnimationFrame(rocketAnimId);
+    rocketState = 'crashed';
+
+    $('rocket-mult').className = 'rocket-mult crashed';
+    $('rocket-mult').textContent = rocketCurrentMult.toFixed(2) + 'x';
+    $('rocket-status').textContent = t('crashed');
+    $('rocket-status').style.color = 'var(--red)';
+
+    // History
+    rocketHistory.unshift(rocketCurrentMult);
+    rocketHistory = rocketHistory.slice(0, 20);
+    saveState();
+    renderRocketHistory();
+
+    // Stats
+    stats.losses++;
+    stats.wagered += rocketBet;
+    history.unshift({ win: false, from: { name: 'Rocket ' + rocketCurrentMult.toFixed(2) + 'x', value: rocketBet }, to: null, time: Date.now(), rocket: true });
+    history = history.slice(0, 50);
+    saveState();
+
+    if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
+    flashRed(); shake();
+    sndLose();
+
+    updateRocketButtonLabel();
+
+    setTimeout(() => {
+        resetRocketUI();
+        $('rocket-status').style.color = '';
+        if (rocketState !== 'flying') {
+            rocketState = 'idle';
+            updateRocketButtonLabel();
+        }
+    }, 1800);
+}
+
+function cashOutRocket() {
+    if (rocketState !== 'flying') return;
+    clearTimeout(rocketTickTimer);
+    cancelAnimationFrame(rocketAnimId);
+    rocketState = 'cashed';
+
+    const winAmount = Math.floor(rocketBet * rocketCurrentMult);
+    balance = Math.min(MAX_BALANCE, balance + winAmount);
+    $('balance').textContent = balance;
+    saveState();
+
+    $('rocket-mult').className = 'rocket-mult cashed';
+    $('rocket-status').textContent = `${t('cashed')} +${winAmount} ⭐`;
+    $('rocket-status').style.color = 'var(--green)';
+
+    // History
+    rocketHistory.unshift(rocketCurrentMult);
+    rocketHistory = rocketHistory.slice(0, 20);
+    saveState();
+    renderRocketHistory();
+
+    // Stats
+    stats.wins++;
+    stats.wagered += rocketBet;
+    if (winAmount > stats.bestDrop) stats.bestDrop = winAmount;
+    history.unshift({ win: true, from: { name: 'Bet', value: rocketBet }, to: { name: 'Cashout ' + rocketCurrentMult.toFixed(2) + 'x', value: winAmount }, time: Date.now(), rocket: true });
+    history = history.slice(0, 50);
+    saveState();
+
+    if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+    flashWin(); confetti();
+    sndWin();
+
+    updateRocketButtonLabel();
+
+    setTimeout(() => {
+        resetRocketUI();
+        $('rocket-status').style.color = '';
+        if (rocketState !== 'flying') {
+            rocketState = 'idle';
+            updateRocketButtonLabel();
+        }
+    }, 1500);
+}
+
+$('rocket-btn').onclick = () => {
+    sndClick();
+    if (rocketState === 'idle') {
+        startRocketFlight();
+    } else if (rocketState === 'flying') {
+        cashOutRocket();
+    }
+};
+
+document.querySelectorAll('.bet-quick-btn').forEach(b => {
+    b.onclick = (e) => {
+        e.stopPropagation();
+        sndClick();
+        const val = parseInt(b.dataset.bet, 10);
+        $('rocket-bet').value = val;
+    };
+});
+
+/* ============== ADMIN PANEL ============== */
+function setupAdminPanel() {
+    const admin = isAdmin();
+    const chip = $('plus-btn');
+    const sign = $('plus-sign');
+    if (admin) {
+        chip.classList.add('admin');
+        sign.style.display = 'inline';
+        chip.onclick = () => {
+            sndClick();
+            const input = prompt('Add coins (max ' + MAX_BALANCE + '):', '10000');
+            if (!input) return;
+            const amt = parseInt(input, 10);
+            if (isNaN(amt) || amt <= 0) return;
+            balance = Math.min(MAX_BALANCE, balance + amt);
+            $('balance').textContent = balance;
+            saveState();
+            renderShop();
+            checkTestEnd();
+            if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+        };
+    } else {
+        chip.classList.remove('admin');
+        sign.style.display = 'none';
+    }
+}
+
+$('inv-search').addEventListener('input', e => { invSearch = e.target.value; renderInventory(); });
+$('inv-price-min').addEventListener('input', e => { const v = e.target.value.trim(); invMin = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
+$('inv-price-max').addEventListener('input', e => { const v = e.target.value.trim(); invMax = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
+$('shop-search').addEventListener('input', e => { shopSearch = e.target.value; renderShop(); });
+$('shop-price-min').addEventListener('input', e => { const v = e.target.value.trim(); shopMin = v === '' ? null : (parseFloat(v) || 0); renderShop(); });
+$('shop-price-max').addEventListener('input', e => { const v = e.target.value.trim(); shopMax = v === '' ? null : (parseFloat(v) || 0); renderShop(); });
+
+document.body.addEventListener('touchstart', initAudio, { once: true });
+document.body.addEventListener('click', initAudio, { once: true });
+
+function startOnlineLoop() {
+    const el = $('online-count');
+    const update = () => { el.textContent = 10 + Math.floor(Math.random() * 41); };
+    update();
+    setInterval(update, 4000 + Math.random() * 3000);
+}
+
+async function init() {
+    CATALOG = [...FALLBACK];
+
+    loadState();
+    applyLang();
+
+    if (balance > MAX_BALANCE) balance = MAX_BALANCE;
+    if (isNaN(balance) || balance < 0) balance = 0;
+
+    const isFirstLaunch = !localStorage.getItem(INIT_KEY);
+    if (isFirstLaunch) {
+        const pool = CATALOG.slice(0, Math.min(12, CATALOG.length));
+        for (let i = 0; i < 8; i++) inventory.push({ ...pool[Math.floor(Math.random() * pool.length)] });
+        balance = MAX_BALANCE;
+        localStorage.setItem(INIT_KEY, '1');
+    }
+    saveState();
+
+    $('balance').textContent = balance;
+
+    if (balance <= 0) {
+        testEnded = true;
+        $('test-ended').style.display = 'flex';
+    }
+
+    currentItem = inventory[0] || null;
+    targetItem = null;
+    chance = 50;
+    multiplier = 2;
+
+    renderMult(); renderInventory(); renderArena(); renderShop();
+    updatePercentUI(); updateBtn();
+    setupAdminPanel();
+    startOnlineLoop();
+    renderRocketHistory();
+    resetRocketUI();
+    updateRocketButtonLabel();
+    updateLogo();
+}
+
+init();
+$('upgrade-btn').onclick = doUpgrade;
+</script>
+</body>
+</html>
