@@ -1102,16 +1102,10 @@ function getRarity(v){
 function iconHTML(item, size){
     size = size || 128;
     const px = size >= 128 ? 500 : 200;
-    const base = item.slug || item.name.toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-    const noDash = base.replace(/-/g,'');
-    // список кандидатов — пробуем по очереди
-    const cands = [base];
-    if(noDash !== base) cands.push(noDash);
-    const urls = cands.map(s => 'https://images.weserv.nl/?url=' + encodeURIComponent('nft.fragment.com/gift/' + s + '.' + px + '.webp'));
-    // последняя попытка — прямой Fragment (на случай если у кого-то нет блокировки)
-    urls.push('https://nft.fragment.com/gift/' + base + '.' + px + '.webp');
-    const urlsJson = JSON.stringify(urls).replace(/'/g, "\\'");
-    return '<img src="' + urls[0] + '" alt="" loading="lazy" data-i="0" data-u=\'' + urlsJson + '\' onerror="try{var u=JSON.parse(this.dataset.u);var i=+this.dataset.i+1;if(i<u.length){this.dataset.i=i;this.src=u[i];}else{this.style.opacity=0.15;}}catch(e){this.style.opacity=0.15;}">';
+    const slug = item.slug || item.name.toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const direct = 'https://nft.fragment.com/gift/' + slug + '.' + px + '.webp';
+    const proxied = 'https://images.weserv.nl/?url=' + encodeURIComponent(direct) + '&output=webp&q=85&w=' + size + '&h=' + size + '&fit=contain';
+    return '<img src="' + proxied + '" alt="" loading="lazy" onerror="this.style.opacity=0.15;">';
 }
 
 function fillMenuIcons(){
@@ -1201,19 +1195,19 @@ function hexToRgba(hex,a){
     const h=hex.replace('#','');
     return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';
 }
-function updateBalanceUI(){
-    const fmt = (n) => {
+const updateBalanceUI = () => {
+    const fmt = n => {
         n = Math.floor(n);
-        if (n >= 1e9) return (n/1e9).toFixed(2).replace(/\.?0+$/,'') + 'B';
-        if (n >= 1e6) return (n/1e6).toFixed(2).replace(/\.?0+$/,'') + 'M';
-        if (n >= 1e3) return (n/1e3).toFixed(1).replace(/\.?0+$/,'') + 'K';
+        if (n >= 1e9) return Math.floor(n/1e9) + 'B';
+        if (n >= 1e6) return Math.floor(n/1e6) + 'M';
+        if (n >= 1e3) return Math.floor(n/1e3) + 'K';
         return String(n);
     };
-    const b = $('balance');
+    const b = document.getElementById('balance');
     if (b) { b.textContent = fmt(balance); b.title = String(balance); }
-    const sb = $('shop-balance');
+    const sb = document.getElementById('shop-balance');
     if (sb) sb.textContent = fmt(balance);
-}
+};
 function goToMenu(){
     if(currentScreen==='menu')return;
     if(currentScreen==='saper'&&saperState==='playing')return;
