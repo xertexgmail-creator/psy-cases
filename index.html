@@ -66,6 +66,7 @@
         display: flex;
         flex-direction: column;
         flex: 1;
+        min-height: 0;
         transform-origin: 50% 45%;
         transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
         will-change: transform;
@@ -478,7 +479,14 @@
         overflow: hidden;
         box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .panel-view { display: none; flex-direction: column; height: 100%; }
+
+    .panel-view {
+        display: none;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
     .panel-view.active { display: flex; }
 
     .panel-tools {
@@ -526,11 +534,14 @@
 
     .items-scroll {
         flex: 1;
+        min-height: 0;
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
         scrollbar-width: thin;
         scrollbar-color: rgba(255,255,255,0.1) transparent;
+        position: relative;
     }
     .items-scroll::-webkit-scrollbar { height: 3px; width: 3px; }
     .items-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
@@ -540,6 +551,7 @@
         grid-template-columns: repeat(4, 1fr);
         gap: 5px;
         min-width: 100%;
+        padding-bottom: 4px;
     }
 
     .slot {
@@ -1080,7 +1092,7 @@
     </div>
 
     <div class="footer">
-        powered by <a href="https://api.changes.tg" target="_blank">@GiftChanges</a>
+        powered by <a href="https://t.me/PSYgg_BOT" target="_blank">@PSYgg_BOT</a>
     </div>
 
 </div>
@@ -1171,8 +1183,6 @@
     tg.expand();
 
     /* ============== ИДЕНТИФИКАТОР ПОЛЬЗОВАТЕЛЯ ============== */
-    // Каждый игрок получает свой префикс ключа в localStorage,
-    // чтобы данные не пересекались между разными аккаунтами на одном устройстве
     const TG_USER = tg.initDataUnsafe?.user;
     const USER_ID = TG_USER?.id ? String(TG_USER.id) : 'guest_' + (localStorage.getItem('psygg_guest_id') || (() => {
         const id = 'g' + Math.random().toString(36).slice(2, 10);
@@ -1181,7 +1191,7 @@
     })());
     const KEY_PREFIX = 'psygg_' + USER_ID + '_';
 
-    console.log('Telegram user:', TG_USER?.username || 'anonymous', '| user_id:', USER_ID);
+    console.log('[PSYgg] Telegram user:', TG_USER?.username || 'anonymous', '| user_id:', USER_ID);
 
     /* ============== ПРАВА АДМИНА ============== */
     const ADMIN_USERNAMES = ['xertex_grace', 'onyurknees', 'romasik09', 'malindak'];
@@ -1192,8 +1202,8 @@
     }
 
     /* ============== НАСТРОЙКИ ============== */
-    const VIB_KEY = 'psygg_vibration';       // глобально для устройства
-    const SND_KEY = 'psygg_sound';           // глобально для устройства
+    const VIB_KEY = 'psygg_vibration';
+    const SND_KEY = 'psygg_sound';
     const USED_KEY = KEY_PREFIX + 'used_promos';
     const HISTORY_KEY = KEY_PREFIX + 'history';
     const INV_KEY = KEY_PREFIX + 'inventory';
@@ -1394,19 +1404,12 @@
     }
 
     /* ============== ИКОНКИ ============== */
-    function imgUrl(item, size = 128) {
-        const px = size >= 128 ? 500 : 200;
-        return `https://nft.fragment.com/gift/${item.slug}.${px}.webp`;
-    }
-    function fallbackUrl(item, size = 128) {
-        return `https://api.changes.tg/original/${encodeURIComponent(item.name)}.png?size=${size}`;
-    }
     function iconHTML(item, size = 128) {
-        const url = imgUrl(item, size);
-        const fb = fallbackUrl(item, size);
-        const safeFb = fb.replace(/'/g, "\\'");
-        return `<img src="${url}" loading="lazy" alt="${item.name}" 
-            onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${safeFb}';}else{this.style.opacity='0.2';}">`;
+        const apiUrl = `https://api.changes.tg/original/${encodeURIComponent(item.name)}.png?size=${size}`;
+        const fragUrl = `https://nft.fragment.com/gift/${item.slug}.${size >= 128 ? 500 : 200}.webp`;
+        const safeFrag = fragUrl.replace(/'/g, "\\'");
+        return `<img src="${apiUrl}" loading="lazy" alt="${item.name}" 
+            onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${safeFrag}';}else{this.style.opacity='0.15';}">`;
     }
 
     function chanceFromRatio(r) {
@@ -1462,7 +1465,6 @@
         ].join(' '));
     }
 
-    /* ============== СОХРАНЕНИЕ (ключи привязаны к user_id) ============== */
     function saveState() {
         try {
             localStorage.setItem(INV_KEY, JSON.stringify(inventory));
@@ -1995,23 +1997,28 @@
 
         const restored = restoreFromSnapshotIfAny();
         if (restored) {
-            console.log('Восстановлен снимок после прерванного спина');
+            console.log('[PSYgg] Восстановлен снимок после прерванного спина');
         } else {
             loadState();
         }
 
-        // Если у пользователя ещё не было никакого сохранения — выдаём стартовый инвентарь
+        // ФИКС: стартовый набор выдаём ТОЛЬКО при первом запуске пользователя.
+        // Флаг INIT_KEY сохраняется навсегда. Если игрок всё проиграет —
+        // инвентарь останется пустым, никаких "подарков с неба" больше не будет.
         const isFirstLaunch = !localStorage.getItem(INIT_KEY);
-        if (!inventory.length && (isFirstLaunch || balance === 0)) {
+
+        if (isFirstLaunch) {
+            console.log('[PSYgg] Первый запуск — выдаю стартовый набор');
             const pool = CATALOG.slice(0, Math.min(12, CATALOG.length));
             for (let i = 0; i < 8; i++) {
                 inventory.push({ ...pool[Math.floor(Math.random() * pool.length)] });
             }
-            if (balance === 0) balance = STARTING_BALANCE;
+            balance = STARTING_BALANCE;
             localStorage.setItem(INIT_KEY, '1');
             saveState();
-        } else if (balance === 0 && inventory.length > 0) {
-            // если что-то осталось, но баланс 0 — не трогаем
+        } else {
+            console.log('[PSYgg] Загружено сохранение. Инвентарь:', inventory.length, 'Баланс:', balance);
+            if (isNaN(balance) || balance < 0) balance = 0;
         }
 
         $('balance').textContent = balance;
