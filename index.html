@@ -991,8 +991,8 @@ const FALLBACK = [
     { name:'Heart', slug:'heart', value:15 },
     { name:'Teddy Bear', slug:'teddy-bear', value:15 },
     { name:'Rose', slug:'rose', value:25 },
-    { name:'Rocket', slug:'rocket', value:50 },
     { name:'1 May', slug:'1may', value:50 },
+    { name:'Rocket', slug:'rocket', value:50 },
     { name:'Jingle Bells', slug:'jingle-bells', value:80 },
     { name:'Homemade Cake', slug:'homemade-cake', value:100 },
     { name:'Eternal Rose', slug:'eternal-rose', value:150 },
@@ -1001,7 +1001,7 @@ const FALLBACK = [
     { name:'Crystal Ball', slug:'crystal-ball', value:280 },
     { name:'Clover Pin', slug:'clover-pin', value:350 },
     { name:'Top Hat', slug:'top-hat', value:380 },
-    { name:"Durov's Cap", slug:'durovs-cap', value:500 },
+    { name:"Durov's Cap", slug:'durovscap', value:500 },
     { name:'Diamond Ring', slug:'diamond-ring', value:700 },
     { name:'Case', slug:'case', value:800 },
     { name:'Sakura Flower', slug:'sakura-flower', value:950 },
@@ -1009,6 +1009,8 @@ const FALLBACK = [
     { name:'Jelly Bunny', slug:'jelly-bunny', value:1100 },
     { name:'Flying Broom', slug:'flying-broom', value:1200 },
     { name:'Jolly Chimp', slug:'jolly-chimp', value:1300 },
+    { name:'Liberty Figure', slug:'libertyfigure', value:1400 },
+    { name:'Pink Flamingo', slug:'pinkflamingo', value:1500 },
     { name:'Bonded Ring', slug:'bonded-ring', value:1500 },
     { name:'Toy Bear', slug:'toy-bear', value:1500 },
     { name:'Valentine Box', slug:'valentine-box', value:1600 },
@@ -1041,13 +1043,13 @@ const FALLBACK = [
     { name:'Kissed Frog', slug:'kissed-frog', value:8000 },
     { name:'Nail Bracelet', slug:'nail-bracelet', value:9000 },
     { name:'Santa Hat', slug:'santa-hat', value:10000 },
-    { name:'Westside Sign', slug:'westside-sign', value:10000 },
+    { name:'Westside Sign', slug:'westsidesign', value:10000 },
     { name:'Neko Helmet', slug:'neko-helmet', value:11000 },
     { name:'Mini Oscar', slug:'mini-oscar', value:12000 },
-    { name:'Rick and Morty', slug:'rick-and-morty', value:12000 },
-    { name:"Durov's Glasses", slug:'durovs-glasses', value:15000 },
-    { name:'The Witcher', slug:'the-witcher', value:15000 },
-    { name:'Snoop Cigar', slug:'snoop-cigar', value:18000 },
+    { name:'Rick and Morty', slug:'rickandmorty', value:12000 },
+    { name:"Durov's Glasses", slug:'durovsglasses', value:15000 },
+    { name:'The Witcher', slug:'thewitcher', value:15000 },
+    { name:'Snoop Cigar', slug:'snoopcigar', value:18000 },
     { name:'Algorithm Cup', slug:'algorithmcup', value:20000 },
     { name:'Astral Shard', slug:'astral-shard', value:25000 },
     { name:'Toncoin', slug:'toncoin', value:30000 },
@@ -1058,7 +1060,7 @@ const FALLBACK = [
     { name:'Evil Eye', slug:'evil-eye', value:80000 },
     { name:'Light Sword', slug:'light-sword', value:100000 }
 ];
-
+    
 const MULTIPLIERS = [1.2,1.5,2,3,5,10,25,100];
 const SPIN_DURATION = 7500;
 const ROCKET_WAIT = 10;
@@ -1113,9 +1115,9 @@ function getRarity(v){
 /* === ИКОНКИ: прямой Fragment → fallback api.changes.tg === */
 function iconHTML(item, size){
     size = size || 128;
-    const px = size >= 128 ? 500 : 200;
     const slug = item.slug || item.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-    const fragUrl = 'https://nft.fragment.com/gift/' + slug + '.' + px + '.webp';
+    // БЫЛО: 'https://nft.fragment.com/gift/' + slug + '.webp'
+    const fragUrl = 'https://nft.fragment.com/collection/' + slug + '.webp';
     const apiUrl  = 'https://api.changes.tg/original/' + encodeURIComponent(item.name) + '.png?size=' + size;
     return '<img src="' + fragUrl + '" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb=\'1\';this.src=\'' + apiUrl + '\';}else{this.style.display=\'none\';}">';
 }
@@ -1849,6 +1851,7 @@ function saperMultiplier(k){
     for(let i=0;i<k;i++) mult *= (N-i)/(N-M-i);
     return mult*0.85; // снижен с 0.95 для баланса
 }
+    
 function updateSaperButtons(){
     const startBtn=$('saper-start-btn'); if(!startBtn) return;
     const cashBtn=$('saper-cash-btn'); if(!cashBtn) return;
@@ -2210,19 +2213,16 @@ let onlineCurrent = 7;
 function startOnlineLoop(){
     const el=$('online-count'); if(!el) return;
     el.textContent = onlineCurrent;
-    // цель меняется редко и плавно
     setInterval(()=>{
-        const drift = (Math.random()-0.5)*4; // -2..+2
+        const drift = (Math.random()-0.5)*4;
         onlineTarget = Math.max(3, Math.min(16, Math.round(onlineTarget + drift)));
     }, 6000 + Math.random()*4000);
-    // текущее плавно догоняет цель
     setInterval(()=>{
         if(onlineCurrent < onlineTarget) onlineCurrent++;
         else if(onlineCurrent > onlineTarget) onlineCurrent--;
         if(el) el.textContent = onlineCurrent;
     }, 1500 + Math.random()*1200);
 }
-
 function startRocketLoop(){
     const loop = ()=>{ rocketCycleTick(); requestAnimationFrame(loop); };
     requestAnimationFrame(loop);
