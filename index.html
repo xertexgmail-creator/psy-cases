@@ -637,13 +637,13 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="menu-card-desc">Открывай клетки</div>
             </button>
 
-<button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,150,50,0.4);">
-    <div class="menu-card-icon">
-        <div class="gicon" data-icon="https://nft.fragment.com/collection/plushpepe.webp"></div>
-    </div>
-    <div class="menu-card-title">Магазин</div>
-    <div class="menu-card-desc">Купить гифты</div>
-</button>
+        <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,150,50,0.4);">
+            <div class="menu-card-icon">
+                <div class="gicon" data-name="Diamond Ring"></div>
+            </div>
+            <div class="menu-card-title">Магазин</div>
+            <div class="menu-card-desc">Купить гифты</div>
+        </button>
         </div>
     </div>
 
@@ -1013,6 +1013,7 @@ const FALLBACK = [
     { name:'Swiss Watch', value:1300 },
     { name:'Precious Peach', value:1500 },
     { name:'Plush Pepe', value:1800 },
+    { name:'Stellar Rocket', value:2000 },
     { name:'Snoop Dogg', value:2200 },
     { name:'Low Rider', value:2500 },
     { name:'Snoop Cigar', value:2800 },
@@ -1101,23 +1102,16 @@ function getRarity(v){
 /* === ИКОНКИ: прямой Fragment → fallback api.changes.tg === */
 function iconHTML(item, size){
     size = size || 128;
-    const slug = (item.slug || item.name)
-        .toLowerCase()
-        .replace(/'/g,'')
-        .replace(/[^a-z0-9]/g,'');
-    const v1 = 'https://nft.fragment.com/gift/' + slug + '-1.webp';
-    const v2 = 'https://nft.fragment.com/collection/' + slug + '.webp';
-    const v3 = 'https://nft.fragment.com/gift/' + slug + '.webp';
-    const wrap = u => 'https://images.weserv.nl/?url=' + encodeURIComponent(u) + '&output=webp&q=85&w=' + size + '&h=' + size + '&fit=contain';
-    const u1 = wrap(v1), u2 = wrap(v2), u3 = wrap(v3);
-    return '<img src="' + u1 + '" data-s="' + u2 + '" data-t="' + u3 + '" alt="" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.s;}else if(this.dataset.f===\'1\'){this.dataset.f=2;this.src=this.dataset.t;}else{this.style.opacity=0.15;}">';
+    var slug = String(item.slug || item.name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');
+    var url = 'https://images.weserv.nl/?url=' + encodeURIComponent('nft.fragment.com/gift/' + slug + '-1.webp') + '&output=webp&q=85&w=' + size;
+    return '<img src="' + url + '" alt="" loading="lazy" onerror="this.style.opacity=0.15;">';
 }
-
+    
 function fillMenuIcons(){
-    document.querySelectorAll('.menu-card-icon .gicon').forEach(el=>{
-        const name = el.dataset.name;
+    document.querySelectorAll('.menu-card-icon .gicon').forEach(function(el){
+        var name = el.dataset.name;
         if(!name) return;
-        const item = CATALOG.find(i=>i.name===name) || {name:name, slug:name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''), value:0};
+        var item = CATALOG.find(function(i){ return i.name === name; }) || { name: name, value: 0 };
         el.innerHTML = iconHTML(item, 128);
     });
 }
