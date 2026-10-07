@@ -20,12 +20,6 @@
         --green: #2ecc71;
         --red: #ff4757;
         --gold: #ffd93d;
-        --rarity-common:    #4b69ff;
-        --rarity-uncommon:  #8847ff;
-        --rarity-rare:      #d32ce6;
-        --rarity-epic:      #eb4b4b;
-        --rarity-mythical:  #ffd700;
-        --rarity-legendary: #ff9500;
     }
 
     html, body { overflow-x: hidden; }
@@ -147,12 +141,8 @@
         transition: all 0.2s ease;
         font-family: inherit;
     }
-    .mode-tab.active {
-        background: var(--accent);
-        color: #000;
-    }
+    .mode-tab.active { background: var(--accent); color: #000; }
 
-    /* РЕЖИМЫ */
     .mode-view { display: none; flex-direction: column; flex: 1; }
     .mode-view.active { display: flex; }
 
@@ -428,47 +418,154 @@
         padding: 24px 8px;
     }
 
-    /* ==================== КЕЙСЫ ==================== */
-    .case-card {
+    /* ==================== КЕЙСЫ — ВЫБОР ==================== */
+    .cases-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+    .case-tile {
         background: var(--bg-elevated);
         border: 1px solid var(--border);
         border-radius: 14px;
-        padding: 20px 16px;
+        padding: 14px 10px 12px;
         text-align: center;
-        margin-bottom: 8px;
-        flex-shrink: 0;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
     }
-    .case-card::before {
+    .case-tile:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+    .case-tile:active { transform: scale(0.97); }
+
+    .case-tile::before {
         content: '';
         position: absolute;
-        top: -50%; left: 50%;
+        top: -30px; left: 50%;
         transform: translateX(-50%);
-        width: 200px; height: 200px;
-        background: radial-gradient(circle, rgba(255, 217, 61, 0.15) 0%, transparent 70%);
+        width: 120px; height: 120px;
+        background: radial-gradient(circle, var(--case-color-a, rgba(255,255,255,0.08)) 0%, transparent 70%);
+        opacity: 0.6;
         pointer-events: none;
     }
-    .case-visual {
-        width: 100px; height: 100px;
-        margin: 0 auto 12px;
+
+    .case-tile-icon {
+        width: 72px; height: 72px;
+        margin: 0 auto 8px;
         position: relative;
-        animation: floaty 4s ease-in-out infinite;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        filter: drop-shadow(0 6px 20px var(--case-color-a, rgba(255,255,255,0.2)));
     }
-    .case-visual svg { width: 100%; height: 100%; filter: drop-shadow(0 8px 24px rgba(255, 217, 61, 0.4)); }
-    .case-title {
+    .case-tile-icon svg { width: 100%; height: 100%; }
+
+    .case-tile-name {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        margin-bottom: 3px;
+        position: relative;
+        z-index: 1;
+    }
+    .case-tile-range {
+        font-size: 9px;
+        color: var(--text-mute);
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+    }
+    .case-tile-price {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: var(--accent);
+        color: #000;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        position: relative;
+        z-index: 1;
+    }
+    .case-tile-price svg { width: 10px; height: 10px; }
+
+    .case-tile.disabled {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    /* ==================== КЕЙС — ОТКРЫТИЕ ==================== */
+    .case-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-dim);
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        margin-bottom: 8px;
+        align-self: flex-start;
+        transition: all 0.15s;
+    }
+    .case-back-btn:hover { border-color: var(--border-strong); color: var(--text); }
+    .case-back-btn:active { transform: scale(0.95); }
+    .case-back-btn svg { width: 12px; height: 12px; }
+
+    .case-header {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        margin-bottom: 8px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    .case-header::before {
+        content: '';
+        position: absolute;
+        top: -60px; left: 50%;
+        transform: translateX(-50%);
+        width: 200px; height: 200px;
+        background: radial-gradient(circle, var(--case-color-a, rgba(255,255,255,0.15)) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .case-header-icon {
+        width: 90px; height: 90px;
+        margin: 0 auto 10px;
+        position: relative;
+        z-index: 1;
+        animation: floaty 4s ease-in-out infinite;
+        filter: drop-shadow(0 8px 24px var(--case-color-a, rgba(255,255,255,0.3)));
+    }
+    .case-header-icon svg { width: 100%; height: 100%; }
+    .case-header-name {
         font-size: 16px;
         font-weight: 800;
         letter-spacing: -0.02em;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
+        position: relative;
+        z-index: 1;
     }
-    .case-desc {
+    .case-header-desc {
         font-size: 10px;
         color: var(--text-mute);
-        margin-bottom: 14px;
+        margin-bottom: 10px;
         line-height: 1.4;
+        position: relative;
+        z-index: 1;
     }
-    .case-price {
+    .case-header-price {
         display: inline-flex;
         align-items: center;
         gap: 5px;
@@ -476,9 +573,11 @@
         font-weight: 800;
         color: var(--gold);
         margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
     }
-    .case-price svg { width: 13px; height: 13px; }
-    .case-open-btn {
+    .case-header-price svg { width: 13px; height: 13px; }
+    .case-header-open-btn {
         width: 70%;
         padding: 13px;
         background: var(--accent);
@@ -489,14 +588,15 @@
         cursor: pointer;
         transition: all 0.2s;
         font-family: inherit;
+        position: relative;
+        z-index: 1;
     }
-    .case-open-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2); }
-    .case-open-btn:active { transform: scale(0.97); }
-    .case-open-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+    .case-header-open-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2); }
+    .case-header-open-btn:active { transform: scale(0.97); }
+    .case-header-open-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    /* REEL — горизонтальная прокрутка как в CS:GO */
+    /* REEL */
     .case-reel-wrap {
-        background: #05050700;
         background: #050507;
         border: 1px solid var(--border);
         border-radius: 12px;
@@ -517,14 +617,8 @@
         z-index: 3;
         pointer-events: none;
     }
-    .case-reel-wrap::before {
-        left: 0;
-        background: linear-gradient(90deg, #050507 0%, transparent 100%);
-    }
-    .case-reel-wrap::after {
-        right: 0;
-        background: linear-gradient(270deg, #050507 0%, transparent 100%);
-    }
+    .case-reel-wrap::before { left: 0; background: linear-gradient(90deg, #050507 0%, transparent 100%); }
+    .case-reel-wrap::after { right: 0; background: linear-gradient(270deg, #050507 0%, transparent 100%); }
     .case-marker {
         position: absolute;
         top: 0; bottom: 0;
@@ -546,14 +640,8 @@
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
     }
-    .case-marker::before {
-        top: 0;
-        border-top: 7px solid var(--accent);
-    }
-    .case-marker::after {
-        bottom: 0;
-        border-bottom: 7px solid var(--accent);
-    }
+    .case-marker::before { top: 0; border-top: 7px solid var(--accent); }
+    .case-marker::after { bottom: 0; border-bottom: 7px solid var(--accent); }
     .case-reel {
         display: flex;
         gap: 6px;
@@ -613,7 +701,7 @@
         padding: 10px;
         flex: 1;
         min-height: 100px;
-        max-height: 260px;
+        max-height: 300px;
         overflow-y: auto;
         scrollbar-width: thin;
     }
@@ -880,7 +968,6 @@
     .mini-btn.sell:hover { border-color: var(--gold); }
     .mini-btn.withdraw { color: var(--text-mute); cursor: not-allowed; }
 
-    /* Результат кейса */
     .case-result-icon {
         width: 100px; height: 100px;
         margin: 0 auto 12px;
@@ -896,9 +983,9 @@
         text-transform: uppercase;
         color: var(--rarity-color, #4b69ff);
         margin-bottom: 6px;
+        text-align: center;
     }
 
-    /* ЭФФЕКТЫ */
     .confetti {
         position: fixed;
         width: 6px; height: 6px;
@@ -973,6 +1060,7 @@
         .case-reel-wrap { height: 122px; }
         .case-item { width: 90px; height: 104px; }
         .case-item-icon { width: 50px; height: 50px; }
+        .case-tile-icon { width: 84px; height: 84px; }
     }
 </style>
 </head>
@@ -1011,7 +1099,6 @@
         </div>
     </div>
 
-    <!-- ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ -->
     <div class="mode-switcher">
         <button class="mode-tab active" data-mode="upgrader">Апгрейдер</button>
         <button class="mode-tab" data-mode="cases">Кейсы</button>
@@ -1089,44 +1176,40 @@
 
     <!-- ============ РЕЖИМ: КЕЙСЫ ============ -->
     <div class="mode-view" id="mode-cases">
-        <div class="case-card">
-            <div class="case-visual">
-                <svg viewBox="0 0 100 100">
-                    <defs>
-                        <linearGradient id="caseGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#ffd93d"/>
-                            <stop offset="100%" stop-color="#ff9500"/>
-                        </linearGradient>
-                        <linearGradient id="caseGrad2" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#ffb800"/>
-                            <stop offset="100%" stop-color="#e07a00"/>
-                        </linearGradient>
-                    </defs>
-                    <rect x="15" y="42" width="70" height="50" rx="6" fill="url(#caseGrad)"/>
-                    <rect x="10" y="30" width="80" height="18" rx="4" fill="url(#caseGrad2)"/>
-                    <rect x="45" y="30" width="10" height="62" fill="#fff" opacity="0.6"/>
-                    <rect x="42" y="44" width="16" height="12" rx="2" fill="#fff" opacity="0.9"/>
-                    <circle cx="50" cy="50" r="3" fill="#ff9500"/>
-                </svg>
-            </div>
-            <div class="case-title">Стартовый кейс</div>
-            <div class="case-desc">Пробный кейс с 6 уровнями редкости.<br>Дроп сразу падает в инвентарь.</div>
-            <div class="case-price">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                100
-            </div>
-            <br>
-            <button class="case-open-btn" id="case-open-btn">Открыть</button>
+
+        <!-- Экран выбора кейса -->
+        <div id="cases-list-view">
+            <div class="cases-grid" id="cases-grid"></div>
         </div>
 
-        <div class="case-reel-wrap" id="case-reel-wrap">
-            <div class="case-marker"></div>
-            <div class="case-reel" id="case-reel"></div>
-        </div>
+        <!-- Экран открытия кейса -->
+        <div id="case-open-view" style="display: none; flex-direction: column; flex: 1;">
+            <button class="case-back-btn" id="case-back-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Назад
+            </button>
 
-        <div class="case-contents">
-            <div class="case-contents-title">Возможный дроп</div>
-            <div id="case-contents-list"></div>
+            <div class="case-header" id="case-header">
+                <div class="case-header-icon" id="case-header-icon"></div>
+                <div class="case-header-name" id="case-header-name">—</div>
+                <div class="case-header-desc" id="case-header-desc">—</div>
+                <div class="case-header-price">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <span id="case-header-price-val">—</span>
+                </div>
+                <br>
+                <button class="case-header-open-btn" id="case-open-btn">Открыть</button>
+            </div>
+
+            <div class="case-reel-wrap" id="case-reel-wrap">
+                <div class="case-marker"></div>
+                <div class="case-reel" id="case-reel"></div>
+            </div>
+
+            <div class="case-contents">
+                <div class="case-contents-title">Возможный дроп</div>
+                <div id="case-contents-list"></div>
+            </div>
         </div>
     </div>
 
@@ -1265,13 +1348,11 @@
 
     /* ============== ЗВУКИ ============== */
     let audioCtx = null;
-
     function initAudio() {
         if (audioCtx) return;
         try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
         catch (e) {}
     }
-
     function playTone(freq, duration = 0.1, type = 'sine', volume = 0.15, startDelay = 0) {
         if (!soundEnabled || !audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -1287,7 +1368,6 @@
         osc.start(t);
         osc.stop(t + duration);
     }
-
     function sndClick() { if (!soundEnabled) return; initAudio(); playTone(800, 0.04, 'square', 0.06); }
     function sndBuy() { if (!soundEnabled) return; initAudio(); playTone(523, 0.1, 'sine', 0.15, 0); playTone(659, 0.1, 'sine', 0.15, 0.08); playTone(784, 0.15, 'sine', 0.15, 0.16); }
     function sndTick() { if (!soundEnabled) return; initAudio(); playTone(1200 + Math.random() * 200, 0.02, 'square', 0.04); }
@@ -1325,7 +1405,6 @@
         { name: 'Witch Hat',       slug: 'witchhat',        value: 60000 },
         { name: 'Evil Eye',        slug: 'evileye',         value: 80000 },
         { name: 'Light Sword',     slug: 'lightsword',      value: 100000 },
-
         { name: '1 May',           slug: '1may',            value: 15 },
         { name: 'Artisan Brick',   slug: 'artisanbrick',    value: 1000 },
         { name: 'B-day Candle',    slug: 'bdaycandle',      value: 50 },
@@ -1406,32 +1485,109 @@
         { name: 'Music',           slug: 'music',           value: 1500 },
         { name: 'Japan',           slug: 'japan',           value: 2500 },
         { name: 'Rick and Morty',  slug: 'rickandmorty',    value: 12000 },
-        { name: 'The Witcher',     slug: 'thewitcher',      value: 15000 },
-        { name: 'Precious Peach',  slug: 'preciouspeach2',  value: 5500 },
-        { name: 'Signet Ring',     slug: 'signetring2',     value: 7500 },
-        { name: 'Santa Hat',       slug: 'santahat2',       value: 11000 },
-        { name: 'Astral Shard',    slug: 'astralshard2',    value: 26000 },
-        { name: 'Mighty Arm',      slug: 'mightyarm2',      value: 52000 },
-        { name: 'Witch Hat',       slug: 'witchhat2',       value: 62000 },
-        { name: 'Evil Eye',        slug: 'evileye2',        value: 82000 },
-        { name: 'Light Sword',     slug: 'lightsword2',     value: 100000 }
+        { name: 'The Witcher',     slug: 'thewitcher',      value: 15000 }
     ];
 
     const MULTIPLIERS = [1.2, 1.5, 2, 3, 5, 10, 25, 100];
     const SPIN_DURATION = 7500;
 
-    /* ============== КОНФИГ КЕЙСА ============== */
-    const CASE_CONFIG = {
-        price: 100,
-        rarities: [
-            { id: 'common',    name: 'Обычный',      color: '#4b69ff', min: 0,    max: 50,     weight: 55 },
-            { id: 'uncommon',  name: 'Необычный',    color: '#8847ff', min: 50,   max: 100,    weight: 25 },
-            { id: 'rare',      name: 'Редкий',       color: '#d32ce6', min: 100,  max: 300,    weight: 12 },
-            { id: 'epic',      name: 'Эпический',    color: '#eb4b4b', min: 300,  max: 1000,   weight: 6 },
-            { id: 'mythical',  name: 'Мифический',   color: '#ffd700', min: 1000, max: 5000,   weight: 1.8 },
-            { id: 'legendary', name: 'Легендарный',  color: '#ff9500', min: 5000, max: 100000, weight: 0.2 }
-        ]
-    };
+    /* ============== КОНФИГ КЕЙСОВ ============== */
+    const CASES = [
+        {
+            id: 'bald',
+            name: 'Лысый пёс',
+            desc: 'Пробный кейс для новичков',
+            price: 25,
+            minValue: 0,
+            maxValue: 50,
+            color: '#8a8a95',
+            colorA: 'rgba(138,138,149,0.4)',
+            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="52" rx="26" ry="28" fill="#b8a78a"/>
+                <ellipse cx="50" cy="58" rx="18" ry="16" fill="#e8dcc4"/>
+                <ellipse cx="24" cy="38" rx="6" ry="10" fill="#a89878" transform="rotate(-20 24 38)"/>
+                <ellipse cx="76" cy="38" rx="6" ry="10" fill="#a89878" transform="rotate(20 76 38)"/>
+                <ellipse cx="42" cy="48" rx="3" ry="3.5" fill="#1a1a1a"/>
+                <ellipse cx="58" cy="48" rx="3" ry="3.5" fill="#1a1a1a"/>
+                <ellipse cx="50" cy="60" rx="4" ry="3" fill="#1a1a1a"/>
+                <path d="M 44 66 Q 50 72 56 66" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <ellipse cx="42" cy="63" rx="3" ry="2" fill="#c98a8a" opacity="0.6"/>
+                <ellipse cx="58" cy="63" rx="3" ry="2" fill="#c98a8a" opacity="0.6"/>
+            </svg>`
+        },
+        {
+            id: 'pug',
+            name: 'Мопс',
+            desc: 'Средний кейс с редкими призами',
+            price: 150,
+            minValue: 0,
+            maxValue: 400,
+            color: '#c8956c',
+            colorA: 'rgba(200,149,108,0.4)',
+            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="52" rx="28" ry="30" fill="#c9a275"/>
+                <ellipse cx="50" cy="50" rx="20" ry="18" fill="#3d2b1f"/>
+                <ellipse cx="50" cy="60" rx="16" ry="13" fill="#d4b48c"/>
+                <ellipse cx="22" cy="40" rx="7" ry="11" fill="#a88560" transform="rotate(-30 22 40)"/>
+                <ellipse cx="78" cy="40" rx="7" ry="11" fill="#a88560" transform="rotate(30 78 40)"/>
+                <circle cx="42" cy="48" r="3.5" fill="#1a1a1a"/>
+                <circle cx="58" cy="48" r="3.5" fill="#1a1a1a"/>
+                <circle cx="43" cy="47" r="1" fill="#fff"/>
+                <circle cx="59" cy="47" r="1" fill="#fff"/>
+                <ellipse cx="50" cy="60" rx="5" ry="4" fill="#1a1a1a"/>
+                <path d="M 46 70 Q 50 73 54 70" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>`
+        },
+        {
+            id: 'bulldog',
+            name: 'Бульдог',
+            desc: 'Мощный кейс с топовыми призами',
+            price: 800,
+            minValue: 100,
+            maxValue: 5000,
+            color: '#c97a5a',
+            colorA: 'rgba(201,122,90,0.4)',
+            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="55" rx="30" ry="28" fill="#d4a880"/>
+                <ellipse cx="50" cy="65" rx="22" ry="16" fill="#e8cba8"/>
+                <ellipse cx="20" cy="35" rx="6" ry="9" fill="#a88560" transform="rotate(-35 20 35)"/>
+                <ellipse cx="80" cy="35" rx="6" ry="9" fill="#a88560" transform="rotate(35 80 35)"/>
+                <ellipse cx="38" cy="48" rx="3" ry="3" fill="#1a1a1a"/>
+                <ellipse cx="62" cy="48" rx="3" ry="3" fill="#1a1a1a"/>
+                <path d="M 32 42 Q 38 40 42 42" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
+                <path d="M 58 42 Q 62 40 68 42" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
+                <ellipse cx="50" cy="65" rx="6" ry="4.5" fill="#1a1a1a"/>
+                <path d="M 44 74 L 44 78 M 56 74 L 56 78" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M 40 78 Q 50 84 60 78" stroke="#1a1a1a" stroke-width="1" fill="none" opacity="0.5"/>
+            </svg>`
+        },
+        {
+            id: 'major',
+            name: 'Мажор пёс',
+            desc: 'VIP кейс — только топ дропы',
+            price: 8000,
+            minValue: 3000,
+            maxValue: 50000,
+            color: '#ffd93d',
+            colorA: 'rgba(255,217,61,0.5)',
+            svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="54" rx="28" ry="29" fill="#e0b878"/>
+                <ellipse cx="50" cy="60" rx="20" ry="16" fill="#f0d8a8"/>
+                <ellipse cx="22" cy="38" rx="7" ry="11" fill="#c8a068" transform="rotate(-25 22 38)"/>
+                <ellipse cx="78" cy="38" rx="7" ry="11" fill="#c8a068" transform="rotate(25 78 38)"/>
+                <circle cx="40" cy="48" r="3.5" fill="#1a1a1a"/>
+                <circle cx="60" cy="48" r="3.5" fill="#1a1a1a"/>
+                <circle cx="41" cy="47" r="1" fill="#fff"/>
+                <circle cx="61" cy="47" r="1" fill="#fff"/>
+                <ellipse cx="50" cy="60" rx="5" ry="4" fill="#1a1a1a"/>
+                <path d="M 46 70 Q 50 73 54 70" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M 20 40 Q 30 30 45 32 L 45 24 Q 30 22 20 34 Z" fill="#1a1a1a"/>
+                <path d="M 80 40 Q 70 30 55 32 L 55 24 Q 70 22 80 34 Z" fill="#1a1a1a"/>
+                <rect x="40" y="24" width="20" height="4" fill="#ffd93d"/>
+                <path d="M 20 60 Q 15 65 15 70 L 25 70 Q 25 65 22 62 Z" fill="#ffd93d" opacity="0.9"/>
+            </svg>`
+        }
+    ];
 
     let CATALOG = [];
     let balance = 1000;
@@ -1445,35 +1601,43 @@
     let isCaseSpinning = false;
     let invSearch = '', invMin = null, invMax = null;
     let shopSearch = '', shopMin = null, shopMax = null;
-    let currentMode = 'upgrader';
+    let currentCase = null;
 
     const $ = id => document.getElementById(id);
 
-    function getRarityByValue(value) {
-        for (const r of CASE_CONFIG.rarities) {
-            if (value >= r.min && value < r.max) return r;
-        }
-        return CASE_CONFIG.rarities[0];
+    function getRarityByValue(value, minV, maxV) {
+        const range = maxV - minV;
+        if (range <= 0) return { id: 'common', name: 'Обычный', color: '#4b69ff' };
+        const pct = (value - minV) / range;
+        if (pct < 0.5)    return { id: 'common',    name: 'Обычный',     color: '#4b69ff' };
+        if (pct < 0.75)   return { id: 'uncommon',  name: 'Необычный',   color: '#8847ff' };
+        if (pct < 0.9)    return { id: 'rare',      name: 'Редкий',      color: '#d32ce6' };
+        if (pct < 0.97)   return { id: 'epic',      name: 'Эпический',   color: '#eb4b4b' };
+        if (pct < 0.995)  return { id: 'mythical',  name: 'Мифический',  color: '#ffd700' };
+        return                    { id: 'legendary',name: 'Легендарный', color: '#ff9500' };
+    }
+
+    function getCaseRarities(caseObj) {
+        const minV = caseObj.minValue;
+        const maxV = caseObj.maxValue;
+        const range = maxV - minV;
+        return [
+            { id: 'common',    name: 'Обычный',     color: '#4b69ff', min: minV,                  max: minV + range * 0.5,  weight: 55   },
+            { id: 'uncommon',  name: 'Необычный',   color: '#8847ff', min: minV + range * 0.5,    max: minV + range * 0.75, weight: 25   },
+            { id: 'rare',      name: 'Редкий',      color: '#d32ce6', min: minV + range * 0.75,   max: minV + range * 0.9,  weight: 12   },
+            { id: 'epic',      name: 'Эпический',   color: '#eb4b4b', min: minV + range * 0.9,    max: minV + range * 0.97, weight: 6    },
+            { id: 'mythical',  name: 'Мифический',  color: '#ffd700', min: minV + range * 0.97,   max: minV + range * 0.995,weight: 1.8  },
+            { id: 'legendary', name: 'Легендарный', color: '#ff9500', min: minV + range * 0.995,  max: maxV + 1,            weight: 0.2  }
+        ];
     }
 
     /* ============== КАТАЛОГ ============== */
     async function loadCatalog() {
-        // Всегда используем FALLBACK — у него реальные названия и цены
         CATALOG = [...FALLBACK];
-        // Пытаемся дополнить из API, но не заменяем
         try {
             const r = await fetch('https://api.changes.tg/gifts');
             if (r.ok) {
-                const d = await r.json();
-                const existing = new Set(CATALOG.map(x => x.slug));
-                d.forEach((it, i) => {
-                    const name = typeof it === 'string' ? it : (it.name || it.title);
-                    if (!name) return;
-                    const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-                    if (!existing.has(slug) && !existing.has(name)) {
-                        // Не добавляем — не знаем цену
-                    }
-                });
+                // Не заменяем, просто игнорируем — у нас полный каталог
             }
         } catch (e) {}
     }
@@ -1841,7 +2005,7 @@
     function flashRed() { const el = $('flash-red'); el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
     function shake() { document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 600); }
 
-    /* ============== АПГРЕЙДЕР — СПИН ============== */
+    /* ============== АПГРЕЙДЕР ============== */
     let hb = null, tensionTimer = null, tickInterval = null;
 
     function startSpin() {
@@ -1944,26 +2108,76 @@
     }
 
     /* ============== КЕЙСЫ ============== */
-    function pickRarity() {
-        const totalW = CASE_CONFIG.rarities.reduce((s, r) => s + r.weight, 0);
+    function renderCasesGrid() {
+        const grid = $('cases-grid');
+        grid.innerHTML = '';
+        CASES.forEach(c => {
+            const tile = document.createElement('div');
+            tile.className = 'case-tile' + (balance < c.price ? ' disabled' : '');
+            tile.style.setProperty('--case-color-a', c.colorA);
+            tile.innerHTML = `
+                <div class="case-tile-icon">${c.svg}</div>
+                <div class="case-tile-name">${c.name}</div>
+                <div class="case-tile-range">до ${c.maxValue.toLocaleString('ru-RU')} ⭐</div>
+                <div class="case-tile-price">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    ${c.price}
+                </div>
+            `;
+            tile.onclick = () => { sndClick(); openCase(c); };
+            grid.appendChild(tile);
+        });
+    }
+
+    function openCase(c) {
+        currentCase = c;
+        $('cases-list-view').style.display = 'none';
+        $('case-open-view').style.display = 'flex';
+
+        $('case-header').style.setProperty('--case-color-a', c.colorA);
+        $('case-header-icon').innerHTML = c.svg;
+        $('case-header-name').textContent = c.name;
+        $('case-header-desc').textContent = c.desc;
+        $('case-header-price-val').textContent = c.price.toLocaleString('ru-RU');
+
+        $('case-open-btn').disabled = balance < c.price;
+
+        renderCaseContents(c);
+    }
+
+    function closeCaseOpenView() {
+        currentCase = null;
+        $('cases-list-view').style.display = 'block';
+        $('case-open-view').style.display = 'none';
+        $('case-reel-wrap').classList.remove('active');
+    }
+    $('case-back-btn').onclick = () => { sndClick(); closeCaseOpenView(); };
+
+    function pickRarity(rarities) {
+        const totalW = rarities.reduce((s, r) => s + r.weight, 0);
         let r = Math.random() * totalW;
-        for (const rar of CASE_CONFIG.rarities) {
+        for (const rar of rarities) {
             r -= rar.weight;
             if (r <= 0) return rar;
         }
-        return CASE_CONFIG.rarities[0];
+        return rarities[0];
     }
 
     function pickItemFromRarity(rar) {
         const pool = CATALOG.filter(it => it.value >= rar.min && it.value < rar.max);
-        if (!pool.length) return CATALOG[Math.floor(Math.random() * CATALOG.length)];
+        if (!pool.length) {
+            // Fallback — ближайший по стоимости
+            const sorted = [...CATALOG].sort((a, b) => Math.abs(a.value - rar.min) - Math.abs(b.value - rar.min));
+            return sorted[0];
+        }
         return pool[Math.floor(Math.random() * pool.length)];
     }
 
-    function renderCaseContents() {
+    function renderCaseContents(c) {
         const el = $('case-contents-list');
         el.innerHTML = '';
-        CASE_CONFIG.rarities.forEach(rar => {
+        const rarities = getCaseRarities(c);
+        rarities.forEach(rar => {
             const items = CATALOG.filter(it => it.value >= rar.min && it.value < rar.max).slice(0, 8);
             if (!items.length) return;
             const group = document.createElement('div');
@@ -1984,9 +2198,9 @@
         });
     }
 
-    function openCase() {
-        if (isCaseSpinning) return;
-        if (balance < CASE_CONFIG.price) {
+    function openCaseSpin() {
+        if (isCaseSpinning || !currentCase) return;
+        if (balance < currentCase.price) {
             sndError();
             if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
             return;
@@ -1995,11 +2209,10 @@
         isCaseSpinning = true;
         $('case-open-btn').disabled = true;
 
-        // Выбираем приз
-        const rar = pickRarity();
+        const rarities = getCaseRarities(currentCase);
+        const rar = pickRarity(rarities);
         const target = pickItemFromRarity(rar);
 
-        // Строим ленту
         const reel = $('case-reel');
         const wrap = $('case-reel-wrap');
         wrap.classList.add('active');
@@ -2015,10 +2228,10 @@
             if (i === TARGET_INDEX) {
                 item = target;
             } else {
-                const r = pickRarity();
+                const r = pickRarity(rarities);
                 item = pickItemFromRarity(r);
             }
-            const itemRar = getRarityByValue(item.value);
+            const itemRar = getRarityByValue(item.value, currentCase.minValue, currentCase.maxValue);
             const el = document.createElement('div');
             el.className = 'case-item';
             el.style.setProperty('--rarity-color', itemRar.color);
@@ -2029,31 +2242,27 @@
             reel.appendChild(el);
         }
 
-        // Считаем позицию
-        const itemW = 80 + 6; // width + gap
+        const itemW = 80 + 6;
         const wrapWidth = wrap.offsetWidth;
         const targetX = TARGET_INDEX * itemW + 80 / 2 + 6;
         const jitter = (Math.random() - 0.5) * 50;
         const offset = targetX - wrapWidth / 2 + jitter;
 
-        // Звук открытия
         sndCaseOpen();
 
-        // Тики барабана
         const duration = 6000;
         let elapsed = 0;
         let tickDelay = 40;
-        const tickLoop = () => {
+        const tickLoopFn = () => {
             sndTick();
             elapsed += tickDelay;
             tickDelay = 40 + 400 * Math.pow(elapsed / duration, 3);
             if (elapsed < duration) {
-                tickInterval = setTimeout(tickLoop, tickDelay);
+                tickInterval = setTimeout(tickLoopFn, tickDelay);
             }
         };
-        tickLoop();
+        tickLoopFn();
 
-        // Вибрация
         let hapticE = 0;
         const hapticLoop = () => {
             if (vibrationEnabled) tg.HapticFeedback?.impactOccurred('light');
@@ -2064,23 +2273,20 @@
         };
         hapticLoop();
 
-        // Анимация ленты
         setTimeout(() => {
             reel.style.transition = `transform ${duration}ms cubic-bezier(0.15, 0.7, 0.15, 1)`;
             reel.style.transform = `translateX(-${offset}px)`;
         }, 50);
 
-        // Финал
         setTimeout(() => {
             clearTimeout(tickInterval);
             clearTimeout(hb);
             isCaseSpinning = false;
             $('case-open-btn').disabled = false;
 
-            balance -= CASE_CONFIG.price;
+            balance -= currentCase.price;
             $('balance').textContent = balance;
 
-            // Добавляем в инвентарь
             inventory.push({ ...target });
             if (!currentItem) currentItem = inventory[inventory.length - 1];
             saveState();
@@ -2088,14 +2294,13 @@
             renderArena();
             renderShop();
             updateBtn();
+            renderCasesGrid();
 
-            // История
-            history.unshift({ win: true, from: { name: 'Кейс', value: CASE_CONFIG.price }, to: target, time: Date.now(), case: true });
+            history.unshift({ win: true, from: { name: 'Кейс ' + currentCase.name, value: currentCase.price }, to: target, time: Date.now(), case: true });
             history = history.slice(0, 50);
             saveState();
 
-            // Результат
-            const resRar = getRarityByValue(target.value);
+            const resRar = getRarityByValue(target.value, currentCase.minValue, currentCase.maxValue);
             $('case-result-icon').innerHTML = iconHTML(target, 128);
             $('case-result-icon').style.setProperty('--rarity-color', resRar.color);
             $('case-result-rarity').textContent = resRar.name;
@@ -2105,14 +2310,13 @@
             $('case-result-modal').classList.add('active');
 
             if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
-            if (target.value >= 1000) {
+            if (target.value >= currentCase.price * 5) {
                 sndWin();
                 confetti();
             } else {
                 sndBuy();
             }
 
-            // Скрываем ленту через паузу
             setTimeout(() => {
                 wrap.classList.remove('active');
                 reel.style.transition = 'none';
@@ -2122,7 +2326,7 @@
         }, duration + 200);
     }
 
-    $('case-open-btn').onclick = () => { sndClick(); openCase(); };
+    $('case-open-btn').onclick = () => { sndClick(); openCaseSpin(); };
     $('case-result-ok').onclick = () => { sndClick(); $('case-result-modal').classList.remove('active'); };
 
     /* ============== ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ ============== */
@@ -2130,15 +2334,17 @@
         tab.onclick = () => {
             sndClick();
             const mode = tab.dataset.mode;
-            currentMode = mode;
             document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.mode-view').forEach(v => v.classList.remove('active'));
             tab.classList.add('active');
             $('mode-' + mode).classList.add('active');
+            if (mode === 'cases') {
+                closeCaseOpenView();
+                renderCasesGrid();
+            }
         };
     });
 
-    /* ============== ТАБЫ ПАНЕЛИ ============== */
     document.querySelectorAll('.tab').forEach(t => {
         t.onclick = () => {
             sndClick();
@@ -2149,7 +2355,6 @@
         };
     });
 
-    /* ============== ПЛЮС ============== */
     $('plus-btn').onclick = () => {
         sndClick();
         const input = prompt('Сколько монет добавить?', '1000');
@@ -2159,10 +2364,10 @@
         balance += amt;
         $('balance').textContent = balance;
         renderShop();
+        renderCasesGrid();
         if (vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     };
 
-    /* ============== ФИЛЬТРЫ ============== */
     $('inv-search').addEventListener('input', e => { invSearch = e.target.value; renderInventory(); });
     $('inv-price-min').addEventListener('input', e => { const v = e.target.value.trim(); invMin = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
     $('inv-price-max').addEventListener('input', e => { const v = e.target.value.trim(); invMax = v === '' ? null : (parseFloat(v) || 0); renderInventory(); });
@@ -2173,7 +2378,6 @@
     document.body.addEventListener('touchstart', initAudio, { once: true });
     document.body.addEventListener('click', initAudio, { once: true });
 
-    /* ============== СТАРТ ============== */
     async function init() {
         await loadCatalog();
         loadState();
@@ -2189,7 +2393,7 @@
         chance = 50;
         multiplier = 2;
         renderMult(); renderInventory(); renderArena(); renderShop();
-        renderCaseContents();
+        renderCasesGrid();
         updatePercentUI(); updateBtn();
     }
 
@@ -2197,4 +2401,4 @@
     $('upgrade-btn').onclick = doUpgrade;
 </script>
 </body>
-   </html>
+</html>
