@@ -1103,8 +1103,9 @@ function iconHTML(item, size){
     size = size || 128;
     const px = size >= 128 ? 500 : 200;
     const slug = item.slug || item.name.toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-    const url = 'https://nft.fragment.com/gift/' + slug + '.' + px + '.webp';
-    return '<img src="' + url + '" alt="" loading="lazy" onerror="this.style.opacity=0.15;">';
+    const direct = 'https://nft.fragment.com/gift/' + slug + '.' + px + '.webp';
+    const proxied = 'https://wsrv.nl/?url=' + encodeURIComponent(direct) + '&output=webp&q=80&w=' + size;
+    return '<img src="' + proxied + '" alt="" loading="lazy" onerror="this.style.opacity=0.15;">';
 }
 
 function fillMenuIcons(){
