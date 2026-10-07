@@ -524,21 +524,36 @@
     .num-input:focus { border-color: var(--border-strong); background: rgba(0,0,0,0.5); }
     .num-input::placeholder { color: var(--text-mute); }
 
+    /* ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ ДЛЯ МАГАЗИНА */
     .items-scroll {
         flex: 1;
         overflow-y: auto;
+        overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: thin;
         scrollbar-color: rgba(255,255,255,0.1) transparent;
     }
-    .items-scroll::-webkit-scrollbar { width: 3px; }
+    .items-scroll::-webkit-scrollbar { height: 3px; width: 3px; }
     .items-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
     .item-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 5px;
+        min-width: 100%;
     }
+    /* Для магазина — горизонтальный ряд */
+    .item-grid.horizontal {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 6px;
+        min-width: max-content;
+    }
+    .item-grid.horizontal .slot {
+        flex-shrink: 0;
+        width: 80px;
+    }
+
     .slot {
         background: linear-gradient(180deg, rgba(22,22,32,0.7) 0%, rgba(12,12,18,0.7) 100%);
         border: 1px solid var(--border);
@@ -961,6 +976,7 @@
         .slot-title { font-size: 10px; }
         .upgrade-btn { width: 50%; padding: 16px; font-size: 14px; }
         .item-grid { grid-template-columns: repeat(5, 1fr); }
+        .item-grid.horizontal .slot { width: 90px; }
         .modal { max-width: 380px; padding: 26px; }
     }
 </style>
@@ -1072,7 +1088,7 @@
                 <input type="number" class="num-input" id="shop-price-min" placeholder="От">
                 <input type="number" class="num-input" id="shop-price-max" placeholder="До">
             </div>
-            <div class="items-scroll"><div class="item-grid" id="shop-grid"></div></div>
+            <div class="items-scroll"><div class="item-grid horizontal" id="shop-grid"></div></div>
         </div>
     </div>
 
@@ -1233,7 +1249,7 @@
     function sndPromo() { if (!soundEnabled) return; initAudio(); playTone(784, 0.1, 'sine', 0.15, 0); playTone(1047, 0.1, 'sine', 0.15, 0.08); playTone(1319, 0.25, 'sine', 0.15, 0.16); }
     function sndError() { if (!soundEnabled) return; initAudio(); playTone(200, 0.1, 'square', 0.12, 0); playTone(150, 0.2, 'square', 0.12, 0.1); }
 
-    /* ============== КАТАЛОГ ============== */
+    /* ============== КАТАЛОГ С РЕАЛИСТИЧНЫМИ ЦЕНАМИ ============== */
     const FALLBACK = [
         { name: 'Heart',           slug: 'heart',           value: 15 },
         { name: 'Teddy Bear',      slug: 'teddybear',       value: 15 },
@@ -1358,6 +1374,9 @@
     let invSearch = '', invMin = null, invMax = null;
     let shopSearch = '', shopMin = null, shopMax = null;
 
+    // Результат спина определяется заранее
+    let preDeterminedWin = false;
+
     const $ = id => document.getElementById(id);
 
     function getRarity(value) {
@@ -1373,7 +1392,7 @@
         CATALOG = [...FALLBACK];
     }
 
-    /* ============== ИКОНКИ С ФОЛЛБЭКОМ ЧЕРЕЗ API ============== */
+    /* ============== ИКОНКИ ============== */
     function imgUrl(item, size = 128) {
         const px = size >= 128 ? 500 : 200;
         return `https://nft.fragment.com/gift/${item.slug}.${px}.webp`;
@@ -1442,7 +1461,6 @@
         ].join(' '));
     }
 
-    /* ============== СОХРАНЕНИЕ ============== */
     function saveState() {
         try {
             localStorage.setItem(INV_KEY, JSON.stringify(inventory));
@@ -1460,7 +1478,6 @@
             if (bal !== null) balance = parseInt(bal, 10) || 0;
         } catch {}
     }
-    /* Snapshot — защита от выхода во время спина */
     function takeSpinSnapshot() {
         try {
             const snap = {
@@ -1652,7 +1669,6 @@
     $('vibration-toggle').onchange = (e) => { vibrationEnabled = e.target.checked; localStorage.setItem(VIB_KEY, vibrationEnabled); };
     $('sound-toggle').onchange = (e) => { soundEnabled = e.target.checked; localStorage.setItem(SND_KEY, soundEnabled); if (soundEnabled) { initAudio(); sndClick(); } };
 
-    /* ============== ПРОФИЛЬ ============== */
     function openProfile() {
         const user = tg.initDataUnsafe?.user;
         const name = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'Игрок';
@@ -1731,8 +1747,8 @@
         sellIdx = idx;
         $('sell-icon').innerHTML = iconHTML(item, 128);
         $('sell-name').textContent = item.name;
-        const price = Math.floor(item.value * 0.7);
-        $('sell-info').innerHTML = `Продать за <b style="color: var(--gold);">${price} ⭐</b><br><span style="font-size: 9px;">(70% от стоимости)</span>`;
+        const price = Math.floor(item.value * 0.9); // Комиссия 10%
+        $('sell-info').innerHTML = `Продать за <b style="color: var(--gold);">${price} ⭐</b><br><span style="font-size: 9px;">(комиссия 10%)</span>`;
         $('sell-modal').classList.add('active');
     }
     function closeSell() { $('sell-modal').classList.remove('active'); sellIdx = -1; }
@@ -1740,7 +1756,7 @@
     $('sell-confirm').onclick = () => {
         if (sellIdx < 0) return;
         const item = inventory[sellIdx];
-        const price = Math.floor(item.value * 0.7);
+        const price = Math.floor(item.value * 0.9); // Комиссия 10%
         balance += price;
         $('balance').textContent = balance;
         if (currentItem === item) currentItem = null;
@@ -1804,7 +1820,7 @@
     function flashWin() { const el = $('flash-win'); el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
     function shake() { document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 600); }
 
-    /* ============== СПИН ============== */
+    /* ============== СПИН С ПРЕДОПРЕДЕЛЁННЫМ РЕЗУЛЬТАТОМ ============== */
     let hb = null, tensionTimer = null, tickInterval = null;
 
     function startSpin() {
@@ -1813,8 +1829,7 @@
         requestAnimationFrame(() => s.classList.add('zooming'));
         $('wheel-wrap').classList.add('spinning');
         sndSpinStart();
-        
-        // Плавное ускорение тиков от 150ms до 35ms
+
         const TICK_START = 150;
         const TICK_END = 35;
         const EFFECTIVE_DURATION = SPIN_DURATION - 500;
@@ -1851,14 +1866,14 @@
         if (win) sndWin(); else sndLose();
     }
 
-    function spin(ch) {
+    function spin(ch, predetWin) {
         return new Promise(resolve => {
             const p = $('wheel-pointer');
             const half = Math.min(179.9, ch * 3.6 / 2);
             const s0 = 180 - half, s1 = 180 + half;
-            const wantWin = Math.random() * 100 < ch;
+
             let angle;
-            if (wantWin) {
+            if (predetWin) {
                 angle = s0 + 1 + Math.random() * (s1 - s0 - 2);
             } else {
                 const out = 360 - (s1 - s0);
@@ -1866,6 +1881,7 @@
                 angle = s1 + off;
                 if (angle > 360) angle -= 360;
             }
+
             const turns = 8 + Math.floor(Math.random() * 4);
             const total = turns * 360 + angle;
             p.style.transition = 'none';
@@ -1886,11 +1902,15 @@
         $('from-card').className = 'item-slot';
         $('to-card').className = 'item-slot';
 
-        // Сохраняем снимок до начала — если пользователь выйдет во время спина, откатимся
+        // ПРЕДОПРЕДЕЛЯЕМ РЕЗУЛЬТАТ ДО АНИМАЦИИ
+        const wantWin = Math.random() * 100 < chance;
+        preDeterminedWin = wantWin;
+
+        // Сохраняем снимок до начала — если игрок выйдет, откатимся
         takeSpinSnapshot();
 
         startSpin();
-        const win = await spin(chance);
+        const win = await spin(chance, preDeterminedWin);
         endSpin(win);
 
         const idx = inventory.indexOf(currentItem);
@@ -1917,7 +1937,6 @@
         }
         history = history.slice(0, 50);
 
-        // Спин завершён — сохраняем окончательное состояние и убираем снимок
         clearSpinSnapshot();
         saveState();
 
@@ -1937,7 +1956,6 @@
         };
     });
 
-    /* ============== ПЛЮС — ТОЛЬКО ДЛЯ АДМИНОВ ============== */
     function setupAdminPanel() {
         const admin = isAdmin();
         const chip = $('plus-btn');
@@ -1977,7 +1995,6 @@
     async function init() {
         await loadCatalog();
 
-        // Сначала проверяем прерванный спин
         const restored = restoreFromSnapshotIfAny();
         if (restored) {
             console.log('Восстановлен снимок после прерванного спина');
@@ -1985,7 +2002,6 @@
             loadState();
         }
 
-        // Если инвентарь пуст — создаём стартовый
         if (!inventory.length) {
             const pool = CATALOG.slice(0, Math.min(12, CATALOG.length));
             for (let i = 0; i < 8; i++) {
