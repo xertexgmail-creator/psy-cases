@@ -1140,9 +1140,11 @@ function getRarity(v){
 function iconHTML(item, size){
     size = size || 128;
     const px = size >= 128 ? 500 : 200;
-    const frag = `https://nft.fragment.com/gift/${item.slug}.${px}.webp`;
-    const api = `https://api.changes.tg/original/${encodeURIComponent(item.name)}.png?size=${size}`;
-    return `<img src="${frag}" alt="${item.name}" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${api}';}else{this.style.visibility='hidden';}">`;
+    // Fragment URL
+    const fragUrl = `nft.fragment.com/gift/${item.slug}.${px}.webp`;
+    // Проксируем через weserv чтобы обойти блокировки провайдера
+    const url = `https://images.weserv.nl/?url=${encodeURIComponent(fragUrl)}&output=webp&q=80`;
+    return `<img src="${url}" alt="${item.name}" loading="lazy">`;
 }
 
 function fillMenuIcons(){
