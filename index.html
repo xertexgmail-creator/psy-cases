@@ -69,27 +69,41 @@ body::before { content: ''; position: fixed; inset: 0;
     background: linear-gradient(135deg, #fff 0%, #b0b8ff 50%, #a855f7 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .menu-subtitle { text-align: center; font-size: 11px; color: var(--text-mute); margin-bottom: 20px; }
-.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-.menu-card { background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(12,12,18,0.95) 100%);
-    border: 1px solid var(--border); border-radius: 18px; padding: 18px 12px 16px;
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+/* === НОВЫЙ ДИЗАЙН КНОПОК МЕНЮ === */
+.menu-card { position: relative; overflow: hidden;
+    background: linear-gradient(160deg, rgba(34,34,50,0.95) 0%, rgba(16,16,26,0.98) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 22px; padding: 22px 14px 20px;
     cursor: pointer; font-family: inherit; color: var(--text);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; transition: all 0.25s; position: relative; overflow: hidden;
-    min-height: 160px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-.menu-card::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
-    width: 200px; height: 200px; background: radial-gradient(circle, var(--card-glow, rgba(120,100,255,0.15)) 0%, transparent 70%);
-    pointer-events: none; }
-.menu-card:active { transform: scale(0.97); }
-.menu-card-icon { width: 100%; height: 70px; margin-bottom: 10px;
-    display: flex; align-items: center; justify-content: center; gap: 4px; position: relative; z-index: 1; }
-.menu-card-icon .gicon { height: 58px; width: 58px; position: relative; flex-shrink: 0;
-    filter: drop-shadow(0 4px 12px var(--card-glow, rgba(120,100,255,0.5))); }
+    text-align: center; min-height: 180px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s; }
+.menu-card::before { content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, var(--card-glow, rgba(120,100,255,0.25)) 0%, transparent 68%);
+    pointer-events: none; transition: opacity 0.3s; }
+.menu-card::after { content: ''; position: absolute; inset: 0; border-radius: 22px; pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.05) 100%);
+    opacity: 0; transition: opacity 0.25s; }
+.menu-card:active { transform: scale(0.95); border-color: var(--border-strong);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1); }
+.menu-card:active::after { opacity: 1; }
+.menu-card-icon { width: 100%; height: 80px; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: center; gap: 6px; position: relative; z-index: 1; }
+.menu-card-icon .gicon { height: 66px; width: 66px; position: relative; flex-shrink: 0;
+    filter: drop-shadow(0 6px 18px var(--card-glow, rgba(120,100,255,0.6)));
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+.menu-card:active .menu-card-icon .gicon { transform: scale(1.1); }
 .menu-card-icon .gicon img { width: 100%; height: 100%; object-fit: contain; }
-.menu-card-icon .arrow { color: #2ecc71; font-size: 20px; font-weight: 900; flex-shrink: 0;
-    filter: drop-shadow(0 0 8px rgba(46,204,113,0.8)); animation: arrowPulse 1.4s ease-in-out infinite; }
-@keyframes arrowPulse { 0%,100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
-.menu-card-title { font-size: 14px; font-weight: 800; margin-bottom: 3px; position: relative; z-index: 1; }
-.menu-card-desc { font-size: 10px; color: var(--text-mute); line-height: 1.3; position: relative; z-index: 1; }
+.menu-card-icon .arrow { color: #2ecc71; font-size: 22px; font-weight: 900; flex-shrink: 0;
+    filter: drop-shadow(0 0 10px rgba(46,204,113,0.9)); animation: arrowPulse 1.4s ease-in-out infinite; }
+@keyframes arrowPulse { 0%,100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+.menu-card-title { font-size: 15px; font-weight: 900; margin-bottom: 4px; position: relative; z-index: 1;
+    letter-spacing: -0.02em; }
+.menu-card-desc { font-size: 10px; color: var(--text-mute); line-height: 1.35; position: relative; z-index: 1; }
 
 .arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: stretch; margin-bottom: 8px; flex-shrink: 0; }
 .item-slot { background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(12,12,18,0.95) 100%);
@@ -519,17 +533,18 @@ body::before { content: ''; position: fixed; inset: 0;
     .balance-chip { font-size: 10px; padding: 4px 7px; }
     .icon-btn { width: 28px; height: 28px; }
     .icon-btn svg { width: 13px; height: 13px; }
-    .menu-card-icon .gicon { height: 48px; width: 48px; }
-    .menu-card-title { font-size: 12px; }
+    .menu-card-icon .gicon { height: 52px; width: 52px; }
+    .menu-card-title { font-size: 13px; }
     .menu-card-desc { font-size: 9px; }
+    .menu-card { min-height: 150px; }
 }
 @media (min-width: 420px) {
     .wheel-wrap { width: 175px; height: 175px; }
     .wheel-col { min-width: 175px; }
     .wheel-center { width: 104px; height: 104px; }
     .wheel-percent { font-size: 27px; }
-    .menu-card-icon .gicon { height: 68px; width: 68px; }
-    .menu-card-title { font-size: 15px; }
+    .menu-card-icon .gicon { height: 76px; width: 76px; }
+    .menu-card-title { font-size: 16px; }
     .rocket-mult { font-size: 60px; }
 }
 @media (min-width: 600px) {
@@ -596,17 +611,17 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="menu-title">Выбери режим</div>
         <div class="menu-subtitle">Играй и выигрывай</div>
         <div class="menu-grid">
-            <button class="menu-card" data-mode="upgrader" type="button" style="--card-glow: rgba(120,100,255,0.4);">
+            <button class="menu-card" data-mode="upgrader" type="button" style="--card-glow: rgba(120,100,255,0.5);">
                 <div class="menu-card-icon">
                     <div class="gicon" data-name="Heart"></div>
                     <span class="arrow">→</span>
-                    <div class="gicon" data-name="Mini Oscar"></div>
+                    <div class="gicon" data-name="Plush Pepe"></div>
                 </div>
                 <div class="menu-card-title">Апгрейдер</div>
                 <div class="menu-card-desc">Прокачивай гифты</div>
             </button>
 
-            <button class="menu-card" data-mode="rocket" type="button" style="--card-glow: rgba(46,204,113,0.5);">
+            <button class="menu-card" data-mode="rocket" type="button" style="--card-glow: rgba(46,204,113,0.6);">
                 <div class="menu-card-icon">
                     <div class="gicon" data-name="Rocket" style="transform: rotate(-15deg);"></div>
                 </div>
@@ -614,15 +629,15 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="menu-card-desc">Автораунд 10 сек</div>
             </button>
 
-            <button class="menu-card" data-mode="saper" type="button" style="--card-glow: rgba(255,217,61,0.4);">
+            <button class="menu-card" data-mode="saper" type="button" style="--card-glow: rgba(255,217,61,0.5);">
                 <div class="menu-card-icon">
-                    <div class="gicon" data-name="Trophy"></div>
+                    <div class="gicon" data-name="Liberty Figure"></div>
                 </div>
                 <div class="menu-card-title">Сапёр</div>
                 <div class="menu-card-desc">Открывай клетки</div>
             </button>
 
-            <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,150,50,0.4);">
+            <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,150,50,0.5);">
                 <div class="menu-card-icon">
                     <div class="gicon" data-name="Diamond Ring"></div>
                 </div>
@@ -971,11 +986,13 @@ function sndRocketStart(){ initAudio(); playTone(300,0.15,'sawtooth',0.1); playT
 function sndRocketTick(){ initAudio(); playTone(1400+Math.random()*200,0.01,'square',0.02); }
 function sndCellOpen(){ initAudio(); playTone(700,0.06,'sine',0.12); }
 
+// === ОБНОВЛЁННЫЙ КАТАЛОГ ПОДАРКОВ (реальные, отсортированы по цене) ===
 const FALLBACK = [
     { name:'Heart', slug:'heart', value:15 },
     { name:'Teddy Bear', slug:'teddy-bear', value:15 },
     { name:'Rose', slug:'rose', value:25 },
     { name:'Rocket', slug:'rocket', value:50 },
+    { name:'1 May', slug:'1may', value:50 },
     { name:'Jingle Bells', slug:'jingle-bells', value:80 },
     { name:'Homemade Cake', slug:'homemade-cake', value:100 },
     { name:'Eternal Rose', slug:'eternal-rose', value:150 },
@@ -1031,10 +1048,10 @@ const FALLBACK = [
     { name:"Durov's Glasses", slug:'durovs-glasses', value:15000 },
     { name:'The Witcher', slug:'the-witcher', value:15000 },
     { name:'Snoop Cigar', slug:'snoop-cigar', value:18000 },
-    { name:'Algorithm Cup', slug:'algorithm-cup', value:20000 },
+    { name:'Algorithm Cup', slug:'algorithmcup', value:20000 },
     { name:'Astral Shard', slug:'astral-shard', value:25000 },
     { name:'Toncoin', slug:'toncoin', value:30000 },
-    { name:'Intelligence Cup', slug:'intelligence-cup', value:35000 },
+    { name:'Intelligence Cup', slug:'intelligencecup', value:35000 },
     { name:'Fabergé', slug:'faberge', value:50000 },
     { name:'Mighty Arm', slug:'mighty-arm', value:50000 },
     { name:'Witch Hat', slug:'witch-hat', value:60000 },
@@ -1112,8 +1129,8 @@ function fillMenuIcons(){
     });
 }
 
-function chanceFromRatio(r){ let c=100/r; if(c>99)c=99; if(c<1)c=1; return Math.round(c*100)/100; }
-function chanceLabel(c){ if(c>=60)return 'высокий'; if(c>=30)return 'средний'; if(c>=10)return 'низкий'; return 'безумие'; }
+function chanceFromRatio(r){ let c=100/r; if(c>99)c=99; if(c<0.01)c=0.01; return Math.round(c*100)/100; }
+function chanceLabel(c){ if(c>=60)return 'высокий'; if(c>=30)return 'средний'; if(c>=10)return 'низкий'; if(c>=1)return 'очень низкий'; return 'безумие'; }
 
 function recomputeChance(){
     if(!selectedItems.length || !targetItem){ chance=0; multiplier=0; return; }
@@ -1147,7 +1164,7 @@ function highlightMult(){
 function updateArc(){
     const arc=$('win-arc'); if(!arc) return;
     const cx=50,cy=50;
-    const c = Math.min(99.9, Math.max(0.1, chance));
+    const c = Math.min(99.9, Math.max(0.01, chance));
     const half = c*3.6/2;
     const a0 = 180-half, a1 = 180+half;
     const rad = d => d*Math.PI/180;
@@ -1830,7 +1847,7 @@ function saperMultiplier(k){
     const N=SAPER_SIZE, M=saperMineCount;
     let mult=1;
     for(let i=0;i<k;i++) mult *= (N-i)/(N-M-i);
-    return mult*0.95;
+    return mult*0.85; // снижен с 0.95 для баланса
 }
 function updateSaperButtons(){
     const startBtn=$('saper-start-btn'); if(!startBtn) return;
@@ -2187,11 +2204,23 @@ $('shop-price-max').addEventListener('input',e=>{ const v=e.target.value.trim();
 document.body.addEventListener('touchstart',initAudio,{once:true});
 document.body.addEventListener('click',initAudio,{once:true});
 
+/* === ОНЛАЙН: медленное случайное блуждание 3..16 === */
+let onlineTarget = 7;
+let onlineCurrent = 7;
 function startOnlineLoop(){
     const el=$('online-count'); if(!el) return;
-    const update=()=>{ el.textContent=3+Math.floor(Math.random()*14); };
-    update();
-    setInterval(update,3000+Math.random()*4000);
+    el.textContent = onlineCurrent;
+    // цель меняется редко и плавно
+    setInterval(()=>{
+        const drift = (Math.random()-0.5)*4; // -2..+2
+        onlineTarget = Math.max(3, Math.min(16, Math.round(onlineTarget + drift)));
+    }, 6000 + Math.random()*4000);
+    // текущее плавно догоняет цель
+    setInterval(()=>{
+        if(onlineCurrent < onlineTarget) onlineCurrent++;
+        else if(onlineCurrent > onlineTarget) onlineCurrent--;
+        if(el) el.textContent = onlineCurrent;
+    }, 1500 + Math.random()*1200);
 }
 
 function startRocketLoop(){
