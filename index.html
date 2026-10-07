@@ -1,3 +1,921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ПСЫ.gg</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+    --bg: #08080c; --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.14);
+    --text: #f5f5f7; --text-dim: #8a8a95; --text-mute: #55555f;
+    --accent: #ffffff; --green: #2ecc71; --red: #ff4757; --gold: #ffd93d;
+}
+html, body { overflow-x: hidden; }
+body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    padding: 8px; min-height: 100vh; position: relative;
+    -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
+    display: flex; flex-direction: column; }
+body::before { content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse 90% 60% at 50% -10%, rgba(120,100,255,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 0% 50%, rgba(74,134,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 100% 50%, rgba(168,85,247,0.08) 0%, transparent 60%);
+    pointer-events: none; z-index: 0; }
+.stage { position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1; min-height: 0;
+    transform-origin: 50% 45%; transform: translate3d(0,0,0); }
+.stage.zooming { transform: translate3d(0,0,0) scale3d(1.08,1.08,1); transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1); }
+.stage.snap { transform: translate3d(0,0,0) scale3d(0.96,0.96,1); transition: transform 0.15s ease-out; }
+.stage.snap-back { transform: translate3d(0,0,0) scale3d(1,1,1); transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+
+.header { display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(16,16,24,0.7) 100%);
+    backdrop-filter: blur(20px); border-radius: 14px; border: 1px solid var(--border);
+    margin-bottom: 8px; flex-shrink: 0; gap: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.header-left { display: flex; align-items: center; gap: 6px; min-width: 0; flex-shrink: 0; }
+.header-right { display: flex; align-items: center; gap: 4px; min-width: 0; flex-shrink: 0; }
+.logo { font-size: 14px; font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, #c0c8ff 50%, #a855f7 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    white-space: nowrap; cursor: pointer; user-select: none; }
+.logo .dot { -webkit-text-fill-color: var(--text-mute); }
+.logo.disabled { cursor: default; }
+.online-badge { display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.25);
+    padding: 3px 6px; border-radius: 8px; font-size: 9px; font-weight: 700; color: var(--green); white-space: nowrap; }
+.online-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 6px var(--green); animation: onlinePulse 1.6s ease-in-out infinite; }
+@keyframes onlinePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+.icon-btn { width: 30px; height: 30px; background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border); border-radius: 9px; color: var(--text-dim);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; padding: 0; flex-shrink: 0; transition: all 0.15s; }
+.icon-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.08); }
+.icon-btn svg { width: 15px; height: 15px; }
+.balance-chip { display: flex; align-items: center; gap: 3px;
+    background: linear-gradient(135deg, #ffffff, #d0d4ff); color: #000;
+    padding: 5px 8px; border-radius: 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+.balance-chip svg { width: 11px; height: 11px; flex-shrink: 0; }
+.test-badge { background: #ff9500; color: #000; font-size: 7px; font-weight: 900;
+    padding: 1px 4px; border-radius: 4px; }
+.balance-chip.admin { cursor: pointer; }
+.plus-sign { font-size: 12px; font-weight: 900; opacity: 0.6; }
+
+.screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
+.screen.active { display: flex; }
+
+.menu-title { text-align: center; font-size: 22px; font-weight: 900; margin-bottom: 4px;
+    background: linear-gradient(135deg, #fff 0%, #b0b8ff 50%, #a855f7 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.menu-subtitle { text-align: center; font-size: 11px; color: var(--text-mute); margin-bottom: 20px; }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.menu-card { background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(12,12,18,0.95) 100%);
+    border: 1px solid var(--border); border-radius: 18px; padding: 18px 12px 16px;
+    cursor: pointer; font-family: inherit; color: var(--text);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; transition: all 0.25s; position: relative; overflow: hidden;
+    min-height: 160px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.menu-card::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 200px; background: radial-gradient(circle, var(--card-glow, rgba(120,100,255,0.15)) 0%, transparent 70%);
+    pointer-events: none; }
+.menu-card:active { transform: scale(0.97); }
+.menu-card-icon { width: 100%; height: 70px; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 4px; position: relative; z-index: 1; }
+.menu-card-icon .gicon { height: 58px; width: 58px; position: relative; flex-shrink: 0;
+    filter: drop-shadow(0 4px 12px var(--card-glow, rgba(120,100,255,0.5))); }
+.menu-card-icon .gicon img { width: 100%; height: 100%; object-fit: contain; }
+.menu-card-icon .arrow { color: #2ecc71; font-size: 20px; font-weight: 900; flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(46,204,113,0.8)); animation: arrowPulse 1.4s ease-in-out infinite; }
+@keyframes arrowPulse { 0%,100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+.menu-card-title { font-size: 14px; font-weight: 800; margin-bottom: 3px; position: relative; z-index: 1; }
+.menu-card-desc { font-size: 10px; color: var(--text-mute); line-height: 1.3; position: relative; z-index: 1; }
+
+.arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: stretch; margin-bottom: 8px; flex-shrink: 0; }
+.item-slot { background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(12,12,18,0.95) 100%);
+    border-radius: 16px; padding: 18px 6px 12px; text-align: center;
+    border: 1px solid var(--border); min-height: 155px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+.item-slot::before { content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, var(--slot-glow, transparent) 0%, transparent 65%);
+    opacity: 0.7; pointer-events: none; }
+.item-slot.win { border-color: rgba(46,204,113,0.55); box-shadow: 0 0 30px rgba(46,204,113,0.35); }
+.item-slot.lose { border-color: rgba(255,71,87,0.55); box-shadow: 0 0 30px rgba(255,71,87,0.35); }
+.slot-title { position: absolute; top: 9px; left: 0; right: 0; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.08em; color: var(--text-mute); text-transform: uppercase; z-index: 1; }
+.slot-icon { width: 70px; height: 70px; margin-bottom: 6px; position: relative; z-index: 1; }
+.slot-icon img { width: 100%; height: 100%; object-fit: contain; }
+.item-name { font-size: 10px; font-weight: 600; color: var(--text-dim); margin-bottom: 3px;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: relative; z-index: 1; }
+.item-value { font-size: 13px; font-weight: 800; position: relative; z-index: 1; }
+
+.wheel-col { display: flex; align-items: center; justify-content: center; min-width: 155px; }
+.wheel-wrap { position: relative; width: 155px; height: 155px; }
+.wheel-wrap::before { content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(120,100,255,0) 0deg, rgba(120,100,255,0.5) 120deg,
+        rgba(168,85,247,0.5) 240deg, rgba(120,100,255,0) 360deg);
+    filter: blur(12px); opacity: 0; transition: opacity 0.5s; pointer-events: none; z-index: 0; }
+.wheel-wrap.spinning::before { opacity: 1; animation: spinGlowFast 1.2s linear infinite; }
+@keyframes spinGlowFast { to { transform: rotate(360deg); } }
+.wheel-svg { width: 100%; height: 100%; position: relative; z-index: 1; }
+.wheel-pointer { position: absolute; inset: 0; transition: transform 7.5s cubic-bezier(0.15,0.7,0.15,1); z-index: 2; }
+.wheel-pointer::before { content: ''; position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;
+    border-top: 12px solid #fff; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
+.wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 92px; height: 92px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, #1a1a26 0%, #08080c 100%);
+    border: 1px solid var(--border-strong); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 3; box-shadow: inset 0 0 24px rgba(0,0,0,0.8); }
+.wheel-percent { font-size: 24px; font-weight: 900; line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, #b0b8ff 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.wheel-label { font-size: 7px; font-weight: 700; color: var(--text-mute);
+    text-transform: uppercase; margin-top: 3px; }
+
+.mult-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-bottom: 8px; flex-shrink: 0; }
+.mult-btn { background: linear-gradient(180deg, rgba(22,22,32,0.9) 0%, rgba(14,14,20,0.9) 100%);
+    border: 1px solid var(--border); color: var(--text); padding: 8px 0; border-radius: 9px;
+    font-size: 9px; font-weight: 800; cursor: pointer; line-height: 1; font-family: inherit; }
+.mult-btn.active { background: linear-gradient(135deg, #fff, #d0d4ff); color: #000; border-color: transparent; }
+.mult-btn .c { display: block; font-size: 6px; color: var(--text-mute); font-weight: 600; margin-top: 3px; }
+.mult-btn.active .c { color: rgba(0,0,0,0.55); }
+
+.upgrade-btn { width: 65%; margin: 0 auto 10px; padding: 14px;
+    background: linear-gradient(135deg, #ffffff, #d0d4ff);
+    border: none; border-radius: 13px; color: #000; font-size: 13px; font-weight: 900;
+    letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+    flex-shrink: 0; font-family: inherit; }
+.upgrade-btn:active:not(:disabled) { transform: scale(0.97); }
+.upgrade-btn:disabled { opacity: 0.28; cursor: not-allowed; }
+
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; flex-shrink: 0; }
+.tab { background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    color: var(--text-dim); padding: 10px; border-radius: 11px; font-size: 10px; font-weight: 700;
+    cursor: pointer; font-family: inherit; text-transform: uppercase; }
+.tab.active { background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
+    color: var(--text); border-color: var(--border-strong); }
+
+.panel { background: linear-gradient(180deg, rgba(22,22,32,0.85) 0%, rgba(12,12,18,0.9) 100%);
+    border: 1px solid var(--border); border-radius: 16px; padding: 10px;
+    display: flex; flex-direction: column; flex: 1; min-height: 220px; max-height: 340px; overflow: hidden; }
+.panel-view { display: none; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+.panel-view.active { display: flex; }
+.panel-tools { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 5px; margin-bottom: 8px; flex-shrink: 0; }
+.search-box { display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.35);
+    border: 1px solid var(--border); border-radius: 9px; padding: 7px 10px; }
+.search-box svg { width: 10px; height: 10px; color: var(--text-mute); flex-shrink: 0; }
+.search-box input { background: transparent; border: none; color: var(--text);
+    font-size: 11px; font-family: inherit; width: 100%; outline: none; min-width: 0; }
+.num-input { background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 9px;
+    color: var(--text); font-size: 11px; font-family: inherit; padding: 7px;
+    width: 100%; min-width: 0; outline: none; text-align: center; }
+.items-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+.items-scroll::-webkit-scrollbar { width: 3px; }
+.items-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+.item-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.slot { background: linear-gradient(180deg, rgba(22,22,32,0.7), rgba(12,12,18,0.7));
+    border: 1px solid var(--border); border-bottom: 2px solid var(--rar-color, transparent);
+    border-radius: 10px; padding: 7px 3px 6px; cursor: pointer; text-align: center; position: relative; }
+.slot:active { transform: scale(0.95); }
+.slot.selected { border-color: var(--accent); box-shadow: 0 0 16px rgba(255,255,255,0.15); }
+.slot.disabled { opacity: 0.25; pointer-events: none; }
+.slot-icon-sm { width: 38px; height: 38px; margin: 0 auto 3px; }
+.slot-icon-sm img { width: 100%; height: 100%; object-fit: contain; }
+.slot-name { font-size: 7px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.slot-price { font-size: 8px; font-weight: 800; margin-top: 2px; }
+.empty { grid-column: 1/-1; text-align: center; color: var(--text-mute); font-size: 11px; padding: 24px 8px; }
+
+.rocket-status-bar { display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 8px; flex-shrink: 0; gap: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.rocket-phase { display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.rocket-phase.waiting { color: var(--gold); }
+.rocket-phase.flying { color: var(--green); }
+.rocket-phase.result { color: var(--text-dim); }
+.rocket-phase .phase-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+    box-shadow: 0 0 10px currentColor; animation: onlinePulse 1s ease-in-out infinite; }
+.rocket-timer { font-size: 15px; font-weight: 900; color: var(--text); letter-spacing: -0.03em; }
+
+.rocket-stage { position: relative; width: 100%; flex: 1; min-height: 280px;
+    background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(46,204,113,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 100% 60% at 0% 100%, rgba(120,100,255,0.12) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(16,16,26,0.95) 0%, rgba(8,8,14,1) 100%);
+    border: 1px solid rgba(120,100,255,0.15); border-radius: 20px; margin-bottom: 8px;
+    overflow: hidden; box-shadow: 0 12px 48px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); }
+.rocket-stage::before { content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(120,100,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(120,100,255,0.04) 1px, transparent 1px);
+    background-size: 28px 28px; pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%); }
+.rocket-trail-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+.rocket-trail-path { fill: none; stroke: url(#trailGrad); stroke-width: 3; stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(168,85,247,0.8)); }
+.rocket-icon { position: absolute; width: 40px; height: 40px;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    transition: left 0.06s linear, top 0.06s linear;
+    pointer-events: none;
+    filter: drop-shadow(0 0 14px rgba(168,85,247,0.9)) drop-shadow(0 0 30px rgba(120,100,255,0.5));
+    z-index: 3; }
+.rocket-icon img { width: 100%; height: 100%; object-fit: contain; }
+.rocket-mult { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 52px; font-weight: 900; color: var(--text); text-align: center; pointer-events: none;
+    z-index: 2; text-shadow: 0 0 40px rgba(120,100,255,0.7); letter-spacing: -0.04em; }
+.rocket-mult.growing { background: linear-gradient(135deg, #fff 0%, #b0b8ff 50%, #a855f7 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(168,85,247,0.6)); }
+.rocket-mult.crashed { color: var(--red); -webkit-text-fill-color: var(--red);
+    animation: crashShake 0.5s ease-out; filter: drop-shadow(0 0 30px rgba(255,71,87,0.8)); }
+.rocket-mult.cashed { color: var(--green); -webkit-text-fill-color: var(--green);
+    animation: cashPop 0.6s ease-out; filter: drop-shadow(0 0 30px rgba(46,204,113,0.8)); }
+@keyframes crashShake { 0%,100% { transform: translate(-50%,-50%) scale(1); }
+    20% { transform: translate(-50%,-50%) scale(1.2) rotate(-3deg); }
+    60% { transform: translate(-50%,-50%) scale(1.15) rotate(3deg); } }
+@keyframes cashPop { 0% { transform: translate(-50%,-50%) scale(1); }
+    50% { transform: translate(-50%,-50%) scale(1.3); }
+    100% { transform: translate(-50%,-50%) scale(1); } }
+
+.rocket-history { display: flex; gap: 5px; overflow-x: auto; padding: 8px 0; flex-shrink: 0;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.rocket-history::-webkit-scrollbar { display: none; }
+.rh-item { flex-shrink: 0; padding: 6px 12px; border-radius: 9px; font-size: 11px; font-weight: 800;
+    background: linear-gradient(180deg, rgba(22,22,32,0.8), rgba(14,14,20,0.8));
+    border: 1px solid var(--border); letter-spacing: -0.02em; }
+.rh-item.low { color: var(--text-dim); border-color: rgba(255,255,255,0.1); }
+.rh-item.mid { color: var(--gold); border-color: rgba(255,217,61,0.35);
+    background: linear-gradient(180deg, rgba(255,217,61,0.12), rgba(255,217,61,0.03)); }
+.rh-item.high { color: var(--green); border-color: rgba(46,204,113,0.35);
+    background: linear-gradient(180deg, rgba(46,204,113,0.12), rgba(46,204,113,0.03));
+    box-shadow: 0 0 12px rgba(46,204,113,0.2); }
+.rh-item.instant { color: var(--text-mute); border-color: rgba(255,255,255,0.06); }
+
+.bet-gift-row { display: flex; align-items: center; gap: 10px;
+    background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 11px 14px; margin-bottom: 8px; flex-shrink: 0;
+    cursor: pointer; min-height: 64px; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.bet-gift-row:active { transform: scale(0.98); }
+.bet-gift-row.empty-bet { justify-content: center; border-style: dashed;
+    border-color: rgba(120,100,255,0.4);
+    background: linear-gradient(180deg, rgba(120,100,255,0.1), rgba(120,100,255,0.03));
+    animation: betPulse 2s ease-in-out infinite; }
+@keyframes betPulse { 0%,100% { border-color: rgba(120,100,255,0.35); box-shadow: 0 0 0 rgba(120,100,255,0); }
+    50% { border-color: rgba(120,100,255,0.8); box-shadow: 0 0 20px rgba(120,100,255,0.3); } }
+.bet-gift-row .bg-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase;
+    letter-spacing: 0.1em; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.bet-gift-row .bg-label::before { content: '+'; font-size: 18px; color: #8fb0ff; font-weight: 900; }
+.bet-gift-icon { width: 48px; height: 48px;
+    background: linear-gradient(135deg, rgba(120,100,255,0.15), rgba(168,85,247,0.05));
+    border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(120,100,255,0.2); }
+.bet-gift-icon img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.bet-gift-info { flex: 1; min-width: 0; }
+.bet-gift-name { font-size: 13px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bet-gift-value { font-size: 10px; color: var(--gold); font-weight: 700; margin-top: 3px; }
+.bet-gift-edit { font-size: 10px; color: var(--text-mute); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em; }
+
+.rocket-btn { width: 100%; padding: 17px;
+    background: linear-gradient(135deg, #2ecc71 0%, #1ea855 100%);
+    border: none; border-radius: 14px; color: #000;
+    font-size: 14px; font-weight: 900; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; font-family: inherit;
+    transition: all 0.25s;
+    box-shadow: 0 8px 32px rgba(46,204,113,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    margin-bottom: 8px; flex-shrink: 0; }
+.rocket-btn:active:not(:disabled) { transform: scale(0.97); }
+.rocket-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+.rocket-btn.cashout { background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
+    box-shadow: 0 8px 32px rgba(255,217,61,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+    animation: cashPulse 0.8s ease-in-out infinite; }
+@keyframes cashPulse { 0%,100% { box-shadow: 0 8px 32px rgba(255,217,61,0.4); }
+    50% { box-shadow: 0 8px 48px rgba(255,217,61,0.9); } }
+
+.saper-info { display: flex; justify-content: space-between; align-items: center;
+    background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(255,217,61,0.08) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.95));
+    border: 1px solid rgba(255,217,61,0.15);
+    border-radius: 16px; padding: 14px 16px; margin-bottom: 10px; flex-shrink: 0; gap: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05); }
+.saper-stat { text-align: center; flex: 1; }
+.saper-stat .lbl { font-size: 9px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 0.08em; font-weight: 700; }
+.saper-stat .val { font-size: 17px; font-weight: 900; margin-top: 3px; letter-spacing: -0.03em; }
+.saper-stat .val.green { color: var(--green); text-shadow: 0 0 15px rgba(46,204,113,0.5); }
+.saper-stat .val.gold { color: var(--gold); text-shadow: 0 0 15px rgba(255,217,61,0.5); }
+.saper-stat .val.red { color: var(--red); text-shadow: 0 0 15px rgba(255,71,87,0.5); }
+
+.saper-grid-wrap {
+    background: radial-gradient(ellipse 100% 100% at 50% 50%, rgba(255,217,61,0.06) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(16,16,26,0.95), rgba(8,8,14,1));
+    border: 1px solid rgba(255,217,61,0.12);
+    border-radius: 20px; padding: 14px; margin-bottom: 10px; flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 300px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); }
+.saper-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    width: 100%; aspect-ratio: 1 / 1; max-width: 100%; max-height: 100%; }
+.saper-cell { background: linear-gradient(160deg, rgba(40,40,55,0.95), rgba(24,24,36,0.95));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 900;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative; user-select: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 8px rgba(0,0,0,0.3); }
+.saper-cell:active:not(.revealed):not(.disabled) { transform: scale(0.94); }
+.saper-cell.revealed { background: radial-gradient(circle at 50% 30%, rgba(46,204,113,0.3), rgba(46,204,113,0.08));
+    border-color: rgba(46,204,113,0.6); cursor: default;
+    animation: cellPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 20px rgba(46,204,113,0.4), inset 0 0 15px rgba(46,204,113,0.2); }
+@keyframes cellPop { 0% { transform: scale(0.8); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.saper-cell.mine { background: radial-gradient(circle at 50% 30%, rgba(255,71,87,0.5), rgba(255,71,87,0.15));
+    border-color: rgba(255,71,87,0.8); animation: mineShake 0.6s;
+    box-shadow: 0 0 30px rgba(255,71,87,0.6), inset 0 0 20px rgba(255,71,87,0.3); }
+@keyframes mineShake { 0%,100% { transform: translate(0,0) rotate(0); }
+    20% { transform: translate(-5px,5px) rotate(-3deg); }
+    40% { transform: translate(5px,-5px) rotate(3deg); }
+    60% { transform: translate(-4px,4px) rotate(-2deg); }
+    80% { transform: translate(4px,-4px) rotate(2deg); } }
+.saper-cell.disabled { cursor: default; pointer-events: none; }
+.saper-cell.mine-reveal { background: linear-gradient(180deg, rgba(255,71,87,0.12), rgba(255,71,87,0.03));
+    border-color: rgba(255,71,87,0.35); opacity: 0.55; }
+
+.saper-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
+.saper-start-btn { padding: 17px; border-radius: 14px; border: none;
+    background: linear-gradient(135deg, #2ecc71, #1ea855);
+    color: #000; font-size: 13px; font-weight: 900; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; font-family: inherit;
+    box-shadow: 0 8px 32px rgba(46,204,113,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    transition: all 0.2s; }
+.saper-start-btn:active:not(:disabled) { transform: scale(0.97); }
+.saper-start-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+.saper-cash-btn { padding: 17px; border-radius: 14px; border: none;
+    background: linear-gradient(135deg, #ffd93d, #ff9500);
+    color: #000; font-size: 13px; font-weight: 900; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; font-family: inherit;
+    box-shadow: 0 8px 32px rgba(255,217,61,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    transition: all 0.2s; }
+.saper-cash-btn:active:not(:disabled) { transform: scale(0.97); }
+.saper-cash-btn:disabled { opacity: 0.3; cursor: not-allowed;
+    background: rgba(255,255,255,0.05); color: var(--text-mute); box-shadow: none; }
+
+.shop-topbar { display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; margin-bottom: 10px; flex-shrink: 0; gap: 8px; }
+.shop-topbar .label { font-size: 11px; color: var(--text-mute);
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+.shop-topbar .val { font-size: 15px; font-weight: 900; color: var(--gold); }
+
+.shop-search-row { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 6px;
+    margin-bottom: 10px; flex-shrink: 0; }
+
+.shop-grid-wrap { background: linear-gradient(180deg, rgba(16,16,26,0.95), rgba(8,8,14,1));
+    border: 1px solid rgba(255,217,61,0.12); border-radius: 16px;
+    padding: 10px; flex: 1; min-height: 0; overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05); }
+.shop-items-scroll { flex: 1; min-height: 0; overflow-y: auto; }
+
+.picker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    border-radius: 12px; padding: 8px; max-height: 200px; overflow-y: auto; }
+
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center;
+    z-index: 300; padding: 20px; }
+.overlay.active { display: flex; }
+.modal { background: linear-gradient(180deg, #1a1a26 0%, #0e0e16 100%);
+    border: 1px solid var(--border-strong); border-radius: 20px;
+    padding: 22px; max-width: 340px; width: 100%;
+    animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    max-height: 80vh; overflow-y: auto; }
+@keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-title { font-size: 15px; font-weight: 800; margin-bottom: 14px; text-align: center; }
+.modal-sub { font-size: 11px; color: var(--text-dim); text-align: center;
+    margin-bottom: 14px; line-height: 1.4; }
+.input-field { width: 100%; background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border); border-radius: 11px;
+    color: var(--text); font-size: 13px; font-family: inherit; font-weight: 700;
+    padding: 12px 14px; text-align: center; letter-spacing: 0.06em;
+    outline: none; text-transform: uppercase; margin-bottom: 12px; }
+.status-msg { font-size: 11px; font-weight: 700; min-height: 16px;
+    text-align: center; margin-bottom: 12px; }
+.status-msg.ok { color: var(--green); }
+.status-msg.err { color: var(--red); }
+.btns-row { display: flex; gap: 8px; }
+.btn { flex: 1; padding: 12px; border-radius: 11px; border: none;
+    font-size: 12px; font-weight: 800; font-family: inherit; cursor: pointer; }
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: linear-gradient(135deg, #fff, #d0d4ff); color: #000; }
+.btn-secondary { background: rgba(255,255,255,0.04); color: var(--text); border: 1px solid var(--border); }
+
+.settings-row { display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid var(--border); }
+.settings-row:last-child { border-bottom: none; }
+.settings-label { font-size: 12px; font-weight: 600; }
+.switch { position: relative; width: 42px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider { position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+    border: 1px solid var(--border-strong); border-radius: 12px;
+    cursor: pointer; transition: 0.25s; }
+.switch .slider::before { content: ''; position: absolute; width: 18px; height: 18px;
+    left: 2px; top: 2px; background: var(--text-dim); border-radius: 50%; transition: 0.25s; }
+.switch input:checked + .slider { background: linear-gradient(135deg, #fff, #d0d4ff); border-color: transparent; }
+.switch input:checked + .slider::before { transform: translateX(18px); background: #000; }
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 10px 0; }
+.lang-btn { padding: 10px 6px; border-radius: 10px;
+    border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+    color: var(--text-dim); font-size: 11px; font-weight: 700;
+    font-family: inherit; cursor: pointer; }
+.lang-btn.active { background: linear-gradient(135deg, #fff, #d0d4ff); color: #000; border-color: transparent; }
+
+.profile-header { display: flex; align-items: center; gap: 14px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.avatar { width: 54px; height: 54px; border-radius: 50%;
+    background: linear-gradient(135deg, #4a86ff, #a855f7);
+    border: 2px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 20px; font-weight: 800; overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-info { flex: 1; min-width: 0; }
+.profile-name { font-size: 15px; font-weight: 800; margin-bottom: 3px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.profile-stats { font-size: 10px; color: var(--text-dim); }
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.stat-cell { background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 12px; }
+.stat-label { font-size: 9px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 4px; font-weight: 700; }
+.stat-value { font-size: 15px; font-weight: 800; }
+.stat-value.green { color: var(--green); }
+.stat-value.red { color: var(--red); }
+.stat-value.gold { color: var(--gold); }
+.profile-tabs { display: flex; gap: 4px; background: rgba(0,0,0,0.35);
+    border-radius: 11px; padding: 3px; margin-bottom: 12px; }
+.profile-tab { flex: 1; padding: 8px; border-radius: 8px; background: transparent;
+    border: none; color: var(--text-dim); font-size: 10px; font-weight: 700;
+    font-family: inherit; cursor: pointer; text-transform: uppercase; }
+.profile-tab.active { background: linear-gradient(180deg, rgba(34,34,48,0.9), rgba(20,20,30,0.9)); color: var(--text); }
+.profile-view { display: none; max-height: 280px; overflow-y: auto; }
+.profile-view.active { display: block; }
+.history-item, .inv-item { display: flex; align-items: center; gap: 10px;
+    padding: 9px 6px; border-bottom: 1px solid var(--border); font-size: 11px; }
+.history-item:last-child, .inv-item:last-child { border-bottom: none; }
+.history-icon { width: 34px; height: 34px; flex-shrink: 0;
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    border: 1px solid var(--border); }
+.history-icon img { width: 100%; height: 100%; object-fit: contain; }
+.history-info { flex: 1; min-width: 0; }
+.history-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.history-sub { font-size: 9px; color: var(--text-mute); margin-top: 2px; }
+.history-result { font-size: 9px; font-weight: 800; flex-shrink: 0;
+    padding: 3px 7px; border-radius: 5px; }
+.history-result.win { color: var(--green); background: rgba(46,204,113,0.12); }
+.history-result.lose { color: var(--red); background: rgba(255,71,87,0.12); }
+.inv-actions { display: flex; gap: 5px; }
+.mini-btn { padding: 6px 10px; border-radius: 7px; border: 1px solid var(--border);
+    background: transparent; color: var(--text); font-size: 9px; font-weight: 800;
+    font-family: inherit; cursor: pointer; }
+.mini-btn.sell { color: var(--gold); border-color: rgba(255,217,61,0.3); }
+.mini-btn.withdraw { color: var(--text-mute); cursor: not-allowed; }
+
+.packs-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
+.pack-btn { display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255,217,61,0.1), rgba(255,150,50,0.05));
+    border: 1px solid rgba(255,217,61,0.3); cursor: pointer;
+    font-family: inherit; color: var(--text); }
+.pack-btn:active { transform: scale(0.98); }
+.pack-stars { font-size: 15px; font-weight: 800; color: var(--gold); }
+.pack-price { font-size: 10px; color: var(--text-mute); margin-top: 2px; }
+.pack-arrow { font-size: 18px; color: var(--gold); font-weight: 900; }
+
+.test-ended-badge { display: flex; align-items: center; justify-content: center;
+    padding: 12px; border-radius: 12px;
+    background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.3);
+    color: var(--red); font-size: 12px; font-weight: 800;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 8px; flex-shrink: 0; }
+.footer { text-align: center; margin-top: 8px; font-size: 9px;
+    color: var(--text-mute); padding-bottom: 4px; flex-shrink: 0; }
+.footer a { color: var(--text-dim); text-decoration: none; font-weight: 600; }
+
+@media (max-width: 360px) {
+    .online-badge { display: none; }
+    .logo { font-size: 13px; }
+    .balance-chip { font-size: 10px; padding: 4px 7px; }
+    .icon-btn { width: 28px; height: 28px; }
+    .icon-btn svg { width: 13px; height: 13px; }
+    .menu-card-icon .gicon { height: 48px; width: 48px; }
+    .menu-card-title { font-size: 12px; }
+    .menu-card-desc { font-size: 9px; }
+}
+@media (min-width: 420px) {
+    .wheel-wrap { width: 175px; height: 175px; }
+    .wheel-col { min-width: 175px; }
+    .wheel-center { width: 104px; height: 104px; }
+    .wheel-percent { font-size: 27px; }
+    .menu-card-icon .gicon { height: 68px; width: 68px; }
+    .menu-card-title { font-size: 15px; }
+    .rocket-mult { font-size: 60px; }
+}
+@media (min-width: 600px) {
+    body { padding: 16px; }
+    .wheel-wrap { width: 220px; height: 220px; }
+    .wheel-col { min-width: 220px; }
+    .wheel-center { width: 130px; height: 130px; }
+    .wheel-percent { font-size: 34px; }
+    .item-grid { grid-template-columns: repeat(5, 1fr); }
+    .modal { max-width: 400px; }
+    .rocket-mult { font-size: 72px; }
+    .menu-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+    <div class="header">
+        <div class="header-left">
+            <div class="logo" id="logo">ПСЫ<span class="dot">.</span>gg</div>
+            <div class="online-badge">
+                <span class="online-dot"></span>
+                <span id="online-count">7</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="balance-chip" id="plus-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span id="balance">10000</span>
+                <span class="test-badge">TEST</span>
+                <span class="plus-sign" id="plus-sign" style="display:none;">+</span>
+            </div>
+            <button class="icon-btn" id="promo-btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+            </button>
+            <button class="icon-btn" id="star-btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/>
+                </svg>
+            </button>
+            <button class="icon-btn" id="settings-btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+            <button class="icon-btn" id="profile-btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="test-ended" class="test-ended-badge" style="display:none;">ТЕСТ ЗАВЕРШЁН · 0 МОНЕТ</div>
+
+    <div class="screen active" id="screen-menu">
+        <div class="menu-title">Выбери режим</div>
+        <div class="menu-subtitle">Играй и выигрывай</div>
+        <div class="menu-grid">
+            <button class="menu-card" data-mode="upgrader" type="button" style="--card-glow: rgba(120,100,255,0.4);">
+                <div class="menu-card-icon">
+                    <div class="gicon" data-name="Heart"></div>
+                    <span class="arrow">→</span>
+                    <div class="gicon" data-name="Mini Oscar"></div>
+                </div>
+                <div class="menu-card-title">Апгрейдер</div>
+                <div class="menu-card-desc">Прокачивай гифты</div>
+            </button>
+
+            <button class="menu-card" data-mode="rocket" type="button" style="--card-glow: rgba(46,204,113,0.5);">
+                <div class="menu-card-icon">
+                    <div class="gicon" data-name="Rocket" style="transform: rotate(-15deg);"></div>
+                </div>
+                <div class="menu-card-title">Рокетка</div>
+                <div class="menu-card-desc">Автораунд 50 сек</div>
+            </button>
+
+            <button class="menu-card" data-mode="saper" type="button" style="--card-glow: rgba(255,217,61,0.4);">
+                <div class="menu-card-icon">
+                    <div class="gicon" data-name="Trophy"></div>
+                </div>
+                <div class="menu-card-title">Сапёр</div>
+                <div class="menu-card-desc">Открывай клетки</div>
+            </button>
+
+            <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,150,50,0.4);">
+                <div class="menu-card-icon">
+                    <div class="gicon" data-name="Diamond Ring"></div>
+                </div>
+                <div class="menu-card-title">Магазин</div>
+                <div class="menu-card-desc">Купить гифты</div>
+            </button>
+        </div>
+    </div>
+
+    <div class="screen" id="screen-upgrader">
+        <div class="arena">
+            <div class="item-slot" id="from-card">
+                <div class="slot-title">Твой</div>
+                <div class="slot-icon" id="from-icon"></div>
+                <div class="item-name" id="from-name">—</div>
+                <div class="item-value" id="from-value">—</div>
+            </div>
+            <div class="wheel-col">
+                <div class="wheel-wrap" id="wheel-wrap">
+                    <svg class="wheel-svg" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#b0b8ff"/>
+                            </linearGradient>
+                            <linearGradient id="trackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#1f1f2a"/>
+                                <stop offset="100%" stop-color="#0e0e16"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="44" fill="none" stroke="url(#trackGrad)" stroke-width="10"/>
+                        <path id="win-arc" fill="url(#winGrad)"/>
+                    </svg>
+                    <div class="wheel-pointer" id="wheel-pointer"></div>
+                    <div class="wheel-center">
+                        <div class="wheel-percent" id="wheel-percent">50%</div>
+                        <div class="wheel-label" id="wheel-label">средний</div>
+                    </div>
+                </div>
+            </div>
+            <div class="item-slot" id="to-card">
+                <div class="slot-title">Цель</div>
+                <div class="slot-icon" id="to-icon"></div>
+                <div class="item-name" id="to-name">—</div>
+                <div class="item-value" id="to-value">—</div>
+            </div>
+        </div>
+
+        <div class="mult-grid" id="mult-grid"></div>
+        <button class="upgrade-btn" id="upgrade-btn" type="button">Прокачать</button>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="inv" type="button">Инвентарь <span id="inv-count"></span></button>
+            <button class="tab" data-tab="target" type="button">Цель</button>
+        </div>
+
+        <div class="panel">
+            <div class="panel-view active" id="view-inv">
+                <div class="panel-tools">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                        <input type="text" id="inv-search" placeholder="Поиск...">
+                    </div>
+                    <input type="number" class="num-input" id="inv-price-min" placeholder="От">
+                    <input type="number" class="num-input" id="inv-price-max" placeholder="До">
+                </div>
+                <div class="items-scroll"><div class="item-grid" id="inv-grid"></div></div>
+            </div>
+            <div class="panel-view" id="view-target">
+                <div class="panel-tools">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                        <input type="text" id="target-search" placeholder="Поиск...">
+                    </div>
+                    <input type="number" class="num-input" id="target-price-min" placeholder="От">
+                    <input type="number" class="num-input" id="target-price-max" placeholder="До">
+                </div>
+                <div class="items-scroll"><div class="item-grid" id="target-grid"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen" id="screen-rocket">
+        <div class="rocket-status-bar">
+            <div class="rocket-phase waiting" id="rocket-phase">
+                <span class="phase-dot"></span>
+                <span id="rocket-phase-text">Приём ставок</span>
+            </div>
+            <div class="rocket-timer" id="rocket-timer">50</div>
+        </div>
+
+        <div class="rocket-stage" id="rocket-stage">
+            <svg class="rocket-trail-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="trailGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="rgba(168,85,247,0.05)"/>
+                        <stop offset="50%" stop-color="rgba(120,100,255,0.6)"/>
+                        <stop offset="100%" stop-color="#a855f7"/>
+                    </linearGradient>
+                </defs>
+                <path id="rocket-trail-path" class="rocket-trail-path" d=""/>
+            </svg>
+            <div class="rocket-icon" id="rocket-icon" style="display:none;"></div>
+            <div class="rocket-mult" id="rocket-mult">1.00x</div>
+        </div>
+
+        <div class="bet-gift-row empty-bet" id="rocket-bet-row">
+            <div class="bg-label" id="rocket-bet-label">Нажми чтобы выбрать гифт</div>
+        </div>
+
+        <button class="rocket-btn" id="rocket-btn" type="button" disabled>Ждите раунд</button>
+
+        <div class="rocket-history" id="rocket-history"></div>
+    </div>
+
+    <div class="screen" id="screen-saper">
+        <div class="saper-info">
+            <div class="saper-stat">
+                <div class="lbl">Множитель</div>
+                <div class="val gold" id="saper-mult">0.00x</div>
+            </div>
+            <div class="saper-stat">
+                <div class="lbl">Открыто</div>
+                <div class="val" id="saper-opened">0 / 22</div>
+            </div>
+            <div class="saper-stat">
+                <div class="lbl">Мин</div>
+                <div class="val red" id="saper-mines">3</div>
+            </div>
+        </div>
+
+        <div class="saper-grid-wrap">
+            <div class="saper-grid" id="saper-grid"></div>
+        </div>
+
+        <div class="bet-gift-row empty-bet" id="saper-bet-row">
+            <div class="bg-label">Нажми чтобы выбрать гифт</div>
+        </div>
+
+        <div class="saper-btn-row">
+            <button class="saper-start-btn" id="saper-start-btn" type="button">Старт</button>
+            <button class="saper-cash-btn" id="saper-cash-btn" type="button" disabled>Забрать</button>
+        </div>
+    </div>
+
+    <div class="screen" id="screen-shop">
+        <div class="shop-topbar">
+            <span class="label">Баланс</span>
+            <span class="val"><span id="shop-balance">10000</span> ⭐</span>
+        </div>
+
+        <div class="shop-search-row">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                <input type="text" id="shop-search" placeholder="Поиск...">
+            </div>
+            <input type="number" class="num-input" id="shop-price-min" placeholder="От">
+            <input type="number" class="num-input" id="shop-price-max" placeholder="До">
+        </div>
+
+        <div class="shop-grid-wrap">
+            <div class="shop-items-scroll">
+                <div class="item-grid" id="shop-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        powered by <a href="https://t.me/PSYgg_BOT" target="_blank">@PSYgg_BOT</a>
+    </div>
+</div>
+
+<div class="overlay" id="gift-picker">
+    <div class="modal" style="max-width:380px;">
+        <div class="modal-title">Выбери гифт для ставки</div>
+        <div class="picker" id="gift-picker-grid"></div>
+        <div class="btns-row" style="margin-top:14px;">
+            <button class="btn btn-secondary" id="gift-picker-cancel" type="button">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="buy-modal">
+    <div class="modal">
+        <div class="slot-icon" id="buy-icon" style="width:80px;height:80px;margin:0 auto 14px;"></div>
+        <div class="modal-title" id="buy-name">—</div>
+        <div class="modal-sub" id="buy-price" style="font-size:20px;font-weight:900;">—</div>
+        <div class="btns-row">
+            <button class="btn btn-secondary" id="buy-cancel" type="button">Отмена</button>
+            <button class="btn btn-primary" id="buy-confirm" type="button">Купить</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="promo-modal">
+    <div class="modal">
+        <div class="modal-title">Промокод</div>
+        <div class="modal-sub">Введи код и получи награду</div>
+        <input type="text" class="input-field" id="promo-input" placeholder="ВВЕДИ ПРОМОКОД">
+        <div class="status-msg" id="promo-message"></div>
+        <div class="btns-row">
+            <button class="btn btn-secondary" id="promo-cancel" type="button">Закрыть</button>
+            <button class="btn btn-primary" id="promo-activate" type="button">Активировать</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="settings-modal">
+    <div class="modal">
+        <div class="modal-title">Настройки</div>
+        <div class="settings-row">
+            <span class="settings-label">Вибрация</span>
+            <label class="switch"><input type="checkbox" id="vibration-toggle"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+            <span class="settings-label">Звук</span>
+            <label class="switch"><input type="checkbox" id="sound-toggle"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:6px;">
+            <span class="settings-label">Язык</span>
+            <div class="lang-grid">
+                <button class="lang-btn" data-lang="ru" type="button">RU</button>
+                <button class="lang-btn" data-lang="en" type="button">EN</button>
+                <button class="lang-btn" data-lang="de" type="button">DE</button>
+            </div>
+        </div>
+        <div class="btns-row" style="margin-top:14px;">
+            <button class="btn btn-primary" id="settings-close" type="button">Готово</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="profile-modal">
+    <div class="modal" style="max-width:380px;">
+        <div class="profile-header">
+            <div class="avatar" id="profile-avatar">?</div>
+            <div class="profile-info">
+                <div class="profile-name" id="profile-name">Игрок</div>
+                <div class="profile-stats"><span id="profile-drops">0</span> · <span id="profile-inv">0</span></div>
+            </div>
+        </div>
+        <div class="stat-grid">
+            <div class="stat-cell"><div class="stat-label">Победы</div><div class="stat-value green" id="stat-wins">0</div></div>
+            <div class="stat-cell"><div class="stat-label">Поражения</div><div class="stat-value red" id="stat-losses">0</div></div>
+            <div class="stat-cell"><div class="stat-label">Проставлено</div><div class="stat-value" id="stat-wagered">0</div></div>
+            <div class="stat-cell"><div class="stat-label">Лучший дроп</div><div class="stat-value gold" id="stat-best">—</div></div>
+        </div>
+        <div class="profile-tabs">
+            <button class="profile-tab active" data-pview="history" type="button">История</button>
+            <button class="profile-tab" data-pview="inventory" type="button">Инвентарь</button>
+        </div>
+        <div class="profile-view active" id="pview-history"><div id="history-list"></div></div>
+        <div class="profile-view" id="pview-inventory"><div id="profile-inv-list"></div></div>
+        <div class="btns-row" style="margin-top:14px;">
+            <button class="btn btn-secondary" id="profile-close" type="button">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="sell-modal">
+    <div class="modal">
+        <div class="slot-icon" id="sell-icon" style="width:80px;height:80px;margin:0 auto 14px;"></div>
+        <div class="modal-title" id="sell-name">—</div>
+        <div class="modal-sub" id="sell-info">—</div>
+        <div class="btns-row">
+            <button class="btn btn-secondary" id="sell-cancel" type="button">Отмена</button>
+            <button class="btn btn-primary" id="sell-confirm" type="button">Продать</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="stars-modal">
+    <div class="modal">
+        <div class="modal-title">Пополнение звёздами</div>
+        <div class="modal-sub">Выбери пакет. Оплата через Telegram Stars.</div>
+        <div class="packs-grid">
+            <button class="pack-btn" data-pack="100" type="button">
+                <div><div class="pack-stars">100 ⭐</div><div class="pack-price">≈ 1.99 $</div></div>
+                <div class="pack-arrow">→</div>
+            </button>
+            <button class="pack-btn" data-pack="500" type="button">
+                <div><div class="pack-stars">500 ⭐</div><div class="pack-price">≈ 9.99 $</div></div>
+                <div class="pack-arrow">→</div>
+            </button>
+            <button class="pack-btn" data-pack="1000" type="button">
+                <div><div class="pack-stars">1000 ⭐</div><div class="pack-price">≈ 19.99 $</div></div>
+                <div class="pack-arrow">→</div>
+            </button>
+        </div>
+        <div class="status-msg" id="stars-message"></div>
+        <div class="btns-row"><button class="btn btn-secondary" id="stars-close" type="button">Закрыть</button></div>
+    </div>
+</div>
+
+<div class="flash-red" id="flash-red"></div>
+<div class="flash-win" id="flash-win"></div>
+
 <script>
 (function(){
 "use strict";
@@ -91,10 +1009,9 @@ const FALLBACK = [
 const MULTIPLIERS = [1.2,1.5,2,3,5,10,25,100];
 const SPIN_DURATION = 7500;
 
-/* ========== РОКЕТКА: тайминги ========== */
-const ROCKET_WAIT = 50;      // 50 сек приём ставок
-const ROCKET_FLY_MAX = 30;   // макс полёт
-const ROCKET_RESULT = 5;     // 5 сек результат
+const ROCKET_WAIT = 50;
+const ROCKET_FLY_MAX = 30;
+const ROCKET_RESULT = 5;
 
 let CATALOG = [];
 let balance = STARTING_BALANCE;
@@ -109,19 +1026,16 @@ let targetSearch = '', targetMin = null, targetMax = null;
 let shopSearch = '', shopMin = null, shopMax = null;
 let currentScreen = 'menu';
 
-/* ROCKET STATE (живёт вне экрана) */
 let rocketPhase = 'waiting';
 let rocketPhaseStart = Date.now();
 let rocketPhaseDuration = ROCKET_WAIT;
-let rocketBetGift = null;      // что поставлено (сам объект для визуала)
-let rocketBetActive = false;    // ставка принята на текущий раунд?
+let rocketBetGift = null;
+let rocketBetActive = false;
 let rocketCrashAt = 0;
 let rocketCurrentMult = 1;
 let rocketStartTime = 0;
 let rocketHistory = [];
-let lastRocketCrash = 0;
 
-/* SAPER */
 let saperState = 'idle';
 let saperBetGift = null;
 let saperMines = [];
@@ -140,7 +1054,6 @@ function getRarity(v){
     return '#ff9500';
 }
 
-/* ========== ИКОНКИ ЧЕРЕЗ WESERV PROXY ========== */
 function iconHTML(item, size){
     size = size || 128;
     const px = size >= 128 ? 500 : 200;
@@ -222,7 +1135,7 @@ function hexToRgba(hex,a){
 }
 
 function updateBalanceUI(){
-    $('balance').textContent=balance;
+    const b = $('balance'); if(b) b.textContent=balance;
     const sb = $('shop-balance'); if(sb) sb.textContent=balance;
 }
 
@@ -240,14 +1153,11 @@ function goToScreen(name){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     $('screen-'+name).classList.add('active');
     updateLogo();
-    // Если зашли на ракетку — обновим UI
     if(name==='rocket') updateRocketButtonLabel();
-    // Обновим ракетку визуально по текущей фазе
     syncRocketVisual();
 }
-
 function updateLogo(){
-    $('logo').classList.toggle('disabled', currentScreen==='menu');
+    const l = $('logo'); if(l) l.classList.toggle('disabled', currentScreen==='menu');
 }
 
 document.querySelectorAll('.menu-card').forEach(card=>{
@@ -269,7 +1179,6 @@ $('logo').addEventListener('click', function(e){
     goToMenu();
 });
 
-/* ============ АПГРЕЙДЕР ============ */
 function renderArena(){
     if(currentItem){
         $('from-icon').innerHTML=iconHTML(currentItem,128);
@@ -566,7 +1475,7 @@ document.querySelectorAll('.tab').forEach(tb=>{
     });
 });
 
-/* ============ РОКЕТКА (автораунд) ============ */
+/* ============ РОКЕТКА ============ */
 function generateCrashPoint(){
     if(Math.random()<0.05)return 1.00;
     const u=Math.random();
@@ -666,15 +1575,14 @@ function setRocketTimer(sec){
 }
 
 function syncRocketVisual(){
-    // Синхронизируем визуал с текущей фазой
     if(rocketPhase==='waiting'){
         resetRocketVisual();
         updateRocketButtonLabel();
     } else if(rocketPhase==='flying'){
         if(rocketBetActive && rocketBetGift){
             setRocketIcon(rocketBetGift);
-            $('rocket-icon').style.display='block';
-            $('rocket-mult').className='rocket-mult growing';
+            const ic=$('rocket-icon'); if(ic) ic.style.display='block';
+            const m=$('rocket-mult'); if(m) m.className='rocket-mult growing';
         }
         updateRocketButtonLabel();
     } else {
@@ -682,7 +1590,6 @@ function syncRocketVisual(){
     }
 }
 
-/* Цикл раунда, работает всегда, независимо от экрана */
 function rocketCycleTick(){
     const elapsed = (Date.now() - rocketPhaseStart) / 1000;
     const remaining = Math.max(0, rocketPhaseDuration - elapsed);
@@ -690,7 +1597,6 @@ function rocketCycleTick(){
 
     if(rocketPhase==='waiting'){
         if(remaining<=0){
-            // Старт полёта
             rocketPhase='flying';
             rocketPhaseStart=Date.now();
             rocketPhaseDuration=ROCKET_FLY_MAX;
@@ -721,7 +1627,6 @@ function rocketCycleTick(){
         }
     } else if(rocketPhase==='result'){
         if(remaining<=0){
-            // Начинаем новый приём ставок
             rocketPhase='waiting';
             rocketPhaseStart=Date.now();
             rocketPhaseDuration=ROCKET_WAIT;
@@ -751,17 +1656,14 @@ function renderRocketFrame(m){
 
 function endRocketFlight(cashed){
     if(rocketPhase!=='flying') return;
-    // Переход в result
     rocketPhase='result';
     rocketPhaseStart=Date.now();
     rocketPhaseDuration=ROCKET_RESULT;
 
     const mult = $('rocket-mult');
     if(!cashed){
-        // Краш
         if(mult){ mult.className='rocket-mult crashed'; mult.textContent=rocketCurrentMult.toFixed(2)+'x'; }
         if(rocketBetActive && rocketBetGift){
-            // игрок потерял
             rocketHistory.unshift(rocketCurrentMult);
             rocketHistory=rocketHistory.slice(0,20);
             renderRocketHistory();
@@ -773,7 +1675,6 @@ function endRocketFlight(cashed){
             if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
             flashRed(); shake(); sndLose();
         } else {
-            // был в игре но не участвовал — только запись в историю
             rocketHistory.unshift(rocketCurrentMult);
             rocketHistory=rocketHistory.slice(0,20);
             renderRocketHistory();
@@ -783,7 +1684,6 @@ function endRocketFlight(cashed){
     updateRocketButtonLabel();
 }
 
-/* Действия пользователя */
 function placeRocketBet(){
     if(rocketPhase!=='waiting') return;
     if(rocketBetActive) return;
@@ -825,7 +1725,6 @@ function cashOutRocket(){
     const mult = $('rocket-mult');
     if(mult){ mult.className='rocket-mult cashed'; mult.textContent=rocketCurrentMult.toFixed(2)+'x'; }
 
-    // Переход в result
     rocketPhase='result';
     rocketPhaseStart=Date.now();
     rocketPhaseDuration=ROCKET_RESULT;
@@ -1016,7 +1915,6 @@ $('saper-bet-row').addEventListener('click', ()=>{
     openGiftPicker('saper');
 });
 
-/* GIFT PICKER */
 let giftPickerMode=null;
 function openGiftPicker(mode){
     if(!inventory.length){ sndError(); return; }
@@ -1262,7 +2160,6 @@ async function init(){
     resetSaperUI();
     updateLogo();
 
-    // 🚀 Запуск автоцикла ракеты
     rocketPhase='waiting';
     rocketPhaseStart=Date.now();
     rocketPhaseDuration=ROCKET_WAIT;
@@ -1278,3 +2175,5 @@ $('upgrade-btn').addEventListener('click', doUpgrade);
 
 })();
 </script>
+</body>
+</html>
