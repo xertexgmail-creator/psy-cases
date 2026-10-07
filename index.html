@@ -6,19 +6,20 @@
 <title>ПСЫ.gg</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-    /* Убираем светлый фон у иконок подарков */
-.slot-icon-sm img,
-.slot-icon img,
-.menu-card-icon .gicon img,
-.bet-gift-icon img,
-.history-icon img {
-    mix-blend-mode: screen;
-}
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
     --bg: #08080c; --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.14);
     --text: #f5f5f7; --text-dim: #8a8a95; --text-mute: #55555f;
     --accent: #ffffff; --green: #2ecc71; --red: #ff4757; --gold: #ffd93d;
+}
+    .slot-icon-sm img,
+.slot-icon img,
+.menu-card-icon .gicon img,
+.bet-gift-icon img,
+.history-icon img {
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 45%, transparent 78%);
+    mask-image: radial-gradient(circle at 50% 45%, #000 45%, transparent 78%);
+    filter: drop-shadow(0 0 8px rgba(120,100,255,0.4));
 }
 html, body { overflow-x: hidden; }
 body { background: var(--bg); color: var(--text);
