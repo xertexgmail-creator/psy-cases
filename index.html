@@ -1116,10 +1116,11 @@ function getRarity(v){
 function iconHTML(item, size){
     size = size || 128;
     const slug = item.slug || item.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-    // БЫЛО: 'https://nft.fragment.com/gift/' + slug + '.webp'
-    const fragUrl = 'https://nft.fragment.com/collection/' + slug + '.webp';
+    // api.changes.tg — по имени, самый надёжный
     const apiUrl  = 'https://api.changes.tg/original/' + encodeURIComponent(item.name) + '.png?size=' + size;
-    return '<img src="' + fragUrl + '" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb=\'1\';this.src=\'' + apiUrl + '\';}else{this.style.display=\'none\';}">';
+    // Fragment — резерв
+    const fragUrl = 'https://nft.fragment.com/collection/' + slug + '.webp';
+    return '<img src="' + apiUrl + '" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb=\'1\';this.src=\'' + fragUrl + '\';}else{this.style.display=\'none\';}">';
 }
 
 function fillMenuIcons(){
@@ -1210,8 +1211,16 @@ function hexToRgba(hex,a){
     return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';
 }
 function updateBalanceUI(){
-    const b = $('balance'); if(b) b.textContent=balance;
-    const sb = $('shop-balance'); if(sb) sb.textContent=balance;
+    const fmt = (n) => {
+        if(n >= 1e9) return (n/1e9).toFixed(1).replace(/\.0$/,'') + 'B';
+        if(n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
+        if(n >= 1e4) return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'K';
+        return String(n);
+    };
+    const b = $('balance');
+    if(b){ b.textContent = fmt(balance); b.title = String(balance); }
+    const sb = $('shop-balance');
+    if(sb) sb.textContent = fmt(balance);
 }
 function goToMenu(){
     if(currentScreen==='menu')return;
@@ -1847,9 +1856,10 @@ $('rocket-bet-row').addEventListener('click', ()=>{
 function saperMultiplier(k){
     if(k===0)return 1;
     const N=SAPER_SIZE, M=saperMineCount;
-    let mult=1;
-    for(let i=0;i<k;i++) mult *= (N-i)/(N-M-i);
-    return mult*0.85; // снижен с 0.95 для баланса
+    let fair=1;
+    for(let i=0;i<k;i++) fair *= (N-i)/(N-M-i);
+    // дом берём с прибыли, а не с базы — монотонно растёт и всегда >1
+    return 1 + (fair-1)*0.85;
 }
     
 function updateSaperButtons(){
