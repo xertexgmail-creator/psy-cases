@@ -201,13 +201,10 @@ body::before { content: ''; position: fixed; inset: 0;
     box-shadow: 0 0 10px currentColor; animation: onlinePulse 1s ease-in-out infinite; }
 .rocket-timer { font-size: 15px; font-weight: 900; color: var(--text); letter-spacing: -0.03em; }
 .rocket-stage { position: relative; width: 100%; flex: 1; min-height: 320px;
-    background:
-        radial-gradient(ellipse 100% 60% at 50% 0%, rgba(120,100,255,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 80% 50% at 100% 100%, rgba(168,85,247,0.12) 0%, transparent 65%),
-        linear-gradient(180deg, #0a0a18 0%, #050510 100%);
+    background: linear-gradient(180deg, #0a0a18 0%, #050510 100%);
     border: 1px solid rgba(120,100,255,0.25);
     border-radius: 20px; margin-bottom: 8px; overflow: hidden; }
-.rocket-stage::before { content: ''; position: absolute; inset: 0;
+.rocket-stage::before { content: ''; position: absolute; inset: -50%;
     background-image:
         radial-gradient(1px 1px at 20% 30%, #fff, transparent),
         radial-gradient(1px 1px at 70% 60%, #fff, transparent),
@@ -217,33 +214,33 @@ body::before { content: ''; position: fixed; inset: 0;
         radial-gradient(1px 1px at 55% 15%, #fff, transparent),
         radial-gradient(1px 1px at 30% 90%, #fff, transparent),
         radial-gradient(1px 1px at 65% 45%, #fff, transparent);
-    background-size: 250px 250px; opacity: 0.7;
-    animation: starsMove 30s linear infinite; pointer-events: none; }
-@keyframes starsMove {
-    from { transform: translate(0,0); }
-    to { transform: translate(-50px, 25px); } }
+    background-size: 200px 200px;
+    opacity: 0.9;
+    pointer-events: none;
+    will-change: background-position;
+    background-position: var(--gx, 0px) var(--gy, 0px); }
 .rocket-trail-svg { position: absolute; inset: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 2; overflow: visible; }
 .rocket-trail-path { fill: none; stroke: url(#trailGrad);
     stroke-width: 2.5; stroke-linecap: round;
     filter: drop-shadow(0 0 6px rgba(168,85,247,0.8)); }
 .rocket-trail-fill { fill: url(#trailFill); }
-.rocket-icon { position: absolute; left: 8%; top: 85%;
+.rocket-icon { position: absolute; left: 10%; top: 82%;
     width: 52px; height: 52px;
-    transform: translate(-50%, -50%);
-    transition: left 0.06s linear, top 0.06s linear;
+    transform: translate(-50%, -50%) scale(1);
+    transition: left 0.06s linear, top 0.06s linear, transform 0.2s;
     z-index: 3;
     filter: drop-shadow(0 0 16px rgba(168,85,247,0.9)) drop-shadow(0 0 30px rgba(120,100,255,0.4)); }
 .rocket-icon img { width: 100%; height: 100%; object-fit: contain;
-    display: block; transform: rotate(-40deg); }
+    display: block; transform: rotate(-15deg); }
 .rocket-icon.idle { animation: rocketFloat 2s ease-in-out infinite; }
 @keyframes rocketFloat {
     0%,100% { transform: translate(-50%, -50%) translateY(0); }
     50% { transform: translate(-50%, -50%) translateY(-6px); } }
-.rocket-icon.flying { animation: rocketShake 0.25s ease-in-out infinite; }
+.rocket-icon.flying { animation: rocketShake 0.2s ease-in-out infinite; }
 @keyframes rocketShake {
-    0%,100% { transform: translate(-50%, -50%) rotate(-2deg); }
-    50% { transform: translate(-50%, -50%) rotate(2deg); } }
+    0%,100% { transform: translate(-50%, -50%) translate(-1px, 1px); }
+    50% { transform: translate(-50%, -50%) translate(1px, -1px); } }
 .rocket-icon.crashed {
     transition: transform 0.55s ease-out, opacity 0.55s;
     transform: translate(-50%, -50%) scale(2.6); opacity: 0; }
@@ -844,12 +841,12 @@ body::before { content: ''; position: fixed; inset: 0;
             <svg class="rocket-trail-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
                     <linearGradient id="trailGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="rgba(168,85,247,0)"/>
+                        <stop offset="0%" stop-color="rgba(168,85,247,0.1)"/>
                         <stop offset="100%" stop-color="#a855f7"/>
                     </linearGradient>
                     <linearGradient id="trailFill" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stop-color="rgba(168,85,247,0.5)"/>
-                        <stop offset="100%" stop-color="rgba(168,85,247,0)"/>
+                        <stop offset="100%" stop-color="rgba(168,85,247,0.05)"/>
                     </linearGradient>
                 </defs>
                 <path id="rocket-trail-fill" class="rocket-trail-fill" d=""/>
@@ -1021,7 +1018,6 @@ const PROMO_CODES = { 'ROMANARMATURA777':10, 'CHIHARDEDEP':20 };
 function getUsedCodes(){ try{ return JSON.parse(localStorage.getItem(USED_KEY)||'[]');}catch{return[];} }
 function markCodeUsed(c){ const u=getUsedCodes(); if(!u.includes(c)){u.push(c);localStorage.setItem(USED_KEY,JSON.stringify(u));} }
 function isCodeUsed(c){ return getUsedCodes().includes(c); }
-
 let audioCtx=null;
 function initAudio(){ if(audioCtx)return; try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} }
 function playTone(freq,dur,type,vol,delay){
@@ -1051,125 +1047,66 @@ function sndCaseSpin(){ initAudio(); playTone(900+Math.random()*300,0.02,'square
 function sndCaseWin(){ initAudio(); [523,659,784,1047,1319].forEach((f,i)=>playTone(f,0.22,'sine',0.2,i*0.09)); }
 
 const FALLBACK = [
-    { name:'Heart Locket', value:15 },
-    { name:'Toy Bear', value:15 },
-    { name:'Jingle Bells', value:25 },
-    { name:'Magic Potion', value:25 },
-    { name:'Jelly Bunny', value:25 },
-    { name:'Homemade Cake', value:50 },
-    { name:'Crystal Ball', value:50 },
-    { name:'Top Hat', value:100 },
-    { name:'Sakura Flower', value:100 },
-    { name:'Clover Pin', value:150 },
-    { name:'Bonded Ring', value:180 },
-    { name:'Diamond Ring', value:100 },
-    { name:"Durov's Cap", value:280 },
-    { name:'Cupid Charm', value:350 },
-    { name:'Valentine Box', value:420 },
-    { name:'Artisan Brick', value:500 },
-    { name:'Voodoo Doll', value:600 },
-    { name:'Scared Cat', value:700 },
-    { name:'Electric Skull', value:850 },
-    { name:'Perfume Bottle', value:1000 },
-    { name:'Santa Hat', value:1200 },
-    { name:'Signet Ring', value:1400 },
-    { name:'Swiss Watch', value:1700 },
-    { name:'Precious Peach', value:2000 },
-    { name:'Plush Pepe', value:2500 },
-    { name:'Stellar Rocket', value:3000 },
-    { name:'Snoop Dogg', value:3500 },
-    { name:'Low Rider', value:4000 },
-    { name:'Snoop Cigar', value:4500 },
-    { name:'Jolly Chimp', value:5000 },
-    { name:'Westside Sign', value:5500 },
-    { name:'Kissed Frog', value:6000 },
-    { name:'Sharp Tongue', value:6500 },
-    { name:'Loot Bag', value:7000 },
-    { name:'Trapped Heart', value:8000 },
-    { name:'Nail Bracelet', value:9000 },
-    { name:'Neko Helmet', value:10000 },
-    { name:'Mini Oscar', value:12000 },
-    { name:'Gem Signet', value:14000 },
-    { name:'Vintage Cigar', value:16000 },
-    { name:'Hanging Star', value:18000 },
-    { name:'Lunar Snake', value:20000 },
-    { name:'Astral Shard', value:24000 },
-    { name:'Light Sword', value:28000 },
-    { name:'Mighty Arm', value:32000 },
-    { name:'Evil Eye', value:38000 },
-    { name:'Witch Hat', value:45000 },
-    { name:'Liberty Figure', value:55000 },
-    { name:"Durov's Glasses", value:65000 },
-    { name:'Intelligence Cup', value:80000 },
-    { name:'Algorithm Cup', value:95000 },
-    { name:"Khabib's Papakha", value:120000 },
-    { name:'UFC Strike', value:140000 },
-    { name:'Rare Bird', value:170000 },
-    { name:'Ion Gem', value:200000 },
-    { name:'Hex Pot', value:250000 },
-    { name:'Genie Lamp', value:300000 },
-    { name:'Tama Gadget', value:400000 },
+    { name:'Heart Locket', value:15 }, { name:'Toy Bear', value:15 },
+    { name:'Jingle Bells', value:25 }, { name:'Magic Potion', value:25 },
+    { name:'Jelly Bunny', value:25 }, { name:'Homemade Cake', value:50 },
+    { name:'Crystal Ball', value:50 }, { name:'Top Hat', value:100 },
+    { name:'Sakura Flower', value:100 }, { name:'Clover Pin', value:150 },
+    { name:'Bonded Ring', value:180 }, { name:'Diamond Ring', value:100 },
+    { name:"Durov's Cap", value:280 }, { name:'Cupid Charm', value:350 },
+    { name:'Valentine Box', value:420 }, { name:'Artisan Brick', value:500 },
+    { name:'Voodoo Doll', value:600 }, { name:'Scared Cat', value:700 },
+    { name:'Electric Skull', value:850 }, { name:'Perfume Bottle', value:1000 },
+    { name:'Santa Hat', value:1200 }, { name:'Signet Ring', value:1400 },
+    { name:'Swiss Watch', value:1700 }, { name:'Precious Peach', value:2000 },
+    { name:'Plush Pepe', value:2500 }, { name:'Stellar Rocket', value:3000 },
+    { name:'Snoop Dogg', value:3500 }, { name:'Low Rider', value:4000 },
+    { name:'Snoop Cigar', value:4500 }, { name:'Jolly Chimp', value:5000 },
+    { name:'Westside Sign', value:5500 }, { name:'Kissed Frog', value:6000 },
+    { name:'Sharp Tongue', value:6500 }, { name:'Loot Bag', value:7000 },
+    { name:'Trapped Heart', value:8000 }, { name:'Nail Bracelet', value:9000 },
+    { name:'Neko Helmet', value:10000 }, { name:'Mini Oscar', value:12000 },
+    { name:'Gem Signet', value:14000 }, { name:'Vintage Cigar', value:16000 },
+    { name:'Hanging Star', value:18000 }, { name:'Lunar Snake', value:20000 },
+    { name:'Astral Shard', value:24000 }, { name:'Light Sword', value:28000 },
+    { name:'Mighty Arm', value:32000 }, { name:'Evil Eye', value:38000 },
+    { name:'Witch Hat', value:45000 }, { name:'Liberty Figure', value:55000 },
+    { name:"Durov's Glasses", value:65000 }, { name:'Intelligence Cup', value:80000 },
+    { name:'Algorithm Cup', value:95000 }, { name:"Khabib's Papakha", value:120000 },
+    { name:'UFC Strike', value:140000 }, { name:'Rare Bird', value:170000 },
+    { name:'Ion Gem', value:200000 }, { name:'Hex Pot', value:250000 },
+    { name:'Genie Lamp', value:300000 }, { name:'Tama Gadget', value:400000 },
     { name:'Mirage Lamp', value:600000 },
-    { name:'Spiced Wine', value:80 },
-    { name:'Berry Box', value:180 },
-    { name:'Skull Flower', value:2800 },
-    { name:'Spy Agaric', value:850 },
-    { name:'Party Sparkler', value:2200 },
-    { name:'Jester Hat', value:900 },
-    { name:'Love Candle', value:400 },
-    { name:'Cookie Heart', value:250 },
-    { name:'Desk Calendar', value:150 },
-    { name:'Snow Mittens', value:120 },
-    { name:'Mad Pumpkin', value:180 },
-    { name:'Hypno Lollipop', value:95 },
-    { name:'B-Day Candle', value:200 },
-    { name:'Bunny Muffin', value:240 },
-    { name:'Eternal Candle', value:340 },
-    { name:'Ginger Cookie', value:75 },
-    { name:'Lol Pop', value:160 },
-    { name:'Star Notepad', value:290 },
-    { name:'Love Potion', value:110 },
-    { name:'Sleigh Bell', value:70 },
-    { name:'Record Player', value:900 },
-    { name:'Winter Wreath', value:55 },
-    { name:'Snow Globe', value:190 },
-    { name:'Candy Cane', value:35 },
-    { name:'Jack-in-the-Box', value:620 },
-    { name:'Easter Egg', value:480 },
-    { name:'Pet Snake', value:1400 },
-    { name:'Snake Box', value:2100 },
-    { name:'Xmas Stocking', value:340 },
-    { name:'Big Year', value:520 },
-    { name:'Holiday Drink', value:95 },
-    { name:'Restless Jar', value:1100 },
-    { name:'Heroic Helmet', value:950 },
-    { name:'Bow Tie', value:400 },
-    { name:'Lush Bouquet', value:900 },
-    { name:'Whip Cupcake', value:140 },
-    { name:'Joyful Bundle', value:700 },
-    { name:'Swag Bag', value:2200 },
-    { name:'Moon Pendant', value:2800 },
-    { name:'Ionic Dryer', value:3300 },
-    { name:'Input Key', value:3800 },
-    { name:'Sky Stilettos', value:2400 },
-    { name:'Fresh Socks', value:150 },
-    { name:'Happy Brownie', value:110 },
-    { name:'Ice Cream', value:70 },
-    { name:'Spring Basket', value:850 },
-    { name:'Instant Ramen', value:180 },
-    { name:'Faith Amulet', value:2900 },
-    { name:'Mousse Cake', value:260 },
-    { name:'Bling Binky', value:3600 },
-    { name:'Money Pot', value:4200 },
-    { name:'Pretty Posy', value:320 },
-    { name:'Victory Medal', value:5500 },
-    { name:'Mood Pack', value:1200 },
-    { name:'Pool Float', value:1800 },
-    { name:'Timeless Book', value:2600 },
-    { name:'Chill Flame', value:900 },
-    { name:'Vice Cream', value:750 },
-    { name:'Surge Board', value:3100 },
-    { name:'Fine Pen', value:8000 }
+    { name:'Spiced Wine', value:80 }, { name:'Berry Box', value:180 },
+    { name:'Skull Flower', value:2800 }, { name:'Spy Agaric', value:850 },
+    { name:'Party Sparkler', value:2200 }, { name:'Jester Hat', value:900 },
+    { name:'Love Candle', value:400 }, { name:'Cookie Heart', value:250 },
+    { name:'Desk Calendar', value:150 }, { name:'Snow Mittens', value:120 },
+    { name:'Mad Pumpkin', value:180 }, { name:'Hypno Lollipop', value:95 },
+    { name:'B-Day Candle', value:200 }, { name:'Bunny Muffin', value:240 },
+    { name:'Eternal Candle', value:340 }, { name:'Ginger Cookie', value:75 },
+    { name:'Lol Pop', value:160 }, { name:'Star Notepad', value:290 },
+    { name:'Love Potion', value:110 }, { name:'Sleigh Bell', value:70 },
+    { name:'Record Player', value:900 }, { name:'Winter Wreath', value:55 },
+    { name:'Snow Globe', value:190 }, { name:'Candy Cane', value:35 },
+    { name:'Jack-in-the-Box', value:620 }, { name:'Easter Egg', value:480 },
+    { name:'Pet Snake', value:1400 }, { name:'Snake Box', value:2100 },
+    { name:'Xmas Stocking', value:340 }, { name:'Big Year', value:520 },
+    { name:'Holiday Drink', value:95 }, { name:'Restless Jar', value:1100 },
+    { name:'Heroic Helmet', value:950 }, { name:'Bow Tie', value:400 },
+    { name:'Lush Bouquet', value:900 }, { name:'Whip Cupcake', value:140 },
+    { name:'Joyful Bundle', value:700 }, { name:'Swag Bag', value:2200 },
+    { name:'Moon Pendant', value:2800 }, { name:'Ionic Dryer', value:3300 },
+    { name:'Input Key', value:3800 }, { name:'Sky Stilettos', value:2400 },
+    { name:'Fresh Socks', value:150 }, { name:'Happy Brownie', value:110 },
+    { name:'Ice Cream', value:70 }, { name:'Spring Basket', value:850 },
+    { name:'Instant Ramen', value:180 }, { name:'Faith Amulet', value:2900 },
+    { name:'Mousse Cake', value:260 }, { name:'Bling Binky', value:3600 },
+    { name:'Money Pot', value:4200 }, { name:'Pretty Posy', value:320 },
+    { name:'Victory Medal', value:5500 }, { name:'Mood Pack', value:1200 },
+    { name:'Pool Float', value:1800 }, { name:'Timeless Book', value:2600 },
+    { name:'Chill Flame', value:900 }, { name:'Vice Cream', value:750 },
+    { name:'Surge Board', value:3100 }, { name:'Fine Pen', value:8000 }
 ];
 
 const MULTIPLIERS = [1.2,1.5,2,3,5,10,25,100];
@@ -1741,14 +1678,14 @@ function resetRocketVisual(){
     var tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d','');
     var ic = $('rocket-icon');
     if(ic){
-        ic.style.transition = 'left 0.06s linear, top 0.06s linear';
-        ic.style.left = '8%';
-        ic.style.top = '85%';
+        ic.style.transition = 'left 0.06s linear, top 0.06s linear, transform 0.2s';
+        ic.style.left = '10%';
+        ic.style.top = '82%';
         ic.style.width = '52px';
         ic.style.height = '52px';
         ic.style.opacity = '1';
         ic.style.filter = '';
-        ic.style.transform = 'translate(-50%, -50%)';
+        ic.style.transform = 'translate(-50%, -50%) scale(1)';
         ic.innerHTML = iconHTML({name:'Stellar Rocket'}, 128);
         ic.className = 'rocket-icon idle';
     }
@@ -1757,6 +1694,8 @@ function resetRocketVisual(){
     if(badge){ badge.classList.add('hidden'); badge.innerHTML = ''; }
     var m = $('rocket-mult');
     if(m){ m.className = 'rocket-mult'; m.textContent = '1.00x'; }
+    var stage = $('rocket-stage');
+    if(stage){ stage.style.setProperty('--gx','0px'); stage.style.setProperty('--gy','0px'); }
 }
 function setRocketIcon(){
     var ic = $('rocket-icon');
@@ -1823,28 +1762,49 @@ function syncRocketVisual(){
     } else { updateRocketButtonLabel(); }
 }
 function renderRocketFrame(m){
-    var START_X = 8, START_Y = 85;
-    var END_X = 88, END_Y = 12;
-    var MAX_M = 20;
-    var progress = Math.min(1, Math.log(m) / Math.log(MAX_M));
-    var x = START_X + (END_X - START_X) * progress;
-    var y = START_Y + (END_Y - START_Y) * progress;
+    // Прогресс от 1x до 20x = полный путь
+    var progress = Math.min(1, Math.log(m) / Math.log(20));
+
+    // Ракета летит от угла к углу за первые 60% прогресса, потом держится у края
+    var pPos = Math.min(1, progress / 0.6);
+    var x = 10 + 75 * pPos;
+    var y = 82 - 68 * pPos;
+
     var ic = $('rocket-icon');
     if(ic){
         ic.style.left = x + '%';
         ic.style.top = y + '%';
+        // Увеличение в начале (приближение) и уменьшение в конце (удаление)
+        var scale = 1;
+        if(pPos < 0.2) scale = 1 + pPos * 1.5;
+        else if(pPos > 0.7) scale = Math.max(0.6, 1 - (pPos - 0.7) * 1.2);
+        ic.style.transform = 'translate(-50%, -50%) scale(' + scale.toFixed(2) + ')';
     }
-    var ctrlX = (START_X + x) / 2;
-    var ctrlY = START_Y - 30 * progress;
-    var path = 'M ' + START_X + ' ' + START_Y + ' Q ' + ctrlX + ' ' + ctrlY + ' ' + x + ' ' + y;
-    var fillPath = path + ' L ' + x + ' ' + START_Y + ' L ' + START_X + ' ' + START_Y + ' Z';
+
+    // Фон прокручивается всё время полёта — эффект что пролетели 600-700м
+    var stage = $('rocket-stage');
+    if(stage){
+        var bgX = -progress * 1400;
+        var bgY = progress * 1100;
+        stage.style.setProperty('--gx', bgX.toFixed(1) + 'px');
+        stage.style.setProperty('--gy', bgY.toFixed(1) + 'px');
+    }
+
+    // SVG-линия — рисуем от старта (10, 82) к ракете, закрываем ЗАЛИВКУ до низа (y=100)
+    var ctrlX = (10 + x) / 2;
+    var ctrlY = 82 - 30 * pPos;
+    var path = 'M 10 82 Q ' + ctrlX + ' ' + ctrlY + ' ' + x + ' ' + y;
+    var fillPath = path + ' L ' + x + ' 100 L 10 100 Z';
     var tp = $('rocket-trail-path'); if(tp) tp.setAttribute('d', path);
     var tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d', fillPath);
+
+    // Бейдж подарка следует за ракетой
     var badge = $('rocket-gift-badge');
     if(badge && !badge.classList.contains('hidden')){
         badge.style.left = (x + 6) + '%';
         badge.style.top = (y - 6) + '%';
     }
+
     var mult = $('rocket-mult'); if(mult) mult.textContent = m.toFixed(2) + 'x';
 }
 function rocketCycleTick(){
