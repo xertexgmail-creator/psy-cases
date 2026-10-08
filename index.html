@@ -1,4 +1,4 @@
-=<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -220,34 +220,31 @@ body::before { content: ''; position: fixed; inset: 0;
         radial-gradient(ellipse 130% 90% at 50% -10%, rgba(120,100,255,0.15) 0%, transparent 60%),
         radial-gradient(ellipse 90% 60% at 100% 100%, rgba(168,85,247,0.1) 0%, transparent 65%),
         linear-gradient(180deg, #0a0a15 0%, #050509 100%);
-    background-size: 400px 400px, 400px 400px, 400px 400px, 400px 400px, 400px 400px, 100% 100%, 100% 100%, 100% 100%;
+    background-size: 200px 200px, 200px 200px, 200px 200px, 200px 200px, 200px 200px, 100% 100%, 100% 100%, 100% 100%;
     border: 1px solid rgba(120,100,255,0.2);
     border-radius: 20px; margin-bottom: 8px;
     overflow: hidden;
     box-shadow: 0 12px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06); }
 .rocket-stage::before { content: ''; position: absolute; inset: 0;
     background-image:
-        linear-gradient(rgba(120,100,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(120,100,255,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(120,100,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(120,100,255,0.06) 1px, transparent 1px);
     background-size: 40px 40px;
     background-position: var(--gx) var(--gy);
     pointer-events: none;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
-    opacity: 0.5; }
-.rocket-stage::after { content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(168,85,247,0.05) 0%, transparent 70%);
-    pointer-events: none; z-index: 1; }
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+    opacity: 0.7; }
 .rocket-trail-svg { position: absolute; inset: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 2; overflow: visible; }
-.rocket-trail-path { fill: none; stroke: url(#trailGrad); stroke-width: 2.5;
+.rocket-trail-path { fill: none; stroke: url(#trailGrad); stroke-width: 3;
     stroke-linecap: round; stroke-linejoin: round;
-    filter: drop-shadow(0 0 6px rgba(168,85,247,0.8)); }
+    filter: drop-shadow(0 0 8px rgba(168,85,247,0.9)); }
 .rocket-trail-fill { fill: url(#trailFill); }
 .rocket-icon { position: absolute; width: 48px; height: 48px;
     transform: translate(-50%,-50%) rotate(-15deg);
     pointer-events: none;
-    filter: drop-shadow(0 0 14px rgba(168,85,247,0.8)) drop-shadow(0 0 30px rgba(120,100,255,0.4));
+    filter: drop-shadow(0 0 14px rgba(168,85,247,0.9)) drop-shadow(0 0 30px rgba(120,100,255,0.5));
     z-index: 4; transition: width 0.1s, height 0.1s; }
 .rocket-icon img { width: 100%; height: 100%; object-fit: contain; }
 .rocket-icon.idle { animation: rocketFloat 2.2s ease-in-out infinite; }
@@ -725,8 +722,9 @@ body::before { content: ''; position: fixed; inset: 0;
     color: var(--red); font-size: 12px; font-weight: 800;
     letter-spacing: 0.05em; text-transform: uppercase;
     margin-bottom: 8px; flex-shrink: 0; }
-.footer { text-align: center; margin-top: 8px; font-size: 9px;
-    color: var(--text-mute); padding-bottom: 4px; flex-shrink: 0; }
+.footer { text-align: center; font-size: 9px;
+    color: var(--text-mute); padding: 6px 0 calc(4px + env(safe-area-inset-bottom, 0px));
+    flex-shrink: 0; }
 .footer a { color: var(--text-dim); text-decoration: none; font-weight: 600; }
 
 @media (max-width: 360px) {
@@ -1917,7 +1915,7 @@ function resetRocketVisual(){
     if(ic){
         ic.style.transition = '';
         ic.style.display='block';
-        ic.style.left='0%'; ic.style.top='100%';
+        ic.style.left='15%'; ic.style.top='80%';
         ic.style.width = '42px';
         ic.style.height = '42px';
         ic.style.opacity = '1';
@@ -1998,11 +1996,11 @@ function syncRocketVisual(){
     } else { updateRocketButtonLabel(); }
 }
 function renderRocketFrame(m){
-    // Быстрый рост: за 8x ракета долетает до конца
+    // прогресс от 1x до 8x — ракета в кадре всё время
     const progress = Math.min(1, Math.log(m+1) / Math.log(9));
-    // Старт с левого нижнего угла (0%, 100%), финиш в правом верхнем (95%, 5%)
-    const xPct = progress * 95;
-    const yPct = 100 - progress * 95;
+    // ракета летит от (15%, 80%) до (85%, 15%)
+    const xPct = 15 + progress * 70;
+    const yPct = 80 - progress * 65;
     const iconEl=$('rocket-icon');
     if(iconEl){
         iconEl.style.left = xPct + '%';
@@ -2010,22 +2008,24 @@ function renderRocketFrame(m){
     }
     const badge = $('rocket-gift-badge');
     if(badge && !badge.classList.contains('hidden')){
-        badge.style.left = (xPct + 5) + '%';
+        badge.style.left = (xPct + 6) + '%';
         badge.style.top  = (yPct - 6) + '%';
     }
     const mult = $('rocket-mult'); if(mult) mult.textContent=m.toFixed(2)+'x';
+    // линия от левого-нижнего угла к ракете
     const sx = xPct;
     const sy = yPct;
     const ctrlX = xPct * 0.5;
-    const ctrlY = 100 - progress * 40;
-    const path='M 0 100 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy;
-    const fillPath='M 0 100 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy+' L '+sx+' 100 L 0 100 Z';
+    const ctrlY = 80 - progress * 30;
+    const path='M 8 85 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy;
+    const fillPath='M 8 85 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy+' L '+sx+' 85 L 8 85 Z';
     const tp = $('rocket-trail-path'); if(tp) tp.setAttribute('d',path);
     const tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d',fillPath);
+    // фон-сетка едет назад — очень быстро и далеко
     const stage = $('rocket-stage');
     if(stage){
-        stage.style.setProperty('--gx', (-progress * 80).toFixed(1) + 'px');
-        stage.style.setProperty('--gy', (progress * 60).toFixed(1) + 'px');
+        stage.style.setProperty('--gx', (-progress * 1500).toFixed(1) + 'px');
+        stage.style.setProperty('--gy', (progress * 1200).toFixed(1) + 'px');
     }
 }
 function rocketCycleTick(){
@@ -2084,7 +2084,6 @@ function endRocketFlight(cashed){
     if(!cashed){
         if(mult){ mult.className='rocket-mult crashed'; mult.textContent=rocketCurrentMult.toFixed(2)+'x'; }
 
-        // ВЗРЫВ
         if(ic){
             const posLeft = ic.style.left || '50%';
             const posTop = ic.style.top || '50%';
