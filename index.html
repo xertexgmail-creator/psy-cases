@@ -84,22 +84,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .menu-card-icon .gicon { height: 66px; width: 66px; position: relative; flex-shrink: 0;
     filter: drop-shadow(0 6px 18px var(--card-glow, rgba(120,100,255,0.6))); }
 .menu-card-icon .gicon img { width: 100%; height: 100%; object-fit: contain; }
-.menu-card-icon .gicon.shop-icon img { filter: grayscale(1) brightness(0.55) contrast(1.15); }
-.menu-card-icon .gicon.shop-icon::after {
-    content: 'SOLD';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-15deg);
-    font-size: 11px; font-weight: 900;
-    color: #ff4757;
-    background: rgba(0,0,0,0.75);
-    padding: 3px 8px;
-    border: 2px solid #ff4757;
-    border-radius: 4px;
-    letter-spacing: 2px;
-    z-index: 10;
-    pointer-events: none;
-    box-shadow: 0 0 12px rgba(255,71,87,0.7); }
 .menu-card-icon .arrow { color: #2ecc71; font-size: 22px; font-weight: 900; flex-shrink: 0;
     filter: drop-shadow(0 0 10px rgba(46,204,113,0.9)); animation: arrowPulse 1.4s ease-in-out infinite; }
 @keyframes arrowPulse { 0%,100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
@@ -681,7 +665,7 @@ body::before { content: ''; position: fixed; inset: 0;
             </button>
             <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,217,61,0.5);">
                 <div class="menu-card-icon">
-                    <div class="gicon shop-icon" data-name="Diamond Ring"></div>
+                    <div class="gicon" data-name="Diamond Ring"></div>
                 </div>
                 <div class="menu-card-title">Магазин</div>
                 <div class="menu-card-desc">Купить гифты</div>
@@ -937,13 +921,15 @@ let audioCtx=null;
 function initAudio(){ if(audioCtx)return; try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} }
 function playTone(freq,dur,type,vol,delay){
     dur=dur||0.1;type=type||'sine';vol=vol||0.15;delay=delay||0;
-    if(!soundEnabled||!audioCtx)return;
-    if(audioCtx.state==='suspended')audioCtx.resume();
-    const t0=audioCtx.currentTime+delay;
-    const osc=audioCtx.createOscillator(); const g=audioCtx.createGain();
-    osc.type=type; osc.frequency.setValueAtTime(freq,t0);
-    g.gain.setValueAtTime(vol,t0); g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
-    osc.connect(g); g.connect(audioCtx.destination); osc.start(t0); osc.stop(t0+dur);
+    try{
+        if(!soundEnabled||!audioCtx)return;
+        if(audioCtx.state==='suspended')audioCtx.resume();
+        const t0=audioCtx.currentTime+delay;
+        const osc=audioCtx.createOscillator(); const g=audioCtx.createGain();
+        osc.type=type; osc.frequency.setValueAtTime(freq,t0);
+        g.gain.setValueAtTime(vol,t0); g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
+        osc.connect(g); g.connect(audioCtx.destination); osc.start(t0); osc.stop(t0+dur);
+    }catch(e){}
 }
 function sndClick(){ initAudio(); playTone(800,0.04,'square',0.06); }
 function sndBuy(){ initAudio(); playTone(523,0.1,'sine',0.15,0); playTone(659,0.1,'sine',0.15,0.08); playTone(784,0.15,'sine',0.15,0.16); }
@@ -1179,7 +1165,8 @@ const SAPER_SIZE = 25;
 
 let currentCase = null;
 let caseSpinning = false;
-let caseAnim = null;
+let caseTimer = null;
+let caseSafety = null;
 
 const $ = id => document.getElementById(id);
 function sumSelected(){ return selectedItems.reduce((s,it)=>s+ (it.value||0), 0); }
@@ -2036,9 +2023,10 @@ function openCase(id){
     const panel = $('case-open-panel'); panel.style.display = 'flex';
     $('case-open-title').textContent = c.name + ' · ' + c.price + ' ⭐';
     const strip = $('case-spinner-strip');
-    if(caseAnim){ cancelAnimationFrame(caseAnim); caseAnim = null; }
+    if(caseTimer){ clearInterval(caseTimer); caseTimer = null; }
+    if(caseSafety){ clearTimeout(caseSafety); caseSafety = null; }
     strip.style.transition = 'none';
-    strip.style.transform = 'translateX(0)';
+    strip.style.transform = 'translate3d(0,0,0)';
     const rolls = [];
     for(let i=0;i<60;i++){
         const r = Math.random()*100;
@@ -2072,6 +2060,27 @@ function pickCaseItem(c){
     for(const it of c.items){ acc += it.chance; if(r<acc) return it; }
     return c.items[c.items.length-1];
 }
+function finishCaseSpin(pick, c, cat){
+    if(!caseSpinning) return;
+    caseSpinning = false;
+    if(caseTimer){ clearInterval(caseTimer); caseTimer = null; }
+    if(caseSafety){ clearTimeout(caseSafety); caseSafety = null; }
+    try{
+        inventory.push({name:pick.name, value:cat.value||0});
+        inventory.sort((a,b)=>(a.value||0)-(b.value||0));
+        stats.wins++;
+        if((cat.value||0) > stats.bestDrop) stats.bestDrop = cat.value||0;
+        history.unshift({win:true, from:{name:'Кейс '+c.name, value:c.price}, to:{name:pick.name, value:cat.value||0}, time:Date.now(), case:true});
+        history = history.slice(0,50);
+        saveState();
+        renderInventory(); renderArena(); renderTargets(); renderShop();
+        if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+        flashWin(); confetti(); sndCaseWin();
+    }catch(e){ console.error(e); }
+    checkTestEnd();
+    const btn = $('case-open-btn');
+    if(btn){ btn.disabled = false; btn.textContent = 'Открыть ещё за ' + c.price + ' ⭐'; }
+}
 function doOpenCase(c){
     if(caseSpinning) return;
     if(balance < c.price){ sndError(); return; }
@@ -2079,6 +2088,7 @@ function doOpenCase(c){
     balance -= c.price;
     updateBalanceUI();
     saveState();
+
     const pick = pickCaseItem(c);
     const strip = $('case-spinner-strip');
     const container = $('case-spinner');
@@ -2086,54 +2096,52 @@ function doOpenCase(c){
     const itemW = 106;
     const targetIndex = 50;
 
-    const cw = container.clientWidth || 320;
+    const cw = container.clientWidth || (window.innerWidth - 60);
     const cat = CATALOG.find(x=>x.name===pick.name) || {name:pick.name, value:pick.value||0};
     const kids = strip.children;
     if(kids[targetIndex]) kids[targetIndex].innerHTML = iconHTML(cat, 128);
 
     const centerOffset = (cw / 2) - 50;
-    const finalX = centerOffset - itemW * targetIndex + (Math.random()-0.5)*40;
+    const finalX = centerOffset - itemW * targetIndex + (Math.random() - 0.5) * 40;
 
-    if(caseAnim){ cancelAnimationFrame(caseAnim); caseAnim = null; }
     strip.style.transition = 'none';
-    strip.style.transform = 'translateX(0px)';
+    strip.style.transform = 'translate3d(0,0,0)';
     void strip.offsetWidth;
 
-    const startTime = performance.now();
+    const startTime = Date.now();
     let lastTick = 0;
 
-    function step(now){
-        const t = Math.min(1, (now - startTime) / DURATION);
-        const eased = 1 - Math.pow(1 - t, 4);
-        const x = finalX * eased;
-        strip.style.transform = 'translateX(' + x.toFixed(1) + 'px)';
-        if(now - lastTick > (30 + t*t*250)){
-            lastTick = now;
-            sndCaseSpin();
+    if(caseTimer){ clearInterval(caseTimer); }
+    caseTimer = setInterval(function(){
+        try {
+            const elapsed = Date.now() - startTime;
+            const t = Math.min(1, elapsed / DURATION);
+            const eased = 1 - Math.pow(1 - t, 4);
+            const x = finalX * eased;
+            strip.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)';
+            if(elapsed - lastTick > 40 + t*t*250){
+                lastTick = elapsed;
+                sndCaseSpin();
+            }
+            if(t >= 1){
+                clearInterval(caseTimer);
+                caseTimer = null;
+                finishCaseSpin(pick, c, cat);
+            }
+        } catch(e){
+            console.error(e);
+            if(caseTimer){ clearInterval(caseTimer); caseTimer = null; }
+            finishCaseSpin(pick, c, cat);
         }
-        if(t < 1){
-            caseAnim = requestAnimationFrame(step);
-        } else {
-            caseAnim = null;
-            setTimeout(function(){
-                inventory.push({name:pick.name, value:cat.value||0});
-                inventory.sort((a,b)=>(a.value||0)-(b.value||0));
-                stats.wins++;
-                if((cat.value||0) > stats.bestDrop) stats.bestDrop = cat.value||0;
-                history.unshift({win:true, from:{name:'Кейс '+c.name, value:c.price}, to:{name:pick.name, value:cat.value||0}, time:Date.now(), case:true});
-                history = history.slice(0,50);
-                saveState();
-                renderInventory(); renderArena(); renderTargets(); renderShop();
-                if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
-                flashWin(); confetti(); sndCaseWin();
-                caseSpinning = false;
-                checkTestEnd();
-                const btn = $('case-open-btn');
-                if(btn){ btn.disabled = false; btn.textContent = 'Открыть ещё за ' + c.price + ' ⭐'; }
-            }, 100);
+    }, 16);
+
+    // Страховка на случай если что-то заглючит
+    caseSafety = setTimeout(function(){
+        if(caseSpinning){
+            if(caseTimer){ clearInterval(caseTimer); caseTimer = null; }
+            finishCaseSpin(pick, c, cat);
         }
-    }
-    caseAnim = requestAnimationFrame(step);
+    }, DURATION + 800);
 }
 function updateCaseButtons(){
     const btn = $('case-open-btn');
