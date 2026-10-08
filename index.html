@@ -1109,14 +1109,11 @@ function getRarity(v){
 /* === ИКОНКИ: прямой Fragment → fallback api.changes.tg === */
 function iconHTML(item, size){
     size = size || 128;
+    var name = item.name.replace(/\s+/g,'');
     var slug = String(item.slug || item.name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');
-    var wrap = function(u){
-        return 'https://images.weserv.nl/?url=' + encodeURIComponent(u) + '&output=webp&q=85&w=' + size + '&h=' + size + '&fit=contain';
-    };
-    var u1 = wrap('nft.fragment.com/gift/' + slug + '.webp');
-    var u2 = wrap('nft.fragment.com/gift/' + slug + '-1.webp');
-    var u3 = wrap('nft.fragment.com/collection/' + slug + '.webp');
-    return '<img src="' + u1 + '" data-b="' + u2 + '" data-c="' + u3 + '" alt="" loading="lazy" onerror="var s=+this.dataset.s||0;if(s===0){this.dataset.s=1;this.src=this.dataset.b;}else if(s===1){this.dataset.s=2;this.src=this.dataset.c;}else{this.style.opacity=0.15;}">';
+    var api = 'https://api.changes.tg/original/' + encodeURIComponent(name) + '.png?size=' + size;
+    var frag = 'https://images.weserv.nl/?url=' + encodeURIComponent('nft.fragment.com/gift/' + slug + '-1.webp') + '&output=webp&q=85&w=' + size;
+    return '<img src="' + api + '" data-fb="' + frag + '" alt="" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb;}else{this.style.opacity=0.15;}">';
 }
     
 function fillMenuIcons(){
