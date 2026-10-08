@@ -89,28 +89,22 @@ body::before { content: ''; position: fixed; inset: 0;
 .menu-card-icon .gicon img { width: 100%; height: 100%; object-fit: contain; }
 .menu-card-icon .gicon.float { animation: menuFloat 2.4s ease-in-out infinite; }
 .menu-card-icon .gicon.shop-icon { position: relative; }
-.menu-card-icon .gicon.shop-icon::before {
-    content: '$    $    $    $    $    $';
-    position: absolute; top: -34px; left: -20px; right: -20px;
-    font-size: 12px; font-weight: 900; color: #ffd93d;
-    text-shadow: 0 0 8px #ffd93d, 0 0 16px #ff9500;
-    letter-spacing: 3px; white-space: nowrap;
-    animation: moneyRain 2.6s linear infinite;
-    pointer-events: none; z-index: 5;
-    transform-origin: 50% 100%; }
-.menu-card-icon .gicon.shop-icon::after {
-    content: '$  $  $  $  $';
-    position: absolute; top: -30px; left: 0; right: 0;
-    font-size: 10px; font-weight: 900; color: #fff9c4;
-    text-shadow: 0 0 8px #ffd93d;
-    letter-spacing: 4px; white-space: nowrap;
-    animation: moneyRain 2.6s linear infinite 1.3s;
-    pointer-events: none; z-index: 5; }
-@keyframes moneyRain {
-    0% { transform: translateY(-30px); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(50px); opacity: 0; }
+.menu-card-icon .gicon.shop-icon .rain {
+    position: absolute;
+    top: -40px;
+    font-weight: 900;
+    color: #ffd93d;
+    text-shadow: 0 0 10px #ffd93d, 0 0 22px #ff9500;
+    animation: moneyFall linear infinite;
+    pointer-events: none;
+    z-index: 6;
+    line-height: 1;
+    will-change: transform, opacity; }
+@keyframes moneyFall {
+    0%   { transform: translateY(-20px) rotate(-20deg); opacity: 0; }
+    15%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translateY(80px) rotate(25deg); opacity: 0; }
 }
 @keyframes menuFloat {
     0%,100% { transform: translateY(0) rotate(0deg); }
@@ -138,7 +132,7 @@ body::before { content: ''; position: fixed; inset: 0;
 .slot-icon { width: 70px; height: 70px; margin-bottom: 6px; position: relative; z-index: 1;
     display: flex; align-items: center; justify-content: center; gap: 0; }
 .slot-icon img { width: 100%; height: 100%; object-fit: contain; }
-.slot-icon.multi img { width: 55%; height: 55%; margin: 0 -8px; }
+.slot-icon.multi img { width: 42%; height: 42%; margin: 0 -5px; }
 .item-name { font-size: 10px; font-weight: 600; color: var(--text-dim); margin-bottom: 3px;
     max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: relative; z-index: 1; }
 .item-value { font-size: 13px; font-weight: 800; position: relative; z-index: 1; }
@@ -161,9 +155,11 @@ body::before { content: ''; position: fixed; inset: 0;
     background: radial-gradient(circle at 30% 25%, #1a1a26, #08080c);
     border: 1px solid var(--border-strong); display: flex; flex-direction: column;
     align-items: center; justify-content: center; z-index: 3; box-shadow: inset 0 0 24px rgba(0,0,0,0.8); }
-.wheel-percent { font-size: 24px; font-weight: 900; line-height: 1;
+.wheel-percent { font-size: 19px; font-weight: 900; line-height: 1;
     background: linear-gradient(135deg, #fff, #b0b8ff);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    max-width: 88px; overflow: hidden; text-overflow: clip;
+    white-space: nowrap; padding: 0 2px; }
 .wheel-label { font-size: 7px; font-weight: 700; color: var(--text-mute);
     text-transform: uppercase; margin-top: 3px; }
 
@@ -492,14 +488,13 @@ body::before { content: ''; position: fixed; inset: 0;
 .case-drop-row { display: flex; align-items: center; gap: 8px; padding: 6px 4px;
     border-bottom: 1px solid var(--border); }
 .case-drop-row:last-child { border-bottom: none; }
-.case-drop-icon { width: 32px; height: 32px; flex-shrink: 0; }
+.case-drop-icon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .case-drop-icon img { width: 100%; height: 100%; object-fit: contain; }
 .case-drop-info { flex: 1; min-width: 0; }
 .case-drop-name { font-size: 11px; font-weight: 700; }
 .case-drop-val { font-size: 9px; color: var(--text-mute); margin-top: 1px; }
 .case-drop-chance { font-size: 11px; font-weight: 900; color: var(--gold); flex-shrink: 0; }
 
-/* === SHOP === */
 .shop-topbar { display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); border-radius: 12px;
@@ -514,12 +509,6 @@ body::before { content: ''; position: fixed; inset: 0;
     padding: 10px; flex: 1; min-height: 0; overflow: hidden;
     display: flex; flex-direction: column; position: relative;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
-.shop-grid-wrap::before { content: '$'; position: absolute; top: 10px; right: 14px;
-    font-size: 24px; color: #ffd93d; opacity: 0.2; pointer-events: none;
-    animation: moneyRain 3.2s linear infinite; }
-.shop-grid-wrap::after { content: '$'; position: absolute; top: 40px; right: 40px;
-    font-size: 20px; color: #fff9c4; opacity: 0.15; pointer-events: none;
-    animation: moneyRain 3.2s linear infinite 1.6s; }
 .shop-items-scroll { flex: 1; min-height: 0; overflow-y: auto; position: relative; z-index: 1; }
 
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85);
@@ -605,7 +594,8 @@ body::before { content: ''; position: fixed; inset: 0;
 .history-item:last-child, .inv-item:last-child { border-bottom: none; }
 .history-icon { width: 34px; height: 34px; flex-shrink: 0;
     background: rgba(255,255,255,0.03); border-radius: 8px;
-    border: 1px solid var(--border); }
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; }
 .history-icon img { width: 100%; height: 100%; object-fit: contain; }
 .history-info { flex: 1; min-width: 0; }
 .history-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -655,7 +645,7 @@ body::before { content: ''; position: fixed; inset: 0;
     .wheel-wrap { width: 175px; height: 175px; }
     .wheel-col { min-width: 175px; }
     .wheel-center { width: 104px; height: 104px; }
-    .wheel-percent { font-size: 27px; }
+    .wheel-percent { font-size: 22px; max-width: 100px; }
     .rocket-mult { font-size: 60px; }
 }
 @media (min-width: 600px) {
@@ -663,7 +653,7 @@ body::before { content: ''; position: fixed; inset: 0;
     .wheel-wrap { width: 220px; height: 220px; }
     .wheel-col { min-width: 220px; }
     .wheel-center { width: 130px; height: 130px; }
-    .wheel-percent { font-size: 34px; }
+    .wheel-percent { font-size: 26px; max-width: 124px; }
     .item-grid { grid-template-columns: repeat(5, 1fr); }
     .modal { max-width: 400px; }
     .rocket-mult { font-size: 72px; }
@@ -678,10 +668,7 @@ body::before { content: ''; position: fixed; inset: 0;
     <div class="header">
         <div class="header-left">
             <div class="logo" id="logo">ПСЫ<span class="dot">.</span>gg</div>
-            <div class="online-badge">
-                <span class="online-dot"></span>
-                <span id="online-count">7</span>
-            </div>
+            <div class="online-badge"><span class="online-dot"></span><span id="online-count">7</span></div>
         </div>
         <div class="header-right">
             <div class="balance-chip" id="plus-btn">
@@ -690,27 +677,16 @@ body::before { content: ''; position: fixed; inset: 0;
                 <span class="plus-sign" id="plus-sign" style="display:none;">+</span>
             </div>
             <button class="icon-btn" id="promo-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                    <line x1="7" y1="7" x2="7.01" y2="7"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
             </button>
             <button class="icon-btn" id="star-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>
             </button>
             <button class="icon-btn" id="settings-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
             <button class="icon-btn" id="profile-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </button>
         </div>
     </div>
@@ -730,7 +706,6 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="menu-card-title">Апгрейдер</div>
                 <div class="menu-card-desc">Прокачивай гифты</div>
             </button>
-
             <button class="menu-card" data-mode="rocket" type="button" style="--card-glow: rgba(46,204,113,0.6);">
                 <div class="menu-card-icon">
                     <div class="gicon float" data-name="Stellar Rocket"></div>
@@ -738,7 +713,6 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="menu-card-title">Рокетка</div>
                 <div class="menu-card-desc">Автораунд 10 сек</div>
             </button>
-
             <button class="menu-card" data-mode="saper" type="button" style="--card-glow: rgba(255,217,61,0.5);">
                 <div class="menu-card-icon">
                     <div class="gicon" data-name="Liberty Figure"></div>
@@ -746,7 +720,6 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="menu-card-title">Сапёр</div>
                 <div class="menu-card-desc">Открывай клетки</div>
             </button>
-
             <button class="menu-card" data-mode="cases" type="button" style="--card-glow: rgba(255,71,87,0.5);">
                 <div class="menu-card-icon">
                     <div class="gicon" data-name="Mighty Arm"></div>
@@ -754,7 +727,6 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="menu-card-title">Кейсы</div>
                 <div class="menu-card-desc">5 кейсов на удачу</div>
             </button>
-
             <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,217,61,0.5);">
                 <div class="menu-card-icon">
                     <div class="gicon shop-icon" data-name="Diamond Ring"></div>
@@ -777,14 +749,8 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="wheel-wrap" id="wheel-wrap">
                     <svg class="wheel-svg" viewBox="0 0 100 100">
                         <defs>
-                            <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#ffffff"/>
-                                <stop offset="100%" stop-color="#b0b8ff"/>
-                            </linearGradient>
-                            <linearGradient id="trackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#1f1f2a"/>
-                                <stop offset="100%" stop-color="#0e0e16"/>
-                            </linearGradient>
+                            <linearGradient id="winGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#b0b8ff"/></linearGradient>
+                            <linearGradient id="trackGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1f1f2a"/><stop offset="100%" stop-color="#0e0e16"/></linearGradient>
                         </defs>
                         <circle cx="50" cy="50" r="44" fill="none" stroke="url(#trackGrad)" stroke-width="10"/>
                         <path id="win-arc" fill="url(#winGrad)"/>
@@ -803,22 +769,16 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="item-value" id="to-value">—</div>
             </div>
         </div>
-
         <div class="mult-grid" id="mult-grid"></div>
         <button class="upgrade-btn" id="upgrade-btn" type="button">Прокачать</button>
-
         <div class="tabs">
             <button class="tab active" data-tab="inv" type="button">Инвентарь <span id="inv-count"></span></button>
             <button class="tab" data-tab="target" type="button">Цель</button>
         </div>
-
         <div class="panel">
             <div class="panel-view active" id="view-inv">
                 <div class="panel-tools">
-                    <div class="search-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                        <input type="text" id="inv-search" placeholder="Поиск...">
-                    </div>
+                    <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="inv-search" placeholder="Поиск..."></div>
                     <input type="number" class="num-input" id="inv-price-min" placeholder="От">
                     <input type="number" class="num-input" id="inv-price-max" placeholder="До">
                 </div>
@@ -826,10 +786,7 @@ body::before { content: ''; position: fixed; inset: 0;
             </div>
             <div class="panel-view" id="view-target">
                 <div class="panel-tools">
-                    <div class="search-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                        <input type="text" id="target-search" placeholder="Поиск...">
-                    </div>
+                    <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="target-search" placeholder="Поиск..."></div>
                     <input type="number" class="num-input" id="target-price-min" placeholder="От">
                     <input type="number" class="num-input" id="target-price-max" placeholder="До">
                 </div>
@@ -840,13 +797,9 @@ body::before { content: ''; position: fixed; inset: 0;
 
     <div class="screen" id="screen-rocket">
         <div class="rocket-status-bar">
-            <div class="rocket-phase waiting" id="rocket-phase">
-                <span class="phase-dot"></span>
-                <span id="rocket-phase-text">Приём ставок</span>
-            </div>
+            <div class="rocket-phase waiting" id="rocket-phase"><span class="phase-dot"></span><span id="rocket-phase-text">Приём ставок</span></div>
             <div class="rocket-timer" id="rocket-timer">10</div>
         </div>
-
         <div class="rocket-stage" id="rocket-stage">
             <svg class="rocket-trail-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
@@ -866,46 +819,28 @@ body::before { content: ''; position: fixed; inset: 0;
             <div class="rocket-icon" id="rocket-icon"></div>
             <div class="rocket-mult" id="rocket-mult">1.00x</div>
         </div>
-
         <div class="bet-gift-row empty-bet" id="rocket-bet-row">
             <div class="bg-label" id="rocket-bet-label">Нажми чтобы выбрать гифт</div>
         </div>
-
         <button class="rocket-btn" id="rocket-btn" type="button" disabled>Ждите раунд</button>
-
         <div class="rocket-history" id="rocket-history"></div>
     </div>
 
     <div class="screen" id="screen-saper">
         <div class="saper-info">
-            <div class="saper-stat">
-                <div class="lbl">Множитель</div>
-                <div class="val gold" id="saper-mult">0.00x</div>
-            </div>
-            <div class="saper-stat">
-                <div class="lbl">Открыто</div>
-                <div class="val" id="saper-opened">0 / 22</div>
-            </div>
-            <div class="saper-stat">
-                <div class="lbl">Мин</div>
-                <div class="val red" id="saper-mines">3</div>
-            </div>
+            <div class="saper-stat"><div class="lbl">Множитель</div><div class="val gold" id="saper-mult">0.00x</div></div>
+            <div class="saper-stat"><div class="lbl">Открыто</div><div class="val" id="saper-opened">0 / 22</div></div>
+            <div class="saper-stat"><div class="lbl">Мин</div><div class="val red" id="saper-mines">3</div></div>
         </div>
-
         <div class="saper-mines-row" id="saper-mines-row">
             <button class="mine-btn active" data-mines="3" type="button">3 мины<span class="c">баланс</span></button>
             <button class="mine-btn" data-mines="4" type="button">4 мины<span class="c">риск</span></button>
             <button class="mine-btn" data-mines="5" type="button">5 мин<span class="c">хардкор</span></button>
         </div>
-
-        <div class="saper-grid-wrap">
-            <div class="saper-grid" id="saper-grid"></div>
-        </div>
-
+        <div class="saper-grid-wrap"><div class="saper-grid" id="saper-grid"></div></div>
         <div class="bet-gift-row empty-bet" id="saper-bet-row">
             <div class="bg-label">Нажми чтобы выбрать гифт</div>
         </div>
-
         <div class="saper-btn-row">
             <button class="saper-start-btn" id="saper-start-btn" type="button">Старт</button>
             <button class="saper-cash-btn" id="saper-cash-btn" type="button" disabled>Забрать</button>
@@ -919,9 +854,7 @@ body::before { content: ''; position: fixed; inset: 0;
                 <button class="case-back" id="case-back-btn" type="button">← Назад</button>
                 <div class="case-open-title" id="case-open-title">—</div>
             </div>
-            <div class="case-spinner">
-                <div class="case-spinner-strip" id="case-spinner-strip"></div>
-            </div>
+            <div class="case-spinner"><div class="case-spinner-strip" id="case-spinner-strip"></div></div>
             <button class="case-open-btn" id="case-open-btn" type="button">Открыть</button>
             <div class="case-items-list" id="case-items-list"></div>
         </div>
@@ -932,26 +865,15 @@ body::before { content: ''; position: fixed; inset: 0;
             <span class="label">Баланс</span>
             <span class="val"><span id="shop-balance">10000</span> ⭐</span>
         </div>
-
         <div class="shop-search-row">
-            <div class="search-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-                <input type="text" id="shop-search" placeholder="Поиск...">
-            </div>
+            <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="shop-search" placeholder="Поиск..."></div>
             <input type="number" class="num-input" id="shop-price-min" placeholder="От">
             <input type="number" class="num-input" id="shop-price-max" placeholder="До">
         </div>
-
-        <div class="shop-grid-wrap">
-            <div class="shop-items-scroll">
-                <div class="item-grid" id="shop-grid"></div>
-            </div>
-        </div>
+        <div class="shop-grid-wrap"><div class="shop-items-scroll"><div class="item-grid" id="shop-grid"></div></div></div>
     </div>
 
-    <div class="footer">
-        powered by <a href="https://t.me/PSYgg_BOT" target="_blank">@PSYgg_BOT</a>
-    </div>
+    <div class="footer">powered by <a href="https://t.me/PSYgg_BOT" target="_blank">@PSYgg_BOT</a></div>
 </div>
 
 <div class="overlay" id="gift-picker">
@@ -992,14 +914,8 @@ body::before { content: ''; position: fixed; inset: 0;
 <div class="overlay" id="settings-modal">
     <div class="modal">
         <div class="modal-title">Настройки</div>
-        <div class="settings-row">
-            <span class="settings-label">Вибрация</span>
-            <label class="switch"><input type="checkbox" id="vibration-toggle"><span class="slider"></span></label>
-        </div>
-        <div class="settings-row">
-            <span class="settings-label">Звук</span>
-            <label class="switch"><input type="checkbox" id="sound-toggle"><span class="slider"></span></label>
-        </div>
+        <div class="settings-row"><span class="settings-label">Вибрация</span><label class="switch"><input type="checkbox" id="vibration-toggle"><span class="slider"></span></label></div>
+        <div class="settings-row"><span class="settings-label">Звук</span><label class="switch"><input type="checkbox" id="sound-toggle"><span class="slider"></span></label></div>
         <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:6px;">
             <span class="settings-label">Язык</span>
             <div class="lang-grid">
@@ -1008,9 +924,7 @@ body::before { content: ''; position: fixed; inset: 0;
                 <button class="lang-btn" data-lang="de" type="button">DE</button>
             </div>
         </div>
-        <div class="btns-row" style="margin-top:14px;">
-            <button class="btn btn-primary" id="settings-close" type="button">Готово</button>
-        </div>
+        <div class="btns-row" style="margin-top:14px;"><button class="btn btn-primary" id="settings-close" type="button">Готово</button></div>
     </div>
 </div>
 
@@ -1059,18 +973,9 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="modal-title">Пополнение звёздами</div>
         <div class="modal-sub">Выбери пакет. Оплата через Telegram Stars.</div>
         <div class="packs-grid">
-            <button class="pack-btn" data-pack="100" type="button">
-                <div><div class="pack-stars">100 ⭐</div><div class="pack-price">≈ 1.99 $</div></div>
-                <div class="pack-arrow">→</div>
-            </button>
-            <button class="pack-btn" data-pack="500" type="button">
-                <div><div class="pack-stars">500 ⭐</div><div class="pack-price">≈ 9.99 $</div></div>
-                <div class="pack-arrow">→</div>
-            </button>
-            <button class="pack-btn" data-pack="1000" type="button">
-                <div><div class="pack-stars">1000 ⭐</div><div class="pack-price">≈ 19.99 $</div></div>
-                <div class="pack-arrow">→</div>
-            </button>
+            <button class="pack-btn" data-pack="100" type="button"><div><div class="pack-stars">100 ⭐</div><div class="pack-price">≈ 1.99 $</div></div><div class="pack-arrow">→</div></button>
+            <button class="pack-btn" data-pack="500" type="button"><div><div class="pack-stars">500 ⭐</div><div class="pack-price">≈ 9.99 $</div></div><div class="pack-arrow">→</div></button>
+            <button class="pack-btn" data-pack="1000" type="button"><div><div class="pack-stars">1000 ⭐</div><div class="pack-price">≈ 19.99 $</div></div><div class="pack-arrow">→</div></button>
         </div>
         <div class="status-msg" id="stars-message"></div>
         <div class="btns-row"><button class="btn btn-secondary" id="stars-close" type="button">Закрыть</button></div>
@@ -1259,76 +1164,56 @@ const ROCKET_FLY_MAX = 30;
 const ROCKET_RESULT = 5;
 
 const CASES = [
-    {
-        id: 'romasik',
-        name: 'Ромасик Лайф',
-        price: 15,
-        glow: 'rgba(46,204,113,0.5)',
-        items: [
-            { name:'Heart Locket', chance:50 },
-            { name:'Toy Bear', chance:25 },
-            { name:'Jingle Bells', chance:15 },
-            { name:'Jelly Bunny', chance:7 },
-            { name:'Homemade Cake', chance:2.5 },
-            { name:'Crystal Ball', chance:0.5 }
-        ]
-    },
-    {
-        id: 'lottery',
-        name: 'Лотерея',
-        price: 100,
-        glow: 'rgba(120,100,255,0.5)',
-        items: [
-            { name:'Jelly Bunny', chance:40 },
-            { name:'Crystal Ball', chance:25 },
-            { name:'Diamond Ring', chance:20 },
-            { name:'Cupid Charm', chance:10 },
-            { name:'Plush Pepe', chance:4 },
-            { name:'Mini Oscar', chance:1 }
-        ]
-    },
-    {
-        id: 'britiy',
-        name: 'Бритый ПЁС',
-        price: 500,
-        glow: 'rgba(184,184,200,0.5)',
-        items: [
-            { name:'Crystal Ball', chance:30 },
-            { name:'Diamond Ring', chance:30 },
-            { name:"Durov's Cap", chance:20 },
-            { name:'Plush Pepe', chance:14 },
-            { name:'Stellar Rocket', chance:4 },
-            { name:'Snoop Dogg', chance:2 }
-        ]
-    },
-    {
-        id: 'oligarh',
-        name: 'Олигарх',
-        price: 2500,
-        glow: 'rgba(255,217,61,0.5)',
-        items: [
-            { name:'Plush Pepe', chance:35 },
-            { name:'Snoop Dogg', chance:25 },
-            { name:'Mini Oscar', chance:20 },
-            { name:'Light Sword', chance:14 },
-            { name:'Mighty Arm', chance:5 },
-            { name:'Intelligence Cup', chance:1 }
-        ]
-    },
-    {
-        id: 'wtf',
-        name: 'Ты кто?',
-        price: 10000,
-        glow: 'rgba(255,71,87,0.5)',
-        items: [
-            { name:'Mini Oscar', chance:30 },
-            { name:'Light Sword', chance:30 },
-            { name:'Mighty Arm', chance:20 },
-            { name:'Liberty Figure', chance:15 },
-            { name:"Khabib's Papakha", chance:4 },
-            { name:'Tama Gadget', chance:1 }
-        ]
-    }
+    { id:'romasik', name:'Ромасик Лайф', price:15, glow:'rgba(46,204,113,0.5)',
+      items:[
+        { name:'Слабый дроп', value:0, chance:50 },
+        { name:'Heart Locket', chance:25 },
+        { name:'Toy Bear', chance:12 },
+        { name:'Jingle Bells', chance:7 },
+        { name:'Jelly Bunny', chance:3 },
+        { name:'Homemade Cake', chance:2 },
+        { name:'Crystal Ball', chance:1 }
+      ]},
+    { id:'lottery', name:'Лотерея', price:100, glow:'rgba(120,100,255,0.5)',
+      items:[
+        { name:'Слабый дроп', value:0, chance:45 },
+        { name:'Jelly Bunny', chance:35 },
+        { name:'Crystal Ball', chance:13 },
+        { name:'Diamond Ring', chance:5 },
+        { name:'Cupid Charm', chance:1.5 },
+        { name:'Plush Pepe', chance:0.45 },
+        { name:'Mini Oscar', chance:0.05 }
+      ]},
+    { id:'britiy', name:'Бритый ПЁС', price:500, glow:'rgba(184,184,200,0.5)',
+      items:[
+        { name:'Слабый дроп', value:0, chance:45 },
+        { name:'Crystal Ball', chance:35 },
+        { name:'Diamond Ring', chance:13 },
+        { name:"Durov's Cap", chance:5 },
+        { name:'Plush Pepe', chance:1.7 },
+        { name:'Stellar Rocket', chance:0.25 },
+        { name:'Snoop Dogg', chance:0.05 }
+      ]},
+    { id:'oligarh', name:'Олигарх', price:2500, glow:'rgba(255,217,61,0.5)',
+      items:[
+        { name:'Слабый дроп', value:0, chance:60 },
+        { name:'Plush Pepe', chance:25 },
+        { name:'Snoop Dogg', chance:10 },
+        { name:'Mini Oscar', chance:3.5 },
+        { name:'Light Sword', chance:1.3 },
+        { name:'Mighty Arm', chance:0.15 },
+        { name:'Intelligence Cup', chance:0.05 }
+      ]},
+    { id:'wtf', name:'Ты кто?', price:10000, glow:'rgba(255,71,87,0.5)',
+      items:[
+        { name:'Слабый дроп', value:0, chance:60 },
+        { name:'Mini Oscar', chance:25 },
+        { name:'Light Sword', chance:10 },
+        { name:'Mighty Arm', chance:3.5 },
+        { name:'Liberty Figure', chance:1.2 },
+        { name:"Khabib's Papakha", chance:0.25 },
+        { name:'Tama Gadget', chance:0.05 }
+      ]}
 ];
 
 let CATALOG = [];
@@ -1391,10 +1276,14 @@ function fmtBalance(n){
 function iconHTML(item, size){
     size = size || 128;
     if(!item || !item.name) return '';
+    if(item.value === 0 || item.name === 'Слабый дроп'){
+        return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:'+Math.floor((size||128)*0.5)+'px;opacity:0.5;">💨</div>';
+    }
     var name = String(item.name).replace(/\s+/g,'');
     var slug = String(item.name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');
-    var api = 'https://api.changes.tg/original/' + encodeURIComponent(name) + '.png?size=' + size;
-    var frag = 'https://images.weserv.nl/?url=' + encodeURIComponent('nft.fragment.com/gift/' + slug + '-1.webp') + '&output=webp&q=85&w=' + size + '&h=' + size + '&fit=contain';
+    var apiSize = size >= 256 ? 256 : 128;
+    var api = 'https://api.changes.tg/original/' + encodeURIComponent(name) + '.png?size=' + apiSize;
+    var frag = 'https://images.weserv.nl/?url=' + encodeURIComponent('nft.fragment.com/gift/' + slug + '-1.webp') + '&output=webp&q=85&w=' + apiSize + '&h=' + apiSize + '&fit=contain';
     return '<img src="' + api + '" data-fb="' + frag + '" alt="" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb;}else{this.style.opacity=0.15;}">';
 }
 
@@ -1404,6 +1293,25 @@ function fillMenuIcons(){
         if(!name) return;
         var item = CATALOG.find(function(i){ return i.name === name; }) || { name: name, value: 0 };
         el.innerHTML = iconHTML(item, 128);
+        if(el.classList.contains('shop-icon')){
+            var cfgs = [
+                { left: -8, size: 20, delay: 0,   dur: 2.6 },
+                { left: 15, size: 16, delay: 0.7, dur: 2.1 },
+                { left: 38, size: 24, delay: 1.4, dur: 2.9 },
+                { left: 62, size: 15, delay: 0.3, dur: 2.4 },
+                { left: 85, size: 22, delay: 1.1, dur: 2.7 }
+            ];
+            cfgs.forEach(function(c){
+                var sp = document.createElement('span');
+                sp.className = 'rain';
+                sp.textContent = '$';
+                sp.style.left = c.left + '%';
+                sp.style.fontSize = c.size + 'px';
+                sp.style.animationDelay = c.delay + 's';
+                sp.style.animationDuration = c.dur + 's';
+                el.appendChild(sp);
+            });
+        }
     });
 }
 
@@ -1427,9 +1335,7 @@ function updatePercentUI(){
     }
     $('wheel-percent').textContent = chance.toFixed(2).replace(/\.00$/,'') + '%';
     $('wheel-label').textContent = chanceLabel(chance);
-    updateArc();
-    highlightMult();
-    updateBtn();
+    updateArc(); highlightMult(); updateBtn();
 }
 function highlightMult(){
     document.querySelectorAll('.mult-btn').forEach(b=>{
@@ -1510,9 +1416,7 @@ function goToScreen(name){
     if(name==='cases') renderCases();
     syncRocketVisual();
 }
-function updateLogo(){
-    const l = $('logo'); if(l) l.classList.toggle('disabled', currentScreen==='menu');
-}
+function updateLogo(){ const l=$('logo'); if(l) l.classList.toggle('disabled', currentScreen==='menu'); }
 
 document.querySelectorAll('.menu-card').forEach(card=>{
     card.addEventListener('click', function(e){
@@ -1550,7 +1454,7 @@ function renderArena(){
         const total = sumSelected();
         const show = selectedItems.slice(0, 3);
         $('from-icon').className='slot-icon multi';
-        $('from-icon').innerHTML = show.map(it => iconHTML(it, 96)).join('');
+        $('from-icon').innerHTML = show.map(it => iconHTML(it, 128)).join('');
         $('from-name').textContent = 'Выбрано: ' + selectedItems.length;
         $('from-value').textContent = total + ' ⭐';
         $('from-card').style.setProperty('--slot-glow', hexToRgba(getRarity(total), 0.35));
@@ -1603,10 +1507,7 @@ function renderInventory(){
 
 function renderTargets(){
     const grid=$('target-grid'); if(!grid) return; grid.innerHTML='';
-    if(!selectedItems.length){
-        grid.innerHTML='<div class="empty">Сначала выбери свои гифты в инвентаре</div>';
-        return;
-    }
+    if(!selectedItems.length){ grid.innerHTML='<div class="empty">Сначала выбери свои гифты в инвентаре</div>'; return; }
     const sum = sumSelected();
     const list=CATALOG.filter(it=>{
         if((it.value||0)<=sum) return false;
@@ -1625,8 +1526,7 @@ function renderTargets(){
             if(isSpinning)return;
             sndClick();
             targetItem={name:item.name, value:item.value||0};
-            recomputeChance();
-            updatePercentUI();
+            recomputeChance(); updatePercentUI();
             renderTargets(); renderArena();
         });
         grid.appendChild(s);
@@ -1690,8 +1590,7 @@ function renderMult(){
             if(!cands.length)return;
             const best=cands.reduce((p,c2)=>Math.abs((c2.value||0)-target)<Math.abs((p.value||0)-target)?c2:p);
             targetItem={name:best.name, value:best.value||0};
-            recomputeChance();
-            updatePercentUI();
+            recomputeChance(); updatePercentUI();
             renderTargets(); renderArena();
         });
         grid.appendChild(b);
@@ -1757,13 +1656,8 @@ function startSpin(){
 function endSpin(win){
     clearInterval(hb); clearTimeout(tickInterval);
     const s=$('stage');
-    s.classList.remove('zooming');
-    s.classList.add('snap');
-    setTimeout(()=>{
-        s.classList.remove('snap');
-        s.classList.add('snap-back');
-        setTimeout(()=>s.classList.remove('snap-back'), 700);
-    }, 180);
+    s.classList.remove('zooming'); s.classList.add('snap');
+    setTimeout(()=>{ s.classList.remove('snap'); s.classList.add('snap-back'); setTimeout(()=>s.classList.remove('snap-back'), 700); }, 180);
     $('wheel-wrap').classList.remove('spinning');
     if(vibrationEnabled)tg.HapticFeedback?.impactOccurred('heavy');
     if(win)sndWin(); else sndLose();
@@ -1774,14 +1668,8 @@ function spin(ch,predetWin){
         const half=Math.min(179.9, ch*3.6/2);
         const s0=180-half, s1=180+half;
         let angle;
-        if(predetWin){
-            const span = Math.max(0.1, s1-s0-0.2);
-            angle = s0 + 0.1 + Math.random()*span;
-        } else {
-            const out = Math.max(0.1, 360-(s1-s0)-0.2);
-            angle = s1 + 0.1 + Math.random()*out;
-            if(angle>360) angle-=360;
-        }
+        if(predetWin){ const span = Math.max(0.1, s1-s0-0.2); angle = s0 + 0.1 + Math.random()*span; }
+        else { const out = Math.max(0.1, 360-(s1-s0)-0.2); angle = s1 + 0.1 + Math.random()*out; if(angle>360) angle-=360; }
         const turns=8+Math.floor(Math.random()*4);
         const total=turns*360+angle;
         p.style.transition='none'; p.style.transform='rotate(0deg)';
@@ -1807,24 +1695,16 @@ async function doUpgrade(){
     stats.wagered += sum;
 
     if(wantWin){
-        fromCopy.forEach(it=>{
-            const idx = inventory.indexOf(it);
-            if(idx>=0) inventory.splice(idx,1);
-        });
+        fromCopy.forEach(it=>{ const idx = inventory.indexOf(it); if(idx>=0) inventory.splice(idx,1); });
         const newItem={name:targetItem.name, value:targetItem.value||0};
-        inventory.push(newItem);
-        inventory.sort((a,b)=>(a.value||0)-(b.value||0));
+        inventory.push(newItem); inventory.sort((a,b)=>(a.value||0)-(b.value||0));
         selectedItems = [newItem];
         stats.wins++;
         if(newItem.value > stats.bestDrop) stats.bestDrop = newItem.value;
         history.unshift({win:true, from:{name:fromCopy.length>1?(fromCopy.length+' гифтов'):(fromCopy[0]?.name||'—'), value:sum}, to:toCopy, time:Date.now()});
     } else {
-        fromCopy.forEach(it=>{
-            const idx = inventory.indexOf(it);
-            if(idx>=0) inventory.splice(idx,1);
-        });
-        selectedItems = [];
-        targetItem = null;
+        fromCopy.forEach(it=>{ const idx = inventory.indexOf(it); if(idx>=0) inventory.splice(idx,1); });
+        selectedItems = []; targetItem = null;
         stats.losses++;
         history.unshift({win:false, from:{name:fromCopy.length>1?(fromCopy.length+' гифтов'):(fromCopy[0]?.name||'—'), value:sum}, to:null, time:Date.now()});
     }
@@ -1858,13 +1738,12 @@ document.querySelectorAll('.tab').forEach(tb=>{
         document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
         document.querySelectorAll('.panel-view').forEach(x=>x.classList.remove('active'));
         tb.classList.add('active');
-        const viewId = 'view-'+tb.dataset.tab;
-        const view = $(viewId); if(view) view.classList.add('active');
+        const view = $('view-'+tb.dataset.tab); if(view) view.classList.add('active');
         if(tb.dataset.tab==='target') renderTargets();
     });
 });
 
-/* ============ РОКЕТКА ============ */
+/* === ROCKET === */
 function generateCrashPoint(){
     if(Math.random()<0.05) return 1.00;
     const u=Math.random();
@@ -1879,9 +1758,7 @@ function renderRocketHistory(){
     const el=$('rocket-history'); if(!el) return;
     el.innerHTML = rocketHistory.slice(0,12).map(h=>{
         let cls;
-        if(h < 1.5) cls='low';
-        else if(h < 10) cls='mid';
-        else cls='high';
+        if(h < 1.5) cls='low'; else if(h < 10) cls='mid'; else cls='high';
         return '<div class="rh-item '+cls+'">'+h.toFixed(2)+'x</div>';
     }).join('');
 }
@@ -1891,8 +1768,7 @@ function resetRocketVisual(){
     var ic = $('rocket-icon');
     if(ic){
         ic.style.display='block';
-        ic.style.left='8%';
-        ic.style.top='85%';
+        ic.style.left='8%'; ic.style.top='85%';
         ic.innerHTML = iconHTML({name:'Stellar Rocket'}, 128);
         ic.className = 'rocket-icon idle';
     }
@@ -1908,37 +1784,23 @@ function setRocketIcon(gift){
 function updateRocketButtonLabel(){
     const btn=$('rocket-btn'); if(!btn) return;
     const row=$('rocket-bet-row'); if(!row) return;
-    const phase=$('rocket-phase');
-    const phaseText=$('rocket-phase-text');
+    const phase=$('rocket-phase'); const phaseText=$('rocket-phase-text');
 
     if(rocketPhase==='waiting'){
         if(phase) phase.className='rocket-phase waiting';
         if(phaseText) phaseText.textContent='Приём ставок';
-        if(rocketBetActive){
-            btn.textContent='Ставка принята';
-            btn.classList.remove('cashout'); btn.disabled=true;
-        } else if(rocketBetGift){
-            btn.textContent='Поставить';
-            btn.classList.remove('cashout'); btn.disabled=false;
-        } else {
-            btn.textContent='Выбери гифт';
-            btn.classList.remove('cashout'); btn.disabled=true;
-        }
+        if(rocketBetActive){ btn.textContent='Ставка принята'; btn.classList.remove('cashout'); btn.disabled=true; }
+        else if(rocketBetGift){ btn.textContent='Поставить'; btn.classList.remove('cashout'); btn.disabled=false; }
+        else { btn.textContent='Выбери гифт'; btn.classList.remove('cashout'); btn.disabled=true; }
     } else if(rocketPhase==='flying'){
         if(phase) phase.className='rocket-phase flying';
         if(phaseText) phaseText.textContent='Полёт';
-        if(rocketBetActive){
-            btn.textContent='Забрать '+rocketCurrentMult.toFixed(2)+'x';
-            btn.classList.add('cashout'); btn.disabled=false;
-        } else {
-            btn.textContent='Не участвую';
-            btn.classList.remove('cashout'); btn.disabled=true;
-        }
+        if(rocketBetActive){ btn.textContent='Забрать '+rocketCurrentMult.toFixed(2)+'x'; btn.classList.add('cashout'); btn.disabled=false; }
+        else { btn.textContent='Не участвую'; btn.classList.remove('cashout'); btn.disabled=true; }
     } else {
         if(phase) phase.className='rocket-phase result';
         if(phaseText) phaseText.textContent='Результат';
-        btn.textContent='Ждите раунд';
-        btn.classList.remove('cashout'); btn.disabled=true;
+        btn.textContent='Ждите раунд'; btn.classList.remove('cashout'); btn.disabled=true;
     }
 
     if(rocketBetGift){
@@ -1961,32 +1823,29 @@ function setRocketTimer(sec){
     if(el.textContent !== String(s)) el.textContent = s;
 }
 function syncRocketVisual(){
-    if(rocketPhase==='waiting'){
-        resetRocketVisual();
-        updateRocketButtonLabel();
-    } else if(rocketPhase==='flying'){
-        if(rocketBetActive && rocketBetGift){
-            setRocketIcon(rocketBetGift);
-        } else {
-            setRocketIcon({name:'Stellar Rocket'});
-        }
+    if(rocketPhase==='waiting'){ resetRocketVisual(); updateRocketButtonLabel(); }
+    else if(rocketPhase==='flying'){
+        if(rocketBetActive && rocketBetGift) setRocketIcon(rocketBetGift);
+        else setRocketIcon({name:'Stellar Rocket'});
         const m=$('rocket-mult'); if(m) m.className='rocket-mult growing';
         updateRocketButtonLabel();
-    } else {
-        updateRocketButtonLabel();
-    }
+    } else { updateRocketButtonLabel(); }
 }
 function renderRocketFrame(m){
-    const progress=Math.min(0.95, 1-1/m);
-    const xPct=5+progress*83;
-    const yPct=88-progress*55;
+    // Прогресс: m^0.42 / 2.5 — при 6х ~0.83, при 10х ~0.93, при 20х ~1.36 (вылетает)
+    const progress = Math.min(1.6, Math.pow(m, 0.42) / 2.5);
+    const xPct = 5 + progress * 83;
+    const yPct = 88 - progress * 55;
     const iconEl=$('rocket-icon');
     if(iconEl){ iconEl.style.left=xPct+'%'; iconEl.style.top=yPct+'%'; }
     const mult = $('rocket-mult'); if(mult) mult.textContent=m.toFixed(2)+'x';
-    const ctrlX=xPct*0.55;
-    const ctrlY=88-(progress*55*0.3);
-    const path='M 5 88 Q '+ctrlX+' '+ctrlY+' '+xPct+' '+yPct;
-    const fillPath='M 5 88 Q '+ctrlX+' '+ctrlY+' '+xPct+' '+yPct+' L '+xPct+' 88 Z';
+    // SVG-линию обрезаем по границам viewBox
+    const sx = Math.min(xPct, 98);
+    const sy = Math.max(yPct, 2);
+    const ctrlX = Math.min(xPct*0.55, 90);
+    const ctrlY = Math.max(0, 88-(progress*55*0.3));
+    const path='M 5 88 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy;
+    const fillPath='M 5 88 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy+' L '+sx+' 88 Z';
     const tp = $('rocket-trail-path'); if(tp) tp.setAttribute('d',path);
     const tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d',fillPath);
 }
@@ -2004,12 +1863,8 @@ function rocketCycleTick(){
             rocketCurrentMult=1;
             rocketStartTime=Date.now();
             rocketLastTick=0;
-            if(rocketBetActive && rocketBetGift){
-                setRocketIcon(rocketBetGift);
-                sndRocketStart();
-            } else {
-                setRocketIcon({name:'Stellar Rocket'});
-            }
+            if(rocketBetActive && rocketBetGift){ setRocketIcon(rocketBetGift); sndRocketStart(); }
+            else { setRocketIcon({name:'Stellar Rocket'}); }
             const m = $('rocket-mult'); if(m) m.className='rocket-mult growing';
             updateRocketButtonLabel();
         }
@@ -2017,10 +1872,7 @@ function rocketCycleTick(){
         const elapsedFly = (Date.now() - rocketStartTime) / 1000;
         const m = multAt(elapsedFly);
         rocketCurrentMult = m;
-        if(elapsedFly - rocketLastTick > 0.15){
-            rocketLastTick = elapsedFly;
-            if(rocketBetActive) sndRocketTick();
-        }
+        if(elapsedFly - rocketLastTick > 0.15){ rocketLastTick = elapsedFly; if(rocketBetActive) sndRocketTick(); }
         if(m >= rocketCrashAt || remaining<=0){
             rocketCurrentMult = Math.min(rocketCrashAt, m);
             renderRocketFrame(rocketCurrentMult);
@@ -2051,19 +1903,16 @@ function endRocketFlight(cashed){
     if(!cashed){
         if(mult){ mult.className='rocket-mult crashed'; mult.textContent=rocketCurrentMult.toFixed(2)+'x'; }
         if(rocketBetActive && rocketBetGift){
-            rocketHistory.unshift(rocketCurrentMult);
-            rocketHistory=rocketHistory.slice(0,20);
+            rocketHistory.unshift(rocketCurrentMult); rocketHistory=rocketHistory.slice(0,20);
             renderRocketHistory();
-            stats.losses++;
-            stats.wagered += rocketBetGift.value||0;
+            stats.losses++; stats.wagered += rocketBetGift.value||0;
             history.unshift({win:false, from:{name:rocketBetGift.name, value:rocketBetGift.value||0}, to:null, time:Date.now(), rocket:true});
             history=history.slice(0,50);
             saveState();
             if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
             flashRed(); shake(); sndLose();
         } else {
-            rocketHistory.unshift(rocketCurrentMult);
-            rocketHistory=rocketHistory.slice(0,20);
+            rocketHistory.unshift(rocketCurrentMult); rocketHistory=rocketHistory.slice(0,20);
             renderRocketHistory();
         }
     }
@@ -2085,8 +1934,7 @@ function placeRocketBet(){
     renderInventory(); renderArena(); renderTargets();
     if(targetItem && (targetItem.value||0) <= sumSelected()) targetItem=null;
     if(selectedItems.length && targetItem) recomputeChance(); else { chance=0; multiplier=0; }
-    updatePercentUI();
-    updateRocketButtonLabel();
+    updatePercentUI(); updateRocketButtonLabel();
     if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     sndBuy();
 }
@@ -2098,28 +1946,20 @@ function cashOutRocket(){
     balance += winAmount;
     updateBalanceUI();
     saveState();
-
-    rocketHistory.unshift(rocketCurrentMult);
-    rocketHistory=rocketHistory.slice(0,20);
+    rocketHistory.unshift(rocketCurrentMult); rocketHistory=rocketHistory.slice(0,20);
     renderRocketHistory();
-
-    stats.wins++;
-    stats.wagered += betValue;
+    stats.wins++; stats.wagered += betValue;
     if(winAmount > stats.bestDrop) stats.bestDrop = winAmount;
     history.unshift({win:true, from:{name:rocketBetGift?.name||'Bet', value:betValue}, to:{name:'Rocket '+rocketCurrentMult.toFixed(2)+'x', value:winAmount}, time:Date.now(), rocket:true});
     history=history.slice(0,50);
     saveState();
-
     const mult = $('rocket-mult');
     if(mult){ mult.className='rocket-mult cashed'; mult.textContent=rocketCurrentMult.toFixed(2)+'x'; }
-
     rocketPhase='result';
     rocketPhaseStart=Date.now();
     rocketPhaseDuration=ROCKET_RESULT;
-
     if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
     flashWin(); confetti(); sndWin();
-
     rocketBetActive=false;
     updateRocketButtonLabel();
     checkTestEnd();
@@ -2136,7 +1976,7 @@ $('rocket-bet-row').addEventListener('click', ()=>{
     openGiftPicker('rocket');
 });
 
-/* ============ САПЁР ============ */
+/* === SAPER === */
 function saperMultiplier(k){
     if(k===0)return 1;
     const N=SAPER_SIZE, M=saperMineCount;
@@ -2156,9 +1996,7 @@ function updateSaperButtons(){
         cashBtn.disabled=saperRevealed.size===0;
         const potential=Math.floor((saperBetGift?.value||0)*saperMultiplier(saperRevealed.size));
         cashBtn.textContent='Забрать '+fmtBalance(potential)+'⭐';
-    }else{
-        startBtn.textContent='Старт'; startBtn.disabled=true; cashBtn.disabled=true;
-    }
+    }else{ startBtn.textContent='Старт'; startBtn.disabled=true; cashBtn.disabled=true; }
     const k=saperRevealed.size;
     $('saper-mult').textContent=saperMultiplier(k).toFixed(2)+'x';
     $('saper-opened').textContent=k+' / '+(SAPER_SIZE-saperMineCount);
@@ -2189,10 +2027,7 @@ function renderSaperGrid(){
         const isMine=saperMines.includes(i);
         const revealed=saperRevealed.has(i);
         if(revealed) cell.classList.add('revealed');
-        else if(saperState==='ended'){
-            cell.classList.add('disabled');
-            if(isMine) cell.classList.add('mine-reveal');
-        }
+        else if(saperState==='ended'){ cell.classList.add('disabled'); if(isMine) cell.classList.add('mine-reveal'); }
         cell.addEventListener('click', ()=>clickSaperCell(i));
         grid.appendChild(cell);
     }
@@ -2207,14 +2042,12 @@ function clickSaperCell(i){
         sndLose();
         if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('error');
         flashRed(); shake();
-        stats.losses++;
-        stats.wagered += saperBetGift?(saperBetGift.value||0):0;
+        stats.losses++; stats.wagered += saperBetGift?(saperBetGift.value||0):0;
         history.unshift({win:false,from:{name:saperBetGift?.name||'Saper',value:saperBetGift?.value||0},to:null,time:Date.now(),saper:true});
         history=history.slice(0,50);
         saperBetGift=null;
         saveState();
-        renderSaperGrid();
-        updateSaperButtons();
+        renderSaperGrid(); updateSaperButtons();
         setTimeout(()=>{ resetSaperUI(); checkTestEnd(); },2000);
     }else{
         saperRevealed.add(i);
@@ -2222,9 +2055,7 @@ function clickSaperCell(i){
         sndCellOpen();
         if(vibrationEnabled)tg.HapticFeedback?.impactOccurred('light');
         updateSaperButtons();
-        if(saperRevealed.size===SAPER_SIZE-saperMineCount){
-            setTimeout(()=>cashOutSaper(),300);
-        }
+        if(saperRevealed.size===SAPER_SIZE-saperMineCount){ setTimeout(()=>cashOutSaper(),300); }
     }
 }
 function startSaper(){
@@ -2248,8 +2079,7 @@ function startSaper(){
     }
     saperRevealed=new Set();
     saperState='playing';
-    renderSaperGrid();
-    updateSaperButtons();
+    renderSaperGrid(); updateSaperButtons();
     sndRocketStart();
 }
 function cashOutSaper(){
@@ -2259,10 +2089,8 @@ function cashOutSaper(){
     const betValue=saperBetGift?(saperBetGift.value||0):0;
     const winAmount=Math.floor(betValue*mult);
     balance=balance+winAmount;
-    updateBalanceUI();
-    saveState();
-    stats.wins++;
-    stats.wagered+=betValue;
+    updateBalanceUI(); saveState();
+    stats.wins++; stats.wagered+=betValue;
     if(winAmount>stats.bestDrop)stats.bestDrop=winAmount;
     history.unshift({win:true,from:{name:saperBetGift?.name||'Bet',value:betValue},to:{name:'Saper '+mult.toFixed(2)+'x',value:winAmount},time:Date.now(),saper:true});
     history=history.slice(0,50);
@@ -2271,8 +2099,7 @@ function cashOutSaper(){
     sndWin();
     if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
     flashWin(); confetti();
-    renderSaperGrid();
-    updateSaperButtons();
+    renderSaperGrid(); updateSaperButtons();
     saperBetGift=null;
     setTimeout(()=>{ resetSaperUI(); checkTestEnd(); },2000);
 }
@@ -2281,16 +2108,11 @@ function resetSaperUI(){
     saperMines=[];
     saperRevealed=new Set();
     saperBetGift=null;
-    renderSaperGrid();
-    updateSaperButtons();
+    renderSaperGrid(); updateSaperButtons();
 }
 $('saper-start-btn').addEventListener('click', ()=>{ sndClick(); startSaper(); });
 $('saper-cash-btn').addEventListener('click', ()=>{ sndClick(); cashOutSaper(); });
-$('saper-bet-row').addEventListener('click', ()=>{
-    if(saperState!=='idle')return;
-    sndClick();
-    openGiftPicker('saper');
-});
+$('saper-bet-row').addEventListener('click', ()=>{ if(saperState!=='idle')return; sndClick(); openGiftPicker('saper'); });
 document.querySelectorAll('.mine-btn').forEach(b=>{
     b.addEventListener('click', ()=>{
         if(saperState!=='idle')return;
@@ -2300,14 +2122,15 @@ document.querySelectorAll('.mine-btn').forEach(b=>{
     });
 });
 
-/* ============ КЕЙСЫ ============ */
+/* === CASES === */
 function renderCases(){
     const grid=$('cases-grid'); if(!grid) return;
     grid.style.display = 'grid';
     if($('case-open-panel')) $('case-open-panel').style.display = 'none';
     grid.innerHTML = CASES.map(c=>{
-        const peek = c.items.slice(-3).map((it,i)=>{
-            const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name};
+        const nonEmpty = c.items.filter(it=>it.value !== 0);
+        const peek = nonEmpty.slice(-3).map((it,i)=>{
+            const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name, value:0};
             return '<div class="case-peek p'+(i+1)+'">'+iconHTML(cat, 64)+'</div>';
         }).join('');
         return '<button class="case-card" data-case="'+c.id+'" type="button" style="--case-glow:'+c.glow+';">'
@@ -2317,13 +2140,9 @@ function renderCases(){
             +'</button>';
     }).join('');
     grid.querySelectorAll('.case-card').forEach(card=>{
-        card.addEventListener('click', ()=>{
-            sndClick();
-            openCase(card.dataset.case);
-        });
+        card.addEventListener('click', ()=>{ sndClick(); openCase(card.dataset.case); });
     });
 }
-
 function openCase(id){
     const c = CASES.find(x=>x.id===id); if(!c) return;
     currentCase = c;
@@ -2331,7 +2150,6 @@ function openCase(id){
     const panel = $('case-open-panel'); panel.style.display = 'flex';
     $('case-open-title').textContent = c.name + ' · ' + c.price + ' ⭐';
 
-    // лента победителей
     const strip = $('case-spinner-strip');
     strip.style.transition = 'none';
     strip.style.transform = 'translateX(0)';
@@ -2343,18 +2161,18 @@ function openCase(id){
         rolls.push(pick);
     }
     strip.innerHTML = rolls.map(w=>{
-        const cat = CATALOG.find(x=>x.name===w.name) || {name:w.name};
+        const cat = CATALOG.find(x=>x.name===w.name) || {name:w.name, value:w.value||0};
         return '<div class="case-spin-item">'+iconHTML(cat, 128)+'</div>';
     }).join('');
 
-    // список дропов
     const list = $('case-items-list');
     list.innerHTML = c.items.slice().sort((a,b)=>b.chance-a.chance).map(it=>{
         const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name, value:0};
+        const showVal = it.value === 0 ? 'ничего' : ((cat.value||0)+' ⭐');
         return '<div class="case-drop-row">'
             +'<div class="case-drop-icon">'+iconHTML(cat,64)+'</div>'
             +'<div class="case-drop-info"><div class="case-drop-name">'+it.name+'</div>'
-            +'<div class="case-drop-val">'+(cat.value||0)+' ⭐</div></div>'
+            +'<div class="case-drop-val">'+showVal+'</div></div>'
             +'<div class="case-drop-chance">'+it.chance+'%</div>'
             +'</div>';
     }).join('');
@@ -2365,14 +2183,12 @@ function openCase(id){
     btn.onclick = ()=> doOpenCase(c);
     $('case-back-btn').onclick = ()=>{ sndClick(); caseSpinning = false; renderCases(); };
 }
-
 function pickCaseItem(c){
     const r = Math.random()*100;
     let acc=0;
     for(const it of c.items){ acc += it.chance; if(r<acc) return it; }
     return c.items[c.items.length-1];
 }
-
 function doOpenCase(c){
     if(caseSpinning) return;
     if(balance < c.price){ sndError(); return; }
@@ -2383,69 +2199,76 @@ function doOpenCase(c){
 
     const pick = pickCaseItem(c);
     const strip = $('case-spinner-strip');
-    const itemW = 100 + 6;
-    const targetIndex = 50;
-    const cat = CATALOG.find(x=>x.name===pick.name) || {name:pick.name, value:0};
-    const kids = strip.children;
-    if(kids[targetIndex]) kids[targetIndex].innerHTML = iconHTML(cat, 128);
-
     const container = $('case-spinner');
-    const centerOffset = (container.clientWidth / 2) - 50;
-    const finalX = centerOffset - itemW * targetIndex + (Math.random()-0.5)*30;
-
-    // Сначала сбрасываем
-    strip.style.transition = 'none';
-    strip.style.transform = 'translateX(0)';
-    void strip.offsetWidth;
-
-    // Звуки тиков во время прокрутки
     const DURATION = 6000;
-    sndCaseSpin();
-    let tickCount = 0;
-    const tickMax = 60;
-    const tickStart = Date.now();
-    const tickLoop = ()=>{
-        const t = (Date.now() - tickStart) / DURATION;
-        if(t >= 1){ return; }
-        sndCaseSpin();
-        tickCount++;
-        const delay = 30 + (t*t*250);
-        setTimeout(tickLoop, delay);
-    };
-    tickLoop();
+    const itemW = 106;
+    const targetIndex = 50;
 
-    requestAnimationFrame(()=>{
-        strip.style.transition = 'transform '+DURATION+'ms cubic-bezier(0.1, 0.55, 0.15, 1)';
-        strip.style.transform = 'translateX(' + finalX + 'px)';
-    });
+    setTimeout(function(){
+        const cw = container.clientWidth || 320;
+        const cat = CATALOG.find(x=>x.name===pick.name) || {name:pick.name, value:pick.value||0};
+        const kids = strip.children;
+        if(kids[targetIndex]) kids[targetIndex].innerHTML = iconHTML(cat, 128);
 
-    setTimeout(()=>{
-        inventory.push({name:pick.name, value:cat.value||0});
-        inventory.sort((a,b)=>(a.value||0)-(b.value||0));
-        stats.wins++;
-        if((cat.value||0) > stats.bestDrop) stats.bestDrop = cat.value||0;
-        history.unshift({win:true, from:{name:'Кейс '+c.name, value:c.price}, to:{name:pick.name, value:cat.value||0}, time:Date.now(), case:true});
-        history = history.slice(0,50);
-        saveState();
-        renderInventory(); renderArena(); renderTargets(); renderShop();
-        if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
-        flashWin(); confetti(); sndCaseWin();
-        caseSpinning = false;
-        checkTestEnd();
-        const btn = $('case-open-btn');
-        btn.disabled = false;
-        btn.textContent = 'Открыть ещё за ' + c.price + ' ⭐';
-    }, DURATION + 150);
+        const centerOffset = (cw / 2) - 50;
+        const finalX = centerOffset - itemW * targetIndex + (Math.random()-0.5)*40;
+
+        strip.style.transition = 'none';
+        strip.style.transform = 'translateX(0)';
+        void strip.offsetWidth;
+
+        (function tickLoop(){
+            const start = Date.now();
+            function tick(){
+                const t = (Date.now() - start) / DURATION;
+                if(t >= 1) return;
+                sndCaseSpin();
+                setTimeout(tick, 30 + t*t*250);
+            }
+            tick();
+        })();
+
+        requestAnimationFrame(function(){
+            requestAnimationFrame(function(){
+                strip.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.1, 0.55, 0.15, 1)';
+                strip.style.transform = 'translateX(' + finalX + 'px)';
+            });
+        });
+
+        setTimeout(function(){
+            if(pick.value === 0 || pick.name === 'Слабый дроп'){
+                stats.losses++;
+                history.unshift({win:false, from:{name:'Кейс '+c.name, value:c.price}, to:null, time:Date.now(), case:true});
+                history = history.slice(0,50);
+                saveState();
+                if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
+                flashRed(); shake(); sndLose();
+            } else {
+                inventory.push({name:pick.name, value:cat.value||0});
+                inventory.sort((a,b)=>(a.value||0)-(b.value||0));
+                stats.wins++;
+                if((cat.value||0) > stats.bestDrop) stats.bestDrop = cat.value||0;
+                history.unshift({win:true, from:{name:'Кейс '+c.name, value:c.price}, to:{name:pick.name, value:cat.value||0}, time:Date.now(), case:true});
+                history = history.slice(0,50);
+                saveState();
+                renderInventory(); renderArena(); renderTargets(); renderShop();
+                if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+                flashWin(); confetti(); sndCaseWin();
+            }
+            caseSpinning = false;
+            checkTestEnd();
+            const btn = $('case-open-btn');
+            btn.disabled = false;
+            btn.textContent = 'Открыть ещё за ' + c.price + ' ⭐';
+        }, DURATION + 200);
+    }, 50);
 }
-
 function updateCaseButtons(){
     const btn = $('case-open-btn');
-    if(btn && currentCase){
-        btn.disabled = caseSpinning || (balance < currentCase.price) || testEnded;
-    }
+    if(btn && currentCase){ btn.disabled = caseSpinning || (balance < currentCase.price) || testEnded; }
 }
 
-/* ============ GIFT PICKER ============ */
+/* === GIFT PICKER === */
 let giftPickerMode=null;
 function openGiftPicker(mode){
     if(!inventory.length){ sndError(); return; }
@@ -2474,7 +2297,7 @@ function openGiftPicker(mode){
 function closeGiftPicker(){ $('gift-picker').classList.remove('active'); giftPickerMode=null; }
 $('gift-picker-cancel').addEventListener('click', ()=>{ sndClick(); closeGiftPicker(); });
 
-/* === ПРОМО, ЗВЁЗДЫ, НАСТРОЙКИ === */
+/* === PROMO / STARS / SETTINGS === */
 $('promo-btn').addEventListener('click', (e)=>{ e.preventDefault(); sndClick(); $('promo-modal').classList.add('active'); $('promo-input').value=''; $('promo-message').textContent=''; $('promo-message').className='status-msg'; });
 $('promo-cancel').addEventListener('click', ()=>{ sndClick(); $('promo-modal').classList.remove('active'); });
 $('promo-activate').addEventListener('click', ()=>{
@@ -2515,7 +2338,7 @@ document.querySelectorAll('.lang-btn').forEach(b=>{
     b.addEventListener('click', ()=>{ sndClick(); localStorage.setItem('psygg_lang',b.dataset.lang); document.querySelectorAll('.lang-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); });
 });
 
-/* === ПРОФИЛЬ === */
+/* === PROFILE === */
 $('profile-btn').addEventListener('click', (e)=>{
     e.preventDefault(); e.stopPropagation();
     sndClick();
@@ -2524,9 +2347,7 @@ $('profile-btn').addEventListener('click', (e)=>{
     const av = $('profile-avatar');
     if(TG_USER && TG_USER.photo_url){
         av.innerHTML = '<img src="'+TG_USER.photo_url+'" alt="" onerror="this.parentNode.textContent=\''+(name||'И').charAt(0).toUpperCase()+'\';">';
-    } else {
-        av.textContent = (name||'И').charAt(0).toUpperCase();
-    }
+    } else { av.textContent = (name||'И').charAt(0).toUpperCase(); }
     $('profile-drops').textContent = history.length+' дропов';
     $('profile-inv').textContent = inventory.length+' в инвентаре';
     $('stat-wins').textContent = stats.wins;
@@ -2539,22 +2360,16 @@ $('profile-btn').addEventListener('click', (e)=>{
             wipeBtn.style.display = 'block';
             wipeBtn.onclick = ()=>{
                 if(!confirm('Стереть ВСЮ статистику?')) return;
-                balance = 0;
-                inventory = [];
-                history = [];
+                balance = 0; inventory = []; history = [];
                 stats = { wins:0, losses:0, wagered:0, bestDrop:0 };
-                selectedItems = [];
-                targetItem = null;
-                rocketBetGift = null;
-                saperBetGift = null;
+                selectedItems = []; targetItem = null;
+                rocketBetGift = null; saperBetGift = null;
                 updateBalanceUI(); saveState();
                 renderInventory(); renderArena(); renderTargets(); renderShop();
                 updatePercentUI(); checkTestEnd(); updateSaperButtons();
                 $('profile-close').click();
             };
-        } else {
-            wipeBtn.style.display = 'none';
-        }
+        } else { wipeBtn.style.display = 'none'; }
     }
     renderHistory(); renderProfileInventory();
     $('profile-modal').classList.add('active');
@@ -2569,7 +2384,6 @@ document.querySelectorAll('.profile-tab').forEach(tb=>{
         $('pview-'+tb.dataset.pview).classList.add('active');
     });
 });
-
 function renderHistory(){
     const el=$('history-list'); if(!el) return;
     if(!history.length){ el.innerHTML='<div class="empty">—</div>'; return; }
@@ -2614,11 +2428,9 @@ function renderProfileInventory(){
         btn.addEventListener('click', ()=>{ const idx=parseInt(btn.dataset.sell,10); sndClick(); openSell(idx); });
     });
 }
-
 let sellIdx=-1;
 function openSell(idx){
-    const item=inventory[idx];
-    if(!item)return;
+    const item=inventory[idx]; if(!item)return;
     sellIdx=idx;
     $('sell-icon').innerHTML=iconHTML(item,128);
     $('sell-name').textContent=item.name;
@@ -2659,14 +2471,10 @@ function setupAdminPanel(){
             const amt=parseInt(input,10);
             if(isNaN(amt)||amt<=0)return;
             balance=balance+amt;
-            updateBalanceUI();
-            saveState(); renderShop(); checkTestEnd();
+            updateBalanceUI(); saveState(); renderShop(); checkTestEnd();
             if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
         });
-    }else{
-        chip.classList.remove('admin');
-        sign.style.display='none';
-    }
+    } else { chip.classList.remove('admin'); sign.style.display='none'; }
 }
 
 $('inv-search').addEventListener('input',e=>{ invSearch=e.target.value; renderInventory(); });
@@ -2717,15 +2525,11 @@ async function init(){
         inventory.sort((a,b)=>(a.value||0)-(b.value||0));
         balance=STARTING_BALANCE;
         localStorage.setItem(INIT_KEY,'1');
-    } else {
-        inventory.sort((a,b)=>(a.value||0)-(b.value||0));
-    }
+    } else { inventory.sort((a,b)=>(a.value||0)-(b.value||0)); }
     saveState();
     updateBalanceUI();
     if(balance<=0){ testEnded=true; const el=$('test-ended'); if(el) el.style.display='flex'; }
-    selectedItems=[];
-    targetItem=null;
-    chance=0; multiplier=0;
+    selectedItems=[]; targetItem=null; chance=0; multiplier=0;
 
     fillMenuIcons();
     renderMult(); renderInventory(); renderArena(); renderTargets(); renderShop(); renderCases();
