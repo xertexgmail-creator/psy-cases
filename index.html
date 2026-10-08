@@ -26,7 +26,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .stage.zooming { transform: translate3d(0,0,0) scale3d(1.08,1.08,1); transition: transform 5s cubic-bezier(0.22,0.61,0.36,1); }
 .stage.snap { transform: translate3d(0,0,0) scale3d(0.96,0.96,1); transition: transform 0.15s ease-out; }
 .stage.snap-back { transform: translate3d(0,0,0) scale3d(1,1,1); transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1); }
-
 .header { display: flex; align-items: center; justify-content: space-between;
     padding: 8px 10px; background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(16,16,24,0.7));
     backdrop-filter: blur(20px); border-radius: 14px; border: 1px solid var(--border);
@@ -58,10 +57,8 @@ body::before { content: ''; position: fixed; inset: 0;
 .balance-chip #balance { overflow: hidden; text-overflow: ellipsis; min-width: 0; flex-shrink: 1; }
 .balance-chip.admin { cursor: pointer; }
 .plus-sign { font-size: 12px; font-weight: 900; opacity: 0.6; }
-
 .screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
 .screen.active { display: flex; }
-
 .menu-title { text-align: center; font-size: 22px; font-weight: 900; margin-bottom: 4px;
     background: linear-gradient(135deg, #fff, #b0b8ff 50%, #a855f7);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -75,7 +72,7 @@ body::before { content: ''; position: fixed; inset: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; min-height: 180px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
-    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s; }
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
 .menu-card::before { content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
     width: 260px; height: 260px;
     background: radial-gradient(circle, var(--card-glow, rgba(120,100,255,0.25)) 0%, transparent 68%);
@@ -88,34 +85,61 @@ body::before { content: ''; position: fixed; inset: 0;
     filter: drop-shadow(0 6px 18px var(--card-glow, rgba(120,100,255,0.6))); }
 .menu-card-icon .gicon img { width: 100%; height: 100%; object-fit: contain; }
 .menu-card-icon .gicon.float { animation: menuFloat 2.4s ease-in-out infinite; }
-.menu-card-icon .gicon.shop-icon { position: relative; }
-.menu-card-icon .gicon.shop-icon .rain {
+.menu-card-icon .gicon.pulse { animation: menuPulse 1.5s ease-in-out infinite; }
+.menu-card-icon .gicon.swing { animation: menuSwing 2.8s ease-in-out infinite; }
+.menu-card-icon .gicon.shake { animation: menuShake 2.2s ease-in-out infinite; }
+@keyframes menuFloat {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(-3deg); }
+}
+@keyframes menuPulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.14); }
+}
+@keyframes menuSwing {
+    0%,100% { transform: rotate(-6deg) translateY(0); }
+    50% { transform: rotate(6deg) translateY(-4px); }
+}
+@keyframes menuShake {
+    0%,100% { transform: translateX(0) rotate(0deg); }
+    20% { transform: translateX(-3px) rotate(-2deg); }
+    40% { transform: translateX(3px) rotate(2deg); }
+    60% { transform: translateX(-2px) rotate(-1deg); }
+    80% { transform: translateX(2px) rotate(1deg); }
+}
+.menu-card-icon .gicon.shop-icon img { filter: grayscale(1) brightness(0.55) contrast(1.15); }
+.menu-card-icon .gicon.shop-icon::after {
+    content: 'SOLD';
     position: absolute;
-    top: -40px;
-    font-weight: 900;
-    color: #ffd93d;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 11px; font-weight: 900;
+    color: #ff4757;
+    background: rgba(0,0,0,0.75);
+    padding: 3px 8px;
+    border: 2px solid #ff4757;
+    border-radius: 4px;
+    letter-spacing: 2px;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(255,71,87,0.7); }
+.menu-card-icon .gicon.shop-icon .rain {
+    position: absolute; top: -40px;
+    font-weight: 900; color: #ffd93d;
     text-shadow: 0 0 10px #ffd93d, 0 0 22px #ff9500;
     animation: moneyFall linear infinite;
-    pointer-events: none;
-    z-index: 6;
-    line-height: 1;
+    pointer-events: none; z-index: 6; line-height: 1;
     will-change: transform, opacity; }
 @keyframes moneyFall {
     0%   { transform: translateY(-20px) rotate(-20deg); opacity: 0; }
     15%  { opacity: 1; }
     85%  { opacity: 1; }
-    100% { transform: translateY(80px) rotate(25deg); opacity: 0; }
-}
-@keyframes menuFloat {
-    0%,100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-6px) rotate(-3deg); }
-}
+    100% { transform: translateY(80px) rotate(25deg); opacity: 0; } }
 .menu-card-icon .arrow { color: #2ecc71; font-size: 22px; font-weight: 900; flex-shrink: 0;
     filter: drop-shadow(0 0 10px rgba(46,204,113,0.9)); animation: arrowPulse 1.4s ease-in-out infinite; }
 @keyframes arrowPulse { 0%,100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
 .menu-card-title { font-size: 15px; font-weight: 900; margin-bottom: 4px; position: relative; z-index: 1; }
 .menu-card-desc { font-size: 10px; color: var(--text-mute); line-height: 1.35; position: relative; z-index: 1; }
-
 .arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: stretch; margin-bottom: 8px; flex-shrink: 0; }
 .item-slot { background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(12,12,18,0.95));
     border-radius: 16px; padding: 18px 6px 12px; text-align: center;
@@ -136,7 +160,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .item-name { font-size: 10px; font-weight: 600; color: var(--text-dim); margin-bottom: 3px;
     max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: relative; z-index: 1; }
 .item-value { font-size: 13px; font-weight: 800; position: relative; z-index: 1; }
-
 .wheel-col { display: flex; align-items: center; justify-content: center; min-width: 155px; }
 .wheel-wrap { position: relative; width: 155px; height: 155px; }
 .wheel-wrap::before { content: ''; position: absolute; inset: -8px; border-radius: 50%;
@@ -162,7 +185,6 @@ body::before { content: ''; position: fixed; inset: 0;
     white-space: nowrap; padding: 0 2px; }
 .wheel-label { font-size: 7px; font-weight: 700; color: var(--text-mute);
     text-transform: uppercase; margin-top: 3px; }
-
 .mult-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-bottom: 8px; flex-shrink: 0; }
 .mult-btn { background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); color: var(--text); padding: 8px 0; border-radius: 9px;
@@ -170,7 +192,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .mult-btn.active { background: linear-gradient(135deg, #fff, #d0d4ff); color: #000; border-color: transparent; }
 .mult-btn .c { display: block; font-size: 6px; color: var(--text-mute); font-weight: 600; margin-top: 3px; }
 .mult-btn.active .c { color: rgba(0,0,0,0.55); }
-
 .upgrade-btn { width: 65%; margin: 0 auto 10px; padding: 14px;
     background: linear-gradient(135deg, #fff, #d0d4ff);
     border: none; border-radius: 13px; color: #000; font-size: 13px; font-weight: 900;
@@ -178,14 +199,12 @@ body::before { content: ''; position: fixed; inset: 0;
     flex-shrink: 0; font-family: inherit; }
 .upgrade-btn:active:not(:disabled) { transform: scale(0.97); }
 .upgrade-btn:disabled { opacity: 0.28; cursor: not-allowed; }
-
 .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; flex-shrink: 0; }
 .tab { background: rgba(255,255,255,0.02); border: 1px solid var(--border);
     color: var(--text-dim); padding: 10px; border-radius: 11px; font-size: 10px; font-weight: 700;
     cursor: pointer; font-family: inherit; text-transform: uppercase; }
 .tab.active { background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     color: var(--text); border-color: var(--border-strong); }
-
 .panel { background: linear-gradient(180deg, rgba(22,22,32,0.85), rgba(12,12,18,0.9));
     border: 1px solid var(--border); border-radius: 16px; padding: 10px;
     display: flex; flex-direction: column; flex: 1; min-height: 220px; max-height: 340px; overflow: hidden; }
@@ -215,7 +234,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .slot-name { font-size: 7px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .slot-price { font-size: 8px; font-weight: 800; margin-top: 2px; }
 .empty { grid-column: 1/-1; text-align: center; color: var(--text-mute); font-size: 11px; padding: 24px 8px; }
-
 .rocket-status-bar { display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); border-radius: 12px;
@@ -228,19 +246,20 @@ body::before { content: ''; position: fixed; inset: 0;
 .rocket-phase .phase-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor;
     box-shadow: 0 0 10px currentColor; animation: onlinePulse 1s ease-in-out infinite; }
 .rocket-timer { font-size: 15px; font-weight: 900; color: var(--text); letter-spacing: -0.03em; }
-
-.rocket-stage { position: relative; width: 100%; flex: 1; min-height: 280px;
+.rocket-stage { --gx: 0px; --gy: 0px;
+    position: relative; width: 100%; flex: 1; min-height: 280px;
     background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(46,204,113,0.08) 0%, transparent 60%),
                 radial-gradient(ellipse 100% 60% at 0% 100%, rgba(120,100,255,0.12) 0%, transparent 60%),
                 linear-gradient(180deg, rgba(16,16,26,0.95), rgba(8,8,14,1));
     border: 1px solid rgba(120,100,255,0.15); border-radius: 20px; margin-bottom: 8px;
     overflow: hidden; box-shadow: 0 12px 48px rgba(0,0,0,0.6); }
 .rocket-stage::before { content: ''; position: absolute; inset: 0;
-    background-image: linear-gradient(rgba(120,100,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(120,100,255,0.04) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(120,100,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(120,100,255,0.06) 1px, transparent 1px);
     background-size: 28px 28px; pointer-events: none;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%); }
+    background-position: var(--gx) var(--gy);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%); }
 .rocket-trail-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
 .rocket-trail-path { fill: none; stroke: url(#trailGrad); stroke-width: 3; stroke-linecap: round;
     filter: drop-shadow(0 0 6px rgba(168,85,247,0.8)); }
@@ -249,7 +268,7 @@ body::before { content: ''; position: fixed; inset: 0;
     transform: translate(-50%, -50%) rotate(-15deg);
     pointer-events: none;
     filter: drop-shadow(0 0 14px rgba(168,85,247,0.9)) drop-shadow(0 0 30px rgba(120,100,255,0.5));
-    z-index: 3; }
+    z-index: 3; transition: transform 0.1s linear; }
 .rocket-icon img { width: 100%; height: 100%; object-fit: contain; }
 .rocket-icon.idle { animation: rocketFloat 2.2s ease-in-out infinite; }
 .rocket-icon.flying { animation: rocketShake 0.35s ease-in-out infinite; }
@@ -275,7 +294,6 @@ body::before { content: ''; position: fixed; inset: 0;
     60% { transform: translate(-50%,-50%) scale(1.15) rotate(3deg); } }
 @keyframes cashPop { 0%,100% { transform: translate(-50%,-50%) scale(1); }
     50% { transform: translate(-50%,-50%) scale(1.3); } }
-
 .rocket-history { display: flex; gap: 5px; overflow-x: auto; padding: 8px 0; flex-shrink: 0; scrollbar-width: none; }
 .rocket-history::-webkit-scrollbar { display: none; }
 .rh-item { flex-shrink: 0; padding: 6px 12px; border-radius: 9px; font-size: 11px; font-weight: 800;
@@ -287,12 +305,11 @@ body::before { content: ''; position: fixed; inset: 0;
 .rh-item.high { color: var(--green); border-color: rgba(46,204,113,0.35);
     background: linear-gradient(180deg, rgba(46,204,113,0.12), rgba(46,204,113,0.03));
     box-shadow: 0 0 12px rgba(46,204,113,0.2); }
-
 .bet-gift-row { display: flex; align-items: center; gap: 10px;
     background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); border-radius: 14px;
     padding: 11px 14px; margin-bottom: 8px; flex-shrink: 0;
-    cursor: pointer; min-height: 64px; transition: all 0.2s; }
+    cursor: pointer; min-height: 64px; }
 .bet-gift-row:active { transform: scale(0.98); }
 .bet-gift-row.empty-bet { justify-content: center; border-style: dashed;
     border-color: rgba(120,100,255,0.4);
@@ -314,7 +331,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .bet-gift-value { font-size: 10px; color: var(--gold); font-weight: 700; margin-top: 3px; }
 .bet-gift-edit { font-size: 10px; color: var(--text-mute); font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.08em; }
-
 .rocket-btn { width: 100%; padding: 17px;
     background: linear-gradient(135deg, #2ecc71, #1ea855);
     border: none; border-radius: 14px; color: #000;
@@ -328,7 +344,6 @@ body::before { content: ''; position: fixed; inset: 0;
     animation: cashPulse 0.8s ease-in-out infinite; }
 @keyframes cashPulse { 0%,100% { box-shadow: 0 8px 32px rgba(255,217,61,0.4); }
     50% { box-shadow: 0 8px 48px rgba(255,217,61,0.9); } }
-
 .saper-info { display: flex; justify-content: space-between; align-items: center;
     background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(255,217,61,0.08) 0%, transparent 60%),
                 linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.95));
@@ -340,7 +355,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .saper-stat .val { font-size: 17px; font-weight: 900; margin-top: 3px; }
 .saper-stat .val.gold { color: var(--gold); text-shadow: 0 0 15px rgba(255,217,61,0.5); }
 .saper-stat .val.red { color: var(--red); text-shadow: 0 0 15px rgba(255,71,87,0.5); }
-
 .saper-mines-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
     margin-bottom: 8px; flex-shrink: 0; }
 .mine-btn { background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
@@ -350,7 +364,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .mine-btn.active { background: linear-gradient(135deg, #ffd93d, #ff9500); color: #000; border-color: transparent; }
 .mine-btn .c { display: block; font-size: 8px; color: var(--text-mute); margin-top: 2px; font-weight: 600; }
 .mine-btn.active .c { color: rgba(0,0,0,0.55); }
-
 .saper-grid-wrap { background: radial-gradient(ellipse 100% 100% at 50% 50%, rgba(255,217,61,0.06) 0%, transparent 70%),
                 linear-gradient(180deg, rgba(16,16,26,0.95), rgba(8,8,14,1));
     border: 1px solid rgba(255,217,61,0.12);
@@ -388,7 +401,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .saper-cell.mine-reveal { background: linear-gradient(180deg, rgba(255,71,87,0.12), rgba(255,71,87,0.03));
     border-color: rgba(255,71,87,0.35); opacity: 0.55; }
 .saper-cell.mine-reveal::after { content: '💣'; font-size: 22px; opacity: 0.8; }
-
 .saper-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
 .saper-start-btn { padding: 17px; border-radius: 14px; border: none;
     background: linear-gradient(135deg, #2ecc71, #1ea855);
@@ -403,8 +415,6 @@ body::before { content: ''; position: fixed; inset: 0;
     box-shadow: 0 8px 32px rgba(255,217,61,0.4); }
 .saper-cash-btn:disabled { opacity: 0.3; cursor: not-allowed;
     background: rgba(255,255,255,0.05); color: var(--text-mute); box-shadow: none; }
-
-/* === CASES === */
 .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .case-card { position: relative; overflow: hidden;
     background: linear-gradient(160deg, rgba(34,34,50,0.95), rgba(16,16,26,0.98));
@@ -426,24 +436,20 @@ body::before { content: ''; position: fixed; inset: 0;
 .case-card .case-peek.p1 { top: -6px; left: 50%; transform: translateX(-50%) rotate(-12deg); z-index: 3; }
 .case-card .case-peek.p2 { top: 2px; left: 4px; transform: rotate(-25deg); z-index: 2; }
 .case-card .case-peek.p3 { top: 2px; right: 4px; transform: rotate(25deg); z-index: 2; }
-.case-card .case-box {
-    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+.case-card .case-box { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
     width: 60px; height: 34px; border-radius: 6px 6px 10px 10px;
     background: linear-gradient(180deg, #8b6f47 0%, #5c4a2f 100%);
     border: 2px solid #4a3a24;
     box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 4px 0 rgba(255,255,255,0.1); }
-.case-card .case-box::before {
-    content: ''; position: absolute; top: -6px; left: -3px; right: -3px; height: 10px;
+.case-card .case-box::before { content: ''; position: absolute; top: -6px; left: -3px; right: -3px; height: 10px;
     border-radius: 4px; background: linear-gradient(180deg, #a8845a 0%, #7a5c38 100%);
     border: 2px solid #4a3a24; }
-.case-card .case-box::after {
-    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+.case-card .case-box::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
     width: 12px; height: 12px; border-radius: 50%;
     background: radial-gradient(circle, #ffd93d, #b88a00);
     box-shadow: 0 0 8px #ffd93d; }
 .case-card .case-name { font-size: 12px; font-weight: 900; margin-bottom: 3px; position: relative; z-index: 1; }
 .case-card .case-price { font-size: 11px; font-weight: 900; color: var(--gold); position: relative; z-index: 1; }
-
 .case-open-panel { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .case-open-header { display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 10px; flex-shrink: 0; gap: 8px; }
@@ -453,7 +459,6 @@ body::before { content: ''; position: fixed; inset: 0;
     font-family: inherit; cursor: pointer; }
 .case-open-header .case-back:active { transform: scale(0.96); }
 .case-open-title { font-size: 13px; font-weight: 900; }
-
 .case-spinner { position: relative; width: 100%; height: 130px;
     background: radial-gradient(ellipse at center, rgba(120,100,255,0.15) 0%, rgba(0,0,0,0.5) 70%);
     border-radius: 16px; overflow: hidden;
@@ -473,14 +478,12 @@ body::before { content: ''; position: fixed; inset: 0;
     width: 3px; background: linear-gradient(180deg, transparent, #ffd93d 30%, #ffd93d 70%, transparent);
     transform: translateX(-50%); z-index: 5;
     box-shadow: 0 0 20px #ffd93d, 0 0 40px rgba(255,217,61,0.5); }
-
 .case-open-btn { width: 100%; padding: 14px; border-radius: 12px; border: none;
     background: linear-gradient(135deg, #ffd93d, #ff9500); color: #000;
     font-size: 13px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
     cursor: pointer; font-family: inherit; margin-top: 10px; }
 .case-open-btn:active:not(:disabled) { transform: scale(0.97); }
 .case-open-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
 .case-items-list { margin-top: 12px; flex: 1; min-height: 0; overflow-y: auto;
     background: rgba(0,0,0,0.3); border-radius: 12px; padding: 8px; border: 1px solid var(--border); }
 .case-items-list::-webkit-scrollbar { width: 3px; }
@@ -494,7 +497,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .case-drop-name { font-size: 11px; font-weight: 700; }
 .case-drop-val { font-size: 9px; color: var(--text-mute); margin-top: 1px; }
 .case-drop-chance { font-size: 11px; font-weight: 900; color: var(--gold); flex-shrink: 0; }
-
 .shop-topbar { display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); border-radius: 12px;
@@ -510,7 +512,6 @@ body::before { content: ''; position: fixed; inset: 0;
     display: flex; flex-direction: column; position: relative;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
 .shop-items-scroll { flex: 1; min-height: 0; overflow-y: auto; position: relative; z-index: 1; }
-
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85);
     backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center;
     z-index: 300; padding: 20px; }
@@ -539,7 +540,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .btn-primary { background: linear-gradient(135deg, #fff, #d0d4ff); color: #000; }
 .btn-secondary { background: rgba(255,255,255,0.04); color: var(--text); border: 1px solid var(--border); }
 .btn-danger { background: linear-gradient(135deg, #ff4757, #c0392b); color: #fff; }
-
 .settings-row { display: flex; align-items: center; justify-content: space-between;
     padding: 12px 0; border-bottom: 1px solid var(--border); }
 .settings-row:last-child { border-bottom: none; }
@@ -559,7 +559,6 @@ body::before { content: ''; position: fixed; inset: 0;
     color: var(--text-dim); font-size: 11px; font-weight: 700;
     font-family: inherit; cursor: pointer; }
 .lang-btn.active { background: linear-gradient(135deg, #fff, #d0d4ff); color: #000; border-color: transparent; }
-
 .profile-header { display: flex; align-items: center; gap: 14px;
     padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
 .avatar { width: 54px; height: 54px; border-radius: 50%;
@@ -610,7 +609,6 @@ body::before { content: ''; position: fixed; inset: 0;
     font-family: inherit; cursor: pointer; }
 .mini-btn.sell { color: var(--gold); border-color: rgba(255,217,61,0.3); }
 .mini-btn.withdraw { color: var(--text-mute); cursor: not-allowed; }
-
 .packs-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
 .pack-btn { display: flex; align-items: center; justify-content: space-between;
     padding: 14px 16px; border-radius: 12px;
@@ -620,7 +618,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .pack-stars { font-size: 15px; font-weight: 800; color: var(--gold); }
 .pack-price { font-size: 10px; color: var(--text-mute); margin-top: 2px; }
 .pack-arrow { font-size: 18px; color: var(--gold); font-weight: 900; }
-
 .test-ended-badge { display: flex; align-items: center; justify-content: center;
     padding: 12px; border-radius: 12px;
     background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.3);
@@ -630,7 +627,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .footer { text-align: center; margin-top: 8px; font-size: 9px;
     color: var(--text-mute); padding-bottom: 4px; flex-shrink: 0; }
 .footer a { color: var(--text-dim); text-decoration: none; font-weight: 600; }
-
 @media (max-width: 360px) {
     .online-badge { display: none; }
     .balance-chip { font-size: 10px; padding: 4px 7px; max-width: 80px; }
@@ -662,9 +658,7 @@ body::before { content: ''; position: fixed; inset: 0;
 </style>
 </head>
 <body>
-
 <div class="stage" id="stage">
-
     <div class="header">
         <div class="header-left">
             <div class="logo" id="logo">ПСЫ<span class="dot">.</span>gg</div>
@@ -676,18 +670,10 @@ body::before { content: ''; position: fixed; inset: 0;
                 <span id="balance">10000</span>
                 <span class="plus-sign" id="plus-sign" style="display:none;">+</span>
             </div>
-            <button class="icon-btn" id="promo-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-            </button>
-            <button class="icon-btn" id="star-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>
-            </button>
-            <button class="icon-btn" id="settings-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </button>
-            <button class="icon-btn" id="profile-btn" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </button>
+            <button class="icon-btn" id="promo-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
+            <button class="icon-btn" id="star-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg></button>
+            <button class="icon-btn" id="settings-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            <button class="icon-btn" id="profile-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
         </div>
     </div>
 
@@ -699,9 +685,9 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="menu-grid">
             <button class="menu-card" data-mode="upgrader" type="button" style="--card-glow: rgba(120,100,255,0.5);">
                 <div class="menu-card-icon">
-                    <div class="gicon" data-name="Heart Locket"></div>
+                    <div class="gicon pulse" data-name="Heart Locket"></div>
                     <span class="arrow">→</span>
-                    <div class="gicon" data-name="Plush Pepe"></div>
+                    <div class="gicon float" data-name="Plush Pepe"></div>
                 </div>
                 <div class="menu-card-title">Апгрейдер</div>
                 <div class="menu-card-desc">Прокачивай гифты</div>
@@ -715,14 +701,14 @@ body::before { content: ''; position: fixed; inset: 0;
             </button>
             <button class="menu-card" data-mode="saper" type="button" style="--card-glow: rgba(255,217,61,0.5);">
                 <div class="menu-card-icon">
-                    <div class="gicon" data-name="Liberty Figure"></div>
+                    <div class="gicon swing" data-name="Liberty Figure"></div>
                 </div>
                 <div class="menu-card-title">Сапёр</div>
                 <div class="menu-card-desc">Открывай клетки</div>
             </button>
             <button class="menu-card" data-mode="cases" type="button" style="--card-glow: rgba(255,71,87,0.5);">
                 <div class="menu-card-icon">
-                    <div class="gicon" data-name="Mighty Arm"></div>
+                    <div class="gicon shake" data-name="Mighty Arm"></div>
                 </div>
                 <div class="menu-card-title">Кейсы</div>
                 <div class="menu-card-desc">5 кейсов на удачу</div>
@@ -803,15 +789,8 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="rocket-stage" id="rocket-stage">
             <svg class="rocket-trail-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
-                    <linearGradient id="trailGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="rgba(168,85,247,0.05)"/>
-                        <stop offset="50%" stop-color="rgba(120,100,255,0.6)"/>
-                        <stop offset="100%" stop-color="#a855f7"/>
-                    </linearGradient>
-                    <linearGradient id="trailFill" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="rgba(168,85,247,0.45)"/>
-                        <stop offset="100%" stop-color="rgba(168,85,247,0)"/>
-                    </linearGradient>
+                    <linearGradient id="trailGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="rgba(168,85,247,0.05)"/><stop offset="50%" stop-color="rgba(120,100,255,0.6)"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+                    <linearGradient id="trailFill" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="rgba(168,85,247,0.45)"/><stop offset="100%" stop-color="rgba(168,85,247,0)"/></linearGradient>
                 </defs>
                 <path id="rocket-trail-fill" class="rocket-trail-fill" d=""/>
                 <path id="rocket-trail-path" class="rocket-trail-path" d=""/>
@@ -838,9 +817,7 @@ body::before { content: ''; position: fixed; inset: 0;
             <button class="mine-btn" data-mines="5" type="button">5 мин<span class="c">хардкор</span></button>
         </div>
         <div class="saper-grid-wrap"><div class="saper-grid" id="saper-grid"></div></div>
-        <div class="bet-gift-row empty-bet" id="saper-bet-row">
-            <div class="bg-label">Нажми чтобы выбрать гифт</div>
-        </div>
+        <div class="bet-gift-row empty-bet" id="saper-bet-row"><div class="bg-label">Нажми чтобы выбрать гифт</div></div>
         <div class="saper-btn-row">
             <button class="saper-start-btn" id="saper-start-btn" type="button">Старт</button>
             <button class="saper-cash-btn" id="saper-cash-btn" type="button" disabled>Забрать</button>
@@ -861,10 +838,7 @@ body::before { content: ''; position: fixed; inset: 0;
     </div>
 
     <div class="screen" id="screen-shop">
-        <div class="shop-topbar">
-            <span class="label">Баланс</span>
-            <span class="val"><span id="shop-balance">10000</span> ⭐</span>
-        </div>
+        <div class="shop-topbar"><span class="label">Баланс</span><span class="val"><span id="shop-balance">10000</span> ⭐</span></div>
         <div class="shop-search-row">
             <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="shop-search" placeholder="Поиск..."></div>
             <input type="number" class="num-input" id="shop-price-min" placeholder="От">
@@ -880,12 +854,9 @@ body::before { content: ''; position: fixed; inset: 0;
     <div class="modal" style="max-width:380px;">
         <div class="modal-title">Выбери гифт для ставки</div>
         <div class="picker" id="gift-picker-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;padding:8px;max-height:200px;overflow-y:auto;"></div>
-        <div class="btns-row" style="margin-top:14px;">
-            <button class="btn btn-secondary" id="gift-picker-cancel" type="button">Отмена</button>
-        </div>
+        <div class="btns-row" style="margin-top:14px;"><button class="btn btn-secondary" id="gift-picker-cancel" type="button">Отмена</button></div>
     </div>
 </div>
-
 <div class="overlay" id="buy-modal">
     <div class="modal">
         <div class="slot-icon" id="buy-icon" style="width:80px;height:80px;margin:0 auto 14px;"></div>
@@ -897,20 +868,15 @@ body::before { content: ''; position: fixed; inset: 0;
         </div>
     </div>
 </div>
-
 <div class="overlay" id="promo-modal">
     <div class="modal">
         <div class="modal-title">Промокод</div>
         <div class="modal-sub">Введи код и получи награду</div>
         <input type="text" class="input-field" id="promo-input" placeholder="ВВЕДИ ПРОМОКОД">
         <div class="status-msg" id="promo-message"></div>
-        <div class="btns-row">
-            <button class="btn btn-secondary" id="promo-cancel" type="button">Закрыть</button>
-            <button class="btn btn-primary" id="promo-activate" type="button">Активировать</button>
-        </div>
+        <div class="btns-row"><button class="btn btn-secondary" id="promo-cancel" type="button">Закрыть</button><button class="btn btn-primary" id="promo-activate" type="button">Активировать</button></div>
     </div>
 </div>
-
 <div class="overlay" id="settings-modal">
     <div class="modal">
         <div class="modal-title">Настройки</div>
@@ -927,7 +893,6 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="btns-row" style="margin-top:14px;"><button class="btn btn-primary" id="settings-close" type="button">Готово</button></div>
     </div>
 </div>
-
 <div class="overlay" id="profile-modal">
     <div class="modal" style="max-width:380px;">
         <div class="profile-header">
@@ -955,7 +920,6 @@ body::before { content: ''; position: fixed; inset: 0;
         </div>
     </div>
 </div>
-
 <div class="overlay" id="sell-modal">
     <div class="modal">
         <div class="slot-icon" id="sell-icon" style="width:80px;height:80px;margin:0 auto 14px;"></div>
@@ -967,7 +931,6 @@ body::before { content: ''; position: fixed; inset: 0;
         </div>
     </div>
 </div>
-
 <div class="overlay" id="stars-modal">
     <div class="modal">
         <div class="modal-title">Пополнение звёздами</div>
@@ -987,28 +950,23 @@ body::before { content: ''; position: fixed; inset: 0;
 "use strict";
 const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand();
-
 const TG_USER = tg.initDataUnsafe?.user;
 const USER_ID = TG_USER?.id ? String(TG_USER.id) : 'guest_'+(localStorage.getItem('psygg_guest_id')||(()=>{const id='g'+Math.random().toString(36).slice(2,10);try{localStorage.setItem('psygg_guest_id',id);}catch{}return id;})());
 const KEY_PREFIX = 'psygg_'+USER_ID+'_';
 const ADMIN_USERNAMES = ['xertex_grace','onyurknees','romasik09','malindak'];
 function isAdmin(){ const u=TG_USER?.username; return u && ADMIN_USERNAMES.includes(u.toLowerCase()); }
-
 const VIB_KEY='psygg_vibration', SND_KEY='psygg_sound';
 const USED_KEY=KEY_PREFIX+'used_promos', HISTORY_KEY=KEY_PREFIX+'history';
 const INV_KEY=KEY_PREFIX+'inventory', BALANCE_KEY=KEY_PREFIX+'balance';
 const INIT_KEY=KEY_PREFIX+'initialized', STATS_KEY=KEY_PREFIX+'stats';
 const RH_KEY=KEY_PREFIX+'rocket_history';
 const STARTING_BALANCE = 10000;
-
 let vibrationEnabled = localStorage.getItem(VIB_KEY) !== 'false';
 let soundEnabled = localStorage.getItem(SND_KEY) !== 'false';
 const PROMO_CODES = { 'ROMANARMATURA777':10, 'CHIHARDEDEP':20 };
-
 function getUsedCodes(){ try{ return JSON.parse(localStorage.getItem(USED_KEY)||'[]');}catch{return[];} }
 function markCodeUsed(c){ const u=getUsedCodes(); if(!u.includes(c)){u.push(c);localStorage.setItem(USED_KEY,JSON.stringify(u));} }
 function isCodeUsed(c){ return getUsedCodes().includes(c); }
-
 let audioCtx=null;
 function initAudio(){ if(audioCtx)return; try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} }
 function playTone(freq,dur,type,vol,delay){
@@ -1250,11 +1208,10 @@ const SAPER_SIZE = 25;
 
 let currentCase = null;
 let caseSpinning = false;
+let caseAnim = null;
 
 const $ = id => document.getElementById(id);
-
 function sumSelected(){ return selectedItems.reduce((s,it)=>s+ (it.value||0), 0); }
-
 function getRarity(v){
     if (v<100) return '#4b69ff';
     if (v<500) return '#8847ff';
@@ -1263,7 +1220,6 @@ function getRarity(v){
     if (v<50000) return '#ffd700';
     return '#ff9500';
 }
-
 function fmtBalance(n){
     if(!n || isNaN(n)) return '0';
     n = Math.floor(n);
@@ -1272,7 +1228,6 @@ function fmtBalance(n){
     if (n >= 1e3) return Math.floor(n/1e3) + 'K';
     return String(n);
 }
-
 function iconHTML(item, size){
     size = size || 128;
     if(!item || !item.name) return '';
@@ -1286,7 +1241,6 @@ function iconHTML(item, size){
     var frag = 'https://images.weserv.nl/?url=' + encodeURIComponent('nft.fragment.com/gift/' + slug + '-1.webp') + '&output=webp&q=85&w=' + apiSize + '&h=' + apiSize + '&fit=contain';
     return '<img src="' + api + '" data-fb="' + frag + '" alt="" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb;}else{this.style.opacity=0.15;}">';
 }
-
 function fillMenuIcons(){
     document.querySelectorAll('.menu-card-icon .gicon').forEach(function(el){
         var name = el.dataset.name;
@@ -1314,10 +1268,8 @@ function fillMenuIcons(){
         }
     });
 }
-
 function chanceFromRatio(r){ let c=100/r; if(c>99)c=99; if(c<0.01)c=0.01; return Math.round(c*100)/100; }
 function chanceLabel(c){ if(c>=60)return 'высокий'; if(c>=30)return 'средний'; if(c>=10)return 'низкий'; if(c>=1)return 'очень низкий'; return 'безумие'; }
-
 function recomputeChance(){
     if(!selectedItems.length || !targetItem){ chance=0; multiplier=0; return; }
     const sum = sumSelected();
@@ -1361,7 +1313,6 @@ function updateArc(){
         ' L '+xi2.toFixed(3)+' '+yi2.toFixed(3)+
         ' A '+ri+' '+ri+' 0 '+large+' 0 '+xi1.toFixed(3)+' '+yi1.toFixed(3)+' Z');
 }
-
 function saveState(){
     try{
         localStorage.setItem(INV_KEY,JSON.stringify(inventory));
@@ -1397,8 +1348,7 @@ function updateBalanceUI(){
 }
 function goToMenu(){
     if(currentScreen==='menu')return;
-    if(currentScreen==='saper'&&saperState==='playing')return;
-    if(currentScreen==='cases'&&caseSpinning)return;
+    // Кейсы не блокируют выход — спин дойдёт в фоне
     currentScreen='menu';
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     $('screen-menu').classList.add('active');
@@ -1406,7 +1356,6 @@ function goToMenu(){
 }
 function goToScreen(name){
     if(currentScreen==='saper'&&saperState==='playing')return;
-    if(currentScreen==='cases'&&caseSpinning)return;
     currentScreen=name;
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     $('screen-'+name).classList.add('active');
@@ -1417,7 +1366,6 @@ function goToScreen(name){
     syncRocketVisual();
 }
 function updateLogo(){ const l=$('logo'); if(l) l.classList.toggle('disabled', currentScreen==='menu'); }
-
 document.querySelectorAll('.menu-card').forEach(card=>{
     card.addEventListener('click', function(e){
         e.preventDefault(); sndClick();
@@ -1432,10 +1380,8 @@ document.querySelectorAll('.menu-card').forEach(card=>{
 $('logo').addEventListener('click', function(e){
     if(currentScreen==='menu')return;
     if(currentScreen==='saper'&&saperState==='playing')return;
-    if(currentScreen==='cases'&&caseSpinning)return;
     e.preventDefault(); sndClick(); goToMenu();
 });
-
 function renderArena(){
     if(selectedItems.length === 0){
         $('from-icon').className='slot-icon';
@@ -1473,7 +1419,6 @@ function renderArena(){
     $('from-card').className = 'item-slot';
     $('to-card').className = 'item-slot';
 }
-
 function renderInventory(){
     const grid=$('inv-grid'); if(!grid) return; grid.innerHTML='';
     $('inv-count').textContent='('+inventory.length+')';
@@ -1504,7 +1449,6 @@ function renderInventory(){
         grid.appendChild(s);
     });
 }
-
 function renderTargets(){
     const grid=$('target-grid'); if(!grid) return; grid.innerHTML='';
     if(!selectedItems.length){ grid.innerHTML='<div class="empty">Сначала выбери свои гифты в инвентаре</div>'; return; }
@@ -1532,7 +1476,6 @@ function renderTargets(){
         grid.appendChild(s);
     });
 }
-
 function renderShop(){
     const grid=$('shop-grid'); if(!grid) return; grid.innerHTML='';
     const list=CATALOG.filter(it=>{
@@ -1551,7 +1494,6 @@ function renderShop(){
         grid.appendChild(s);
     });
 }
-
 let buyItem=null;
 function openBuy(item){
     buyItem=item;
@@ -1573,7 +1515,6 @@ $('buy-confirm').addEventListener('click', ()=>{
     renderInventory(); renderArena(); renderTargets(); renderShop(); updateBtn(); checkTestEnd();
     if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
 });
-
 function renderMult(){
     const grid=$('mult-grid'); if(!grid) return; grid.innerHTML='';
     MULTIPLIERS.forEach(m=>{
@@ -1596,7 +1537,6 @@ function renderMult(){
         grid.appendChild(b);
     });
 }
-
 function updateBtn(){
     const b = $('upgrade-btn'); if(b) b.disabled=isSpinning||!selectedItems.length||!targetItem||testEnded;
 }
@@ -1611,7 +1551,6 @@ function checkTestEnd(){
         updateBtn(); updateSaperButtons(); updateCaseButtons();
     }
 }
-
 function confetti(){
     const colors=['#fff','#2ecc71','#4a86ff','#a855f7','#ffd93d','#ff4757','#ff9500'];
     const cx=window.innerWidth/2, cy=window.innerHeight/2;
@@ -1681,19 +1620,16 @@ function spin(ch,predetWin){
         setTimeout(()=>resolve(real),SPIN_DURATION+100);
     });
 }
-
 async function doUpgrade(){
     if(isSpinning||!selectedItems.length||!targetItem||testEnded)return;
     isSpinning=true;
     $('upgrade-btn').disabled=true;
     $('from-card').className='item-slot'; $('to-card').className='item-slot';
-
     const sum = sumSelected();
     const wantWin=Math.random()*100 < chance;
     const fromCopy = selectedItems.slice();
     const toCopy={name:targetItem.name, value:targetItem.value||0};
     stats.wagered += sum;
-
     if(wantWin){
         fromCopy.forEach(it=>{ const idx = inventory.indexOf(it); if(idx>=0) inventory.splice(idx,1); });
         const newItem={name:targetItem.name, value:targetItem.value||0};
@@ -1710,11 +1646,9 @@ async function doUpgrade(){
     }
     history=history.slice(0,50);
     saveState();
-
     startSpin();
     const win=await spin(chance, wantWin);
     endSpin(win);
-
     if(win){
         $('to-card').classList.add('win');
         if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
@@ -1724,14 +1658,12 @@ async function doUpgrade(){
         if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('error');
         flashRed(); shake();
     }
-
     renderInventory(); renderArena(); renderTargets();
     if(selectedItems.length && targetItem) recomputeChance();
     else { chance=0; multiplier=0; }
     updatePercentUI();
     setTimeout(()=>{ isSpinning=false; updateBtn(); checkTestEnd(); },500);
 }
-
 document.querySelectorAll('.tab').forEach(tb=>{
     tb.addEventListener('click', ()=>{
         sndClick();
@@ -1769,11 +1701,14 @@ function resetRocketVisual(){
     if(ic){
         ic.style.display='block';
         ic.style.left='8%'; ic.style.top='85%';
+        ic.style.transform = 'translate(-50%, -50%) rotate(-15deg)';
         ic.innerHTML = iconHTML({name:'Stellar Rocket'}, 128);
         ic.className = 'rocket-icon idle';
     }
     var m = $('rocket-mult');
     if(m){ m.className='rocket-mult'; m.textContent='1.00x'; }
+    var stage = $('rocket-stage');
+    if(stage){ stage.style.setProperty('--gx','0px'); stage.style.setProperty('--gy','0px'); }
 }
 function setRocketIcon(gift){
     var iconEl=$('rocket-icon'); if(!iconEl) return;
@@ -1785,7 +1720,6 @@ function updateRocketButtonLabel(){
     const btn=$('rocket-btn'); if(!btn) return;
     const row=$('rocket-bet-row'); if(!row) return;
     const phase=$('rocket-phase'); const phaseText=$('rocket-phase-text');
-
     if(rocketPhase==='waiting'){
         if(phase) phase.className='rocket-phase waiting';
         if(phaseText) phaseText.textContent='Приём ставок';
@@ -1802,7 +1736,6 @@ function updateRocketButtonLabel(){
         if(phaseText) phaseText.textContent='Результат';
         btn.textContent='Ждите раунд'; btn.classList.remove('cashout'); btn.disabled=true;
     }
-
     if(rocketBetGift){
         row.className='bet-gift-row';
         const showEdit = (rocketPhase==='waiting' && !rocketBetActive);
@@ -1832,28 +1765,41 @@ function syncRocketVisual(){
     } else { updateRocketButtonLabel(); }
 }
 function renderRocketFrame(m){
-    // Прогресс: m^0.42 / 2.5 — при 6х ~0.83, при 10х ~0.93, при 20х ~1.36 (вылетает)
-    const progress = Math.min(1.6, Math.pow(m, 0.42) / 2.5);
-    const xPct = 5 + progress * 83;
-    const yPct = 88 - progress * 55;
+    // Логарифмический прогресс: 1x→0, 2x→~0.22, 5x→~0.55, 10x→~0.78, 30x→~1.0
+    const progress = Math.min(1.15, Math.log(m+1) / Math.log(30));
+    // ракета уходит далеко за пределы stage (до xPct=130% на больших x)
+    const xPct = 5 + progress * 90;
+    const yPct = 88 - progress * 60;
+    // уменьшение при улёте — иллюзия полёта вдаль
+    const scale = progress > 0.7 ? Math.max(0.45, 1 - (progress-0.7)*1.2) : 1;
     const iconEl=$('rocket-icon');
-    if(iconEl){ iconEl.style.left=xPct+'%'; iconEl.style.top=yPct+'%'; }
+    if(iconEl){
+        iconEl.style.left = xPct + '%';
+        iconEl.style.top = yPct + '%';
+        // сохраняем idle-анимацию парения в flying-режиме через CSS, transform только scale
+        iconEl.style.transform = 'translate(-50%, -50%) rotate(-15deg) scale(' + scale.toFixed(3) + ')';
+    }
     const mult = $('rocket-mult'); if(mult) mult.textContent=m.toFixed(2)+'x';
-    // SVG-линию обрезаем по границам viewBox
+    // SVG-линию обрезаем по границам viewBox, чтобы не выходить за край
     const sx = Math.min(xPct, 98);
     const sy = Math.max(yPct, 2);
     const ctrlX = Math.min(xPct*0.55, 90);
-    const ctrlY = Math.max(0, 88-(progress*55*0.3));
+    const ctrlY = Math.max(0, 88-(progress*60*0.3));
     const path='M 5 88 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy;
     const fillPath='M 5 88 Q '+ctrlX+' '+ctrlY+' '+sx+' '+sy+' L '+sx+' 88 Z';
     const tp = $('rocket-trail-path'); if(tp) tp.setAttribute('d',path);
     const tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d',fillPath);
+    // Параллакс сетки: мир двигается назад → эффект полёта
+    const stage = $('rocket-stage');
+    if(stage){
+        stage.style.setProperty('--gx', (-progress*120).toFixed(1) + 'px');
+        stage.style.setProperty('--gy', (progress*80).toFixed(1) + 'px');
+    }
 }
 function rocketCycleTick(){
     const elapsed = (Date.now() - rocketPhaseStart) / 1000;
     const remaining = Math.max(0, rocketPhaseDuration - elapsed);
     setRocketTimer(remaining);
-
     if(rocketPhase==='waiting'){
         if(remaining<=0){
             rocketPhase='flying';
@@ -1898,7 +1844,6 @@ function endRocketFlight(cashed){
     rocketPhase='result';
     rocketPhaseStart=Date.now();
     rocketPhaseDuration=ROCKET_RESULT;
-
     const mult = $('rocket-mult');
     if(!cashed){
         if(mult){ mult.className='rocket-mult crashed'; mult.textContent=rocketCurrentMult.toFixed(2)+'x'; }
@@ -2149,10 +2094,10 @@ function openCase(id){
     $('cases-grid').style.display = 'none';
     const panel = $('case-open-panel'); panel.style.display = 'flex';
     $('case-open-title').textContent = c.name + ' · ' + c.price + ' ⭐';
-
     const strip = $('case-spinner-strip');
-    strip.style.transition = 'none';
+    if(caseAnim){ try{caseAnim.cancel();}catch(e){} caseAnim=null; }
     strip.style.transform = 'translateX(0)';
+    strip.style.animation = 'none';
     const rolls = [];
     for(let i=0;i<60;i++){
         const r = Math.random()*100;
@@ -2164,7 +2109,6 @@ function openCase(id){
         const cat = CATALOG.find(x=>x.name===w.name) || {name:w.name, value:w.value||0};
         return '<div class="case-spin-item">'+iconHTML(cat, 128)+'</div>';
     }).join('');
-
     const list = $('case-items-list');
     list.innerHTML = c.items.slice().sort((a,b)=>b.chance-a.chance).map(it=>{
         const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name, value:0};
@@ -2176,12 +2120,11 @@ function openCase(id){
             +'<div class="case-drop-chance">'+it.chance+'%</div>'
             +'</div>';
     }).join('');
-
     const btn = $('case-open-btn');
     btn.disabled = balance < c.price || caseSpinning || testEnded;
     btn.textContent = 'Открыть за ' + c.price + ' ⭐';
     btn.onclick = ()=> doOpenCase(c);
-    $('case-back-btn').onclick = ()=>{ sndClick(); caseSpinning = false; renderCases(); };
+    $('case-back-btn').onclick = ()=>{ sndClick(); renderCases(); };
 }
 function pickCaseItem(c){
     const r = Math.random()*100;
@@ -2196,72 +2139,70 @@ function doOpenCase(c){
     balance -= c.price;
     updateBalanceUI();
     saveState();
-
     const pick = pickCaseItem(c);
     const strip = $('case-spinner-strip');
     const container = $('case-spinner');
     const DURATION = 6000;
     const itemW = 106;
     const targetIndex = 50;
-
+    // размеры
+    const cw = container.clientWidth || 320;
+    const cat = CATALOG.find(x=>x.name===pick.name) || {name:pick.name, value:pick.value||0};
+    const kids = strip.children;
+    if(kids[targetIndex]) kids[targetIndex].innerHTML = iconHTML(cat, 128);
+    const centerOffset = (cw / 2) - 50;
+    const finalX = centerOffset - itemW * targetIndex + (Math.random()-0.5)*40;
+    // отменяем предыдущую анимацию
+    if(caseAnim){ try{caseAnim.cancel();}catch(e){} caseAnim=null; }
+    strip.style.animation = 'none';
+    strip.style.transform = 'translateX(0)';
+    // форсируем reflow
+    void strip.offsetWidth;
+    // ЗАПУСК через Web Animations API — надёжно работает
+    caseAnim = strip.animate(
+        [{ transform: 'translateX(0)' }, { transform: 'translateX(' + finalX + 'px)' }],
+        { duration: DURATION, easing: 'cubic-bezier(0.1, 0.55, 0.15, 1)', fill: 'forwards' }
+    );
+    // тики
+    (function tickLoop(){
+        const start = Date.now();
+        function tick(){
+            const t = (Date.now() - start) / DURATION;
+            if(t >= 1) return;
+            sndCaseSpin();
+            setTimeout(tick, 30 + t*t*250);
+        }
+        tick();
+    })();
+    // завершение
     setTimeout(function(){
-        const cw = container.clientWidth || 320;
-        const cat = CATALOG.find(x=>x.name===pick.name) || {name:pick.name, value:pick.value||0};
-        const kids = strip.children;
-        if(kids[targetIndex]) kids[targetIndex].innerHTML = iconHTML(cat, 128);
-
-        const centerOffset = (cw / 2) - 50;
-        const finalX = centerOffset - itemW * targetIndex + (Math.random()-0.5)*40;
-
-        strip.style.transition = 'none';
-        strip.style.transform = 'translateX(0)';
-        void strip.offsetWidth;
-
-        (function tickLoop(){
-            const start = Date.now();
-            function tick(){
-                const t = (Date.now() - start) / DURATION;
-                if(t >= 1) return;
-                sndCaseSpin();
-                setTimeout(tick, 30 + t*t*250);
-            }
-            tick();
-        })();
-
-        requestAnimationFrame(function(){
-            requestAnimationFrame(function(){
-                strip.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.1, 0.55, 0.15, 1)';
-                strip.style.transform = 'translateX(' + finalX + 'px)';
-            });
-        });
-
-        setTimeout(function(){
-            if(pick.value === 0 || pick.name === 'Слабый дроп'){
-                stats.losses++;
-                history.unshift({win:false, from:{name:'Кейс '+c.name, value:c.price}, to:null, time:Date.now(), case:true});
-                history = history.slice(0,50);
-                saveState();
-                if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
-                flashRed(); shake(); sndLose();
-            } else {
-                inventory.push({name:pick.name, value:cat.value||0});
-                inventory.sort((a,b)=>(a.value||0)-(b.value||0));
-                stats.wins++;
-                if((cat.value||0) > stats.bestDrop) stats.bestDrop = cat.value||0;
-                history.unshift({win:true, from:{name:'Кейс '+c.name, value:c.price}, to:{name:pick.name, value:cat.value||0}, time:Date.now(), case:true});
-                history = history.slice(0,50);
-                saveState();
-                renderInventory(); renderArena(); renderTargets(); renderShop();
-                if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
-                flashWin(); confetti(); sndCaseWin();
-            }
-            caseSpinning = false;
-            checkTestEnd();
-            const btn = $('case-open-btn');
+        if(pick.value === 0 || pick.name === 'Слабый дроп'){
+            stats.losses++;
+            history.unshift({win:false, from:{name:'Кейс '+c.name, value:c.price}, to:null, time:Date.now(), case:true});
+            history = history.slice(0,50);
+            saveState();
+            if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
+            flashRed(); shake(); sndLose();
+        } else {
+            inventory.push({name:pick.name, value:cat.value||0});
+            inventory.sort((a,b)=>(a.value||0)-(b.value||0));
+            stats.wins++;
+            if((cat.value||0) > stats.bestDrop) stats.bestDrop = cat.value||0;
+            history.unshift({win:true, from:{name:'Кейс '+c.name, value:c.price}, to:{name:pick.name, value:cat.value||0}, time:Date.now(), case:true});
+            history = history.slice(0,50);
+            saveState();
+            renderInventory(); renderArena(); renderTargets(); renderShop();
+            if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+            flashWin(); confetti(); sndCaseWin();
+        }
+        caseSpinning = false;
+        checkTestEnd();
+        const btn = $('case-open-btn');
+        if(btn){
             btn.disabled = false;
             btn.textContent = 'Открыть ещё за ' + c.price + ' ⭐';
-        }, DURATION + 200);
-    }, 50);
+        }
+    }, DURATION + 200);
 }
 function updateCaseButtons(){
     const btn = $('case-open-btn');
@@ -2317,13 +2258,11 @@ $('promo-activate').addEventListener('click', ()=>{
 });
 $('promo-input').addEventListener('keydown',e=>{ if(e.key==='Enter')$('promo-activate').click(); });
 $('promo-input').addEventListener('input',e=>{ e.target.value=e.target.value.toUpperCase(); });
-
 $('star-btn').addEventListener('click', (e)=>{ e.preventDefault(); sndClick(); $('stars-message').textContent=''; $('stars-message').className='status-msg'; $('stars-modal').classList.add('active'); });
 $('stars-close').addEventListener('click', ()=>{ sndClick(); $('stars-modal').classList.remove('active'); });
 document.querySelectorAll('.pack-btn').forEach(b=>{
     b.addEventListener('click', ()=>{ sndClick(); const m=$('stars-message'); m.textContent='Оплата скоро.'; m.classList.add('ok'); });
 });
-
 $('settings-btn').addEventListener('click', (e)=>{
     e.preventDefault(); sndClick();
     $('vibration-toggle').checked=vibrationEnabled;
@@ -2456,7 +2395,6 @@ $('sell-confirm').addEventListener('click', ()=>{
     updatePercentUI();
     if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
 });
-
 function setupAdminPanel(){
     const admin=isAdmin();
     const chip=$('plus-btn');
@@ -2476,7 +2414,6 @@ function setupAdminPanel(){
         });
     } else { chip.classList.remove('admin'); sign.style.display='none'; }
 }
-
 $('inv-search').addEventListener('input',e=>{ invSearch=e.target.value; renderInventory(); });
 $('inv-price-min').addEventListener('input',e=>{ const v=e.target.value.trim(); invMin=v===''?null:(parseFloat(v)||0); renderInventory(); });
 $('inv-price-max').addEventListener('input',e=>{ const v=e.target.value.trim(); invMax=v===''?null:(parseFloat(v)||0); renderInventory(); });
@@ -2486,10 +2423,8 @@ $('target-price-max').addEventListener('input',e=>{ const v=e.target.value.trim(
 $('shop-search').addEventListener('input',e=>{ shopSearch=e.target.value; renderShop(); });
 $('shop-price-min').addEventListener('input',e=>{ const v=e.target.value.trim(); shopMin=v===''?null:(parseFloat(v)||0); renderShop(); });
 $('shop-price-max').addEventListener('input',e=>{ const v=e.target.value.trim(); shopMax=v===''?null:(parseFloat(v)||0); renderShop(); });
-
 document.body.addEventListener('touchstart',initAudio,{once:true});
 document.body.addEventListener('click',initAudio,{once:true});
-
 let onlineTarget = 7;
 let onlineCurrent = 7;
 function startOnlineLoop(){
@@ -2505,12 +2440,10 @@ function startOnlineLoop(){
         if(el) el.textContent = onlineCurrent;
     }, 1500 + Math.random()*1200);
 }
-
 function startRocketLoop(){
     const loop = ()=>{ rocketCycleTick(); requestAnimationFrame(loop); };
     requestAnimationFrame(loop);
 }
-
 async function init(){
     CATALOG = [...FALLBACK].sort((a,b)=>(a.value||0)-(b.value||0));
     loadState();
@@ -2530,7 +2463,6 @@ async function init(){
     updateBalanceUI();
     if(balance<=0){ testEnded=true; const el=$('test-ended'); if(el) el.style.display='flex'; }
     selectedItems=[]; targetItem=null; chance=0; multiplier=0;
-
     fillMenuIcons();
     renderMult(); renderInventory(); renderArena(); renderTargets(); renderShop(); renderCases();
     updatePercentUI(); updateBtn();
@@ -2539,7 +2471,6 @@ async function init(){
     renderRocketHistory();
     resetSaperUI();
     updateLogo();
-
     rocketPhase='waiting';
     rocketPhaseStart=Date.now();
     rocketPhaseDuration=ROCKET_WAIT;
@@ -2548,13 +2479,10 @@ async function init(){
     resetRocketVisual();
     updateRocketButtonLabel();
     setRocketTimer(ROCKET_WAIT);
-
     startRocketLoop();
 }
-
 init();
 $('upgrade-btn').addEventListener('click', doUpgrade);
-
 })();
 </script>
 </body>
