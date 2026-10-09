@@ -19,10 +19,11 @@ body { background: var(--bg); color: var(--text);
     -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
     display: flex; flex-direction: column; }
 body::before { content: ''; position: fixed; inset: 0;
-    background: radial-gradient(ellipse 90% 60% at 50% -10%, rgba(120,100,255,0.18) 0%, transparent 60%),
-                radial-gradient(ellipse 70% 50% at 0% 50%, rgba(74,134,255,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 70% 50% at 100% 50%, rgba(168,85,247,0.08) 0%, transparent 60%);
-    pointer-events: none; z-index: 0; }
+    background: radial-gradient(ellipse 90% 60% at 50% -10%, rgba(120,100,255,0.22) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 0% 50%, rgba(74,134,255,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 100% 50%, rgba(168,85,247,0.1) 0%, transparent 60%);
+    pointer-events: none; z-index: 0; animation: bgPulse 8s ease-in-out infinite alternate; }
+@keyframes bgPulse { from { opacity: 0.8; } to { opacity: 1.2; } }
 .stage { position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1; min-height: 0;
     transform-origin: 50% 45%; transform: translate3d(0,0,0); }
 .stage.zooming { transform: translate3d(0,0,0) scale3d(1.08,1.08,1); transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1); }
@@ -55,7 +56,9 @@ body::before { content: ''; position: fixed; inset: 0;
 .balance-chip { display: flex; align-items: center; gap: 3px;
     background: linear-gradient(135deg, #ffffff, #d0d4ff); color: #000;
     padding: 5px 8px; border-radius: 10px; font-size: 11px; font-weight: 800;
-    white-space: nowrap; max-width: 100px; overflow: hidden; min-width: 0; }
+    white-space: nowrap; max-width: 100px; overflow: hidden; min-width: 0;
+    box-shadow: 0 0 0 rgba(208,212,255,0); transition: box-shadow 0.4s; }
+.balance-chip.pulse { box-shadow: 0 0 20px rgba(208,212,255,0.9); }
 .balance-chip svg { width: 11px; height: 11px; flex-shrink: 0; }
 .balance-chip #balance { overflow: hidden; text-overflow: ellipsis; min-width: 0; flex-shrink: 1; }
 .balance-chip.admin { cursor: pointer; }
@@ -75,12 +78,14 @@ body::before { content: ''; position: fixed; inset: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; min-height: 180px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
-    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s; }
 .menu-card::before { content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
     width: 260px; height: 260px;
     background: radial-gradient(circle, var(--card-glow, rgba(120,100,255,0.25)) 0%, transparent 68%);
-    pointer-events: none; }
+    pointer-events: none; animation: cardGlow 4s ease-in-out infinite alternate; }
+@keyframes cardGlow { from { transform: translateX(-50%) scale(0.9); } to { transform: translateX(-50%) scale(1.15); } }
 .menu-card:active { transform: scale(0.95); }
+.menu-card:active { border-color: var(--border-strong); }
 .menu-card-icon { width: 100%; height: 80px; margin-bottom: 14px;
     display: flex; align-items: center; justify-content: center; gap: 6px;
     position: relative; z-index: 1; }
@@ -187,7 +192,7 @@ body::before { content: ''; position: fixed; inset: 0;
 .slot-price { font-size: 8px; font-weight: 800; margin-top: 2px; }
 .empty { grid-column: 1/-1; text-align: center; color: var(--text-mute); font-size: 11px; padding: 24px 8px; }
 
-/* ROCKET */
+/* === NEW ROCKET — вертикальный взлёт === */
 .rocket-status-bar { display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); border-radius: 12px;
@@ -200,101 +205,154 @@ body::before { content: ''; position: fixed; inset: 0;
 .rocket-phase .phase-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor;
     box-shadow: 0 0 10px currentColor; animation: onlinePulse 1s ease-in-out infinite; }
 .rocket-timer { font-size: 15px; font-weight: 900; color: var(--text); letter-spacing: -0.03em; }
-.rocket-stage { position: relative; width: 100%; flex: 1; min-height: 320px;
-    background: linear-gradient(180deg, #0a0a18 0%, #050510 100%);
-    border: 1px solid rgba(120,100,255,0.25);
-    border-radius: 20px; margin-bottom: 8px; overflow: hidden; }
-.rocket-stage::before { content: ''; position: absolute; inset: -50%;
-    background-image:
-        radial-gradient(1px 1px at 20% 30%, #fff, transparent),
-        radial-gradient(1px 1px at 70% 60%, #fff, transparent),
-        radial-gradient(2px 2px at 40% 80%, #b8c0ff, transparent),
-        radial-gradient(1px 1px at 85% 20%, #fff, transparent),
-        radial-gradient(1px 1px at 10% 70%, #b8c0ff, transparent),
-        radial-gradient(1px 1px at 55% 15%, #fff, transparent),
-        radial-gradient(1px 1px at 30% 90%, #fff, transparent),
-        radial-gradient(1px 1px at 65% 45%, #fff, transparent);
-    background-size: 200px 200px;
-    opacity: 0.9;
+
+.rocket-stage {
+    position: relative;
+    width: 100%; flex: 1; min-height: 380px;
+    background: linear-gradient(180deg,
+        #000004 0%,
+        #050218 15%,
+        #0f0840 35%,
+        #1a1560 55%,
+        #241a70 75%,
+        #2e2080 100%);
+    border: 1px solid rgba(120,100,255,0.3);
+    border-radius: 20px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    box-shadow: inset 0 0 80px rgba(120,100,255,0.15); }
+/* Земля/стартовая площадка снизу */
+.rocket-stage::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 12%;
+    background:
+        radial-gradient(ellipse 60% 100% at 50% 100%, rgba(120,100,255,0.4) 0%, transparent 70%),
+        linear-gradient(180deg, transparent 0%, rgba(120,100,255,0.08) 50%, rgba(120,100,255,0.18) 100%);
+    border-top: 1px solid rgba(168,85,247,0.4);
     pointer-events: none;
-    will-change: background-position;
-    background-position: var(--gx, 0px) var(--gy, 0px); }
+    z-index: 1; }
+/* Звёзды — появляются при подъёме */
+.rocket-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(1px 1px at 12% 22%, #fff, transparent),
+        radial-gradient(1px 1px at 68% 15%, #fff, transparent),
+        radial-gradient(2px 2px at 35% 45%, #c0c8ff, transparent),
+        radial-gradient(1px 1px at 82% 30%, #fff, transparent),
+        radial-gradient(1px 1px at 22% 12%, #fff, transparent),
+        radial-gradient(1px 1px at 48% 8%, #fff, transparent),
+        radial-gradient(2px 2px at 78% 55%, #b8c0ff, transparent),
+        radial-gradient(1px 1px at 5% 40%, #fff, transparent),
+        radial-gradient(1px 1px at 92% 18%, #fff, transparent),
+        radial-gradient(1px 1px at 55% 28%, #fff, transparent),
+        radial-gradient(1px 1px at 30% 5%, #b8c0ff, transparent);
+    background-size: 100% 100%;
+    opacity: var(--stars-op, 0);
+    transition: opacity 0.4s;
+    pointer-events: none;
+    animation: starsTwinkle 3s ease-in-out infinite alternate; }
+@keyframes starsTwinkle { from { filter: brightness(0.8); } to { filter: brightness(1.2); } }
 .rocket-trail-svg { position: absolute; inset: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 2; overflow: visible; }
 .rocket-trail-path { fill: none; stroke: url(#trailGrad);
     stroke-width: 2.5; stroke-linecap: round;
-    filter: drop-shadow(0 0 6px rgba(168,85,247,0.8)); }
+    filter: drop-shadow(0 0 8px rgba(168,85,247,0.9)) drop-shadow(0 0 16px rgba(120,100,255,0.5)); }
 .rocket-trail-fill { fill: url(#trailFill); }
-.rocket-icon { position: absolute; left: 10%; top: 82%;
-    width: 52px; height: 52px;
-    transform: translate(-50%, -50%) scale(1);
+
+.rocket-icon { position: absolute; left: 50%; top: 85%;
+    width: 54px; height: 54px;
+    transform: translate(-50%, -50%) rotate(-15deg) scale(1);
     transition: left 0.06s linear, top 0.06s linear, transform 0.2s;
     z-index: 3;
-    filter: drop-shadow(0 0 16px rgba(168,85,247,0.9)) drop-shadow(0 0 30px rgba(120,100,255,0.4)); }
+    filter: drop-shadow(0 0 18px rgba(168,85,247,1)) drop-shadow(0 0 40px rgba(120,100,255,0.6)); }
 .rocket-icon img { width: 100%; height: 100%; object-fit: contain;
-    display: block; transform: rotate(-15deg); }
-.rocket-icon.idle { animation: rocketFloat 2s ease-in-out infinite; }
-@keyframes rocketFloat {
-    0%,100% { transform: translate(-50%, -50%) translateY(0); }
-    50% { transform: translate(-50%, -50%) translateY(-6px); } }
-.rocket-icon.flying { animation: rocketShake 0.2s ease-in-out infinite; }
+    display: block; }
+.rocket-icon.idle { animation: rocketIdle 2.2s ease-in-out infinite; }
+@keyframes rocketIdle {
+    0%,100% { transform: translate(-50%, -50%) rotate(-15deg) translateY(0); }
+    50% { transform: translate(-50%, -50%) rotate(-15deg) translateY(-6px); } }
+.rocket-icon.flying { animation: rocketShake 0.15s ease-in-out infinite; }
 @keyframes rocketShake {
-    0%,100% { transform: translate(-50%, -50%) translate(-1px, 1px); }
-    50% { transform: translate(-50%, -50%) translate(1px, -1px); } }
+    0%,100% { transform: translate(-50%, -50%) translate(-1.5px, 1px); }
+    50% { transform: translate(-50%, -50%) translate(1.5px, -1px); } }
+/* Пламя под ракетой во время полёта */
+.rocket-icon.flying::after {
+    content: '';
+    position: absolute;
+    top: 85%; left: 50%;
+    transform: translateX(-50%);
+    width: 20px; height: 60px;
+    background: radial-gradient(ellipse at top, rgba(255,255,200,1) 0%, rgba(255,180,50,0.9) 25%, rgba(255,80,30,0.6) 55%, transparent 80%);
+    filter: blur(4px);
+    animation: flameFlicker 0.08s infinite alternate;
+    pointer-events: none;
+    z-index: -1; }
+@keyframes flameFlicker {
+    from { transform: translateX(-50%) scaleY(1) scaleX(1); opacity: 1; }
+    to { transform: translateX(-50%) scaleY(1.3) scaleX(0.85); opacity: 0.8; } }
 .rocket-icon.crashed {
-    transition: transform 0.55s ease-out, opacity 0.55s;
-    transform: translate(-50%, -50%) scale(2.6); opacity: 0; }
+    transition: transform 0.5s cubic-bezier(0.4,0,0.6,1), opacity 0.5s;
+    transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
 .rocket-icon.cashed {
-    transition: transform 0.7s ease-out, opacity 0.7s;
-    transform: translate(-50%, -120%) scale(0.6); opacity: 0;
-    filter: drop-shadow(0 0 40px #2ecc71) !important; }
-.rocket-boom { position: absolute; width: 180px; height: 180px;
+    transition: transform 1s cubic-bezier(0.4,0,0.6,1), opacity 1s;
+    transform: translate(-50%, -180%) scale(0.4); opacity: 0;
+    filter: drop-shadow(0 0 50px #2ecc71) !important; }
+.rocket-boom { position: absolute; width: 200px; height: 200px;
     border-radius: 50%; pointer-events: none; z-index: 4;
     transform: translate(-50%, -50%);
     background: radial-gradient(circle,
-        rgba(255,255,255,0.95) 0%, rgba(255,217,61,0.9) 15%,
-        rgba(255,120,50,0.7) 35%, rgba(255,71,87,0.4) 55%, transparent 75%);
-    animation: boomFlash 0.75s cubic-bezier(0.15,0.9,0.3,1) forwards; opacity: 0; }
+        rgba(255,255,255,1) 0%,
+        rgba(255,240,150,0.95) 10%,
+        rgba(255,180,50,0.85) 25%,
+        rgba(255,80,40,0.55) 45%,
+        rgba(255,71,87,0.2) 65%,
+        transparent 80%);
+    animation: boomFlash 0.8s cubic-bezier(0.15,0.9,0.3,1) forwards; opacity: 0; }
 @keyframes boomFlash {
-    0% { transform: translate(-50%,-50%) scale(0.1); opacity: 0; }
-    20% { transform: translate(-50%,-50%) scale(0.7); opacity: 1; }
-    60% { transform: translate(-50%,-50%) scale(1.5); opacity: 0.6; }
-    100% { transform: translate(-50%,-50%) scale(2.6); opacity: 0; } }
-.rocket-gift-badge { position: absolute; width: 26px; height: 26px;
+    0% { transform: translate(-50%,-50%) scale(0.05); opacity: 0; }
+    15% { transform: translate(-50%,-50%) scale(0.6); opacity: 1; }
+    55% { transform: translate(-50%,-50%) scale(1.5); opacity: 0.7; }
+    100% { transform: translate(-50%,-50%) scale(3); opacity: 0; } }
+.rocket-gift-badge { position: absolute; width: 28px; height: 28px;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(120,100,255,0.9), rgba(168,85,247,0.8));
-    border: 2px solid rgba(255,255,255,0.4);
+    background: linear-gradient(135deg, rgba(120,100,255,0.95), rgba(168,85,247,0.9));
+    border: 2px solid rgba(255,255,255,0.5);
     display: flex; align-items: center; justify-content: center;
     z-index: 5; pointer-events: none;
-    box-shadow: 0 0 12px rgba(168,85,247,0.9);
+    box-shadow: 0 0 14px rgba(168,85,247,1);
     transform: translate(-50%, -50%);
     transition: left 0.06s linear, top 0.06s linear, opacity 0.2s; }
 .rocket-gift-badge img { width: 80%; height: 80%; object-fit: contain; }
 .rocket-gift-badge.hidden { opacity: 0; }
 .rocket-mult { position: absolute; top: 50%; left: 50%;
     transform: translate(-50%,-50%);
-    font-size: 60px; font-weight: 900; color: #fff; text-align: center;
-    pointer-events: none; z-index: 3; letter-spacing: -0.05em;
-    text-shadow: 0 0 30px rgba(120,100,255,0.9), 0 0 60px rgba(168,85,247,0.5);
+    font-size: 64px; font-weight: 900; color: #fff; text-align: center;
+    pointer-events: none; z-index: 3; letter-spacing: -0.06em;
+    text-shadow: 0 0 40px rgba(120,100,255,1), 0 0 80px rgba(168,85,247,0.6);
     font-variant-numeric: tabular-nums; }
 .rocket-mult.growing {
-    background: linear-gradient(135deg, #fff 0%, #c0c8ff 40%, #a855f7 100%);
+    background: linear-gradient(135deg, #fff 0%, #e0e6ff 40%, #a855f7 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 30px rgba(168,85,247,0.8)); }
+    filter: drop-shadow(0 0 40px rgba(168,85,247,1)) drop-shadow(0 0 80px rgba(120,100,255,0.6)); }
 .rocket-mult.crashed { color: var(--red); -webkit-text-fill-color: var(--red);
-    animation: crashShake 0.6s ease-out;
-    filter: drop-shadow(0 0 40px rgba(255,71,87,1)); }
+    animation: crashShake 0.7s ease-out;
+    filter: drop-shadow(0 0 50px rgba(255,71,87,1)); }
 .rocket-mult.cashed { color: var(--green); -webkit-text-fill-color: var(--green);
-    animation: cashPop 0.8s ease-out;
-    filter: drop-shadow(0 0 40px rgba(46,204,113,1)); }
+    animation: cashPop 0.9s ease-out;
+    filter: drop-shadow(0 0 50px rgba(46,204,113,1)); }
 @keyframes crashShake { 0%,100% { transform: translate(-50%,-50%) scale(1) rotate(0); }
-    15% { transform: translate(-50%,-50%) scale(1.3) rotate(-4deg); }
-    35% { transform: translate(-50%,-50%) scale(1.15) rotate(4deg); }
-    55% { transform: translate(-50%,-50%) scale(1.25) rotate(-3deg); }
-    75% { transform: translate(-50%,-50%) scale(1.1) rotate(2deg); } }
+    15% { transform: translate(-50%,-50%) scale(1.35) rotate(-5deg); }
+    35% { transform: translate(-50%,-50%) scale(1.2) rotate(5deg); }
+    55% { transform: translate(-50%,-50%) scale(1.3) rotate(-4deg); }
+    75% { transform: translate(-50%,-50%) scale(1.15) rotate(3deg); } }
 @keyframes cashPop { 0% { transform: translate(-50%,-50%) scale(1); }
-    40% { transform: translate(-50%,-50%) scale(1.4); }
+    40% { transform: translate(-50%,-50%) scale(1.5); }
     100% { transform: translate(-50%,-50%) scale(1); } }
+
 .rocket-history { display: flex; gap: 5px; overflow-x: auto; padding: 8px 0; flex-shrink: 0; scrollbar-width: none; }
 .rocket-history::-webkit-scrollbar { display: none; }
 .rh-item { flex-shrink: 0; padding: 6px 12px; border-radius: 9px; font-size: 11px; font-weight: 800;
@@ -471,10 +529,11 @@ body::before { content: ''; position: fixed; inset: 0;
     cursor: pointer; font-family: inherit; color: var(--text);
     display: flex; flex-direction: column; align-items: center; text-align: center;
     min-height: 160px;
-    box-shadow: 0 10px 32px rgba(0,0,0,0.5); }
+    box-shadow: 0 10px 32px rgba(0,0,0,0.5);
+    transition: transform 0.2s; }
 .case-card::before { content: ''; position: absolute; inset: 0;
     background: radial-gradient(circle at 50% 30%, var(--case-glow, rgba(120,100,255,0.15)) 0%, transparent 65%);
-    pointer-events: none; }
+    pointer-events: none; animation: cardGlow 3s ease-in-out infinite alternate; }
 .case-card:active { transform: scale(0.97); }
 .case-card .case-preview { position: relative; width: 90px; height: 74px; margin-bottom: 8px; }
 .case-card .case-peek { position: absolute; width: 34px; height: 34px;
@@ -701,7 +760,7 @@ body::before { content: ''; position: fixed; inset: 0;
     .wheel-col { min-width: 175px; }
     .wheel-center { width: 104px; height: 104px; }
     .wheel-percent { font-size: 22px; max-width: 100px; }
-    .rocket-mult { font-size: 70px; }
+    .rocket-mult { font-size: 76px; }
 }
 @media (min-width: 600px) {
     body { padding: 16px; }
@@ -711,7 +770,7 @@ body::before { content: ''; position: fixed; inset: 0;
     .wheel-percent { font-size: 26px; max-width: 124px; }
     .item-grid { grid-template-columns: repeat(5, 1fr); }
     .modal { max-width: 400px; }
-    .rocket-mult { font-size: 84px; }
+    .rocket-mult { font-size: 92px; }
     .menu-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 </style>
@@ -764,7 +823,7 @@ body::before { content: ''; position: fixed; inset: 0;
             <button class="menu-card" data-mode="cases" type="button" style="--card-glow: rgba(255,71,87,0.5);">
                 <div class="menu-card-icon"><div class="gicon" data-name="Mighty Arm"></div></div>
                 <div class="menu-card-title">Кейсы</div>
-                <div class="menu-card-desc">5 кейсов на удачу</div>
+                <div class="menu-card-desc">7 кейсов на удачу</div>
             </button>
             <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,217,61,0.5);">
                 <div class="menu-card-icon"><div class="gicon" data-name="Diamond Ring"></div></div>
@@ -840,13 +899,15 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="rocket-stage" id="rocket-stage">
             <svg class="rocket-trail-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
-                    <linearGradient id="trailGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <linearGradient id="trailGrad" x1="0%" y1="100%" x2="0%" y2="0%">
                         <stop offset="0%" stop-color="rgba(168,85,247,0.1)"/>
-                        <stop offset="100%" stop-color="#a855f7"/>
+                        <stop offset="50%" stop-color="rgba(168,85,247,0.7)"/>
+                        <stop offset="100%" stop-color="#c8a0ff"/>
                     </linearGradient>
                     <linearGradient id="trailFill" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="rgba(168,85,247,0.5)"/>
-                        <stop offset="100%" stop-color="rgba(168,85,247,0.05)"/>
+                        <stop offset="0%" stop-color="rgba(200,160,255,0.55)"/>
+                        <stop offset="60%" stop-color="rgba(168,85,247,0.25)"/>
+                        <stop offset="100%" stop-color="rgba(168,85,247,0.02)"/>
                     </linearGradient>
                 </defs>
                 <path id="rocket-trail-fill" class="rocket-trail-fill" d=""/>
@@ -1174,6 +1235,31 @@ const CASES = [
         { name:"Khabib's Papakha", chance:0.8 },
         { name:'Tama Gadget', chance:0.5 },
         { name:'Mirage Lamp', chance:0.2 }
+      ]},
+    { id:'mcilyxa', name:'MC ilyxa', price:200, glow:'rgba(90,200,255,0.5)',
+      items:[
+        { name:'Crystal Ball', chance:30 },
+        { name:'Top Hat', chance:25 },
+        { name:'Diamond Ring', chance:20 },
+        { name:'Sakura Flower', chance:15 },
+        { name:'Clover Pin', chance:5 },
+        { name:"Durov's Cap", chance:3 },
+        { name:'Plush Pepe', chance:1.5 },
+        { name:'Stellar Rocket', chance:0.4 },
+        { name:'Mini Oscar', chance:0.1 }
+      ]},
+    { id:'gold', name:'Золото', price:6000, glow:'rgba(255,215,0,0.6)',
+      items:[
+        { name:'Plush Pepe', chance:35 },
+        { name:'Stellar Rocket', chance:25 },
+        { name:'Snoop Dogg', chance:15 },
+        { name:'Low Rider', chance:10 },
+        { name:'Loot Bag', chance:8 },
+        { name:'Mini Oscar', chance:4 },
+        { name:'Light Sword', chance:2 },
+        { name:'Mighty Arm', chance:0.7 },
+        { name:'Liberty Figure', chance:0.25 },
+        { name:"Khabib's Papakha", chance:0.05 }
       ]}
 ];
 
@@ -1323,6 +1409,8 @@ function updateBalanceUI(){
     if(b){ b.textContent = fmtBalance(balance); b.title = String(balance); }
     const sb = $('shop-balance');
     if(sb) sb.textContent = fmtBalance(balance);
+    const chip = $('plus-btn');
+    if(chip){ chip.classList.add('pulse'); setTimeout(()=>chip.classList.remove('pulse'), 500); }
 }
 function goToMenu(){
     if(currentScreen==='menu')return;
@@ -1550,7 +1638,6 @@ function confetti(){
 function flashRed(){ const el=$('flash-red'); if(!el) return; el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
 function flashWin(){ const el=$('flash-win'); if(!el) return; el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
 function shake(){ document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(()=>document.body.classList.remove('shake'),600); }
-
 let hb=null, tickInterval=null;
 function startSpin(){
     const s=$('stage');
@@ -1654,7 +1741,7 @@ document.querySelectorAll('.tab').forEach(tb=>{
     });
 });
 
-/* ROCKET */
+/* === NEW ROCKET — VERTICAL ASCENT === */
 function generateCrashPoint(){
     if(Math.random()<0.05) return 1.00;
     const u=Math.random();
@@ -1678,14 +1765,14 @@ function resetRocketVisual(){
     var tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d','');
     var ic = $('rocket-icon');
     if(ic){
-        ic.style.transition = 'left 0.06s linear, top 0.06s linear, transform 0.2s';
-        ic.style.left = '10%';
-        ic.style.top = '82%';
-        ic.style.width = '52px';
-        ic.style.height = '52px';
+        ic.style.transition = 'left 0.06s linear, top 0.06s linear, transform 0.2s, opacity 0.3s';
+        ic.style.left = '50%';
+        ic.style.top = '85%';
+        ic.style.width = '54px';
+        ic.style.height = '54px';
         ic.style.opacity = '1';
         ic.style.filter = '';
-        ic.style.transform = 'translate(-50%, -50%) scale(1)';
+        ic.style.transform = 'translate(-50%, -50%) rotate(-15deg)';
         ic.innerHTML = iconHTML({name:'Stellar Rocket'}, 128);
         ic.className = 'rocket-icon idle';
     }
@@ -1695,7 +1782,7 @@ function resetRocketVisual(){
     var m = $('rocket-mult');
     if(m){ m.className = 'rocket-mult'; m.textContent = '1.00x'; }
     var stage = $('rocket-stage');
-    if(stage){ stage.style.setProperty('--gx','0px'); stage.style.setProperty('--gy','0px'); }
+    if(stage){ stage.style.setProperty('--stars-op', '0'); }
 }
 function setRocketIcon(){
     var ic = $('rocket-icon');
@@ -1726,7 +1813,7 @@ function updateRocketButtonLabel(){
         else { btn.textContent='Выбери гифт'; btn.classList.remove('cashout'); btn.disabled=true; }
     } else if(rocketPhase==='flying'){
         if(phase) phase.className='rocket-phase flying';
-        if(phaseText) phaseText.textContent='Полёт';
+        if(phaseText) phaseText.textContent='Взлёт';
         if(rocketBetActive){ btn.textContent='Забрать '+rocketCurrentMult.toFixed(2)+'x'; btn.classList.add('cashout'); btn.disabled=false; }
         else { btn.textContent='Не участвую'; btn.classList.remove('cashout'); btn.disabled=true; }
     } else {
@@ -1762,47 +1849,44 @@ function syncRocketVisual(){
     } else { updateRocketButtonLabel(); }
 }
 function renderRocketFrame(m){
-    // Прогресс от 1x до 20x = полный путь
-    var progress = Math.min(1, Math.log(m) / Math.log(20));
+    var MAX_M = 20;
+    var progress = Math.min(1, Math.log(m) / Math.log(MAX_M));
 
-    // Ракета летит от угла к углу за первые 60% прогресса, потом держится у края
-    var pPos = Math.min(1, progress / 0.6);
-    var x = 10 + 75 * pPos;
-    var y = 82 - 68 * pPos;
+    // Вертикальный взлёт: ракета поднимается по центру с лёгким покачиванием
+    var sway = Math.sin(progress * Math.PI * 1.4) * 10;
+    var x = 50 + sway;
+    var y = 85 - progress * 70;
 
     var ic = $('rocket-icon');
     if(ic){
         ic.style.left = x + '%';
         ic.style.top = y + '%';
-        // Увеличение в начале (приближение) и уменьшение в конце (удаление)
         var scale = 1;
-        if(pPos < 0.2) scale = 1 + pPos * 1.5;
-        else if(pPos > 0.7) scale = Math.max(0.6, 1 - (pPos - 0.7) * 1.2);
-        ic.style.transform = 'translate(-50%, -50%) scale(' + scale.toFixed(2) + ')';
+        if(progress < 0.25) scale = 1 + progress * 0.6;
+        else if(progress > 0.75) scale = Math.max(0.65, 1 - (progress - 0.75) * 1.0);
+        var rot = -15 - progress * 25;
+        ic.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg) scale(' + scale.toFixed(2) + ')';
     }
 
-    // Фон прокручивается всё время полёта — эффект что пролетели 600-700м
-    var stage = $('rocket-stage');
-    if(stage){
-        var bgX = -progress * 1400;
-        var bgY = progress * 1100;
-        stage.style.setProperty('--gx', bgX.toFixed(1) + 'px');
-        stage.style.setProperty('--gy', bgY.toFixed(1) + 'px');
-    }
-
-    // SVG-линия — рисуем от старта (10, 82) к ракете, закрываем ЗАЛИВКУ до низа (y=100)
-    var ctrlX = (10 + x) / 2;
-    var ctrlY = 82 - 30 * pPos;
-    var path = 'M 10 82 Q ' + ctrlX + ' ' + ctrlY + ' ' + x + ' ' + y;
-    var fillPath = path + ' L ' + x + ' 100 L 10 100 Z';
+    // Траектория: от земли (50, 90) к ракете
+    var ctrlX = 50 + sway * 0.5;
+    var ctrlY = (90 + y) / 2;
+    var path = 'M 50 90 Q ' + ctrlX + ' ' + ctrlY + ' ' + x + ' ' + y;
+    var fillPath = path + ' L ' + x + ' 100 L 50 100 Z';
     var tp = $('rocket-trail-path'); if(tp) tp.setAttribute('d', path);
     var tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d', fillPath);
 
-    // Бейдж подарка следует за ракетой
+    // Звёзды — появляются при подъёме в верхнюю часть экрана
+    var stage = $('rocket-stage');
+    if(stage){
+        stage.style.setProperty('--stars-op', Math.min(1, Math.max(0, (progress - 0.3) * 1.8)).toFixed(2));
+    }
+
+    // Бейдж рядом с ракетой
     var badge = $('rocket-gift-badge');
     if(badge && !badge.classList.contains('hidden')){
-        badge.style.left = (x + 6) + '%';
-        badge.style.top = (y - 6) + '%';
+        badge.style.left = (x + 7) + '%';
+        badge.style.top = (y - 7) + '%';
     }
 
     var mult = $('rocket-mult'); if(mult) mult.textContent = m.toFixed(2) + 'x';
