@@ -70,54 +70,92 @@ body::before { content: ''; position: fixed; inset: 0;
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .menu-subtitle { text-align: center; font-size: 11px; color: var(--text-mute); margin-bottom: 14px; }
 
-/* === NEWS FEED === */
-.news-feed { display: flex; align-items: center; gap: 12px;
-    background: linear-gradient(160deg, rgba(34,34,50,0.95), rgba(16,16,26,0.98));
+/* === NEWS FEED (card) === */
+.news-feed { position: relative;
+    display: flex; align-items: center; gap: 12px;
+    background: linear-gradient(135deg, rgba(120,100,255,0.20) 0%, rgba(168,85,247,0.08) 50%, rgba(46,204,113,0.05) 100%),
+                linear-gradient(160deg, rgba(34,34,50,0.95), rgba(16,16,26,0.98));
     border: 1px solid rgba(120,100,255,0.35);
-    border-radius: 16px; padding: 12px 14px; margin-bottom: 16px;
-    cursor: pointer; position: relative; overflow: hidden;
-    box-shadow: 0 8px 28px rgba(120,100,255,0.18);
+    border-radius: 16px; padding: 12px 14px; margin-bottom: 14px;
+    cursor: pointer; overflow: hidden;
+    box-shadow: 0 8px 28px rgba(120,100,255,0.18), inset 0 1px 0 rgba(255,255,255,0.06);
     transition: transform 0.15s; }
 .news-feed::before { content:''; position:absolute; inset:0;
-    background: radial-gradient(circle at 20% 50%, rgba(120,100,255,0.22) 0%, transparent 60%);
+    background: radial-gradient(circle at 20% 50%, rgba(120,100,255,0.28) 0%, transparent 60%);
     pointer-events:none; animation: cardGlow 4s ease-in-out infinite alternate; }
 .news-feed:active { transform: scale(0.98); }
-.news-feed-badge { position: absolute; top: -7px; right: 12px;
-    background: linear-gradient(135deg, #ff4757, #c0392b);
-    color: #fff; font-size: 8px; font-weight: 900; padding: 3px 8px;
-    border-radius: 7px; letter-spacing: 0.12em;
-    box-shadow: 0 0 14px rgba(255,71,87,0.85);
-    animation: newsPulse 1.6s ease-in-out infinite; z-index: 2; }
-@keyframes newsPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
-.news-feed-icon { width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
-    background: linear-gradient(135deg, rgba(120,100,255,0.35), rgba(168,85,247,0.15));
-    border: 1px solid rgba(120,100,255,0.45);
+.news-feed-icon { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(120,100,255,0.5), rgba(168,85,247,0.25));
+    border: 1px solid rgba(120,100,255,0.55);
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px; position: relative; z-index: 1; }
+    font-size: 20px; position: relative; z-index: 1;
+    box-shadow: 0 0 20px rgba(120,100,255,0.4), inset 0 1px 0 rgba(255,255,255,0.15); }
 .news-feed-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
-.news-feed-title { font-size: 13px; font-weight: 900; margin-bottom: 2px;
+.news-feed-title { font-size: 13px; font-weight: 900; margin-bottom: 3px;
+    display: flex; align-items: center; gap: 6px;
     background: linear-gradient(135deg, #fff, #c0c8ff);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.news-feed-badge-inline { font-size: 7px; font-weight: 900; padding: 2px 5px;
+    border-radius: 4px; letter-spacing: 0.1em;
+    background: linear-gradient(135deg, #ff4757, #c0392b); color: #fff;
+    -webkit-text-fill-color: #fff;
+    box-shadow: 0 0 10px rgba(255,71,87,0.7);
+    animation: newsPulse 1.6s ease-in-out infinite; flex-shrink: 0; }
+@keyframes newsPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
 .news-feed-sub { font-size: 10px; color: var(--text-mute); }
 .news-feed-arrow { color: #8fb0ff; font-size: 18px; font-weight: 900; flex-shrink: 0;
-    position: relative; z-index: 1; }
-.news-content { max-height: 62vh; overflow-y: auto; padding-right: 4px; }
+    position: relative; z-index: 1; animation: arrowPulse 1.4s ease-in-out infinite; }
+
+/* === NEWS MODAL === */
+.news-modal { max-width: 420px; padding: 20px; }
+.news-modal-header { display: flex; align-items: center; gap: 12px;
+    padding-bottom: 16px; margin-bottom: 16px;
+    border-bottom: 1px solid var(--border); }
+.news-modal-icon { width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(120,100,255,0.5), rgba(168,85,247,0.25));
+    border: 1px solid rgba(120,100,255,0.55);
+    display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(120,100,255,0.35); }
+.news-modal-title { font-size: 16px; font-weight: 900; }
+.news-modal-sub { font-size: 10px; color: var(--text-mute); margin-top: 2px; }
+.news-content { max-height: 58vh; overflow-y: auto; padding-right: 6px; margin-bottom: 14px; }
 .news-content::-webkit-scrollbar { width: 3px; }
 .news-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-.news-block { margin-bottom: 16px; }
-.news-block:last-child { margin-bottom: 0; }
-.news-block-title { font-size: 12px; font-weight: 900; color: var(--gold);
-    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 9px;
-    display: flex; align-items: center; gap: 6px; }
-.news-block-title::before { content:''; width: 3px; height: 12px;
-    background: linear-gradient(180deg, var(--gold), #ff9500);
-    border-radius: 2px; box-shadow: 0 0 8px rgba(255,217,61,0.7); }
-.news-block-text { font-size: 11px; color: var(--text-dim); line-height: 1.55; margin-bottom: 9px; }
-.news-block-list { display: flex; flex-direction: column; gap: 6px; }
-.news-item { font-size: 11px; color: var(--text); line-height: 1.4;
-    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-    border-radius: 10px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; }
-.news-item .ni-emoji { flex-shrink: 0; font-size: 12px; line-height: 1.3; }
+
+.news-version-card { margin-bottom: 14px;
+    background: linear-gradient(160deg, rgba(22,22,32,0.7), rgba(14,14,20,0.9));
+    border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
+.news-version-card:last-child { margin-bottom: 0; }
+.news-version-card.current { border-color: rgba(120,100,255,0.5);
+    box-shadow: 0 0 24px rgba(120,100,255,0.18), inset 0 1px 0 rgba(255,255,255,0.06); }
+.news-version-card.future { border-color: rgba(255,217,61,0.35);
+    background: linear-gradient(160deg, rgba(40,34,22,0.6), rgba(20,16,10,0.9)); }
+.news-version-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.news-version-tag { padding: 4px 10px; border-radius: 8px;
+    font-size: 11px; font-weight: 900; letter-spacing: 0.05em;
+    background: linear-gradient(135deg, #fff, #d0d4ff); color: #000;
+    box-shadow: 0 0 12px rgba(208,212,255,0.4); }
+.news-version-tag.future { background: linear-gradient(135deg, #ffd93d, #ff9500);
+    box-shadow: 0 0 12px rgba(255,217,61,0.5); }
+.news-version-date { font-size: 9px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 0.1em; font-weight: 800; }
+.news-version-title { font-size: 13px; font-weight: 800; margin-bottom: 12px; color: var(--text); }
+.news-feature-list { display: flex; flex-direction: column; gap: 8px; }
+.news-feature { display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(0,0,0,0.25); border: 1px solid var(--border);
+    border-radius: 11px; padding: 10px 12px; }
+.news-feature.new { border-color: rgba(46,204,113,0.35);
+    background: linear-gradient(135deg, rgba(46,204,113,0.08), rgba(46,204,113,0.02)); }
+.news-feature.plan { border-color: rgba(255,217,61,0.25);
+    background: linear-gradient(135deg, rgba(255,217,61,0.06), rgba(255,217,61,0.01)); }
+.news-feature-icon { width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+    background: rgba(120,100,255,0.15); border: 1px solid rgba(120,100,255,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.news-feature.new .news-feature-icon { background: rgba(46,204,113,0.15); border-color: rgba(46,204,113,0.4); }
+.news-feature.plan .news-feature-icon { background: rgba(255,217,61,0.15); border-color: rgba(255,217,61,0.4); }
+.news-feature-body { flex: 1; min-width: 0; }
+.news-feature-name { font-size: 11px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+.news-feature-desc { font-size: 10px; color: var(--text-mute); line-height: 1.35; }
 
 .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .menu-card { position: relative; overflow: hidden;
@@ -254,7 +292,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .rocket-phase .phase-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor;
     box-shadow: 0 0 10px currentColor; animation: onlinePulse 1s ease-in-out infinite; }
 .rocket-timer { font-size: 15px; font-weight: 900; color: var(--text); letter-spacing: -0.03em; }
-
 .rocket-stage {
     position: relative;
     width: 100%; flex: 1; min-height: 380px;
@@ -309,7 +346,6 @@ body::before { content: ''; position: fixed; inset: 0;
     stroke-width: 2.5; stroke-linecap: round;
     filter: drop-shadow(0 0 8px rgba(168,85,247,0.9)) drop-shadow(0 0 16px rgba(120,100,255,0.5)); }
 .rocket-trail-fill { fill: url(#trailFill); }
-
 .rocket-icon { position: absolute; left: 50%; top: 85%;
     width: 54px; height: 54px;
     transform: translate(-50%, -50%) rotate(-15deg) scale(1);
@@ -398,7 +434,6 @@ body::before { content: ''; position: fixed; inset: 0;
 @keyframes cashPop { 0% { transform: translate(-50%,-50%) scale(1); }
     40% { transform: translate(-50%,-50%) scale(1.5); }
     100% { transform: translate(-50%,-50%) scale(1); } }
-
 .rocket-history { display: flex; gap: 5px; overflow-x: auto; padding: 8px 0; flex-shrink: 0; scrollbar-width: none; }
 .rocket-history::-webkit-scrollbar { display: none; }
 .rh-item { flex-shrink: 0; padding: 6px 12px; border-radius: 9px; font-size: 11px; font-weight: 800;
@@ -671,6 +706,130 @@ body::before { content: ''; position: fixed; inset: 0;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
 .shop-items-scroll { flex: 1; min-height: 0; overflow-y: auto; position: relative; z-index: 1; }
 
+/* === PLINKO === */
+.plinko-tabs-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 6px; flex-shrink: 0; }
+.plinko-tab { background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    color: var(--text-dim); padding: 10px 6px; border-radius: 11px;
+    font-size: 10px; font-weight: 800; cursor: pointer; font-family: inherit;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    transition: all 0.15s; }
+.plinko-tab.active { background: linear-gradient(180deg, rgba(34,34,48,0.95), rgba(20,20,30,0.95));
+    color: var(--text); border-color: var(--border-strong);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+.plinko-tab.active.risk-low { border-color: rgba(46,204,113,0.6); box-shadow: 0 0 16px rgba(46,204,113,0.35); }
+.plinko-tab.active.risk-medium { border-color: rgba(255,217,61,0.6); box-shadow: 0 0 16px rgba(255,217,61,0.35); }
+.plinko-tab.active.risk-high { border-color: rgba(255,71,87,0.6); box-shadow: 0 0 16px rgba(255,71,87,0.35); }
+.plinko-tab:active { transform: scale(0.96); }
+.plinko-tab .sub { font-size: 8px; color: var(--text-mute); text-transform: none; letter-spacing: 0; }
+.plinko-tab.active .sub { color: var(--text-dim); }
+
+.plinko-board-wrap {
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(120,100,255,0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 50% at 50% 100%, rgba(46,204,113,0.06) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(14,14,22,0.98), rgba(6,6,12,1));
+    border: 1px solid rgba(120,100,255,0.25);
+    border-radius: 22px;
+    padding: 12px;
+    margin-bottom: 10px;
+    flex: 1;
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 56px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05),
+                inset 0 0 80px rgba(120,100,255,0.08); }
+.plinko-board { position: relative; width: 100%; height: 100%; min-height: 380px; }
+.plinko-peg { position: absolute; width: 7px; height: 7px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #b8b8d0 60%, #6a6a80 100%);
+    box-shadow: 0 0 6px rgba(255,255,255,0.7), 0 0 14px rgba(120,100,255,0.5),
+                inset 0 -1px 1px rgba(0,0,0,0.4);
+    transform: translate(-50%, -50%); pointer-events: none; }
+.plinko-peg.hit { animation: pegHit 0.3s ease-out; }
+@keyframes pegHit {
+    0% { box-shadow: 0 0 6px rgba(255,255,255,0.7), 0 0 14px rgba(120,100,255,0.5), 0 0 0 rgba(255,217,61,0); }
+    40% { box-shadow: 0 0 10px #fff, 0 0 24px #ffd93d, 0 0 40px #ffd93d; transform: translate(-50%, -50%) scale(1.5); }
+    100% { box-shadow: 0 0 6px rgba(255,255,255,0.7), 0 0 14px rgba(120,100,255,0.5), 0 0 0 rgba(255,217,61,0); }
+}
+.plinko-ball { position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #ffffff 0%, #ffd93d 45%, #ff9500 100%);
+    box-shadow: 0 0 16px #ffd93d, 0 0 32px rgba(255,217,61,0.7), 0 0 48px rgba(255,149,0,0.35),
+                inset 0 -2px 4px rgba(180,90,0,0.5);
+    transform: translate(-50%, -50%); z-index: 10; pointer-events: none;
+    will-change: left, top; }
+.plinko-ball.trail { opacity: 0.35; filter: blur(2px); z-index: 9; }
+.plinko-slot { position: absolute; bottom: 6px;
+    transform: translateX(-50%);
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, rgba(34,34,50,0.95), rgba(14,14,20,0.98));
+    border: 1px solid var(--border);
+    border-radius: 7px 7px 9px 9px;
+    text-align: center; font-weight: 900;
+    color: var(--text-dim);
+    padding: 4px 2px; font-size: 9px; letter-spacing: -0.03em;
+    transition: all 0.3s;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(0,0,0,0.5); }
+.plinko-slot.low { color: var(--text-mute); }
+.plinko-slot.mid { color: #b0b0c0; border-color: rgba(255,255,255,0.12); }
+.plinko-slot.high { color: var(--gold); border-color: rgba(255,217,61,0.45);
+    background: linear-gradient(180deg, rgba(255,217,61,0.14), rgba(255,217,61,0.02)); }
+.plinko-slot.mega { color: var(--red); border-color: rgba(255,71,87,0.55);
+    background: linear-gradient(180deg, rgba(255,71,87,0.18), rgba(255,71,87,0.03));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 0 14px rgba(255,71,87,0.25); }
+.plinko-slot.hit { transform: translateX(-50%) scale(1.18);
+    color: #000 !important; background: linear-gradient(180deg, #ffd93d, #ff9500) !important;
+    border-color: #ffd93d !important;
+    box-shadow: 0 0 30px #ffd93d, 0 0 60px rgba(255,217,61,0.6) !important;
+    animation: slotHit 0.5s ease-out; z-index: 20; }
+@keyframes slotHit {
+    0% { transform: translateX(-50%) scale(1); }
+    45% { transform: translateX(-50%) scale(1.35); }
+    100% { transform: translateX(-50%) scale(1.18); } }
+
+.plinko-info { display: flex; justify-content: space-around; align-items: center;
+    background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 10px 12px; margin-bottom: 8px; flex-shrink: 0; gap: 6px; }
+.plinko-info-stat { text-align: center; flex: 1; }
+.plinko-info-stat .lbl { font-size: 8px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 0.1em; font-weight: 800; }
+.plinko-info-stat .val { font-size: 14px; font-weight: 900; margin-top: 4px;
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.plinko-info-stat .val.gold { color: var(--gold); text-shadow: 0 0 12px rgba(255,217,61,0.6); }
+.plinko-info-stat .val.green { color: var(--green); text-shadow: 0 0 12px rgba(46,204,113,0.6); }
+
+.plinko-bet-row { display: flex; align-items: stretch; gap: 6px;
+    margin-bottom: 8px; flex-shrink: 0; }
+.plinko-bet-input { flex: 1; display: flex; align-items: center; gap: 4px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border-strong); border-radius: 12px;
+    padding: 0 12px; min-width: 0; }
+.plinko-bet-input input { flex: 1; background: transparent; border: none;
+    color: var(--text); font-size: 15px; font-weight: 900; font-family: inherit;
+    outline: none; text-align: center; min-width: 0;
+    font-variant-numeric: tabular-nums; }
+.plinko-bet-input .suffix { font-size: 12px; color: var(--gold); font-weight: 900; flex-shrink: 0; }
+.plinko-bet-btn { width: 48px; background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border); border-radius: 12px;
+    color: var(--text); font-size: 11px; font-weight: 900;
+    cursor: pointer; font-family: inherit; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0; }
+.plinko-bet-btn:active { transform: scale(0.94); background: rgba(255,255,255,0.1); }
+.plinko-bet-btn.max { color: var(--gold); border-color: rgba(255,217,61,0.4);
+    background: linear-gradient(135deg, rgba(255,217,61,0.1), rgba(255,217,61,0.02)); width: 54px; }
+.plinko-drop-btn { width: 100%; padding: 16px;
+    background: linear-gradient(135deg, #2ecc71 0%, #1ea855 100%);
+    border: none; border-radius: 14px; color: #000;
+    font-size: 14px; font-weight: 900; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; font-family: inherit;
+    box-shadow: 0 8px 32px rgba(46,204,113,0.4);
+    flex-shrink: 0; }
+.plinko-drop-btn:active:not(:disabled) { transform: scale(0.97); }
+.plinko-drop-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+.plinko-drop-btn.dropping { background: linear-gradient(135deg, #ff4757, #c0392b);
+    color: #fff; }
+
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85);
     backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center;
     z-index: 300; padding: 20px; }
@@ -797,6 +956,8 @@ body::before { content: ''; position: fixed; inset: 0;
     .menu-card-title { font-size: 13px; }
     .menu-card-desc { font-size: 9px; }
     .menu-card { min-height: 150px; }
+    .plinko-board-wrap { min-height: 340px; }
+    .plinko-board { min-height: 320px; }
 }
 @media (min-width: 420px) {
     .wheel-wrap { width: 175px; height: 175px; }
@@ -845,11 +1006,13 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="menu-subtitle">Играй и выигрывай</div>
 
         <div class="news-feed" id="news-feed">
-            <div class="news-feed-badge">NEW</div>
             <div class="news-feed-icon">📰</div>
             <div class="news-feed-info">
-                <div class="news-feed-title">Новости и обновления</div>
-                <div class="news-feed-sub">Версия 2.0 — что нового?</div>
+                <div class="news-feed-title">
+                    Новости проекта
+                    <span class="news-feed-badge-inline">NEW</span>
+                </div>
+                <div class="news-feed-sub">Версия 2.0 — большое обновление</div>
             </div>
             <div class="news-feed-arrow">→</div>
         </div>
@@ -878,6 +1041,11 @@ body::before { content: ''; position: fixed; inset: 0;
                 <div class="menu-card-icon"><div class="gicon" data-name="Mighty Arm"></div></div>
                 <div class="menu-card-title">Кейсы</div>
                 <div class="menu-card-desc">7 кейсов на удачу</div>
+            </button>
+            <button class="menu-card" data-mode="plinko" type="button" style="--card-glow: rgba(255,149,0,0.6);">
+                <div class="menu-card-icon"><div class="gicon" data-name="Crystal Ball"></div></div>
+                <div class="menu-card-title">Плинко</div>
+                <div class="menu-card-desc">Брось шар — сорви куш</div>
             </button>
             <button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,217,61,0.5);">
                 <div class="menu-card-icon"><div class="gicon" data-name="Diamond Ring"></div></div>
@@ -974,6 +1142,37 @@ body::before { content: ''; position: fixed; inset: 0;
         <div class="bet-gift-row empty-bet" id="rocket-bet-row"><div class="bg-label" id="rocket-bet-label">Нажми чтобы выбрать гифт</div></div>
         <button class="rocket-btn" id="rocket-btn" type="button" disabled>Ждите раунд</button>
         <div class="rocket-history" id="rocket-history"></div>
+    </div>
+
+    <div class="screen" id="screen-plinko">
+        <div class="plinko-tabs-row" id="plinko-rows-row">
+            <button class="plinko-tab" data-rows="8" type="button">8 <span class="sub">рядов</span></button>
+            <button class="plinko-tab" data-rows="12" type="button">12 <span class="sub">рядов</span></button>
+            <button class="plinko-tab active" data-rows="16" type="button">16 <span class="sub">рядов</span></button>
+        </div>
+        <div class="plinko-tabs-row" id="plinko-risk-row">
+            <button class="plinko-tab risk-low" data-risk="low" type="button">🟢 <span class="sub">низкий</span></button>
+            <button class="plinko-tab risk-medium active" data-risk="medium" type="button">🟡 <span class="sub">средний</span></button>
+            <button class="plinko-tab risk-high" data-risk="high" type="button">🔴 <span class="sub">высокий</span></button>
+        </div>
+        <div class="plinko-board-wrap">
+            <div class="plinko-board" id="plinko-board"></div>
+        </div>
+        <div class="plinko-info">
+            <div class="plinko-info-stat"><div class="lbl">Последний</div><div class="val gold" id="plinko-last">—</div></div>
+            <div class="plinko-info-stat"><div class="lbl">Профит</div><div class="val" id="plinko-profit">0</div></div>
+            <div class="plinko-info-stat"><div class="lbl">Лучший</div><div class="val green" id="plinko-best">—</div></div>
+        </div>
+        <div class="plinko-bet-row">
+            <button class="plinko-bet-btn" id="plinko-half" type="button">½</button>
+            <div class="plinko-bet-input">
+                <input type="number" id="plinko-bet" value="100" min="1">
+                <span class="suffix">⭐</span>
+            </div>
+            <button class="plinko-bet-btn" id="plinko-double" type="button">2×</button>
+            <button class="plinko-bet-btn max" id="plinko-max" type="button">MAX</button>
+        </div>
+        <button class="plinko-drop-btn" id="plinko-drop" type="button">Бросить шар</button>
     </div>
 
     <div class="screen" id="screen-saper">
@@ -1112,33 +1311,105 @@ body::before { content: ''; position: fixed; inset: 0;
 </div>
 
 <div class="overlay" id="news-modal">
-    <div class="modal" style="max-width:400px;">
-        <div class="modal-title">📰 Новости</div>
+    <div class="modal news-modal">
+        <div class="news-modal-header">
+            <div class="news-modal-icon">📰</div>
+            <div>
+                <div class="news-modal-title">Новости проекта</div>
+                <div class="news-modal-sub">Обновления и планы развития</div>
+            </div>
+        </div>
         <div class="news-content">
-            <div class="news-block">
-                <div class="news-block-title">Версия 2</div>
-                <div class="news-block-text">Были добавлены новости для подробного отслеживания изменений. Из изменений:</div>
-                <div class="news-block-list">
-                    <div class="news-item"><span class="ni-emoji">🚀</span><span>Переделана ракетка (возможны последующие переделывания)</span></div>
-                    <div class="news-item"><span class="ni-emoji">📦</span><span>Добавлено 2 новых кейса</span></div>
-                    <div class="news-item"><span class="ni-emoji">🎲</span><span>Изменены полностью шансы на дроп в кейсах</span></div>
-                    <div class="news-item"><span class="ni-emoji">⚡</span><span>Довели апгрейдер до идеала</span></div>
+            <div class="news-version-card current">
+                <div class="news-version-head">
+                    <div class="news-version-tag">v2.0</div>
+                    <div class="news-version-date">Текущая версия</div>
+                </div>
+                <div class="news-version-title">Большое обновление</div>
+                <div class="news-feature-list">
+                    <div class="news-feature new">
+                        <div class="news-feature-icon">📰</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Новостная лента</div>
+                            <div class="news-feature-desc">Подробное отслеживание всех изменений проекта</div>
+                        </div>
+                    </div>
+                    <div class="news-feature new">
+                        <div class="news-feature-icon">🎰</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Новый режим — Плинко</div>
+                            <div class="news-feature-desc">Брось шар и сорви куш до x1000</div>
+                        </div>
+                    </div>
+                    <div class="news-feature">
+                        <div class="news-feature-icon">🚀</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Реворк ракетки</div>
+                            <div class="news-feature-desc">Вертикальный взлёт, новые эффекты (возможны переделки)</div>
+                        </div>
+                    </div>
+                    <div class="news-feature">
+                        <div class="news-feature-icon">📦</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Кейсы</div>
+                            <div class="news-feature-desc">Полностью пересмотрены шансы на дроп — сбалансированы под окуп</div>
+                        </div>
+                    </div>
+                    <div class="news-feature">
+                        <div class="news-feature-icon">⚡</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Апгрейдер</div>
+                            <div class="news-feature-desc">Доведён до идеала — стабильная работа и баланс</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="news-block">
-                <div class="news-block-title">Что будет в последующих обновлениях</div>
-                <div class="news-block-list">
-                    <div class="news-item"><span class="ni-emoji">🔧</span><span>Реворк сапёра</span></div>
-                    <div class="news-item"><span class="ni-emoji">🎮</span><span>Добавление нового режима</span></div>
-                    <div class="news-item"><span class="ni-emoji">💰</span><span>Увеличение демо-баланса</span></div>
-                    <div class="news-item"><span class="ni-emoji">📦</span><span>Добавление новых кейсов</span></div>
-                    <div class="news-item"><span class="ni-emoji">💎</span><span>Смена цен гифтов на настоящие</span></div>
+            <div class="news-version-card future">
+                <div class="news-version-head">
+                    <div class="news-version-tag future">v3.0</div>
+                    <div class="news-version-date">Планы</div>
+                </div>
+                <div class="news-version-title">Что будет дальше</div>
+                <div class="news-feature-list">
+                    <div class="news-feature plan">
+                        <div class="news-feature-icon">🔧</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Реворк сапёра</div>
+                            <div class="news-feature-desc">Новый геймплей и переработанные множители</div>
+                        </div>
+                    </div>
+                    <div class="news-feature plan">
+                        <div class="news-feature-icon">🎮</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Новый режим</div>
+                            <div class="news-feature-desc">Следите за новостями — скоро анонс</div>
+                        </div>
+                    </div>
+                    <div class="news-feature plan">
+                        <div class="news-feature-icon">💰</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Увеличение демо-баланса</div>
+                            <div class="news-feature-desc">Больше стартового капитала для новых игроков</div>
+                        </div>
+                    </div>
+                    <div class="news-feature plan">
+                        <div class="news-feature-icon">📦</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Новые кейсы</div>
+                            <div class="news-feature-desc">Расширение коллекции и новые дропы</div>
+                        </div>
+                    </div>
+                    <div class="news-feature plan">
+                        <div class="news-feature-icon">💎</div>
+                        <div class="news-feature-body">
+                            <div class="news-feature-name">Реальные цены гифтов</div>
+                            <div class="news-feature-desc">Актуализация стоимости под реальный рынок</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="btns-row" style="margin-top:14px;">
-            <button class="btn btn-primary" id="news-close" type="button">Понятно</button>
-        </div>
+        <button class="btn btn-primary" id="news-close" type="button" style="width:100%;">Понятно</button>
     </div>
 </div>
 
@@ -1191,6 +1462,9 @@ function sndRocketTick(){ initAudio(); playTone(1400+Math.random()*200,0.01,'squ
 function sndCellOpen(){ initAudio(); playTone(700,0.06,'sine',0.12); }
 function sndCaseSpin(){ initAudio(); playTone(900+Math.random()*300,0.02,'square',0.04); }
 function sndCaseWin(){ initAudio(); [523,659,784,1047,1319].forEach((f,i)=>playTone(f,0.22,'sine',0.2,i*0.09)); }
+function sndPegHit(){ initAudio(); playTone(600+Math.random()*400,0.025,'triangle',0.06); }
+function sndPlinkoDrop(){ initAudio(); playTone(320,0.12,'sine',0.1); playTone(480,0.12,'sine',0.08,0.08); }
+function sndPlinkoBigWin(){ initAudio(); [523,659,784,1047,1319,1568].forEach((f,i)=>playTone(f,0.25,'sine',0.2,i*0.08)); }
 
 const FALLBACK = [
     { name:'Heart Locket', value:15 }, { name:'Toy Bear', value:15 },
@@ -1261,99 +1535,111 @@ const ROCKET_WAIT = 10;
 const ROCKET_FLY_MAX = 30;
 const ROCKET_RESULT = 5;
 
-/* === CASES — шансы: 55% недокуп (0.5-0.8x), 10% ~1x, 20% 1.5-2x, 15% 2x+ === */
+/* === CASES — 55% недокуп / 10% ~1x / 20% 1.5-2x / 15% 2x+ === */
 const CASES = [
-    /* 25 ⭐ — Ромасик Лайф */
     { id:'romasik', name:'Ромасик Лайф', price:25, glow:'rgba(46,204,113,0.5)',
       items:[
-        { name:'Heart Locket', chance:27.5 },   /* 15 (0.6x) */
-        { name:'Toy Bear', chance:27.5 },       /* 15 (0.6x) */
-        { name:'Magic Potion', chance:10 },     /* 25 (1.0x) */
-        { name:'Homemade Cake', chance:20 },    /* 50 (2.0x) */
-        { name:'Top Hat', chance:15 }           /* 100 (4.0x) */
+        { name:'Heart Locket', chance:27.5 },
+        { name:'Toy Bear', chance:27.5 },
+        { name:'Magic Potion', chance:10 },
+        { name:'Homemade Cake', chance:20 },
+        { name:'Top Hat', chance:15 }
       ]},
-    /* 120 ⭐ — Лотерея */
     { id:'lottery', name:'Лотерея', price:120, glow:'rgba(120,100,255,0.5)',
       items:[
-        { name:'Ginger Cookie', chance:20 },    /* 75  (0.63x) */
-        { name:'Spiced Wine', chance:20 },      /* 80  (0.67x) */
-        { name:'Hypno Lollipop', chance:15 },   /* 95  (0.79x) */
-        { name:'Love Potion', chance:10 },      /* 110 (0.92x) */
-        { name:'Bonded Ring', chance:10 },      /* 180 (1.5x) */
-        { name:'Snow Globe', chance:10 },       /* 190 (1.58x) */
-        { name:'Bunny Muffin', chance:8 },      /* 240 (2.0x) */
-        { name:'Mousse Cake', chance:4 },       /* 260 (2.17x) */
-        { name:'Star Notepad', chance:3 }       /* 290 (2.42x) */
+        { name:'Ginger Cookie', chance:20 },
+        { name:'Spiced Wine', chance:20 },
+        { name:'Hypno Lollipop', chance:15 },
+        { name:'Love Potion', chance:10 },
+        { name:'Bonded Ring', chance:10 },
+        { name:'Snow Globe', chance:10 },
+        { name:'Bunny Muffin', chance:8 },
+        { name:'Mousse Cake', chance:4 },
+        { name:'Star Notepad', chance:3 }
       ]},
-    /* 200 ⭐ — MC ilyxa */
     { id:'mcilyxa', name:'MC ilyxa', price:200, glow:'rgba(90,200,255,0.5)',
       items:[
-        { name:'Love Potion', chance:20 },      /* 110 (0.55x) */
-        { name:'Snow Mittens', chance:20 },     /* 120 (0.60x) */
-        { name:'Whip Cupcake', chance:15 },     /* 140 (0.70x) */
-        { name:'Bonded Ring', chance:10 },      /* 180 (0.90x) */
-        { name:'Pretty Posy', chance:10 },      /* 320 (1.6x) */
-        { name:'Cupid Charm', chance:10 },      /* 350 (1.75x) */
-        { name:'Bow Tie', chance:8 },           /* 400 (2.0x) */
-        { name:'Valentine Box', chance:4 },     /* 420 (2.1x) */
-        { name:'Easter Egg', chance:3 }         /* 480 (2.4x) */
+        { name:'Love Potion', chance:20 },
+        { name:'Snow Mittens', chance:20 },
+        { name:'Whip Cupcake', chance:15 },
+        { name:'Bonded Ring', chance:10 },
+        { name:'Pretty Posy', chance:10 },
+        { name:'Cupid Charm', chance:10 },
+        { name:'Bow Tie', chance:8 },
+        { name:'Valentine Box', chance:4 },
+        { name:'Easter Egg', chance:3 }
       ]},
-    /* 600 ⭐ — Бритый ПЁС */
     { id:'britiy', name:'Бритый ПЁС', price:600, glow:'rgba(184,184,200,0.5)',
       items:[
-        { name:'Pretty Posy', chance:20 },      /* 320 (0.53x) */
-        { name:'Cupid Charm', chance:20 },      /* 350 (0.58x) */
-        { name:'Valentine Box', chance:15 },    /* 420 (0.70x) */
-        { name:'Voodoo Doll', chance:10 },      /* 600 (1.0x) */
-        { name:'Jester Hat', chance:10 },       /* 900 (1.5x) */
-        { name:'Perfume Bottle', chance:10 },   /* 1000 (1.67x) */
-        { name:'Signet Ring', chance:8 },       /* 1400 (2.33x) */
-        { name:'Swiss Watch', chance:4 },       /* 1700 (2.83x) */
-        { name:'Precious Peach', chance:3 }     /* 2000 (3.33x) */
+        { name:'Pretty Posy', chance:20 },
+        { name:'Cupid Charm', chance:20 },
+        { name:'Valentine Box', chance:15 },
+        { name:'Voodoo Doll', chance:10 },
+        { name:'Jester Hat', chance:10 },
+        { name:'Perfume Bottle', chance:10 },
+        { name:'Signet Ring', chance:8 },
+        { name:'Swiss Watch', chance:4 },
+        { name:'Precious Peach', chance:3 }
       ]},
-    /* 3000 ⭐ — Олигарх */
     { id:'oligarh', name:'Олигарх', price:3000, glow:'rgba(255,217,61,0.5)',
       items:[
-        { name:'Pet Snake', chance:20 },        /* 1400 (0.47x) */
-        { name:'Pool Float', chance:20 },       /* 1800 (0.60x) */
-        { name:'Party Sparkler', chance:15 },   /* 2200 (0.73x) */
-        { name:'Stellar Rocket', chance:10 },   /* 3000 (1.0x) */
-        { name:'Snoop Cigar', chance:10 },      /* 4500 (1.5x) */
-        { name:'Victory Medal', chance:10 },    /* 5500 (1.83x) */
-        { name:'Loot Bag', chance:6 },          /* 7000 (2.33x) */
-        { name:'Trapped Heart', chance:5 },     /* 8000 (2.67x) */
-        { name:'Neko Helmet', chance:4 }        /* 10000 (3.33x) */
+        { name:'Pet Snake', chance:20 },
+        { name:'Pool Float', chance:20 },
+        { name:'Party Sparkler', chance:15 },
+        { name:'Stellar Rocket', chance:10 },
+        { name:'Snoop Cigar', chance:10 },
+        { name:'Victory Medal', chance:10 },
+        { name:'Loot Bag', chance:6 },
+        { name:'Trapped Heart', chance:5 },
+        { name:'Neko Helmet', chance:4 }
       ]},
-    /* 6000 ⭐ — Золото */
     { id:'gold', name:'Золото', price:6000, glow:'rgba(255,215,0,0.6)',
       items:[
-        { name:'Stellar Rocket', chance:20 },   /* 3000 (0.50x) */
-        { name:'Low Rider', chance:20 },        /* 4000 (0.67x) */
-        { name:'Snoop Cigar', chance:15 },      /* 4500 (0.75x) */
-        { name:'Kissed Frog', chance:10 },      /* 6000 (1.0x) */
-        { name:'Nail Bracelet', chance:10 },    /* 9000 (1.5x) */
-        { name:'Mini Oscar', chance:10 },       /* 12000 (2.0x) */
-        { name:'Vintage Cigar', chance:6 },     /* 16000 (2.67x) */
-        { name:'Lunar Snake', chance:5 },       /* 20000 (3.33x) */
-        { name:'Light Sword', chance:3 },       /* 28000 (4.67x) */
-        { name:'Mighty Arm', chance:1 }         /* 32000 (5.33x) */
+        { name:'Stellar Rocket', chance:20 },
+        { name:'Low Rider', chance:20 },
+        { name:'Snoop Cigar', chance:15 },
+        { name:'Kissed Frog', chance:10 },
+        { name:'Nail Bracelet', chance:10 },
+        { name:'Mini Oscar', chance:10 },
+        { name:'Vintage Cigar', chance:6 },
+        { name:'Lunar Snake', chance:5 },
+        { name:'Light Sword', chance:3 },
+        { name:'Mighty Arm', chance:1 }
       ]},
-    /* 12000 ⭐ — Ты кто? */
     { id:'wtf', name:'Ты кто?', price:12000, glow:'rgba(255,71,87,0.5)',
       items:[
-        { name:'Kissed Frog', chance:20 },      /* 6000  (0.50x) */
-        { name:'Trapped Heart', chance:20 },    /* 8000  (0.67x) */
-        { name:'Nail Bracelet', chance:15 },    /* 9000  (0.75x) */
-        { name:'Mini Oscar', chance:10 },       /* 12000 (1.0x) */
-        { name:'Hanging Star', chance:10 },     /* 18000 (1.5x) */
-        { name:'Astral Shard', chance:10 },     /* 24000 (2.0x) */
-        { name:'Light Sword', chance:5 },       /* 28000 (2.33x) */
-        { name:'Mighty Arm', chance:4 },        /* 32000 (2.67x) */
-        { name:'Evil Eye', chance:3 },          /* 38000 (3.17x) */
-        { name:'Witch Hat', chance:2 },         /* 45000 (3.75x) */
-        { name:'Liberty Figure', chance:1 }     /* 55000 (4.58x) */
+        { name:'Kissed Frog', chance:20 },
+        { name:'Trapped Heart', chance:20 },
+        { name:'Nail Bracelet', chance:15 },
+        { name:'Mini Oscar', chance:10 },
+        { name:'Hanging Star', chance:10 },
+        { name:'Astral Shard', chance:10 },
+        { name:'Light Sword', chance:5 },
+        { name:'Mighty Arm', chance:4 },
+        { name:'Evil Eye', chance:3 },
+        { name:'Witch Hat', chance:2 },
+        { name:'Liberty Figure', chance:1 }
       ]}
 ];
+
+/* === PLINKO multipliers (left→right, sym) === */
+const PLINKO_MULTS = {
+    8: {
+        low:    [5.6, 2.1, 1.1, 1, 0.5, 1, 1.1, 2.1, 5.6],
+        medium: [13, 3, 1.3, 0.7, 0.4, 0.7, 1.3, 3, 13],
+        high:   [29, 4, 1.5, 0.3, 0.2, 0.3, 1.5, 4, 29]
+    },
+    12: {
+        low:    [10, 3, 1.6, 1.4, 1.1, 1, 0.5, 1, 1.1, 1.4, 1.6, 3, 10],
+        medium: [33, 11, 4, 2, 1.1, 0.6, 0.3, 0.6, 1.1, 2, 4, 11, 33],
+        high:   [170, 24, 8.1, 2, 0.7, 0.2, 0.2, 0.2, 0.7, 2, 8.1, 24, 170]
+    },
+    16: {
+        low:    [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16],
+        medium: [110, 41, 10, 5, 3, 1.5, 1, 0.5, 0.3, 0.5, 1, 1.5, 3, 5, 10, 41, 110],
+        high:   [1000, 130, 26, 9, 4, 2, 0.2, 0.2, 0.2, 0.2, 0.2, 2, 4, 9, 26, 130, 1000]
+    }
+};
 
 let CATALOG = [];
 let balance = STARTING_BALANCE;
@@ -1387,6 +1673,13 @@ const SAPER_SIZE = 25;
 let currentCase = null;
 let caseSpinning = false;
 let caseSafety = null;
+
+/* Plinko state */
+let plinkoRows = 16;
+let plinkoRisk = 'medium';
+let plinkoDropping = false;
+let plinkoStats = { last:0, profit:0, best:0 };
+let plinkoBoardDims = null;
 
 const $ = id => document.getElementById(id);
 function sumSelected(){ return selectedItems.reduce((s,it)=>s+ (it.value||0), 0); }
@@ -1507,6 +1800,7 @@ function updateBalanceUI(){
 function goToMenu(){
     if(currentScreen==='menu')return;
     if(currentScreen==='saper'&&saperState==='playing')return;
+    if(currentScreen==='plinko'&&plinkoDropping)return;
     currentScreen='menu';
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     $('screen-menu').classList.add('active');
@@ -1514,6 +1808,7 @@ function goToMenu(){
 }
 function goToScreen(name){
     if(currentScreen==='saper'&&saperState==='playing')return;
+    if(currentScreen==='plinko'&&plinkoDropping)return;
     currentScreen=name;
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     $('screen-'+name).classList.add('active');
@@ -1521,6 +1816,7 @@ function goToScreen(name){
     if(name==='rocket') updateRocketButtonLabel();
     if(name==='shop') renderShop();
     if(name==='cases') renderCases();
+    if(name==='plinko') setTimeout(()=>{ renderPlinkoBoard(); updatePlinkoUI(); }, 30);
     syncRocketVisual();
 }
 function updateLogo(){ const l=$('logo'); if(l) l.classList.toggle('disabled', currentScreen==='menu'); }
@@ -1532,12 +1828,14 @@ document.querySelectorAll('.menu-card').forEach(card=>{
         else if(m==='rocket') goToScreen('rocket');
         else if(m==='saper'){ goToScreen('saper'); resetSaperUI(); }
         else if(m==='cases') goToScreen('cases');
+        else if(m==='plinko') goToScreen('plinko');
         else if(m==='shop'){ goToScreen('shop'); renderShop(); }
     });
 });
 $('logo').addEventListener('click', function(e){
     if(currentScreen==='menu')return;
     if(currentScreen==='saper'&&saperState==='playing')return;
+    if(currentScreen==='plinko'&&plinkoDropping)return;
     e.preventDefault(); sndClick(); goToMenu();
 });
 function renderArena(){
@@ -1702,11 +2000,11 @@ function checkTestEnd(){
     if(balance<=0&&!testEnded){
         testEnded=true;
         const el=$('test-ended'); if(el) el.style.display='flex';
-        updateBtn(); updateSaperButtons(); updateCaseButtons();
+        updateBtn(); updateSaperButtons(); updateCaseButtons(); updatePlinkoUI();
     } else if(balance>0&&testEnded){
         testEnded=false;
         const el=$('test-ended'); if(el) el.style.display='none';
-        updateBtn(); updateSaperButtons(); updateCaseButtons();
+        updateBtn(); updateSaperButtons(); updateCaseButtons(); updatePlinkoUI();
     }
 }
 function confetti(){
@@ -1943,11 +2241,9 @@ function syncRocketVisual(){
 function renderRocketFrame(m){
     var MAX_M = 20;
     var progress = Math.min(1, Math.log(m) / Math.log(MAX_M));
-
     var sway = Math.sin(progress * Math.PI * 1.4) * 10;
     var x = 50 + sway;
     var y = 85 - progress * 70;
-
     var ic = $('rocket-icon');
     if(ic){
         ic.style.left = x + '%';
@@ -1958,25 +2254,21 @@ function renderRocketFrame(m){
         var rot = -15 - progress * 25;
         ic.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg) scale(' + scale.toFixed(2) + ')';
     }
-
     var ctrlX = 50 + sway * 0.5;
     var ctrlY = (90 + y) / 2;
     var path = 'M 50 90 Q ' + ctrlX + ' ' + ctrlY + ' ' + x + ' ' + y;
     var fillPath = path + ' L ' + x + ' 100 L 50 100 Z';
     var tp = $('rocket-trail-path'); if(tp) tp.setAttribute('d', path);
     var tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d', fillPath);
-
     var stage = $('rocket-stage');
     if(stage){
         stage.style.setProperty('--stars-op', Math.min(1, Math.max(0, (progress - 0.3) * 1.8)).toFixed(2));
     }
-
     var badge = $('rocket-gift-badge');
     if(badge && !badge.classList.contains('hidden')){
         badge.style.left = (x + 7) + '%';
         badge.style.top = (y - 7) + '%';
     }
-
     var mult = $('rocket-mult'); if(mult) mult.textContent = m.toFixed(2) + 'x';
 }
 function rocketCycleTick(){
@@ -2120,6 +2412,274 @@ $('rocket-bet-row').addEventListener('click', ()=>{
     if(rocketBetActive) return;
     sndClick();
     openGiftPicker('rocket');
+});
+
+/* === PLINKO === */
+function renderPlinkoBoard(){
+    const board = $('plinko-board'); if(!board) return;
+    board.innerHTML = '';
+    const rect = board.getBoundingClientRect();
+    const W = rect.width || 340;
+    const H = rect.height || 380;
+    const R = plinkoRows;
+    const topPad = H * 0.05;
+    const slotsTop = H * 0.87;
+    const rowH = (slotsTop - topPad) / R;
+    const spacing = W / (R + 1.5);
+    const mults = PLINKO_MULTS[R][plinkoRisk];
+    plinkoBoardDims = { W, H, R, topPad, slotsTop, rowH, spacing, mults };
+
+    // Pegs
+    for(let i=0; i<R; i++){
+        for(let j=0; j<=i; j++){
+            const x = W/2 + (j - i/2) * spacing;
+            const y = topPad + i * rowH;
+            const peg = document.createElement('div');
+            peg.className = 'plinko-peg';
+            peg.style.left = x.toFixed(2) + 'px';
+            peg.style.top = y.toFixed(2) + 'px';
+            peg.dataset.i = i; peg.dataset.j = j;
+            board.appendChild(peg);
+        }
+    }
+    // Slots
+    const slotH = Math.max(22, H * 0.09);
+    for(let k=0; k<=R; k++){
+        const x = W/2 + (k - R/2) * spacing;
+        const m = mults[k];
+        const slot = document.createElement('div');
+        slot.className = 'plinko-slot';
+        if(m >= 50) slot.classList.add('mega');
+        else if(m >= 2) slot.classList.add('high');
+        else if(m >= 0.9) slot.classList.add('mid');
+        else slot.classList.add('low');
+        slot.style.left = x.toFixed(2) + 'px';
+        slot.style.width = Math.max(28, spacing * 0.92).toFixed(2) + 'px';
+        slot.style.height = slotH.toFixed(2) + 'px';
+        slot.style.fontSize = Math.max(8, Math.min(11, spacing * 0.45)).toFixed(1) + 'px';
+        slot.textContent = (m >= 10 ? Math.round(m) : m) + 'x';
+        slot.dataset.k = k;
+        board.appendChild(slot);
+    }
+}
+function updatePlinkoUI(){
+    document.querySelectorAll('#plinko-rows-row .plinko-tab').forEach(b=>{
+        b.classList.toggle('active', parseInt(b.dataset.rows,10)===plinkoRows);
+    });
+    document.querySelectorAll('#plinko-risk-row .plinko-tab').forEach(b=>{
+        b.classList.toggle('active', b.dataset.risk===plinkoRisk);
+    });
+    const drop = $('plinko-drop');
+    if(drop){
+        const betVal = parseInt($('plinko-bet')?.value,10) || 0;
+        drop.disabled = plinkoDropping || testEnded || betVal <= 0 || betVal > balance;
+        drop.classList.toggle('dropping', plinkoDropping);
+        drop.textContent = plinkoDropping ? 'Шар в полёте...' : ('Бросить ' + fmtBalance(betVal) + ' ⭐');
+    }
+    const lastEl = $('plinko-last');
+    if(lastEl) lastEl.textContent = plinkoStats.last ? (plinkoStats.last.toFixed(2) + 'x') : '—';
+    const profEl = $('plinko-profit');
+    if(profEl){
+        profEl.textContent = (plinkoStats.profit >= 0 ? '+' : '') + fmtBalance(plinkoStats.profit);
+        profEl.classList.toggle('green', plinkoStats.profit > 0);
+        profEl.classList.toggle('gold', plinkoStats.profit < 0);
+    }
+    const bestEl = $('plinko-best');
+    if(bestEl) bestEl.textContent = plinkoStats.best ? (plinkoStats.best.toFixed(2) + 'x') : '—';
+}
+function computePlinkoPath(R, spacing, W, topPad, rowH, slotsTop){
+    // Start above row 0
+    const points = [];
+    points.push({ x: W/2, y: topPad - rowH * 0.6, k: 0 });
+    let k = 0;
+    for(let i=0; i<R; i++){
+        // Arrive at row i (peg k of row i)
+        points.push({ x: W/2 + (k - i/2) * spacing, y: topPad + i * rowH, k: k });
+        // Bounce
+        const goRight = Math.random() < 0.5;
+        if(goRight) k++;
+    }
+    // Final: slot k
+    points.push({ x: W/2 + (k - R/2) * spacing, y: slotsTop + 6, k: k });
+    return { points, finalK: k };
+}
+function animatePlinko(ball, points, board){
+    return new Promise(resolve => {
+        const totalDur = 320 + plinkoRows * 95;
+        const segCount = points.length - 1;
+        const segDur = totalDur / segCount;
+        const start = performance.now();
+        let pegFlashIdx = 0;
+        // Peg elements by row
+        const pegs = board.querySelectorAll('.plinko-peg');
+
+        function frame(now){
+            const elapsed = now - start;
+            if(elapsed >= totalDur){
+                const last = points[points.length - 1];
+                ball.style.left = last.x + 'px';
+                ball.style.top = last.y + 'px';
+                resolve();
+                return;
+            }
+            const segIdx = Math.min(segCount - 1, Math.floor(elapsed / segDur));
+            const segT = Math.min(1, (elapsed - segIdx * segDur) / segDur);
+            const a = points[segIdx];
+            const b = points[segIdx + 1];
+
+            // Vertical acceleration for each fall
+            const tEased = segT * segT * (3 - 2 * segT); // smoothstep
+            const x = a.x + (b.x - a.x) * segT;
+            const y = a.y + (b.y - a.y) * tEased;
+            ball.style.left = x + 'px';
+            ball.style.top = y + 'px';
+
+            // Trigger peg hit sound + flash when entering a segment
+            if(segIdx !== pegFlashIdx){
+                pegFlashIdx = segIdx;
+                // The peg at row (segIdx-1) with k value = points[segIdx].k
+                if(segIdx >= 1 && segIdx <= plinkoRows){
+                    const rowI = segIdx - 1;
+                    const colJ = points[segIdx].k;
+                    const peg = pegs[pegIdx(rowI, colJ)];
+                    if(peg){
+                        peg.classList.remove('hit'); void peg.offsetWidth; peg.classList.add('hit');
+                    }
+                    sndPegHit();
+                }
+            }
+
+            requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    });
+}
+function pegIdx(i, j){
+    // Row i has i+1 pegs; cumulative index = i*(i+1)/2 + j
+    return i * (i + 1) / 2 + j;
+}
+async function dropPlinkoBall(){
+    if(plinkoDropping || testEnded) return;
+    const betVal = parseInt($('plinko-bet')?.value, 10) || 0;
+    if(betVal <= 0) { sndError(); return; }
+    if(betVal > balance) { sndError(); return; }
+    if(!plinkoBoardDims) renderPlinkoBoard();
+    const dims = plinkoBoardDims;
+    if(!dims) return;
+
+    plinkoDropping = true;
+    updatePlinkoUI();
+    balance -= betVal;
+    updateBalanceUI();
+    saveState();
+    sndPlinkoDrop();
+
+    const board = $('plinko-board');
+    // Remove existing ball
+    board.querySelectorAll('.plinko-ball').forEach(b => b.remove());
+
+    const ball = document.createElement('div');
+    ball.className = 'plinko-ball';
+    const startX = dims.W / 2;
+    const startY = dims.topPad - dims.rowH * 0.6;
+    ball.style.left = startX + 'px';
+    ball.style.top = startY + 'px';
+    board.appendChild(ball);
+
+    const { points, finalK } = computePlinkoPath(dims.R, dims.spacing, dims.W, dims.topPad, dims.rowH, dims.slotsTop);
+    await animatePlinko(ball, points, board);
+
+    // Land in slot
+    const mult = dims.mults[finalK];
+    const winAmount = Math.floor(betVal * mult);
+    balance += winAmount;
+    updateBalanceUI();
+
+    // Highlight slot
+    const slotEl = board.querySelector('.plinko-slot[data-k="' + finalK + '"]');
+    if(slotEl){
+        slotEl.classList.add('hit');
+        setTimeout(()=>slotEl.classList.remove('hit'), 1500);
+    }
+    // Ball fades out
+    ball.style.transition = 'opacity 0.4s, transform 0.4s';
+    ball.style.opacity = '0';
+    ball.style.transform = 'translate(-50%, -50%) scale(1.6)';
+    setTimeout(()=>ball.remove(), 500);
+
+    // Update stats & history
+    const profit = winAmount - betVal;
+    plinkoStats.last = mult;
+    plinkoStats.profit += profit;
+    if(mult > plinkoStats.best) plinkoStats.best = mult;
+    stats.wagered += betVal;
+    if(mult >= 1){
+        stats.wins++;
+        if(winAmount > stats.bestDrop) stats.bestDrop = winAmount;
+        history.unshift({win:true, from:{name:'Plinko bet', value:betVal}, to:{name:'Plinko '+mult.toFixed(2)+'x', value:winAmount}, time:Date.now(), plinko:true});
+    } else {
+        stats.losses++;
+        history.unshift({win:false, from:{name:'Plinko bet', value:betVal}, to:null, time:Date.now(), plinko:true});
+    }
+    history = history.slice(0,50);
+    saveState();
+
+    // FX
+    if(mult >= 2){
+        flashWin(); confetti();
+        if(mult >= 10) sndPlinkoBigWin(); else sndWin();
+        if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+    } else if(mult >= 1){
+        sndBuy();
+        if(vibrationEnabled) tg.HapticFeedback?.impactOccurred('medium');
+    } else {
+        sndLose();
+        if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
+    }
+
+    plinkoDropping = false;
+    updatePlinkoUI();
+    checkTestEnd();
+}
+$('plinko-drop').addEventListener('click', ()=>{ sndClick(); dropPlinkoBall(); });
+$('plinko-bet').addEventListener('input', ()=>updatePlinkoUI());
+$('plinko-half').addEventListener('click', ()=>{
+    sndClick();
+    const v = Math.max(1, Math.floor((parseInt($('plinko-bet').value,10)||0) / 2));
+    $('plinko-bet').value = v;
+    updatePlinkoUI();
+});
+$('plinko-double').addEventListener('click', ()=>{
+    sndClick();
+    const v = Math.min(balance, (parseInt($('plinko-bet').value,10)||0) * 2);
+    $('plinko-bet').value = Math.max(1, v);
+    updatePlinkoUI();
+});
+$('plinko-max').addEventListener('click', ()=>{
+    sndClick();
+    $('plinko-bet').value = Math.max(1, balance);
+    updatePlinkoUI();
+});
+document.querySelectorAll('#plinko-rows-row .plinko-tab').forEach(b=>{
+    b.addEventListener('click', ()=>{
+        if(plinkoDropping) return;
+        sndClick();
+        plinkoRows = parseInt(b.dataset.rows, 10) || 16;
+        renderPlinkoBoard(); updatePlinkoUI();
+    });
+});
+document.querySelectorAll('#plinko-risk-row .plinko-tab').forEach(b=>{
+    b.addEventListener('click', ()=>{
+        if(plinkoDropping) return;
+        sndClick();
+        plinkoRisk = b.dataset.risk || 'medium';
+        renderPlinkoBoard(); updatePlinkoUI();
+    });
+});
+window.addEventListener('resize', ()=>{
+    if(currentScreen==='plinko' && !plinkoDropping){
+        renderPlinkoBoard();
+    }
 });
 
 /* SAPER */
@@ -2276,7 +2836,6 @@ function renderCases(){
     const grid=$('cases-grid'); if(!grid) return;
     grid.style.display = 'grid';
     if($('case-open-panel')) $('case-open-panel').style.display = 'none';
-    /* Сортируем кейсы по цене от дешёвого к дорогому */
     const sortedCases = CASES.slice().sort((a,b)=>a.price-b.price);
     grid.innerHTML = sortedCases.map(c=>{
         const peek = c.items.slice(-3).map((it,i)=>{
@@ -2441,7 +3000,7 @@ $('promo-activate').addEventListener('click', ()=>{
     markCodeUsed(code); saveState();
     msg.textContent='+'+promo+' ⭐'; msg.classList.add('ok');
     sndPromo(); if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
-    confetti(); renderShop(); updateBtn(); checkTestEnd();
+    confetti(); renderShop(); updateBtn(); updatePlinkoUI(); checkTestEnd();
     setTimeout(()=>$('promo-modal').classList.remove('active'),1200);
 });
 $('promo-input').addEventListener('keydown',e=>{ if(e.key==='Enter')$('promo-activate').click(); });
@@ -2495,9 +3054,10 @@ $('profile-btn').addEventListener('click', (e)=>{
                 stats = { wins:0, losses:0, wagered:0, bestDrop:0 };
                 selectedItems = []; targetItem = null;
                 rocketBetGift = null; saperBetGift = null;
+                plinkoStats = { last:0, profit:0, best:0 };
                 updateBalanceUI(); saveState();
                 renderInventory(); renderArena(); renderTargets(); renderShop();
-                updatePercentUI(); checkTestEnd(); updateSaperButtons();
+                updatePercentUI(); checkTestEnd(); updateSaperButtons(); updatePlinkoUI();
                 $('profile-close').click();
             };
         } else { wipeBtn.style.display = 'none'; }
@@ -2584,7 +3144,7 @@ $('sell-confirm').addEventListener('click', ()=>{
     renderProfileInventory();
     if(targetItem && (targetItem.value||0) <= sumSelected()) targetItem=null;
     if(selectedItems.length && targetItem) recomputeChance(); else { chance=0; multiplier=0; }
-    updatePercentUI();
+    updatePercentUI(); updatePlinkoUI();
     if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
 });
 function setupAdminPanel(){
@@ -2601,7 +3161,7 @@ function setupAdminPanel(){
             const amt=parseInt(input,10);
             if(isNaN(amt)||amt<=0)return;
             balance=balance+amt;
-            updateBalanceUI(); saveState(); renderShop(); checkTestEnd();
+            updateBalanceUI(); saveState(); renderShop(); updatePlinkoUI(); checkTestEnd();
             if(vibrationEnabled)tg.HapticFeedback?.notificationOccurred('success');
         });
     } else { chip.classList.remove('admin'); sign.style.display='none'; }
@@ -2674,6 +3234,8 @@ async function init(){
     updateRocketButtonLabel();
     setRocketTimer(ROCKET_WAIT);
     startRocketLoop();
+    // Plinko initial render
+    setTimeout(()=>{ renderPlinkoBoard(); updatePlinkoUI(); }, 100);
 }
 init();
 $('upgrade-btn').addEventListener('click', doUpgrade);
