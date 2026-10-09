@@ -73,9 +73,6 @@ body.perf-low .menu-card-icon .gicon{animation:none}
 @keyframes menuGiftFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
 .menu-card-icon .gicon img{width:100%;height:100%;object-fit:contain}
 .menu-card-icon .gicon.locked{filter:grayscale(1) brightness(.5);animation:none}
-.menu-card-icon .gicon.double{height:56px;width:56px}
-.menu-card-icon .gicon.double:first-child{transform:translateX(-8px) rotate(-10deg);animation-delay:0s}
-.menu-card-icon .gicon.double:last-child{transform:translateX(8px) rotate(10deg);animation-delay:.4s;position:absolute;left:50%;top:50%;margin-left:-28px;margin-top:-28px}
 .menu-card-icon .arrow{color:#2ecc71;font-size:22px;font-weight:900;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(46,204,113,.9));animation:arrowPulse 1.4s ease-in-out infinite;position:relative;z-index:2}
 .menu-card-icon .trail-glow{position:absolute;width:140px;height:2px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,transparent,rgba(46,204,113,.6),transparent);top:50%;opacity:.6;pointer-events:none;z-index:0}
 .menu-card-title{font-size:15px;font-weight:900;margin-bottom:4px;position:relative;z-index:1}
@@ -142,24 +139,33 @@ body.perf-low .collab-leaf{display:none}
 .news-version-card.current{border-color:rgba(120,100,255,.5);box-shadow:0 0 24px rgba(120,100,255,.18)}
 .news-version-card.patch{border-color:rgba(46,204,113,.45);background:linear-gradient(160deg,rgba(20,36,26,.6),rgba(12,20,14,.9))}
 .news-version-card.future{border-color:rgba(255,217,61,.35);background:linear-gradient(160deg,rgba(40,34,22,.6),rgba(20,16,10,.9))}
+.news-version-card.deprecated{border-color:rgba(255,71,87,.3);background:linear-gradient(160deg,rgba(30,15,18,.6),rgba(16,8,10,.9));opacity:.75}
 .news-version-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.news-version-head-right{display:flex;align-items:center;gap:6px}
 .news-version-tag{padding:4px 10px;border-radius:8px;font-size:11px;font-weight:900;letter-spacing:.05em;background:linear-gradient(135deg,#fff,#d0d4ff);color:#000;box-shadow:0 0 12px rgba(208,212,255,.4)}
 .news-version-tag.patch{background:linear-gradient(135deg,#2ecc71,#1ea855);box-shadow:0 0 12px rgba(46,204,113,.5)}
 .news-version-tag.future{background:linear-gradient(135deg,#ffd93d,#ff9500);box-shadow:0 0 12px rgba(255,217,61,.5)}
+.news-version-tag.deprecated{background:linear-gradient(135deg,#6a1f2a,#3a0f15);color:#ff9aa5;box-shadow:none}
 .news-version-date{font-size:9px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.1em;font-weight:800}
+.news-deprecated-badge{padding:3px 6px;border-radius:5px;font-size:7px;font-weight:900;letter-spacing:.1em;background:rgba(255,71,87,.15);border:1px solid rgba(255,71,87,.5);color:#ff4757;text-transform:uppercase}
 .news-version-title{font-size:12px;font-weight:800;margin-bottom:10px}
+.news-version-card.deprecated .news-version-title{color:#a0a0b0}
 .news-feature-list{display:flex;flex-direction:column;gap:7px}
 .news-feature{display:flex;align-items:flex-start;gap:10px;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:11px;padding:9px 11px}
 .news-feature.new{border-color:rgba(46,204,113,.35);background:linear-gradient(135deg,rgba(46,204,113,.08),rgba(46,204,113,.02))}
 .news-feature.plan{border-color:rgba(255,217,61,.25);background:linear-gradient(135deg,rgba(255,217,61,.06),rgba(255,217,61,.01))}
+.news-feature.deprecated{border-color:rgba(255,71,87,.15);background:rgba(0,0,0,.2);opacity:.85}
 .news-feature-icon{width:26px;height:26px;border-radius:8px;flex-shrink:0;background:rgba(120,100,255,.15);border:1px solid rgba(120,100,255,.3);display:flex;align-items:center;justify-content:center;color:#c0c8ff}
 .news-feature-icon svg{width:13px;height:13px}
 .news-feature.new .news-feature-icon{background:rgba(46,204,113,.15);border-color:rgba(46,204,113,.4);color:#7ff0b0}
 .news-feature.plan .news-feature-icon{background:rgba(255,217,61,.15);border-color:rgba(255,217,61,.4);color:#ffe370}
+.news-feature.deprecated .news-feature-icon{background:rgba(255,71,87,.1);border-color:rgba(255,71,87,.25);color:#ff9aa5}
 .news-feature-body{flex:1;min-width:0}
 .news-feature-name{font-size:11px;font-weight:800;margin-bottom:2px}
+.news-feature.deprecated .news-feature-name{color:#a0a0b0}
 .news-feature-desc{font-size:10px;color:var(--text-mute);line-height:1.35}
 .news-feature-desc b{color:var(--gold);font-weight:900}
+.news-version-card.deprecated .news-feature-desc b{color:#c9a8a8}
 .tgk-link{display:flex;align-items:center;gap:10px;margin-top:12px;padding:12px 14px;background:linear-gradient(135deg,rgba(74,134,255,.15),rgba(74,134,255,.03));border:1px solid rgba(74,134,255,.35);border-radius:12px;text-decoration:none;color:inherit;transition:transform .15s}
 .tgk-link:active{transform:scale(.98)}
 .tgk-link-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#4a86ff,#2b5cbf);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(74,134,255,.5)}
@@ -298,8 +304,11 @@ body.perf-low .bet-gift-row.empty-bet{animation:none}
 .plinko-slot.low{color:#a0a0b0}.plinko-slot.mid{color:#c8c8d8}
 .plinko-slot.high{color:var(--gold);border-color:rgba(255,217,61,.45);background:linear-gradient(180deg,rgba(60,50,26,.95),rgba(30,24,14,.98))}
 .plinko-slot.mega{color:#ffb020;border-color:rgba(255,149,0,.6);background:linear-gradient(180deg,rgba(70,40,14,.95),rgba(36,20,8,.98));box-shadow:0 0 18px rgba(255,149,0,.3)}
+.plinko-slot.empty{opacity:.4;filter:grayscale(.7)}
+.plinko-slot.empty .slot-gift svg{opacity:.6}
 .plinko-slot.hit{transform:translateX(-50%) scale(1.15);color:#000!important;background:linear-gradient(180deg,#ffd93d,#ff9500)!important;border-color:#ffd93d!important;box-shadow:0 0 30px #ffd93d!important;z-index:20}
 .plinko-slot.hit .slot-mult{color:#000}
+.plinko-slot.hit-empty{transform:translateX(-50%) scale(1.05);background:linear-gradient(180deg,#3a3a4a,#1a1a26)!important;border-color:#6a6a80!important;box-shadow:0 0 20px rgba(120,120,140,.6)!important;z-index:20}
 .plinko-locked{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(180deg,rgba(10,10,16,.92),rgba(6,6,10,.96));backdrop-filter:blur(6px);z-index:50;border-radius:22px;text-align:center;padding:20px}
 .plinko-locked-icon{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,rgba(120,120,140,.2),rgba(60,60,80,.15));border:1px solid rgba(120,120,140,.3);display:flex;align-items:center;justify-content:center;color:#6a6a80;filter:grayscale(1)}
 .plinko-locked-icon svg{width:32px;height:32px}
@@ -357,39 +366,47 @@ body.perf-low .bet-gift-row.empty-bet{animation:none}
 .saper-cash-btn:active:not(:disabled){transform:scale(.97)}
 .saper-cash-btn:disabled{opacity:.3;cursor:not-allowed;background:rgba(255,255,255,.05);color:var(--text-mute);box-shadow:none}
 
-/* CASES */
-.cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.case-card{position:relative;overflow:hidden;background:linear-gradient(160deg,rgba(34,34,50,.95),rgba(16,16,26,.98));border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:0;cursor:pointer;font-family:inherit;color:var(--text);display:flex;flex-direction:column;align-items:center;text-align:center;min-height:200px;box-shadow:0 12px 40px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .3s;animation:caseIn .4s cubic-bezier(.4,0,.2,1) both}
+/* CASES — 1 column, list of gifts at bottom */
+.cases-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:12px}
+.case-card{position:relative;overflow:hidden;background:linear-gradient(160deg,rgba(34,34,50,.95),rgba(16,16,26,.98));border:1px solid rgba(255,255,255,.08);border-radius:20px;cursor:pointer;font-family:inherit;color:var(--text);display:flex;flex-direction:column;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .3s;animation:caseIn .4s cubic-bezier(.4,0,.2,1) both}
 body.perf-low .case-card{animation:none}
 @keyframes caseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.case-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,var(--case-glow,rgba(120,100,255,.15)) 0%,transparent 70%);pointer-events:none;opacity:.85}
-.case-card::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);transition:left .6s;pointer-events:none}
-.case-card:active{transform:scale(.96);border-color:var(--border-strong)}
+.case-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 25%,var(--case-glow,rgba(120,100,255,.15)) 0%,transparent 55%);pointer-events:none;opacity:.85;z-index:0}
+.case-card::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transition:left .6s;pointer-events:none;z-index:5}
+.case-card:active{transform:scale(.99);border-color:var(--border-strong)}
 .case-card:active::after{left:100%}
-.case-card-badge{position:absolute;top:8px;right:8px;padding:3px 7px;border-radius:6px;font-size:7px;font-weight:900;letter-spacing:.08em;background:linear-gradient(135deg,rgba(46,204,113,.95),rgba(30,168,85,.95));color:#fff;box-shadow:0 0 10px rgba(46,204,113,.7);z-index:10;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.4)}
-.case-card-badge.hot{background:linear-gradient(135deg,#ff4757,#c0392b);box-shadow:0 0 12px rgba(255,71,87,.8)}
-.case-card-badge.legendary{background:linear-gradient(135deg,#ffd93d,#ff9500);color:#000;box-shadow:0 0 14px rgba(255,217,61,.9);text-shadow:none}
-.case-stage{position:relative;width:100%;height:118px;flex-shrink:0;overflow:hidden;z-index:1}
-.case-stage::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:110px;height:14px;background:radial-gradient(ellipse,rgba(0,0,0,.6),transparent 70%);border-radius:50%}
-.case-peek{position:absolute;width:42px;height:42px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 6px 12px rgba(0,0,0,.7));z-index:3}
+.case-card-badge{position:absolute;top:10px;right:10px;padding:4px 8px;border-radius:6px;font-size:8px;font-weight:900;letter-spacing:.08em;background:linear-gradient(135deg,rgba(46,204,113,.95),rgba(30,168,85,.95));color:#fff;box-shadow:0 0 12px rgba(46,204,113,.7);z-index:20;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.case-card-badge.hot{background:linear-gradient(135deg,#ff4757,#c0392b);box-shadow:0 0 14px rgba(255,71,87,.85)}
+.case-card-badge.legendary{background:linear-gradient(135deg,#ffd93d,#ff9500);color:#000;box-shadow:0 0 16px rgba(255,217,61,.9);text-shadow:none}
+.case-card-top{position:relative;width:100%;padding:14px 14px 12px;display:flex;align-items:center;gap:12px;z-index:2}
+.case-stage{position:relative;width:110px;height:88px;flex-shrink:0;overflow:hidden;z-index:2}
+.case-peek{position:absolute;width:34px;height:34px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 4px 10px rgba(0,0,0,.7));z-index:3}
 .case-peek img{width:100%;height:100%;object-fit:contain}
-.case-peek.p1{top:6px;left:50%;transform:translateX(-50%);animation:float1 3s ease-in-out infinite;z-index:4}
-.case-peek.p2{top:14px;left:14px;transform:rotate(-18deg);animation:float2 3.4s ease-in-out infinite;z-index:3}
-.case-peek.p3{top:14px;right:14px;transform:rotate(18deg);animation:float3 3.2s ease-in-out infinite;z-index:3}
+.case-peek.p1{top:0;left:50%;transform:translateX(-50%);animation:float1 3s ease-in-out infinite;z-index:4}
+.case-peek.p2{top:6px;left:2px;transform:rotate(-18deg);animation:float2 3.4s ease-in-out infinite;z-index:3}
+.case-peek.p3{top:6px;right:2px;transform:rotate(18deg);animation:float3 3.2s ease-in-out infinite;z-index:3}
 body.perf-low .case-peek{animation:none}
-@keyframes float1{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
-@keyframes float2{0%,100%{transform:rotate(-18deg) translateY(0)}50%{transform:rotate(-18deg) translateY(-4px)}}
-@keyframes float3{0%,100%{transform:rotate(18deg) translateY(0)}50%{transform:rotate(18deg) translateY(-4px)}}
-.case-chest{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:88px;height:58px;z-index:2;filter:drop-shadow(0 6px 14px rgba(0,0,0,.7)) drop-shadow(0 0 20px var(--case-glow,rgba(120,100,255,.3)))}
-.case-chest-lid{position:absolute;top:0;left:0;right:0;height:22px;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#8b6f47 0%,#6d5537 60%,#4a3a24 100%);border:1.5px solid #2f2418;box-shadow:inset 0 2px 0 rgba(255,220,150,.25)}
-.case-chest-body{position:absolute;top:20px;left:0;right:0;bottom:0;border-radius:2px 2px 8px 8px;background:linear-gradient(180deg,#7a5c38 0%,#5c4a2f 50%,#3d2e1a 100%);border:1.5px solid #2f2418;box-shadow:inset 0 2px 0 rgba(255,220,150,.15)}
-.case-chest-strap{position:absolute;top:18px;bottom:0;width:6px;background:linear-gradient(180deg,#3a2a1a,#2a1e12)}
-.case-chest-strap.sl{left:14px}.case-chest-strap.sr{right:14px}
-.case-chest-lock{position:absolute;top:16px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:3px;background:radial-gradient(circle at 50% 45%,#ffe370,#ffd93d 40%,#b88a00);box-shadow:0 0 8px rgba(255,217,61,.9);z-index:3}
-.case-card-body{position:relative;z-index:2;padding:6px 14px 14px;width:100%}
-.case-card-name{font-size:12px;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,#fff,#c0c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.case-card-price{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:10px;font-size:11px;font-weight:900;background:linear-gradient(135deg,rgba(255,217,61,.2),rgba(255,149,0,.08));border:1px solid rgba(255,217,61,.4);color:var(--gold);box-shadow:0 0 14px rgba(255,217,61,.25)}
+@keyframes float1{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
+@keyframes float2{0%,100%{transform:rotate(-18deg) translateY(0)}50%{transform:rotate(-18deg) translateY(-3px)}}
+@keyframes float3{0%,100%{transform:rotate(18deg) translateY(0)}50%{transform:rotate(18deg) translateY(-3px)}}
+.case-chest{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:72px;height:48px;z-index:2;filter:drop-shadow(0 5px 12px rgba(0,0,0,.75)) drop-shadow(0 0 18px var(--case-glow,rgba(120,100,255,.3)))}
+.case-chest-lid{position:absolute;top:0;left:0;right:0;height:18px;border-radius:7px 7px 3px 3px;background:linear-gradient(180deg,#8b6f47 0%,#6d5537 60%,#4a3a24 100%);border:1.5px solid #2f2418;box-shadow:inset 0 2px 0 rgba(255,220,150,.25)}
+.case-chest-body{position:absolute;top:16px;left:0;right:0;bottom:0;border-radius:2px 2px 7px 7px;background:linear-gradient(180deg,#7a5c38 0%,#5c4a2f 50%,#3d2e1a 100%);border:1.5px solid #2f2418;box-shadow:inset 0 2px 0 rgba(255,220,150,.15)}
+.case-chest-strap{position:absolute;top:14px;bottom:0;width:5px;background:linear-gradient(180deg,#3a2a1a,#2a1e12)}
+.case-chest-strap.sl{left:11px}.case-chest-strap.sr{right:11px}
+.case-chest-lock{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:3px;background:radial-gradient(circle at 50% 45%,#ffe370,#ffd93d 40%,#b88a00);box-shadow:0 0 8px rgba(255,217,61,.9);z-index:3}
+.case-card-info{flex:1;min-width:0;text-align:left;position:relative;z-index:2}
+.case-card-name{font-size:14px;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,#fff,#c0c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.case-card-price{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:10px;font-size:12px;font-weight:900;background:linear-gradient(135deg,rgba(255,217,61,.2),rgba(255,149,0,.08));border:1px solid rgba(255,217,61,.4);color:var(--gold);box-shadow:0 0 14px rgba(255,217,61,.25)}
 .case-card-price svg{width:11px;height:11px}
+.case-items-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:10px 12px 12px;width:100%;border-top:1px solid var(--border);position:relative;z-index:2;background:rgba(0,0,0,.3)}
+.case-item-mini{display:flex;align-items:center;gap:6px;padding:5px 7px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;min-width:0}
+.case-item-mini .ci-icon{width:24px;height:24px;flex-shrink:0}
+.case-item-mini .ci-icon img{width:100%;height:100%;object-fit:contain}
+.case-item-mini .ci-body{flex:1;min-width:0;text-align:left}
+.case-item-mini .ci-name{font-size:8px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.case-item-mini .ci-price{font-size:7px;color:var(--gold);font-weight:800;margin-top:1px}
+
 .case-open-panel{display:flex;flex-direction:column;flex:1;min-height:0;animation:caseOpen .4s cubic-bezier(.4,0,.2,1)}
 @keyframes caseOpen{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .case-open-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-shrink:0;gap:8px}
@@ -427,7 +444,6 @@ body.perf-low .case-peek{animation:none}
 .shop-grid-wrap{background:linear-gradient(180deg,rgba(16,16,26,.95),rgba(8,8,14,1));border:1px solid rgba(255,217,61,.12);border-radius:16px;padding:10px;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.5)}
 .shop-items-scroll{flex:1;min-height:0;overflow-y:auto;position:relative;z-index:1}
 
-/* SELL MODAL / BUY */
 .buy-gift-icon{width:100px;height:100px;margin:0 auto 14px;position:relative;display:flex;align-items:center;justify-content:center;animation:buyFloat 3s ease-in-out infinite}
 body.perf-low .buy-gift-icon{animation:none}
 @keyframes buyFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(2deg)}}
@@ -447,6 +463,17 @@ body.perf-low .buy-gift-icon{animation:none}
 .stat-label{font-size:9px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-weight:700}
 .stat-value{font-size:15px;font-weight:800}
 .stat-value.green{color:var(--green)}.stat-value.red{color:var(--red)}.stat-value.gold{color:var(--gold)}
+
+/* REFERRAL */
+.referral-card{display:flex;align-items:center;gap:10px;padding:12px;background:linear-gradient(135deg,rgba(120,100,255,.1),rgba(168,85,247,.03));border:1px solid rgba(120,100,255,.35);border-radius:12px;margin-bottom:14px;cursor:not-allowed;opacity:.85;position:relative;overflow:hidden}
+.referral-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(120,100,255,.15),transparent 60%);pointer-events:none}
+.referral-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(120,100,255,.5),rgba(168,85,247,.25));border:1px solid rgba(120,100,255,.5);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;position:relative;z-index:1;color:#c0c8ff}
+.referral-icon svg{width:18px;height:18px}
+.referral-info{flex:1;min-width:0;position:relative;z-index:1}
+.referral-title{font-size:12px;font-weight:900;color:var(--text)}
+.referral-desc{font-size:9px;color:var(--text-mute);margin-top:2px;line-height:1.35}
+.referral-badge{padding:4px 8px;border-radius:6px;font-size:8px;font-weight:900;letter-spacing:.1em;background:linear-gradient(135deg,rgba(255,217,61,.2),rgba(255,149,0,.1));border:1px solid rgba(255,217,61,.4);color:var(--gold);flex-shrink:0;position:relative;z-index:1}
+
 .profile-tabs{display:flex;gap:4px;background:rgba(0,0,0,.35);border-radius:11px;padding:3px;margin-bottom:12px}
 .profile-tab{flex:1;padding:8px;border-radius:8px;background:transparent;border:none;color:var(--text-dim);font-size:10px;font-weight:700;font-family:inherit;cursor:pointer;text-transform:uppercase}
 .profile-tab.active{background:linear-gradient(180deg,rgba(34,34,48,.9),rgba(20,20,30,.9));color:var(--text)}
@@ -493,16 +520,12 @@ body.perf-low .buy-gift-icon{animation:none}
 @media (max-width:360px){
 .online-badge{display:none}
 .balance-chip{font-size:10px;padding:4px 7px;max-width:80px}
-.icon-btn{width:28px;height:28px}
-.icon-btn svg{width:13px;height:13px}
+.icon-btn{width:28px;height:28px}.icon-btn svg{width:13px;height:13px}
 .menu-card-icon .gicon{height:52px;width:52px}
-.menu-card-title{font-size:13px}
-.menu-card-desc{font-size:9px}
-.menu-card{min-height:150px}
-.plinko-board-wrap{min-height:360px}
-.plinko-board{min-height:340px}
-.case-card{min-height:180px}
-.case-stage{height:106px}
+.menu-card-title{font-size:13px}.menu-card-desc{font-size:9px}.menu-card{min-height:150px}
+.plinko-board-wrap{min-height:360px}.plinko-board{min-height:340px}
+.case-stage{width:96px;height:80px}
+.case-card-name{font-size:13px}
 }
 @media (min-width:420px){
 .wheel-wrap{width:175px;height:175px}.wheel-col{min-width:175px}
@@ -517,6 +540,7 @@ body{padding:16px}
 .modal{max-width:400px}
 .rocket-mult{font-size:92px}
 .menu-grid{grid-template-columns:1fr 1fr 1fr}
+.cases-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -548,7 +572,7 @@ body{padding:16px}
 <div class="news-feed-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9"/><path d="M18 14H10M18 18H10M18 10H10"/></svg></div>
 <div class="news-feed-info">
 <div class="news-feed-title">Новости проекта <span class="news-feed-badge-inline">NEW</span></div>
-<div class="news-feed-sub">v2.0.1 · Коллаба с MC Илюхой · Промо</div>
+<div class="news-feed-sub">v2.0.1 · Коллаба · Промокод</div>
 </div>
 <div class="news-feed-arrow">→</div>
 </div>
@@ -643,8 +667,8 @@ body{padding:16px}
 <div class="modal-title">Настройки</div>
 <div class="settings-row"><span class="settings-label">Вибрация</span><label class="switch"><input type="checkbox" id="vibration-toggle"><span class="slider"></span></label></div>
 <div class="settings-row"><span class="settings-label">Звук</span><label class="switch"><input type="checkbox" id="sound-toggle"><span class="slider"></span></label></div>
-<div class="settings-row"><span class="settings-label">Оптимизация<small>Отключает анимации и эффекты для слабых телефонов</small></span><label class="switch"><input type="checkbox" id="optimize-toggle"><span class="slider"></span></label></div>
-<div class="settings-row"><span class="settings-label">Экономия батареи<small>Реже обновляет фоновые процессы</small></span><label class="switch"><input type="checkbox" id="battery-toggle"><span class="slider"></span></label></div>
+<div class="settings-row"><span class="settings-label">Оптимизация<small>Отключает анимации для слабых телефонов</small></span><label class="switch"><input type="checkbox" id="optimize-toggle"><span class="slider"></span></label></div>
+<div class="settings-row"><span class="settings-label">Экономия батареи<small>Реже обновляет фон</small></span><label class="switch"><input type="checkbox" id="battery-toggle"><span class="slider"></span></label></div>
 <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:6px;"><span class="settings-label">Язык</span><div class="lang-grid"><button class="lang-btn" data-lang="ru" type="button">RU</button><button class="lang-btn" data-lang="en" type="button">EN</button><button class="lang-btn" data-lang="de" type="button">DE</button></div></div>
 <div class="btns-row" style="margin-top:14px;"><button class="btn btn-primary" id="settings-close" type="button">Готово</button></div>
 </div></div>
@@ -655,6 +679,11 @@ body{padding:16px}
 <div class="stat-cell"><div class="stat-label">Поражения</div><div class="stat-value red" id="stat-losses">0</div></div>
 <div class="stat-cell"><div class="stat-label">Проставлено</div><div class="stat-value" id="stat-wagered">0</div></div>
 <div class="stat-cell"><div class="stat-label">Лучший дроп</div><div class="stat-value gold" id="stat-best">—</div></div>
+</div>
+<div class="referral-card" id="referral-card" title="Скоро">
+<div class="referral-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+<div class="referral-info"><div class="referral-title">Реферальная программа</div><div class="referral-desc">Приглашай друзей и получай бонусы за их игру</div></div>
+<div class="referral-badge">СКОРО</div>
 </div>
 <div class="profile-tabs"><button class="profile-tab active" data-pview="history" type="button">История</button><button class="profile-tab" data-pview="inventory" type="button">Инвентарь</button></div>
 <div class="profile-view active" id="pview-history"><div id="history-list"></div></div>
@@ -694,35 +723,45 @@ body{padding:16px}
 </a>
 </div>
 
+<!-- Current patch -->
 <div class="news-version-card patch">
-<div class="news-version-head"><div class="news-version-tag patch">v2.0.1</div><div class="news-version-date">09.10.2026</div></div>
+<div class="news-version-head">
+<div class="news-version-tag patch">v2.0.1</div>
+<div class="news-version-head-right"><div class="news-version-date">09.10.2026</div></div>
+</div>
 <div class="news-version-title">Patch — исправления</div>
 <div class="news-feature-list">
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Иконки режимов</div><div class="news-feature-desc">Все режимы получили тематические гифт-иконки с анимациями</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Бейджи кейсов</div><div class="news-feature-desc">Исправлено наложение бейджей ТОП / ЛЕГЕНДА на иконки</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Игр сыграно</div><div class="news-feature-desc">Счётчик всех игр вместо счётчика дропов</div></div></div>
-<div class="news-feature"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Иконки в истории</div><div class="news-feature-desc">SVG-иконки для всех игровых режимов</div></div></div>
-<div class="news-feature"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Оптимизация</div><div class="news-feature-desc">Новые режимы оптимизации для слабых телефонов</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Список подарков в кейсах</div><div class="news-feature-desc">Список подарков под кейсом в 2 колонки, убраны шансы</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Реферальная программа</div><div class="news-feature-desc">Раздел появился в профиле — функция появится в ближайшем релизе</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Плинко — фикс пустых слотов</div><div class="news-feature-desc">Если кэф × ставка меньше 15⭐ — слот пустой, подарок не выдаётся</div></div></div>
 </div>
 </div>
 
-<div class="news-version-card current">
-<div class="news-version-head"><div class="news-version-tag">v2.0</div><div class="news-version-date">Релиз</div></div>
-<div class="news-version-title">Большое обновление</div>
+<!-- Deprecated v2.0 -->
+<div class="news-version-card deprecated">
+<div class="news-version-head">
+<div class="news-version-tag deprecated">v2.0</div>
+<div class="news-version-head-right">
+<span class="news-deprecated-badge">НЕАКТУАЛЕН</span>
+<div class="news-version-date">Релиз</div>
+</div>
+</div>
+<div class="news-version-title">Прошлое обновление</div>
 <div class="news-feature-list">
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Реворк Сапёра</div><div class="news-feature-desc">Новая механика: шкала прироста от <b>+0.10x</b> до <b>+0.70x</b>, старт с <b>0.80x</b>, 3–9 мин</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2H4"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Новостная лента</div><div class="news-feature-desc">Полноценное отслеживание всех изменений проекта</div></div></div>
-<div class="news-feature"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Реворк Ракетки</div><div class="news-feature-desc">Вертикальный взлёт, новые эффекты</div></div></div>
-<div class="news-feature"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Кейсы</div><div class="news-feature-desc">Пересмотрены шансы на дроп</div></div></div>
-<div class="news-feature"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Апгрейдер</div><div class="news-feature-desc">Доведён до идеала</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Промокод MCilyxa</div><div class="news-feature-desc">В честь коллабы с MC Илюхой — промокод <b>MCilyxa</b> даёт <b>30 000 ⭐</b></div></div></div>
+<div class="news-feature deprecated"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Реворк Сапёра</div><div class="news-feature-desc">Шкала прироста от <b>+0.10x</b> до <b>+0.70x</b>, старт с <b>0.80x</b>, 3–9 мин</div></div></div>
+<div class="news-feature deprecated"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Промокод MCilyxa</div><div class="news-feature-desc">В честь коллабы — <b>30 000 ⭐</b> на баланс</div></div></div>
 </div>
 </div>
 
+<!-- Future v2.1 -->
 <div class="news-version-card future">
-<div class="news-version-head"><div class="news-version-tag future">v2.1</div><div class="news-version-date">Планы</div></div>
+<div class="news-version-head">
+<div class="news-version-tag future">v2.1</div>
+<div class="news-version-date">Планы</div>
+</div>
 <div class="news-version-title">Что будет дальше</div>
 <div class="news-feature-list">
+<div class="news-feature plan"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Реферальная система</div><div class="news-feature-desc">Приглашай друзей и получай бонусы за их игру</div></div></div>
 <div class="news-feature plan"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Новый режим</div><div class="news-feature-desc">Скоро анонс — следи за новостями</div></div></div>
 <div class="news-feature plan"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Увеличение демо-баланса</div><div class="news-feature-desc">Больше стартового капитала для новичков</div></div></div>
 <div class="news-feature plan"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Новые кейсы</div><div class="news-feature-desc">Расширение коллекции и новые дропы</div></div></div>
@@ -862,8 +901,8 @@ const FALLBACK = [
 const MULTIPLIERS = [1.2,1.5,2,3,5,10,25,100];
 const SPIN_DURATION = 7500;
 const ROCKET_WAIT = 10, ROCKET_FLY_MAX = 30, ROCKET_RESULT = 5;
+const MIN_GIFT_VALUE = 15; /* минимальная цена подарка для плинко */
 
-/* Mode icons as TG gift names */
 const MENU_GIFT_SAPER = 'Electric Skull';
 const MENU_GIFT_CASES = 'Loot Bag';
 const MENU_GIFT_PLINKO = 'Crystal Ball';
@@ -878,20 +917,37 @@ const SVG_ICON_UPGRADER = '<svg viewBox="0 0 24 24" fill="none" stroke="#c0c8ff"
 
 const CASES = [
 { id:'romasik', name:'Ромасик Лайф', price:25, glow:'rgba(46,204,113,0.5)', badge:'НОВИЧОК',
-items:[{ name:'Heart Locket', chance:27.5 }, { name:'Toy Bear', chance:27.5 }, { name:'Magic Potion', chance:10 }, { name:'Homemade Cake', chance:20 }, { name:'Top Hat', chance:15 }]},
+items:[{ name:'Heart Locket' }, { name:'Toy Bear' }, { name:'Magic Potion' }, { name:'Homemade Cake' }, { name:'Top Hat' }]},
 { id:'lottery', name:'Лотерея', price:120, glow:'rgba(120,100,255,0.5)', badge:'ХАЙП',
-items:[{ name:'Ginger Cookie', chance:20 }, { name:'Spiced Wine', chance:20 }, { name:'Hypno Lollipop', chance:15 }, { name:'Love Potion', chance:10 }, { name:'Bonded Ring', chance:10 }, { name:'Snow Globe', chance:10 }, { name:'Bunny Muffin', chance:8 }, { name:'Mousse Cake', chance:4 }, { name:'Star Notepad', chance:3 }]},
+items:[{ name:'Ginger Cookie' }, { name:'Spiced Wine' }, { name:'Hypno Lollipop' }, { name:'Love Potion' }, { name:'Bonded Ring' }, { name:'Snow Globe' }, { name:'Bunny Muffin' }, { name:'Mousse Cake' }, { name:'Star Notepad' }]},
 { id:'mcilyxa', name:'MC ilyxa', price:200, glow:'rgba(90,200,255,0.5)',
-items:[{ name:'Love Potion', chance:20 }, { name:'Snow Mittens', chance:20 }, { name:'Whip Cupcake', chance:15 }, { name:'Bonded Ring', chance:10 }, { name:'Pretty Posy', chance:10 }, { name:'Cupid Charm', chance:10 }, { name:'Bow Tie', chance:8 }, { name:'Valentine Box', chance:4 }, { name:'Easter Egg', chance:3 }]},
+items:[{ name:'Love Potion' }, { name:'Snow Mittens' }, { name:'Whip Cupcake' }, { name:'Bonded Ring' }, { name:'Pretty Posy' }, { name:'Cupid Charm' }, { name:'Bow Tie' }, { name:'Valentine Box' }, { name:'Easter Egg' }]},
 { id:'britiy', name:'Бритый ПЁС', price:600, glow:'rgba(184,184,200,0.5)',
-items:[{ name:'Pretty Posy', chance:20 }, { name:'Cupid Charm', chance:20 }, { name:'Valentine Box', chance:15 }, { name:'Voodoo Doll', chance:10 }, { name:'Jester Hat', chance:10 }, { name:'Perfume Bottle', chance:10 }, { name:'Signet Ring', chance:8 }, { name:'Swiss Watch', chance:4 }, { name:'Precious Peach', chance:3 }]},
+items:[{ name:'Pretty Posy' }, { name:'Cupid Charm' }, { name:'Valentine Box' }, { name:'Voodoo Doll' }, { name:'Jester Hat' }, { name:'Perfume Bottle' }, { name:'Signet Ring' }, { name:'Swiss Watch' }, { name:'Precious Peach' }]},
 { id:'oligarh', name:'Олигарх', price:3000, glow:'rgba(255,217,61,0.5)', badge:'ТОП',
-items:[{ name:'Pet Snake', chance:20 }, { name:'Pool Float', chance:20 }, { name:'Party Sparkler', chance:15 }, { name:'Stellar Rocket', chance:10 }, { name:'Snoop Cigar', chance:10 }, { name:'Victory Medal', chance:10 }, { name:'Loot Bag', chance:6 }, { name:'Trapped Heart', chance:5 }, { name:'Neko Helmet', chance:4 }]},
+items:[{ name:'Pet Snake' }, { name:'Pool Float' }, { name:'Party Sparkler' }, { name:'Stellar Rocket' }, { name:'Snoop Cigar' }, { name:'Victory Medal' }, { name:'Loot Bag' }, { name:'Trapped Heart' }, { name:'Neko Helmet' }]},
 { id:'gold', name:'Золото', price:6000, glow:'rgba(255,215,0,0.6)', badge:'ЛЕГЕНДА', badgeType:'legendary',
-items:[{ name:'Stellar Rocket', chance:20 }, { name:'Low Rider', chance:20 }, { name:'Snoop Cigar', chance:15 }, { name:'Kissed Frog', chance:10 }, { name:'Nail Bracelet', chance:10 }, { name:'Mini Oscar', chance:10 }, { name:'Vintage Cigar', chance:6 }, { name:'Lunar Snake', chance:5 }, { name:'Light Sword', chance:3 }, { name:'Mighty Arm', chance:1 }]},
+items:[{ name:'Stellar Rocket' }, { name:'Low Rider' }, { name:'Snoop Cigar' }, { name:'Kissed Frog' }, { name:'Nail Bracelet' }, { name:'Mini Oscar' }, { name:'Vintage Cigar' }, { name:'Lunar Snake' }, { name:'Light Sword' }, { name:'Mighty Arm' }]},
 { id:'wtf', name:'Ты кто?', price:12000, glow:'rgba(255,71,87,0.5)', badge:'ХАРДКОР', badgeType:'hot',
-items:[{ name:'Kissed Frog', chance:20 }, { name:'Trapped Heart', chance:20 }, { name:'Nail Bracelet', chance:15 }, { name:'Mini Oscar', chance:10 }, { name:'Hanging Star', chance:10 }, { name:'Astral Shard', chance:10 }, { name:'Light Sword', chance:5 }, { name:'Mighty Arm', chance:4 }, { name:'Evil Eye', chance:3 }, { name:'Witch Hat', chance:2 }, { name:'Liberty Figure', chance:1 }]}
+items:[{ name:'Kissed Frog' }, { name:'Trapped Heart' }, { name:'Nail Bracelet' }, { name:'Mini Oscar' }, { name:'Hanging Star' }, { name:'Astral Shard' }, { name:'Light Sword' }, { name:'Mighty Arm' }, { name:'Evil Eye' }, { name:'Witch Hat' }, { name:'Liberty Figure' }]}
 ];
+
+/* Weighted case drop — использует position-based chance (первый = самый частый) */
+function caseChance(index, total){
+/* index 0..total-1, сумма должна давать 100%. Используем exp-decay веса */
+let weights = [];
+for(let i=0;i<total;i++){
+weights.push(Math.pow(0.55, i));
+}
+const sum = weights.reduce((a,b)=>a+b, 0);
+return weights[index] / sum * 100;
+}
+/* Присваиваем chance каждому item для расчёта дропа (внутренне) */
+CASES.forEach(c=>{
+c.items.forEach((it, i)=>{
+it.chance = caseChance(i, c.items.length);
+});
+});
 
 const PLINKO_MULTS = [2.5, 1.8, 1.1, 0.7, 0.3, 0.7, 1.1, 1.8, 2.5];
 const PLINKO_ROWS = 8;
@@ -929,7 +985,6 @@ const SAPER_SIZE = 25;
 let currentCase = null;
 let caseSpinning = false;
 let caseSafety = null;
-/* PLINKO state — clean */
 let plinkoDropping = false;
 let plinkoBetGift = null;
 let plinkoStats = { last:0, profit:0, best:0 };
@@ -1628,7 +1683,7 @@ if(rocketBetActive) return;
 sndClick(); openGiftPicker('rocket');
 });
 
-/* ============ PLINKO — FULLY REWRITTEN ============ */
+/* PLINKO */
 function plinkoAccess(){ return isAdmin(); }
 function plinkoCancelAnim(){
 if(plinkoAnimState){
@@ -1684,19 +1739,22 @@ board.appendChild(peg);
 }
 
 const slotH = Math.max(46, H * 0.13);
-const slotW = Math.max(20, spacing * 0.82); /* guaranteed < spacing */
+const slotW = Math.max(20, spacing * 0.82);
 const betVal = plinkoBetGift ? (plinkoBetGift.value||0) : 0;
 
 for(let k=0; k<PLINKO_SLOTS; k++){
 const x = W/2 + (k - R/2) * spacing;
 const m = PLINKO_MULTS[k];
+const targetVal = betVal > 0 ? betVal * m : 0;
+const isEmpty = betVal > 0 && targetVal < MIN_GIFT_VALUE; /* слот пуст */
 let iconStr = '';
-if(betVal > 0){
-const g = findClosestCatalogGift(betVal * m);
+if(!isEmpty && targetVal >= MIN_GIFT_VALUE){
+const g = findClosestCatalogGift(targetVal);
 if(g) iconStr = iconHTML(g, 64);
 }
 const slot = document.createElement('div');
 slot.className = 'plinko-slot';
+if(isEmpty) slot.classList.add('empty');
 if(m >= 2) slot.classList.add('mega');
 else if(m >= 1) slot.classList.add('high');
 else if(m >= .6) slot.classList.add('mid');
@@ -1705,7 +1763,11 @@ slot.style.left = x.toFixed(2) + 'px';
 slot.style.width = slotW.toFixed(2) + 'px';
 slot.style.height = slotH.toFixed(2) + 'px';
 slot.dataset.k = k;
+if(isEmpty){
+slot.innerHTML = '<div class="slot-gift"><svg viewBox="0 0 24 24" fill="none" stroke="#7a7a8a" stroke-width="2.2" stroke-linecap="round" style="width:18px;height:18px"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></div><div class="slot-mult">'+m+'x</div>';
+} else {
 slot.innerHTML = '<div class="slot-gift">'+(iconStr||'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;opacity:.35"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>')+'</div><div class="slot-mult">'+m+'x</div>';
+}
 board.appendChild(slot);
 }
 updatePlinkoUI();
@@ -1757,7 +1819,6 @@ const segCount = points.length - 1;
 const segDur = totalDur / segCount;
 const state = { cancelled: false, timeouts: [], resolve: null, finished: false };
 plinkoAnimState = state;
-
 function finish(){
 if(state.finished) return;
 state.finished = true;
@@ -1765,11 +1826,9 @@ state.timeouts.forEach(t=>clearTimeout(t));
 resolve();
 }
 state.resolve = finish;
-
 let segIdx = 0;
 let pegFlashIdx = 0;
 const pegs = board.querySelectorAll('.plinko-peg');
-
 function nextSeg(){
 if(state.cancelled){ finish(); return; }
 if(state.finished){ return; }
@@ -1792,7 +1851,6 @@ segIdx++;
 const tid = setTimeout(nextSeg, segDur + 10);
 state.timeouts.push(tid);
 }
-/* Safety net */
 const safetyTid = setTimeout(finish, totalDur + 1500);
 state.timeouts.push(safetyTid);
 nextSeg();
@@ -1829,15 +1887,12 @@ board.appendChild(ball);
 
 const { points, finalK } = computePlinkoPath(dims.R, dims.spacing, dims.W, dims.topPad, dims.rowH);
 
-try {
-await animatePlinko(ball, points, board);
-} catch(e) {
+try { await animatePlinko(ball, points, board); } catch(e) {
 plinkoDropping = false;
 updatePlinkoUI();
 return;
 }
 
-/* If cancelled by another render — bail out cleanly */
 if(!ball.parentNode){
 plinkoDropping = false;
 updatePlinkoUI();
@@ -1846,13 +1901,25 @@ return;
 
 const m = PLINKO_MULTS[finalK];
 const betVal = betGift.value || 0;
-const wonGift = findClosestCatalogGift(betVal * m) || {name:'Heart Locket', value:15};
+const targetVal = betVal * m;
+const isEmptySlot = targetVal < MIN_GIFT_VALUE; /* пустой слот — нечего выдавать */
 
+let wonGift = null;
+if(!isEmptySlot){
+wonGift = findClosestCatalogGift(targetVal);
+}
+
+if(wonGift){
 inventory.push({name: wonGift.name, value: wonGift.value||0});
 inventory.sort((a,b)=>(a.value||0)-(b.value||0));
+}
 
 const slotEl = board.querySelector('.plinko-slot[data-k="' + finalK + '"]');
-if(slotEl){ slotEl.classList.add('hit'); setTimeout(()=>slotEl.classList.remove('hit'), 1500); }
+if(slotEl){
+if(isEmptySlot){ slotEl.classList.add('hit-empty'); }
+else { slotEl.classList.add('hit'); }
+setTimeout(()=>{ slotEl.classList.remove('hit'); slotEl.classList.remove('hit-empty'); }, 1500);
+}
 try {
 ball.style.transition = 'opacity .4s, transform .4s';
 ball.style.opacity = '0';
@@ -1860,24 +1927,24 @@ ball.style.transform = 'translate(-50%,-50%) scale(1.6)';
 setTimeout(()=>{ try{ ball.remove(); }catch(e){} }, 500);
 } catch(e){}
 
-const profitVal = (wonGift.value||0) - betVal;
 plinkoStats.last = m;
+const profitVal = isEmptySlot ? -betVal : ((wonGift.value||0) - betVal);
 plinkoStats.profit += profitVal;
 if(m > plinkoStats.best) plinkoStats.best = m;
 stats.wagered += betVal; stats.games++;
-if(m >= 1){
+if(!isEmptySlot && m >= 1){
 stats.wins++;
 if((wonGift.value||0) > stats.bestDrop) stats.bestDrop = wonGift.value||0;
 history.unshift({win:true, plinko:true, from:{name:betGift.name, value:betVal}, to:{name:wonGift.name, value:wonGift.value||0}, time:Date.now()});
 } else {
 stats.losses++;
-history.unshift({win:false, plinko:true, from:{name:betGift.name, value:betVal}, to:{name:wonGift.name, value:wonGift.value||0}, time:Date.now()});
+history.unshift({win:false, plinko:true, from:{name:betGift.name, value:betVal}, to: wonGift ? {name:wonGift.name, value:wonGift.value||0} : null, time:Date.now()});
 }
 history = history.slice(0,80);
 saveState();
 
-if(m >= 1.8){ flashWin(); confetti(); if(m >= 2.5) sndPlinkoBigWin(); else sndWin(); if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success'); }
-else if(m >= 1){ sndBuy(); if(vibrationEnabled) tg.HapticFeedback?.impactOccurred('medium'); }
+if(!isEmptySlot && m >= 1.8){ flashWin(); confetti(); if(m >= 2.5) sndPlinkoBigWin(); else sndWin(); if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success'); }
+else if(!isEmptySlot && m >= 1){ sndBuy(); if(vibrationEnabled) tg.HapticFeedback?.impactOccurred('medium'); }
 else { sndLose(); if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error'); }
 
 renderInventory(); renderArena(); renderTargets();
@@ -2033,23 +2100,41 @@ saperStepIndex = parseInt(e.target.value,10) || 3;
 sndClick(); updateSaperButtons();
 });
 
-/* CASES */
+/* CASES — list of gifts in 2 columns */
 function renderCases(){
 const grid=$('cases-grid'); if(!grid) return;
 grid.style.display = 'grid';
 if($('case-open-panel')) $('case-open-panel').style.display = 'none';
 const sortedCases = CASES.slice().sort((a,b)=>a.price-b.price);
 grid.innerHTML = sortedCases.map((c,i)=>{
+/* Превью — последние 3 подарка как "топ" */
 const peek = c.items.slice(-3).map((it,j)=>{
 const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name, value:0};
 return '<div class="case-peek p'+(j+1)+'">'+iconHTML(cat, 64)+'</div>';
 }).join('');
 const badgeHTML = c.badge ? '<div class="case-card-badge'+(c.badgeType?' '+c.badgeType:'')+'">'+c.badge+'</div>' : '';
-return '<button class="case-card" data-case="'+c.id+'" type="button" style="--case-glow:'+c.glow+';animation-delay:'+(i*0.05)+'s">'
+/* Список всех подарков кейса в 2 колонки */
+const itemsHTML = c.items.map(it=>{
+const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name, value:0};
+return '<div class="case-item-mini">'
++'<div class="ci-icon">'+iconHTML(cat, 64)+'</div>'
++'<div class="ci-body">'
++'<div class="ci-name">'+it.name+'</div>'
++'<div class="ci-price">'+(cat.value||0)+' ⭐</div>'
++'</div>'
++'</div>';
+}).join('');
+return '<div class="case-card" data-case="'+c.id+'" style="--case-glow:'+c.glow+';animation-delay:'+(i*0.05)+'s">'
 +badgeHTML
++'<div class="case-card-top">'
 +'<div class="case-stage">'+peek+'<div class="case-chest"><div class="case-chest-body"><div class="case-chest-strap sl"></div><div class="case-chest-strap sr"></div></div><div class="case-chest-lid"></div><div class="case-chest-lock"></div></div></div>'
-+'<div class="case-card-body"><div class="case-card-name">'+c.name+'</div><div class="case-card-price"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+c.price+'</div></div>'
-+'</button>';
++'<div class="case-card-info">'
++'<div class="case-card-name">'+c.name+'</div>'
++'<div class="case-card-price"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+c.price+'</div>'
++'</div>'
++'</div>'
++'<div class="case-items-grid">'+itemsHTML+'</div>'
++'</div>';
 }).join('');
 grid.querySelectorAll('.case-card').forEach(card=>{
 card.addEventListener('click', ()=>{ sndClick(); openCase(card.dataset.case); });
@@ -2080,7 +2165,7 @@ return '<div class="case-spin-item">'+iconHTML(cat, 128)+'</div>';
 const list = $('case-items-list');
 list.innerHTML = c.items.slice().sort((a,b)=>b.chance-a.chance).map(it=>{
 const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name, value:0};
-return '<div class="case-drop-row"><div class="case-drop-icon">'+iconHTML(cat,64)+'</div><div class="case-drop-info"><div class="case-drop-name">'+it.name+'</div><div class="case-drop-val">'+(cat.value||0)+' ⭐</div></div><div class="case-drop-chance">'+it.chance+'%</div></div>';
+return '<div class="case-drop-row"><div class="case-drop-icon">'+iconHTML(cat,64)+'</div><div class="case-drop-info"><div class="case-drop-name">'+it.name+'</div><div class="case-drop-val">'+(cat.value||0)+' ⭐</div></div><div class="case-drop-chance">'+(it.chance<1?it.chance.toFixed(2):it.chance.toFixed(0))+'%</div></div>';
 }).join('');
 const btn = $('case-open-btn');
 btn.disabled = balance < c.price || testEnded;
@@ -2273,6 +2358,7 @@ tb.classList.add('active');
 $('pview-'+tb.dataset.pview).classList.add('active');
 });
 });
+$('referral-card').addEventListener('click', ()=>{ sndClick(); });
 function renderHistory(){
 const el=$('history-list'); if(!el) return;
 if(!history.length){ el.innerHTML='<div class="empty">—</div>'; return; }
