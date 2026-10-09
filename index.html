@@ -68,7 +68,57 @@ body::before { content: ''; position: fixed; inset: 0;
 .menu-title { text-align: center; font-size: 22px; font-weight: 900; margin-bottom: 4px;
     background: linear-gradient(135deg, #fff 0%, #b0b8ff 50%, #a855f7 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.menu-subtitle { text-align: center; font-size: 11px; color: var(--text-mute); margin-bottom: 20px; }
+.menu-subtitle { text-align: center; font-size: 11px; color: var(--text-mute); margin-bottom: 14px; }
+
+/* === NEWS FEED === */
+.news-feed { display: flex; align-items: center; gap: 12px;
+    background: linear-gradient(160deg, rgba(34,34,50,0.95), rgba(16,16,26,0.98));
+    border: 1px solid rgba(120,100,255,0.35);
+    border-radius: 16px; padding: 12px 14px; margin-bottom: 16px;
+    cursor: pointer; position: relative; overflow: hidden;
+    box-shadow: 0 8px 28px rgba(120,100,255,0.18);
+    transition: transform 0.15s; }
+.news-feed::before { content:''; position:absolute; inset:0;
+    background: radial-gradient(circle at 20% 50%, rgba(120,100,255,0.22) 0%, transparent 60%);
+    pointer-events:none; animation: cardGlow 4s ease-in-out infinite alternate; }
+.news-feed:active { transform: scale(0.98); }
+.news-feed-badge { position: absolute; top: -7px; right: 12px;
+    background: linear-gradient(135deg, #ff4757, #c0392b);
+    color: #fff; font-size: 8px; font-weight: 900; padding: 3px 8px;
+    border-radius: 7px; letter-spacing: 0.12em;
+    box-shadow: 0 0 14px rgba(255,71,87,0.85);
+    animation: newsPulse 1.6s ease-in-out infinite; z-index: 2; }
+@keyframes newsPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+.news-feed-icon { width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(120,100,255,0.35), rgba(168,85,247,0.15));
+    border: 1px solid rgba(120,100,255,0.45);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; position: relative; z-index: 1; }
+.news-feed-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+.news-feed-title { font-size: 13px; font-weight: 900; margin-bottom: 2px;
+    background: linear-gradient(135deg, #fff, #c0c8ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.news-feed-sub { font-size: 10px; color: var(--text-mute); }
+.news-feed-arrow { color: #8fb0ff; font-size: 18px; font-weight: 900; flex-shrink: 0;
+    position: relative; z-index: 1; }
+.news-content { max-height: 62vh; overflow-y: auto; padding-right: 4px; }
+.news-content::-webkit-scrollbar { width: 3px; }
+.news-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+.news-block { margin-bottom: 16px; }
+.news-block:last-child { margin-bottom: 0; }
+.news-block-title { font-size: 12px; font-weight: 900; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 9px;
+    display: flex; align-items: center; gap: 6px; }
+.news-block-title::before { content:''; width: 3px; height: 12px;
+    background: linear-gradient(180deg, var(--gold), #ff9500);
+    border-radius: 2px; box-shadow: 0 0 8px rgba(255,217,61,0.7); }
+.news-block-text { font-size: 11px; color: var(--text-dim); line-height: 1.55; margin-bottom: 9px; }
+.news-block-list { display: flex; flex-direction: column; gap: 6px; }
+.news-item { font-size: 11px; color: var(--text); line-height: 1.4;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; }
+.news-item .ni-emoji { flex-shrink: 0; font-size: 12px; line-height: 1.3; }
+
 .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .menu-card { position: relative; overflow: hidden;
     background: linear-gradient(160deg, rgba(34,34,50,0.95) 0%, rgba(16,16,26,0.98) 100%);
@@ -192,7 +242,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .slot-price { font-size: 8px; font-weight: 800; margin-top: 2px; }
 .empty { grid-column: 1/-1; text-align: center; color: var(--text-mute); font-size: 11px; padding: 24px 8px; }
 
-/* === NEW ROCKET — вертикальный взлёт === */
 .rocket-status-bar { display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); border-radius: 12px;
@@ -221,7 +270,6 @@ body::before { content: ''; position: fixed; inset: 0;
     margin-bottom: 8px;
     overflow: hidden;
     box-shadow: inset 0 0 80px rgba(120,100,255,0.15); }
-/* Земля/стартовая площадка снизу */
 .rocket-stage::after {
     content: '';
     position: absolute;
@@ -233,7 +281,6 @@ body::before { content: ''; position: fixed; inset: 0;
     border-top: 1px solid rgba(168,85,247,0.4);
     pointer-events: none;
     z-index: 1; }
-/* Звёзды — появляются при подъёме */
 .rocket-stage::before {
     content: '';
     position: absolute;
@@ -279,7 +326,6 @@ body::before { content: ''; position: fixed; inset: 0;
 @keyframes rocketShake {
     0%,100% { transform: translate(-50%, -50%) translate(-1.5px, 1px); }
     50% { transform: translate(-50%, -50%) translate(1.5px, -1px); } }
-/* Пламя под ракетой во время полёта */
 .rocket-icon.flying::after {
     content: '';
     position: absolute;
@@ -404,7 +450,6 @@ body::before { content: ''; position: fixed; inset: 0;
 @keyframes cashPulse { 0%,100% { box-shadow: 0 8px 32px rgba(255,217,61,0.4); }
     50% { box-shadow: 0 8px 48px rgba(255,217,61,0.9); } }
 
-/* SAPER */
 .saper-info { display: flex; justify-content: space-around; align-items: center;
     background: radial-gradient(ellipse 90% 120% at 50% 0%, rgba(255,217,61,0.12) 0%, transparent 60%),
                 linear-gradient(180deg, rgba(34,34,50,0.95), rgba(14,14,20,0.98));
@@ -520,7 +565,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .saper-cash-btn:disabled { opacity: 0.3; cursor: not-allowed;
     background: rgba(255,255,255,0.05); color: var(--text-mute); box-shadow: none; }
 
-/* CASES */
 .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .case-card { position: relative; overflow: hidden;
     background: linear-gradient(160deg, rgba(34,34,50,0.95), rgba(16,16,26,0.98));
@@ -611,7 +655,6 @@ body::before { content: ''; position: fixed; inset: 0;
 .case-drop-val { font-size: 9px; color: var(--text-mute); margin-top: 1px; }
 .case-drop-chance { font-size: 11px; font-weight: 900; color: var(--gold); flex-shrink: 0; }
 
-/* SHOP */
 .shop-topbar { display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(180deg, rgba(22,22,32,0.9), rgba(14,14,20,0.9));
     border: 1px solid var(--border); border-radius: 12px;
@@ -800,6 +843,17 @@ body::before { content: ''; position: fixed; inset: 0;
     <div class="screen active" id="screen-menu">
         <div class="menu-title">Выбери режим</div>
         <div class="menu-subtitle">Играй и выигрывай</div>
+
+        <div class="news-feed" id="news-feed">
+            <div class="news-feed-badge">NEW</div>
+            <div class="news-feed-icon">📰</div>
+            <div class="news-feed-info">
+                <div class="news-feed-title">Новости и обновления</div>
+                <div class="news-feed-sub">Версия 2.0 — что нового?</div>
+            </div>
+            <div class="news-feed-arrow">→</div>
+        </div>
+
         <div class="menu-grid">
             <button class="menu-card" data-mode="upgrader" type="button" style="--card-glow: rgba(120,100,255,0.5);">
                 <div class="menu-card-icon">
@@ -1057,6 +1111,37 @@ body::before { content: ''; position: fixed; inset: 0;
     </div>
 </div>
 
+<div class="overlay" id="news-modal">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-title">📰 Новости</div>
+        <div class="news-content">
+            <div class="news-block">
+                <div class="news-block-title">Версия 2</div>
+                <div class="news-block-text">Были добавлены новости для подробного отслеживания изменений. Из изменений:</div>
+                <div class="news-block-list">
+                    <div class="news-item"><span class="ni-emoji">🚀</span><span>Переделана ракетка (возможны последующие переделывания)</span></div>
+                    <div class="news-item"><span class="ni-emoji">📦</span><span>Добавлено 2 новых кейса</span></div>
+                    <div class="news-item"><span class="ni-emoji">🎲</span><span>Изменены полностью шансы на дроп в кейсах</span></div>
+                    <div class="news-item"><span class="ni-emoji">⚡</span><span>Довели апгрейдер до идеала</span></div>
+                </div>
+            </div>
+            <div class="news-block">
+                <div class="news-block-title">Что будет в последующих обновлениях</div>
+                <div class="news-block-list">
+                    <div class="news-item"><span class="ni-emoji">🔧</span><span>Реворк сапёра</span></div>
+                    <div class="news-item"><span class="ni-emoji">🎮</span><span>Добавление нового режима</span></div>
+                    <div class="news-item"><span class="ni-emoji">💰</span><span>Увеличение демо-баланса</span></div>
+                    <div class="news-item"><span class="ni-emoji">📦</span><span>Добавление новых кейсов</span></div>
+                    <div class="news-item"><span class="ni-emoji">💎</span><span>Смена цен гифтов на настоящие</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="btns-row" style="margin-top:14px;">
+            <button class="btn btn-primary" id="news-close" type="button">Понятно</button>
+        </div>
+    </div>
+</div>
+
 <script>
 (function(){
 "use strict";
@@ -1176,90 +1261,97 @@ const ROCKET_WAIT = 10;
 const ROCKET_FLY_MAX = 30;
 const ROCKET_RESULT = 5;
 
+/* === CASES — шансы: 55% недокуп (0.5-0.8x), 10% ~1x, 20% 1.5-2x, 15% 2x+ === */
 const CASES = [
+    /* 25 ⭐ — Ромасик Лайф */
     { id:'romasik', name:'Ромасик Лайф', price:25, glow:'rgba(46,204,113,0.5)',
       items:[
-        { name:'Heart Locket', chance:50 },
-        { name:'Toy Bear', chance:25 },
-        { name:'Jingle Bells', chance:15 },
-        { name:'Magic Potion', chance:7 },
-        { name:'Homemade Cake', chance:2.5 },
-        { name:'Crystal Ball', chance:0.5 }
+        { name:'Heart Locket', chance:27.5 },   /* 15 (0.6x) */
+        { name:'Toy Bear', chance:27.5 },       /* 15 (0.6x) */
+        { name:'Magic Potion', chance:10 },     /* 25 (1.0x) */
+        { name:'Homemade Cake', chance:20 },    /* 50 (2.0x) */
+        { name:'Top Hat', chance:15 }           /* 100 (4.0x) */
       ]},
+    /* 120 ⭐ — Лотерея */
     { id:'lottery', name:'Лотерея', price:120, glow:'rgba(120,100,255,0.5)',
       items:[
-        { name:'Heart Locket', chance:25 },
-        { name:'Toy Bear', chance:22 },
-        { name:'Jingle Bells', chance:18 },
-        { name:'Magic Potion', chance:14 },
-        { name:'Jelly Bunny', chance:10 },
-        { name:'Homemade Cake', chance:6 },
-        { name:'Crystal Ball', chance:3 },
-        { name:'Top Hat', chance:1.5 },
-        { name:'Diamond Ring', chance:0.4 },
-        { name:'Plush Pepe', chance:0.1 }
+        { name:'Ginger Cookie', chance:20 },    /* 75  (0.63x) */
+        { name:'Spiced Wine', chance:20 },      /* 80  (0.67x) */
+        { name:'Hypno Lollipop', chance:15 },   /* 95  (0.79x) */
+        { name:'Love Potion', chance:10 },      /* 110 (0.92x) */
+        { name:'Bonded Ring', chance:10 },      /* 180 (1.5x) */
+        { name:'Snow Globe', chance:10 },       /* 190 (1.58x) */
+        { name:'Bunny Muffin', chance:8 },      /* 240 (2.0x) */
+        { name:'Mousse Cake', chance:4 },       /* 260 (2.17x) */
+        { name:'Star Notepad', chance:3 }       /* 290 (2.42x) */
       ]},
-    { id:'britiy', name:'Бритый ПЁС', price:600, glow:'rgba(184,184,200,0.5)',
-      items:[
-        { name:'Crystal Ball', chance:30 },
-        { name:'Top Hat', chance:25 },
-        { name:'Sakura Flower', chance:18 },
-        { name:'Diamond Ring', chance:13 },
-        { name:"Durov's Cap", chance:8 },
-        { name:'Plush Pepe', chance:4 },
-        { name:'Snoop Dogg', chance:1.5 },
-        { name:'Stellar Rocket', chance:0.5 }
-      ]},
-    { id:'oligarh', name:'Олигарх', price:3000, glow:'rgba(255,217,61,0.5)',
-      items:[
-        { name:'Diamond Ring', chance:28 },
-        { name:"Durov's Cap", chance:22 },
-        { name:'Plush Pepe', chance:20 },
-        { name:'Snoop Dogg', chance:15 },
-        { name:'Mini Oscar', chance:10 },
-        { name:'Light Sword', chance:3.5 },
-        { name:'Mighty Arm', chance:1.2 },
-        { name:'Intelligence Cup', chance:0.3 }
-      ]},
-    { id:'wtf', name:'Ты кто?', price:12000, glow:'rgba(255,71,87,0.5)',
-      items:[
-        { name:'Stellar Rocket', chance:22 },
-        { name:'Snoop Dogg', chance:20 },
-        { name:'Low Rider', chance:15 },
-        { name:'Jolly Chimp', chance:12 },
-        { name:'Loot Bag', chance:10 },
-        { name:'Mini Oscar', chance:9 },
-        { name:'Light Sword', chance:5 },
-        { name:'Mighty Arm', chance:3.5 },
-        { name:'Liberty Figure', chance:2 },
-        { name:"Khabib's Papakha", chance:0.8 },
-        { name:'Tama Gadget', chance:0.5 },
-        { name:'Mirage Lamp', chance:0.2 }
-      ]},
+    /* 200 ⭐ — MC ilyxa */
     { id:'mcilyxa', name:'MC ilyxa', price:200, glow:'rgba(90,200,255,0.5)',
       items:[
-        { name:'Crystal Ball', chance:30 },
-        { name:'Top Hat', chance:25 },
-        { name:'Diamond Ring', chance:20 },
-        { name:'Sakura Flower', chance:15 },
-        { name:'Clover Pin', chance:5 },
-        { name:"Durov's Cap", chance:3 },
-        { name:'Plush Pepe', chance:1.5 },
-        { name:'Stellar Rocket', chance:0.4 },
-        { name:'Mini Oscar', chance:0.1 }
+        { name:'Love Potion', chance:20 },      /* 110 (0.55x) */
+        { name:'Snow Mittens', chance:20 },     /* 120 (0.60x) */
+        { name:'Whip Cupcake', chance:15 },     /* 140 (0.70x) */
+        { name:'Bonded Ring', chance:10 },      /* 180 (0.90x) */
+        { name:'Pretty Posy', chance:10 },      /* 320 (1.6x) */
+        { name:'Cupid Charm', chance:10 },      /* 350 (1.75x) */
+        { name:'Bow Tie', chance:8 },           /* 400 (2.0x) */
+        { name:'Valentine Box', chance:4 },     /* 420 (2.1x) */
+        { name:'Easter Egg', chance:3 }         /* 480 (2.4x) */
       ]},
+    /* 600 ⭐ — Бритый ПЁС */
+    { id:'britiy', name:'Бритый ПЁС', price:600, glow:'rgba(184,184,200,0.5)',
+      items:[
+        { name:'Pretty Posy', chance:20 },      /* 320 (0.53x) */
+        { name:'Cupid Charm', chance:20 },      /* 350 (0.58x) */
+        { name:'Valentine Box', chance:15 },    /* 420 (0.70x) */
+        { name:'Voodoo Doll', chance:10 },      /* 600 (1.0x) */
+        { name:'Jester Hat', chance:10 },       /* 900 (1.5x) */
+        { name:'Perfume Bottle', chance:10 },   /* 1000 (1.67x) */
+        { name:'Signet Ring', chance:8 },       /* 1400 (2.33x) */
+        { name:'Swiss Watch', chance:4 },       /* 1700 (2.83x) */
+        { name:'Precious Peach', chance:3 }     /* 2000 (3.33x) */
+      ]},
+    /* 3000 ⭐ — Олигарх */
+    { id:'oligarh', name:'Олигарх', price:3000, glow:'rgba(255,217,61,0.5)',
+      items:[
+        { name:'Pet Snake', chance:20 },        /* 1400 (0.47x) */
+        { name:'Pool Float', chance:20 },       /* 1800 (0.60x) */
+        { name:'Party Sparkler', chance:15 },   /* 2200 (0.73x) */
+        { name:'Stellar Rocket', chance:10 },   /* 3000 (1.0x) */
+        { name:'Snoop Cigar', chance:10 },      /* 4500 (1.5x) */
+        { name:'Victory Medal', chance:10 },    /* 5500 (1.83x) */
+        { name:'Loot Bag', chance:6 },          /* 7000 (2.33x) */
+        { name:'Trapped Heart', chance:5 },     /* 8000 (2.67x) */
+        { name:'Neko Helmet', chance:4 }        /* 10000 (3.33x) */
+      ]},
+    /* 6000 ⭐ — Золото */
     { id:'gold', name:'Золото', price:6000, glow:'rgba(255,215,0,0.6)',
       items:[
-        { name:'Plush Pepe', chance:35 },
-        { name:'Stellar Rocket', chance:25 },
-        { name:'Snoop Dogg', chance:15 },
-        { name:'Low Rider', chance:10 },
-        { name:'Loot Bag', chance:8 },
-        { name:'Mini Oscar', chance:4 },
-        { name:'Light Sword', chance:2 },
-        { name:'Mighty Arm', chance:0.7 },
-        { name:'Liberty Figure', chance:0.25 },
-        { name:"Khabib's Papakha", chance:0.05 }
+        { name:'Stellar Rocket', chance:20 },   /* 3000 (0.50x) */
+        { name:'Low Rider', chance:20 },        /* 4000 (0.67x) */
+        { name:'Snoop Cigar', chance:15 },      /* 4500 (0.75x) */
+        { name:'Kissed Frog', chance:10 },      /* 6000 (1.0x) */
+        { name:'Nail Bracelet', chance:10 },    /* 9000 (1.5x) */
+        { name:'Mini Oscar', chance:10 },       /* 12000 (2.0x) */
+        { name:'Vintage Cigar', chance:6 },     /* 16000 (2.67x) */
+        { name:'Lunar Snake', chance:5 },       /* 20000 (3.33x) */
+        { name:'Light Sword', chance:3 },       /* 28000 (4.67x) */
+        { name:'Mighty Arm', chance:1 }         /* 32000 (5.33x) */
+      ]},
+    /* 12000 ⭐ — Ты кто? */
+    { id:'wtf', name:'Ты кто?', price:12000, glow:'rgba(255,71,87,0.5)',
+      items:[
+        { name:'Kissed Frog', chance:20 },      /* 6000  (0.50x) */
+        { name:'Trapped Heart', chance:20 },    /* 8000  (0.67x) */
+        { name:'Nail Bracelet', chance:15 },    /* 9000  (0.75x) */
+        { name:'Mini Oscar', chance:10 },       /* 12000 (1.0x) */
+        { name:'Hanging Star', chance:10 },     /* 18000 (1.5x) */
+        { name:'Astral Shard', chance:10 },     /* 24000 (2.0x) */
+        { name:'Light Sword', chance:5 },       /* 28000 (2.33x) */
+        { name:'Mighty Arm', chance:4 },        /* 32000 (2.67x) */
+        { name:'Evil Eye', chance:3 },          /* 38000 (3.17x) */
+        { name:'Witch Hat', chance:2 },         /* 45000 (3.75x) */
+        { name:'Liberty Figure', chance:1 }     /* 55000 (4.58x) */
       ]}
 ];
 
@@ -1741,7 +1833,7 @@ document.querySelectorAll('.tab').forEach(tb=>{
     });
 });
 
-/* === NEW ROCKET — VERTICAL ASCENT === */
+/* === ROCKET === */
 function generateCrashPoint(){
     if(Math.random()<0.05) return 1.00;
     const u=Math.random();
@@ -1852,7 +1944,6 @@ function renderRocketFrame(m){
     var MAX_M = 20;
     var progress = Math.min(1, Math.log(m) / Math.log(MAX_M));
 
-    // Вертикальный взлёт: ракета поднимается по центру с лёгким покачиванием
     var sway = Math.sin(progress * Math.PI * 1.4) * 10;
     var x = 50 + sway;
     var y = 85 - progress * 70;
@@ -1868,7 +1959,6 @@ function renderRocketFrame(m){
         ic.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg) scale(' + scale.toFixed(2) + ')';
     }
 
-    // Траектория: от земли (50, 90) к ракете
     var ctrlX = 50 + sway * 0.5;
     var ctrlY = (90 + y) / 2;
     var path = 'M 50 90 Q ' + ctrlX + ' ' + ctrlY + ' ' + x + ' ' + y;
@@ -1876,13 +1966,11 @@ function renderRocketFrame(m){
     var tp = $('rocket-trail-path'); if(tp) tp.setAttribute('d', path);
     var tf = $('rocket-trail-fill'); if(tf) tf.setAttribute('d', fillPath);
 
-    // Звёзды — появляются при подъёме в верхнюю часть экрана
     var stage = $('rocket-stage');
     if(stage){
         stage.style.setProperty('--stars-op', Math.min(1, Math.max(0, (progress - 0.3) * 1.8)).toFixed(2));
     }
 
-    // Бейдж рядом с ракетой
     var badge = $('rocket-gift-badge');
     if(badge && !badge.classList.contains('hidden')){
         badge.style.left = (x + 7) + '%';
@@ -2188,7 +2276,9 @@ function renderCases(){
     const grid=$('cases-grid'); if(!grid) return;
     grid.style.display = 'grid';
     if($('case-open-panel')) $('case-open-panel').style.display = 'none';
-    grid.innerHTML = CASES.map(c=>{
+    /* Сортируем кейсы по цене от дешёвого к дорогому */
+    const sortedCases = CASES.slice().sort((a,b)=>a.price-b.price);
+    grid.innerHTML = sortedCases.map(c=>{
         const peek = c.items.slice(-3).map((it,i)=>{
             const cat = CATALOG.find(x=>x.name===it.name) || {name:it.name, value:0};
             return '<div class="case-peek p'+(i+1)+'">'+iconHTML(cat, 64)+'</div>';
@@ -2374,6 +2464,10 @@ $('sound-toggle').addEventListener('change', (e)=>{ soundEnabled=e.target.checke
 document.querySelectorAll('.lang-btn').forEach(b=>{
     b.addEventListener('click', ()=>{ sndClick(); localStorage.setItem('psygg_lang',b.dataset.lang); document.querySelectorAll('.lang-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); });
 });
+
+/* NEWS */
+$('news-feed').addEventListener('click', ()=>{ sndClick(); $('news-modal').classList.add('active'); });
+$('news-close').addEventListener('click', ()=>{ sndClick(); $('news-modal').classList.remove('active'); });
 
 /* PROFILE */
 $('profile-btn').addEventListener('click', (e)=>{
