@@ -96,28 +96,56 @@ body.perf-low .menu-card-icon .gicon{animation:none}
 .global-toast.error{background:linear-gradient(135deg,rgba(255,71,87,.98),rgba(192,57,43,.98));color:#fff;box-shadow:0 12px 40px rgba(255,71,87,.5)}
 .global-toast.info{background:linear-gradient(135deg,rgba(74,134,255,.98),rgba(43,92,191,.98));color:#fff;box-shadow:0 12px 40px rgba(74,134,255,.5)}
 .global-toast svg{width:16px;height:16px;flex-shrink:0}
-/* policy */
-.policy-modal{max-width:420px;padding:22px;display:flex;flex-direction:column;max-height:86vh}
-.policy-hero{display:flex;align-items:center;gap:14px;padding-bottom:16px;margin-bottom:14px;border-bottom:1px solid var(--border)}
-.policy-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(74,134,255,.5),rgba(120,100,255,.25));border:1px solid rgba(74,134,255,.55);display:flex;align-items:center;justify-content:center;color:#c0d8ff;flex-shrink:0;box-shadow:0 0 24px rgba(74,134,255,.4)}
-.policy-icon svg{width:26px;height:26px}
-.policy-title{font-size:16px;font-weight:900;margin-bottom:3px}
-.policy-sub{font-size:10px;color:var(--text-mute)}
-.policy-content{flex:1;min-height:0;overflow-y:auto;padding-right:6px;margin-bottom:12px}
-.policy-content::-webkit-scrollbar{width:3px}
-.policy-content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
-.policy-block{margin-bottom:12px}
-.policy-block-title{font-size:12px;font-weight:900;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;display:flex;align-items:center;gap:6px}
-.policy-block-title::before{content:'';width:3px;height:12px;background:linear-gradient(180deg,var(--gold),#ff9500);border-radius:2px;box-shadow:0 0 8px rgba(255,217,61,.7)}
-.policy-block-text{font-size:11px;color:var(--text-dim);line-height:1.55}
-.policy-agree-row{display:flex;align-items:flex-start;gap:10px;padding:12px;background:linear-gradient(135deg,rgba(74,134,255,.1),rgba(74,134,255,.02));border:1px solid rgba(74,134,255,.3);border-radius:11px;margin-bottom:12px;cursor:pointer}
-.policy-agree-row input{display:none}
-.policy-checkbox{width:20px;height:20px;border:2px solid rgba(120,150,255,.5);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);transition:all .2s;margin-top:1px}
-.policy-checkbox svg{width:12px;height:12px;color:#000;opacity:0;transition:opacity .15s}
-.policy-agree-row.checked .policy-checkbox{background:linear-gradient(135deg,#4a86ff,#2b5cbf);border-color:#4a86ff}
-.policy-agree-row.checked .policy-checkbox svg{opacity:1}
-.policy-agree-text{flex:1;font-size:11px;color:var(--text);line-height:1.4}
+/* POLICY 2.0 */
+.policy-modal{max-width:440px;width:100%;padding:0;overflow:hidden;background:linear-gradient(180deg,#15151f 0%,#0a0a12 100%);border:1px solid rgba(120,100,255,.35);box-shadow:0 24px 80px rgba(0,0,0,.85),0 0 60px rgba(120,100,255,.15),inset 0 1px 0 rgba(255,255,255,.08);display:flex;flex-direction:column;max-height:92vh;border-radius:22px;position:relative}
+.policy-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:180px;background:radial-gradient(ellipse 80% 100% at 50% 0%,rgba(120,100,255,.3) 0%,transparent 70%);pointer-events:none;z-index:0}
+.policy-modal::after{content:'';position:absolute;top:-30%;right:-20%;width:240px;height:240px;background:radial-gradient(circle,rgba(46,204,113,.18) 0%,transparent 65%);pointer-events:none;z-index:0;animation:policyGlow 5s ease-in-out infinite alternate}
+@keyframes policyGlow{from{transform:scale(.9);opacity:.7}to{transform:scale(1.15);opacity:1}}
+.policy-hero{position:relative;z-index:1;padding:20px 20px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.policy-icon{width:64px;height:64px;border-radius:18px;flex-shrink:0;background:linear-gradient(135deg,rgba(74,134,255,.6),rgba(120,100,255,.35));border:1px solid rgba(140,180,255,.55);display:flex;align-items:center;justify-content:center;color:#e0eaff;box-shadow:0 0 32px rgba(74,134,255,.55),inset 0 1px 0 rgba(255,255,255,.2);animation:policyIconFloat 3.2s ease-in-out infinite;position:relative}
+.policy-icon::after{content:'';position:absolute;inset:-6px;border-radius:22px;background:conic-gradient(from 0deg,rgba(74,134,255,0) 0deg,rgba(74,134,255,.6) 90deg,rgba(168,85,247,.5) 180deg,rgba(46,204,113,.5) 270deg,rgba(74,134,255,0) 360deg);filter:blur(10px);opacity:.55;z-index:-1;animation:policyRing 6s linear infinite}
+@keyframes policyRing{to{transform:rotate(360deg)}}
+@keyframes policyIconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.policy-icon svg{width:32px;height:32px}
+.policy-title{font-size:18px;font-weight:900;letter-spacing:-.02em;background:linear-gradient(135deg,#fff 0%,#c0c8ff 50%,#a855f7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.policy-sub{font-size:10px;color:var(--text-mute);max-width:280px;line-height:1.4;letter-spacing:.02em}
+.policy-content{position:relative;z-index:1;flex:1;min-height:0;overflow-y:auto;padding:14px 16px 8px;-webkit-overflow-scrolling:touch}
+.policy-content::-webkit-scrollbar{width:4px}
+.policy-content::-webkit-scrollbar-thumb{background:rgba(120,100,255,.35);border-radius:4px}
+.policy-block{margin-bottom:9px;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,rgba(30,30,46,.9),rgba(14,14,22,.95));border:1px solid rgba(255,255,255,.07);transition:border-color .25s,box-shadow .25s}
+.policy-block.open{border-color:rgba(120,100,255,.5);box-shadow:0 0 22px rgba(120,100,255,.22)}
+.policy-block-head{display:flex;align-items:center;gap:11px;padding:13px 14px;cursor:pointer;user-select:none;position:relative;-webkit-tap-highlight-color:transparent}
+.policy-block-head:active{background:rgba(255,255,255,.03)}
+.policy-block-icon{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(120,100,255,.15);border:1px solid rgba(120,100,255,.3);color:#c0c8ff;transition:all .25s}
+.policy-block.open .policy-block-icon{background:linear-gradient(135deg,rgba(74,134,255,.55),rgba(120,100,255,.3));border-color:rgba(140,180,255,.6);color:#fff;box-shadow:0 0 18px rgba(74,134,255,.5)}
+.policy-block-icon svg{width:16px;height:16px}
+.policy-block-title-text{flex:1;min-width:0;font-size:12px;font-weight:900;letter-spacing:.01em;color:var(--text)}
+.policy-block-caret{width:22px;height:22px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--text-mute);transition:transform .3s cubic-bezier(.34,1.56,.64,1),color .25s}
+.policy-block.open .policy-block-caret{transform:rotate(180deg);color:#a8c8ff}
+.policy-block-caret svg{width:14px;height:14px}
+.policy-block-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),padding .3s,opacity .3s;opacity:0}
+.policy-block.open .policy-block-body{max-height:600px;opacity:1;padding:0 14px 14px}
+.policy-block-text{font-size:11.5px;color:var(--text-dim);line-height:1.6;padding-left:43px}
+.policy-block-text b{color:var(--gold);font-weight:900}
+.policy-block-list{padding-left:43px;margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.policy-block-list-item{font-size:11px;color:var(--text-dim);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.policy-block-list-item::before{content:'';flex-shrink:0;width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,#4a86ff,#a855f7);margin-top:6px;box-shadow:0 0 6px rgba(74,134,255,.7)}
+.policy-agree-row{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;margin:0 16px 10px;background:linear-gradient(135deg,rgba(74,134,255,.12),rgba(74,134,255,.03));border:1.5px solid rgba(74,134,255,.35);border-radius:14px;cursor:pointer;user-select:none;position:relative;z-index:1;transition:all .25s;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.policy-agree-row::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(74,134,255,.2) 0%,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.policy-agree-row.checked::before{opacity:1}
+.policy-agree-row.checked{border-color:rgba(46,204,113,.6);background:linear-gradient(135deg,rgba(46,204,113,.15),rgba(46,204,113,.04));box-shadow:0 0 24px rgba(46,204,113,.25)}
+.policy-agree-row input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none;left:-9999px}
+.policy-checkbox{width:24px;height:24px;border:2px solid rgba(120,150,255,.5);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);transition:all .25s cubic-bezier(.34,1.56,.64,1);margin-top:1px;position:relative}
+.policy-checkbox svg{width:14px;height:14px;color:#fff;opacity:0;transform:scale(.5);transition:opacity .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+.policy-agree-row.checked .policy-checkbox{background:linear-gradient(135deg,#2ecc71,#1ea855);border-color:#2ecc71;box-shadow:0 0 16px rgba(46,204,113,.7)}
+.policy-agree-row.checked .policy-checkbox svg{opacity:1;transform:scale(1)}
+.policy-agree-text{flex:1;font-size:11.5px;color:var(--text);line-height:1.45;position:relative;z-index:1}
 .policy-agree-text b{color:var(--gold);font-weight:900}
+.policy-accept-btn{margin:0 16px 16px;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#4a86ff,#2b5cbf);color:#fff;font-size:14px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:inherit;position:relative;z-index:1;box-shadow:0 8px 28px rgba(74,134,255,.5),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .15s,box-shadow .3s,opacity .3s}
+.policy-accept-btn:active:not(:disabled){transform:scale(.97)}
+.policy-accept-btn:disabled{background:rgba(255,255,255,.05);color:var(--text-mute);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);cursor:not-allowed;opacity:.7}
+.policy-accept-btn:not(:disabled){background:linear-gradient(135deg,#2ecc71,#1ea855);box-shadow:0 8px 28px rgba(46,204,113,.55),inset 0 1px 0 rgba(255,255,255,.3);animation:acceptPulse 2s ease-in-out infinite}
+@keyframes acceptPulse{0%,100%{box-shadow:0 8px 28px rgba(46,204,113,.55),inset 0 1px 0 rgba(255,255,255,.3)}50%{box-shadow:0 8px 44px rgba(46,204,113,.9),inset 0 1px 0 rgba(255,255,255,.3)}}
 /* news modal */
 .news-modal{max-width:440px;padding:18px;display:flex;flex-direction:column;max-height:86vh}
 .news-modal-header{display:flex;align-items:center;gap:12px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -158,6 +186,7 @@ body.perf-low .menu-card-icon .gicon{animation:none}
 .news-version-type{padding:3px 8px;border-radius:6px;font-size:8px;font-weight:900;letter-spacing:.12em;background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.5);color:#7ff0b0;text-transform:uppercase}
 .news-version-type.release{background:rgba(120,100,255,.15);border-color:rgba(120,100,255,.5);color:#c0c8ff}
 .news-version-type.plans{background:rgba(255,217,61,.15);border-color:rgba(255,217,61,.5);color:#ffe370}
+.news-version-date{font-size:9px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.1em;font-weight:800}
 .news-version-title{font-size:12px;font-weight:800;margin-bottom:10px}
 .news-feature-list{display:flex;flex-direction:column;gap:7px}
 .news-feature{display:flex;align-items:flex-start;gap:10px;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:11px;padding:9px 11px}
@@ -486,15 +515,13 @@ body.perf-low .case-peek{animation:none}
 .shop-grid-wrap{background:linear-gradient(180deg,rgba(16,16,26,.95),rgba(8,8,14,1));border:1px solid rgba(255,217,61,.12);border-radius:16px;padding:10px;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 .shop-items-scroll{flex:1;min-height:0;overflow-y:auto;position:relative;z-index:1}
 .buy-gift-icon{width:100px;height:100px;margin:0 auto 14px;position:relative;display:flex;align-items:center;justify-content:center;animation:buyFloat 3s ease-in-out infinite}
-body.perf-low .buy-gift-icon{animation:none}
 @keyframes buyFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(2deg)}}
 .buy-gift-icon::before{content:'';position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(255,217,61,.35),transparent 70%);animation:buyGlow 2s ease-in-out infinite alternate;pointer-events:none}
 @keyframes buyGlow{from{opacity:.6;transform:scale(1)}to{opacity:1;transform:scale(1.15)}}
 .buy-gift-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(255,217,61,.5))}
-/* PROFILE - improved */
+/* PROFILE */
 .profile-header{display:flex;align-items:center;gap:14px;padding:16px 14px;border-radius:18px;margin-bottom:14px;background:linear-gradient(135deg,rgba(74,134,255,.2),rgba(168,85,247,.1) 50%,rgba(46,204,113,.05)),linear-gradient(160deg,rgba(34,34,52,.95),rgba(14,14,24,.98));border:1px solid rgba(120,100,255,.35);position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.4)}
 .profile-header::before{content:'';position:absolute;top:-30%;right:-15%;width:180px;height:180px;background:radial-gradient(circle,rgba(120,100,255,.35),transparent 65%);pointer-events:none;animation:cardGlow 4s ease-in-out infinite alternate}
-.profile-header::after{content:'';position:absolute;bottom:-40%;left:-20%;width:160px;height:160px;background:radial-gradient(circle,rgba(74,134,255,.25),transparent 70%);pointer-events:none;animation:cardGlow 5s ease-in-out infinite alternate reverse}
 .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#4a86ff,#a855f7);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px;font-weight:900;overflow:hidden;box-shadow:0 0 24px rgba(120,100,255,.6),inset 0 0 12px rgba(0,0,0,.3);position:relative;z-index:1}
 .avatar img{width:100%;height:100%;object-fit:cover}
 .profile-info{flex:1;min-width:0;position:relative;z-index:1}
@@ -592,6 +619,16 @@ body.perf-low .buy-gift-icon{animation:none}
 .case-card-name{font-size:13px}
 .plinko-board-wrap{min-height:360px}.plinko-board{min-height:340px}
 .inv-card-icon{width:60px;height:60px}
+.policy-hero{padding:16px 14px 12px}
+.policy-icon{width:56px;height:56px}
+.policy-icon svg{width:28px;height:28px}
+.policy-title{font-size:16px}
+.policy-block-head{padding:11px 12px;gap:9px}
+.policy-block-icon{width:28px;height:28px}
+.policy-block-text,.policy-block-list{padding-left:37px;font-size:11px}
+.policy-agree-row{padding:11px 12px;gap:10px;margin:0 12px 8px}
+.policy-agree-text{font-size:11px}
+.policy-accept-btn{margin:0 12px 12px;padding:14px}
 }
 @media (min-width:420px){
 .wheel-wrap{width:175px;height:175px}.wheel-col{min-width:175px}
@@ -849,10 +886,10 @@ body{padding:16px}
 <div class="news-version-title">Большой релиз 2.0 — начало новой эры</div>
 <div class="news-feature-list">
 <div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2H4"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Проект полностью переосмыслен</div><div class="news-feature-desc">Обновили дизайн, ускорили работу и подготовили платформу для будущих режимов</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Сапёр нового поколения</div><div class="news-feature-desc">Полный реворк: ты сам выбираешь силу риска — от <b>+0.10x</b> до <b>+0.70x</b> за каждую клетку. Старт с <b>0.80x</b>, от 3 до 9 мин</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Кейсы с открытыми шансами</div><div class="news-feature-desc">Смотри все подарки внутри кейса прямо на карточке. Хочешь рискнуть — знаешь за что</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Апгрейдер — теперь быстрее и плавнее</div><div class="news-feature-desc">Улучшили анимации, точность шансов и работу на слабых устройствах</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.35 1.78.65 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.47-1.47a2 2 0 0 1 2.11-.45c.82.3 1.7.52 2.6.65A2 2 0 0 1 22 16.92z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Промокод MCilyxa</div><div class="news-feature-desc">Забирай <b>30 000 ⭐</b> на баланс — приятный бонус для новых игроков</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Сапёр нового поколения</div><div class="news-feature-desc">Полный реворк: ты сам выбираешь силу риска — от <b>+0.10x</b> до <b>+0.70x</b> за каждую клетку. Старт с <b>0.80x</b></div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Кейсы с открытыми шансами</div><div class="news-feature-desc">Смотри все подарки внутри кейса прямо на карточке</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Апгрейдер — быстрее и плавнее</div><div class="news-feature-desc">Улучшили анимации, точность шансов и работу на слабых устройствах</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.35 1.78.65 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.47-1.47a2 2 0 0 1 2.11-.45c.82.3 1.7.52 2.6.65A2 2 0 0 1 22 16.92z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Промокод MCilyxa</div><div class="news-feature-desc">Забирай <b>30 000 ⭐</b> на баланс</div></div></div>
 </div>
 </div>
 
@@ -882,40 +919,150 @@ body{padding:16px}
 <div class="overlay" id="policy-modal">
 <div class="modal policy-modal">
 <div class="policy-hero">
-<div class="policy-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-<div>
+<div class="policy-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+<path d="M9 12l2 2 4-4"/>
+</svg>
+</div>
 <div class="policy-title">Политика и условия</div>
-<div class="policy-sub">Пожалуйста, ознакомься перед началом</div>
+<div class="policy-sub">Пожалуйста, ознакомься перед началом игры. Нажми на раздел, чтобы раскрыть</div>
+</div>
+
+<div class="policy-content" id="policy-content">
+<div class="policy-block open" data-policy="1">
+<div class="policy-block-head">
+<div class="policy-block-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+</svg>
+</div>
+<div class="policy-block-title-text">Общие положения</div>
+<div class="policy-block-caret">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/>
+</svg>
 </div>
 </div>
-<div class="policy-content">
-<div class="policy-block">
-<div class="policy-block-title">Общие положения</div>
-<div class="policy-block-text">Добро пожаловать в ПСЫ.gg — игровую платформу с виртуальными звёздами. Все игровые ценности (звёзды, гифты) являются виртуальными и не имеют реальной денежной стоимости. Приложение создано исключительно для развлечения.</div>
-</div>
-<div class="policy-block">
-<div class="policy-block-title">Игровой процесс</div>
-<div class="policy-block-text">Все результаты игр определяются генератором случайных чисел. Мы не гарантируем выигрыш и не несём ответственности за проигранные виртуальные ценности. Играй ответственно и только для удовольствия.</div>
-</div>
-<div class="policy-block">
-<div class="policy-block-title">Данные и приватность</div>
-<div class="policy-block-text">Мы сохраняем твой игровой прогресс (баланс, инвентарь, статистику) локально на устройстве и синхронизируем через облако Telegram. Мы не передаём данные третьим лицам. Твой Telegram ID используется только для идентификации игрового аккаунта.</div>
-</div>
-<div class="policy-block">
-<div class="policy-block-title">Правила поведения</div>
-<div class="policy-block-text">Запрещено использование багов, эксплойтов и любых способов получения нечестного преимущества. Нарушение правил может привести к блокировке аккаунта без предупреждения.</div>
-</div>
-<div class="policy-block">
-<div class="policy-block-title">Изменения условий</div>
-<div class="policy-block-text">Мы оставляем за собой право изменять данное соглашение. Актуальная версия всегда доступна в приложении. Продолжая использовать приложение, ты автоматически соглашаешься с обновлениями.</div>
+<div class="policy-block-body">
+<div class="policy-block-text">
+Добро пожаловать в <b>ПСЫ.gg</b> — игровую платформу с виртуальными звёздами. Все игровые ценности являются виртуальными и не имеют реальной денежной стоимости. Приложение создано исключительно для развлечения.
 </div>
 </div>
-<label class="policy-agree-row" id="policy-agree-row">
-<input type="checkbox" id="policy-checkbox">
-<div class="policy-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+</div>
+
+<div class="policy-block" data-policy="2">
+<div class="policy-block-head">
+<div class="policy-block-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+</svg>
+</div>
+<div class="policy-block-title-text">Игровой процесс</div>
+<div class="policy-block-caret">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/>
+</svg>
+</div>
+</div>
+<div class="policy-block-body">
+<div class="policy-block-text">
+Все результаты игр определяются <b>генератором случайных чисел</b>. Мы не гарантируем выигрыш и не несём ответственности за проигранные виртуальные ценности.
+</div>
+<div class="policy-block-list">
+<div class="policy-block-list-item">Шансы в каждом режиме указаны честно</div>
+<div class="policy-block-list-item">RTP рассчитан математически для каждого режима</div>
+<div class="policy-block-list-item">Играй ответственно и только для удовольствия</div>
+</div>
+</div>
+</div>
+
+<div class="policy-block" data-policy="3">
+<div class="policy-block-head">
+<div class="policy-block-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+</svg>
+</div>
+<div class="policy-block-title-text">Данные и приватность</div>
+<div class="policy-block-caret">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/>
+</svg>
+</div>
+</div>
+<div class="policy-block-body">
+<div class="policy-block-text">
+Мы сохраняем игровой прогресс <b>локально на устройстве</b> и синхронизируем через <b>облако Telegram</b>. Данные не передаются третьим лицам.
+</div>
+<div class="policy-block-list">
+<div class="policy-block-list-item">Telegram ID используется только для идентификации</div>
+<div class="policy-block-list-item">Синхронизация через tg.CloudStorage</div>
+<div class="policy-block-list-item">Возможность сбросить данные в профиле</div>
+</div>
+</div>
+</div>
+
+<div class="policy-block" data-policy="4">
+<div class="policy-block-head">
+<div class="policy-block-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+</svg>
+</div>
+<div class="policy-block-title-text">Правила поведения</div>
+<div class="policy-block-caret">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/>
+</svg>
+</div>
+</div>
+<div class="policy-block-body">
+<div class="policy-block-text">Запрещено использование багов и эксплойтов:</div>
+<div class="policy-block-list">
+<div class="policy-block-list-item">Использование багов и эксплойтов</div>
+<div class="policy-block-list-item">Автоматизация и скрипты</div>
+<div class="policy-block-list-item">Любые способы нечестного преимущества</div>
+</div>
+<div class="policy-block-text" style="padding-left:43px;margin-top:8px">
+Нарушение правил ведёт к <b>блокировке аккаунта</b> без предупреждения.
+</div>
+</div>
+</div>
+
+<div class="policy-block" data-policy="5">
+<div class="policy-block-head">
+<div class="policy-block-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+</svg>
+</div>
+<div class="policy-block-title-text">Изменения условий</div>
+<div class="policy-block-caret">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="6 9 12 15 18 9"/>
+</svg>
+</div>
+</div>
+<div class="policy-block-body">
+<div class="policy-block-text">
+Мы оставляем за собой право изменять данное соглашение. Актуальная версия всегда доступна в приложении. Продолжая использовать приложение, ты автоматически соглашаешься с обновлениями.
+</div>
+</div>
+</div>
+</div>
+
+<div class="policy-agree-row" id="policy-agree-row">
+<input type="checkbox" id="policy-checkbox" aria-label="Согласие с условиями">
+<div class="policy-checkbox">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="20 6 9 17 4 12"/>
+</svg>
+</div>
 <div class="policy-agree-text">Я прочитал(а) и <b>согласен(на)</b> с политикой приложения и условиями использования</div>
-</label>
-<button class="btn btn-primary" id="policy-accept" type="button" disabled style="width:100%;">Начать игру</button>
+</div>
+
+<button class="policy-accept-btn" id="policy-accept" type="button" disabled>Начать игру</button>
 </div>
 </div>
 
@@ -945,45 +1092,45 @@ const PROMO_CODES = { 'ROMANARMATURA777':10, 'CHIHARDEDEP':20, 'MCILYXA':30000 }
 function getUsedCodes(){ try{ return JSON.parse(localStorage.getItem(USED_KEY)||'[]');}catch{return[];} }
 function markCodeUsed(c){ const u=getUsedCodes(); if(!u.includes(c)){u.push(c);localStorage.setItem(USED_KEY,JSON.stringify(u));} }
 function isCodeUsed(c){ return getUsedCodes().includes(c); }
-/* Cloud storage sync */
+/* Cloud sync */
 function cloudSave(){
-  try{
-    if(!tg.CloudStorage) return;
-    tg.CloudStorage.setItem(BALANCE_KEY, String(balance), ()=>{});
-    tg.CloudStorage.setItem(INV_KEY, JSON.stringify(inventory), ()=>{});
-    tg.CloudStorage.setItem(STATS_KEY, JSON.stringify(stats), ()=>{});
-    tg.CloudStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0,80)), ()=>{});
-  }catch(e){}
+try{
+if(!tg.CloudStorage) return;
+tg.CloudStorage.setItem(BALANCE_KEY, String(balance), ()=>{});
+tg.CloudStorage.setItem(INV_KEY, JSON.stringify(inventory), ()=>{});
+tg.CloudStorage.setItem(STATS_KEY, JSON.stringify(stats), ()=>{});
+tg.CloudStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0,80)), ()=>{});
+}catch(e){}
 }
 function cloudLoad(cb){
-  if(!tg.CloudStorage){ cb(); return; }
-  let done = 0; const total = 4;
-  const tryDone = ()=>{ done++; if(done>=total) cb(); };
-  tg.CloudStorage.getItem(BALANCE_KEY, (err, val)=>{
-    if(!err && val !== null && val !== undefined && val !== ''){
-      const v = parseInt(val, 10);
-      if(!isNaN(v) && v >= 0) balance = v;
-    }
-    tryDone();
-  });
-  tg.CloudStorage.getItem(INV_KEY, (err, val)=>{
-    if(!err && val){
-      try{ const arr = JSON.parse(val); if(Array.isArray(arr)){ inventory = arr.filter(x=>x && x.name).map(x=>({name:String(x.name), value:Number(x.value)||0})); } }catch(e){}
-    }
-    tryDone();
-  });
-  tg.CloudStorage.getItem(STATS_KEY, (err, val)=>{
-    if(!err && val){
-      try{ const st = JSON.parse(val); if(st && typeof st === 'object') stats = {wins:0,losses:0,wagered:0,bestDrop:0,games:0, ...st}; }catch(e){}
-    }
-    tryDone();
-  });
-  tg.CloudStorage.getItem(HISTORY_KEY, (err, val)=>{
-    if(!err && val){
-      try{ const h = JSON.parse(val); if(Array.isArray(h)) history = h; }catch(e){}
-    }
-    tryDone();
-  });
+if(!tg.CloudStorage){ cb(); return; }
+let done = 0; const total = 4;
+const tryDone = ()=>{ done++; if(done>=total) cb(); };
+tg.CloudStorage.getItem(BALANCE_KEY, (err, val)=>{
+if(!err && val !== null && val !== undefined && val !== ''){
+const v = parseInt(val, 10);
+if(!isNaN(v) && v >= 0) balance = v;
+}
+tryDone();
+});
+tg.CloudStorage.getItem(INV_KEY, (err, val)=>{
+if(!err && val){
+try{ const arr = JSON.parse(val); if(Array.isArray(arr)){ inventory = arr.filter(x=>x && x.name).map(x=>({name:String(x.name), value:Number(x.value)||0})); } }catch(e){}
+}
+tryDone();
+});
+tg.CloudStorage.getItem(STATS_KEY, (err, val)=>{
+if(!err && val){
+try{ const st = JSON.parse(val); if(st && typeof st === 'object') stats = {wins:0,losses:0,wagered:0,bestDrop:0,games:0, ...st}; }catch(e){}
+}
+tryDone();
+});
+tg.CloudStorage.getItem(HISTORY_KEY, (err, val)=>{
+if(!err && val){
+try{ const h = JSON.parse(val); if(Array.isArray(h)) history = h; }catch(e){}
+}
+tryDone();
+});
 }
 let audioCtx=null;
 function initAudio(){ if(audioCtx)return; try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} }
@@ -1017,7 +1164,6 @@ function sndCaseWin(){ initAudio(); [523,659,784,1047,1319].forEach((f,i)=>playT
 function sndPegHit(){ initAudio(); playTone(600+Math.random()*400,.025,'triangle',.06); }
 function sndPlinkoDrop(){ initAudio(); playTone(320,.12,'sine',.1); playTone(480,.12,'sine',.08,.08); }
 function sndPlinkoBigWin(){ initAudio(); [523,659,784,1047,1319,1568].forEach((f,i)=>playTone(f,.25,'sine',.2,i*.08)); }
-/* global toast */
 function showGlobalToast(type, text){
 const toast = document.createElement('div');
 toast.className = 'global-toast ' + type;
@@ -1144,7 +1290,6 @@ const PLINKO_MULTS = [15, 4, 1.8, 1.1, 0.5, 1.1, 1.8, 4, 15];
 const PLINKO_ROWS = 8;
 const PLINKO_SLOTS = 9;
 
-/* Milestones — равномерно распределены по вертикали, слева */
 const ROCKET_MILESTONES = [
 { value:1.5, label:'1.5x', topPct:78, mega:false },
 { value:2,   label:'2x',   topPct:67, mega:false },
@@ -1747,10 +1892,8 @@ if(m){ m.className='rocket-mult-hero'; m.textContent='1.00x'; m.style.opacity=''
 var toast = $('rocket-cashout-toast'); if(toast) toast.classList.remove('show');
 var planet = $('rocket-planet'); if(planet){ planet.style.transition=''; planet.style.opacity=''; }
 var hero = $('rocket-hero'); if(hero) hero.classList.remove('flying','shaking');
-/* Milestones — вернуть в исходное состояние */
 document.querySelectorAll('.rocket-milestone').forEach(el=>{ el.classList.remove('visible','reached','fade-out'); });
 rocketMilestoneReached = {};
-/* Stars — вернуть */
 document.querySelectorAll('.rocket-stars-layer').forEach(el=>{ el.style.opacity=''; el.style.transition=''; });
 const pf = $('rocket-progress-fill'); if(pf) pf.style.width = '0%';
 rocketCashedOut = false;
@@ -1847,12 +1990,10 @@ const path = 'M 50 ' + trailStart.toFixed(2) + ' L 50 ' + trailEnd.toFixed(2);
 const fillPath = 'M 48.5 ' + trailStart.toFixed(2) + ' L 48.5 ' + trailEnd.toFixed(2) + ' L 51.5 ' + trailEnd.toFixed(2) + ' L 51.5 ' + trailStart.toFixed(2) + ' Z';
 const tp = $('rocket-trail-path'); if(tp){ tp.setAttribute('d', path); tp.style.opacity='1'; }
 const tf = $('rocket-trail-fill'); if(tf){ tf.setAttribute('d', fillPath); tf.style.opacity='1'; }
-/* Stars opacity — восстановить */
 const stars = document.querySelectorAll('.rocket-stars-layer');
 if(stars[0]) stars[0].style.opacity = '0.5';
 if(stars[1]) stars[1].style.opacity = '0.7';
 if(stars[2]) stars[2].style.opacity = '0.9';
-/* Planet */
 const planet = $('rocket-planet'); if(planet) planet.style.opacity = '1';
 const badge = $('rocket-gift-badge');
 if(badge && !badge.classList.contains('hidden')){ badge.style.left = (x + 8) + '%'; badge.style.top = (y - 8) + '%'; }
@@ -1863,12 +2004,10 @@ mult.classList.toggle('hot', m >= 5);
 }
 const pf = $('rocket-progress-fill');
 if(pf) pf.style.width = (progress*100).toFixed(1) + '%';
-/* Milestones — visible после первых 20% прогресса, reached при достижении */
 const milestones = document.querySelectorAll('.rocket-milestone');
 milestones.forEach(el=>{
 const val = parseFloat(el.dataset.value);
 if(isNaN(val)) return;
-/* появляются по мере продвижения */
 if(progress >= 0.1 || m >= val*0.9) el.classList.add('visible');
 if(m >= val && !rocketMilestoneReached[val]){
 rocketMilestoneReached[val] = true;
@@ -1890,7 +2029,6 @@ rocketMilestoneReached = {};
 rocketCashedOut = false; rocketCashoutMult = 0;
 setRocketIcon();
 const hero = $('rocket-hero'); if(hero) hero.classList.add('flying');
-/* Восстановить звёзды */
 const stars = document.querySelectorAll('.rocket-stars-layer');
 if(stars[0]) stars[0].style.opacity = '0.5';
 if(stars[1]) stars[1].style.opacity = '0.7';
@@ -1998,10 +2136,8 @@ const ic = $('rocket-icon'); const mult = $('rocket-mult');
 const planet = $('rocket-planet');
 const xPct = ic && ic.style.left ? ic.style.left : '50%';
 const yPct = ic && ic.style.top ? ic.style.top : ROCKET_START_Y + '%';
-/* Explosion */
 spawnRocketExplosion(xPct, yPct, rocketCurrentMult >= 10);
 if(currentScreen==='rocket') sndExplosion();
-/* Убрать ракету мгновенно */
 if(ic){
 ic.style.transition = 'transform .2s ease-out, opacity .2s ease-out';
 ic.style.transform = 'translate(-50%,-50%) scale(1.7)';
@@ -2012,7 +2148,6 @@ if(badge){ badge.style.transition = 'opacity .25s'; badge.style.opacity = '0'; }
 const tp = $('rocket-trail-path'); if(tp){ tp.style.transition = 'opacity .5s ease'; tp.style.opacity = '0'; }
 const tf = $('rocket-trail-fill'); if(tf){ tf.style.transition = 'opacity .5s ease'; tf.style.opacity = '0'; }
 if(planet){ planet.style.transition = 'opacity .6s ease'; planet.style.opacity = '0'; }
-/* Milestones — все fade-out */
 document.querySelectorAll('.rocket-milestone').forEach(el=>{ el.classList.add('fade-out'); });
 if(mult){
 mult.className = 'rocket-mult-hero crashed';
@@ -2020,7 +2155,6 @@ mult.textContent = rocketCurrentMult.toFixed(2) + 'x';
 setTimeout(()=>{ if(mult) mult.classList.add('fade-out'); }, 3000);
 }
 document.querySelectorAll('.rocket-stars-layer').forEach(el=>{ el.style.transition = 'opacity .8s ease'; el.style.opacity = '0'; });
-/* Если не забрал — проигрыш */
 if(rocketBetActive && !rocketCashedOut && rocketBetGift){
 rocketHistory.unshift(rocketCurrentMult); rocketHistory=rocketHistory.slice(0,20);
 renderRocketHistory();
@@ -2029,7 +2163,6 @@ history.unshift({win:false, rocket:true, from:{name:rocketBetGift.name, value:ro
 history = history.slice(0,80); saveState();
 if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('error');
 if(currentScreen==='rocket'){ flashRed(); shake(); }
-/* Глобальный тост если не на экране ракеты */
 if(currentScreen !== 'rocket'){
 showGlobalToast('error', 'Крах на ' + rocketCurrentMult.toFixed(2) + 'x · -' + fmtBalance(rocketBetGift.value||0) + '⭐');
 }
@@ -2074,7 +2207,6 @@ const toast = $('rocket-cashout-toast');
 if(toast && currentScreen==='rocket'){ toast.textContent = (isAuto?'Авто · ':'') + '+' + fmtBalance(winAmount) + '⭐'; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 2200); }
 if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
 if(currentScreen==='rocket'){ flashWin(); confetti(); if(!isAuto) sndWin(); else sndBuy(); }
-/* Глобальный тост если вне экрана ракеты */
 if(currentScreen !== 'rocket'){
 showGlobalToast('success', (isAuto?'Автовывод на ':'Забрано на ') + rocketCurrentMult.toFixed(2) + 'x · +' + fmtBalance(winAmount) + '⭐');
 }
@@ -2671,7 +2803,6 @@ if(!code){ msg.textContent='Введи промокод'; msg.classList.add('err
 const promo=PROMO_CODES[code];
 if(!promo){ msg.textContent='Неверный промокод'; msg.classList.add('err'); sndError(); return; }
 if(isCodeUsed(code)){ msg.textContent='Уже активирован'; msg.classList.add('err'); sndError(); return; }
-/* MCILYXA требует подписки */
 if(code === 'MCILYXA' && localStorage.getItem('psygg_sub_confirmed') !== 'true'){
 $('promo-modal').classList.remove('active');
 $('sub-modal').classList.add('active');
@@ -2688,7 +2819,6 @@ setTimeout(()=>$('promo-modal').classList.remove('active'),1200);
 });
 $('promo-input').addEventListener('keydown',e=>{ if(e.key==='Enter')$('promo-activate').click(); });
 $('promo-input').addEventListener('input',e=>{ e.target.value=e.target.value.toUpperCase(); });
-/* sub modal */
 $('sub-cancel').addEventListener('click', ()=>{ sndClick(); $('sub-modal').classList.remove('active'); });
 $('sub-go').addEventListener('click', ()=>{
 sndClick();
@@ -2885,36 +3015,82 @@ function startGameLoop(){
 const loop = ()=>{ rocketCycleTick(); requestAnimationFrame(loop); };
 requestAnimationFrame(loop);
 }
-/* POLICY */
-(function(){
+
+/* POLICY — работает на телефоне через touchstart+click */
+function setupPolicy(){
 const policyRow = $('policy-agree-row');
 const policyCheck = $('policy-checkbox');
 const policyBtn = $('policy-accept');
 const policyModal = $('policy-modal');
+if(!policyRow || !policyBtn || !policyModal) return;
+
 if(localStorage.getItem(POLICY_KEY) === 'true'){
 policyModal.classList.remove('active');
 return;
 }
 policyModal.classList.add('active');
-if(policyRow){
-policyRow.addEventListener('click', ()=>{
-const checked = policyRow.classList.toggle('checked');
-policyCheck.checked = checked;
-policyBtn.disabled = !checked;
+
+/* Аккордеоны */
+document.querySelectorAll('.policy-block').forEach(block=>{
+const head = block.querySelector('.policy-block-head');
+if(!head) return;
+let touched = false;
+const toggle = (e)=>{
+e.preventDefault();
+e.stopPropagation();
+if(touched) return;
+touched = true;
+setTimeout(()=>{ touched = false; }, 350);
+sndClick();
+const isOpen = block.classList.contains('open');
+document.querySelectorAll('.policy-block').forEach(b=>b.classList.remove('open'));
+if(!isOpen) block.classList.add('open');
+};
+head.addEventListener('touchstart', toggle, {passive:false});
+head.addEventListener('click', toggle);
 });
-}
+
+/* Тап по соглашению — жёстко через 3 события */
+let agree = false;
+const toggleAgree = (e)=>{
+if(e && e.preventDefault) e.preventDefault();
+if(e && e.stopPropagation) e.stopPropagation();
+agree = !agree;
+policyRow.classList.toggle('checked', agree);
+if(policyCheck) policyCheck.checked = agree;
+policyBtn.disabled = !agree;
+if(vibrationEnabled) tg.HapticFeedback?.impactOccurred('light');
+if(agree) sndBuy();
+};
+let agreeTouched = false;
+policyRow.addEventListener('touchstart', (e)=>{
+agreeTouched = true;
+toggleAgree(e);
+setTimeout(()=>{ agreeTouched = false; }, 400);
+}, {passive:false});
+policyRow.addEventListener('click', (e)=>{
+if(agreeTouched){ e.preventDefault(); e.stopPropagation(); return; }
+toggleAgree(e);
+});
+policyRow.addEventListener('touchend', (e)=>{ e.preventDefault(); }, {passive:false});
+
+/* Кнопка принятия */
 policyBtn.addEventListener('click', ()=>{
+if(!agree) return;
 localStorage.setItem(POLICY_KEY,'true');
 policyModal.classList.remove('active');
 sndBuy();
+confetti();
+if(vibrationEnabled) tg.HapticFeedback?.notificationOccurred('success');
+showGlobalToast('success', 'Добро пожаловать в ПСЫ.gg!');
 });
-})();
+}
+setupPolicy();
 
 async function init(){
 CATALOG = [...FALLBACK].sort((a,b)=>(a.value||0)-(b.value||0));
 loadState();
 if(isNaN(balance)||balance<0)balance=0;
-/* cloud load before deciding first launch */
 await new Promise(res=>{
 let done = false;
 cloudLoad(()=>{ if(!done){ done = true; res(); } });
