@@ -288,12 +288,13 @@ body.perf-low .menu-card-icon .roll-icon svg{animation:none}
 .rocket-milestone.reached{border-color:rgba(255,217,61,.7);color:var(--gold);box-shadow:0 0 16px rgba(255,217,61,.5);transform:translateX(0) scale(1.1)}
 .rocket-milestone.mega.reached{border-color:rgba(255,71,87,.75);color:#ff8590;box-shadow:0 0 20px rgba(255,71,87,.6)}
 .rocket-milestone.fade-out{opacity:0!important;transform:translateX(-20px)!important;transition:opacity .5s,transform .5s}
-.rocket-ship{position:absolute;left:50%;top:90%;width:66px;height:66px;will-change:transform,opacity;transition:transform .25s;z-index:6;filter:drop-shadow(0 0 20px rgba(168,85,247,1))}
+.rocket-ship{position:absolute;left:50%;top:90%;width:66px;height:66px;will-change:transform,opacity;z-index:6;filter:drop-shadow(0 0 20px rgba(168,85,247,1));transform:translate(-50%,-50%)}
 .rocket-ship img{width:100%;height:100%;object-fit:contain;display:block;transform:rotate(-45deg)}
-.rocket-ship.idle{animation:shipIdle 2.2s ease-in-out infinite}
-@keyframes shipIdle{0%,100%{transform:translate3d(-50%,-50%,0) translateY(0)}50%{transform:translate3d(-50%,-50%,0) translateY(-8px)}}
-.rocket-ship.flying{animation:shipShake .12s ease-in-out infinite}
-@keyframes shipShake{0%,100%{transform:translate3d(-50%,-50%,0) translate(-2px,1px)}50%{transform:translate3d(-50%,-50%,0) translate(2px,-1px)}}
+.rocket-ship.idle img{animation:shipIdle 2.2s ease-in-out infinite}
+@keyframes shipIdle{0%,100%{transform:rotate(-45deg) translateY(0)}50%{transform:rotate(-45deg) translateY(-8px)}}
+.rocket-ship.flying{left:0;top:0;transform:translate(0,0)}
+.rocket-ship.flying img{animation:shipShake .12s ease-in-out infinite}
+@keyframes shipShake{0%,100%{transform:rotate(-45deg) translate(-2px,1px)}50%{transform:rotate(-45deg) translate(2px,-1px)}}
 .rocket-ship.flying::before{content:'';position:absolute;top:78%;left:50%;transform:translateX(-50%);width:30px;height:100px;background:radial-gradient(ellipse at top,rgba(255,255,220,1) 0%,rgba(255,220,120,.95) 20%,rgba(255,140,50,.85) 45%,transparent 90%);filter:blur(5px);animation:flameBig .09s infinite alternate;pointer-events:none;z-index:-1}
 @keyframes flameBig{from{transform:translateX(-50%) scaleY(1);opacity:1}to{transform:translateX(-50%) scaleY(1.45) scaleX(.8);opacity:.75}}
 .rocket-explosion-flash{position:absolute;inset:0;z-index:40;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,1) 0%,rgba(255,240,200,.95) 12%,rgba(255,180,80,.7) 30%,rgba(255,80,40,.35) 55%,transparent 80%);animation:explFlash .85s cubic-bezier(.15,.9,.3,1) forwards;opacity:0}
@@ -349,7 +350,7 @@ body.perf-low .menu-card-icon .roll-icon svg{animation:none}
 .rocket-btn.cashout{background:linear-gradient(135deg,#ffd93d,#ff9500)}
 .rocket-btn.cashed{background:linear-gradient(135deg,#3a3a4a,#2a2a36);color:#7ff0b0}
 /* ROLL */
-.roll-board{position:relative;width:100%;flex:1;min-height:400px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(255,217,61,.1),transparent 60%),linear-gradient(180deg,rgba(14,14,22,.98),rgba(6,6,12,1));border:1px solid rgba(255,217,61,.25);border-radius:22px;margin-bottom:10px;padding:12px;box-shadow:inset 0 0 120px rgba(255,217,61,.08);overflow:hidden}
+.roll-board{position:relative;width:100%;flex:1;min-height:400px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(255,217,61,.12),transparent 60%),linear-gradient(180deg,rgba(14,14,22,.98),rgba(6,6,12,1));border:1px solid rgba(120,100,255,.35);border-radius:22px;margin-bottom:10px;padding:12px;box-shadow:inset 0 0 120px rgba(120,100,255,.14),0 16px 60px rgba(0,0,0,.55);overflow:hidden}
 .roll-wheel-wrap{position:relative;width:min(92%,380px);aspect-ratio:1/1;max-height:100%;display:flex;align-items:center;justify-content:center}
 .roll-wheel-wrap::before{content:'';position:absolute;inset:-10px;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,217,61,0),rgba(255,217,61,.6) 90deg,rgba(255,71,87,.5) 180deg,rgba(168,85,247,.5) 270deg,rgba(255,217,61,0) 360deg);filter:blur(14px);opacity:0;transition:opacity .5s;z-index:0}
 .roll-wheel-wrap.spinning::before{opacity:1;animation:rollRingSpin 3s linear infinite}
@@ -592,7 +593,7 @@ body{padding:16px}
 <div class="news-feed-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9"/><path d="M18 14H10M18 18H10M18 10H10"/></svg></div>
 <div class="news-feed-info">
 <div class="news-feed-title">Новости проекта <span class="news-feed-badge-inline">NEW</span></div>
-<div class="news-feed-sub">v2.1 · RollUp · Новый режим</div>
+<div class="news-feed-sub">v2.0.2 · RollUp · Патч стабильности</div>
 </div>
 <div class="news-feed-arrow">→</div>
 </div>
@@ -763,16 +764,14 @@ body{padding:16px}
 </a>
 <div class="news-version-card patch">
 <div class="news-version-head">
-<div class="news-version-tag patch">v2.1</div>
-<div class="news-version-head-right"><span class="news-version-type">НОВОВВЕДЕНИЯ</span></div>
+<div class="news-version-tag patch">v2.0.2</div>
+<div class="news-version-head-right"><span class="news-version-type">ОБНОВЛЕНИЕ</span></div>
 </div>
-<div class="news-version-title">Новый режим Roll</div>
+<div class="news-version-title">Патч 2.0.2 — стабильность и стиль</div>
 <div class="news-feature-list">
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Режим Roll — колесо фортуны</div><div class="news-feature-desc">Ставь свои звёзды и крути колесо — от <b>0x</b> до <b>5x</b> на одном обороте</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Ребрендинг в RollUp</div><div class="news-feature-desc">Проект переименован — новый бот @RollUp_BOT, канал @RollsUp</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Оптимизация рокетки</div><div class="news-feature-desc">GPU-рендер через transform3d — теперь без лагов на телефоне</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Новый профиль</div><div class="news-feature-desc">Большая аватарка, @username под ником и премиум-оформление</div></div></div>
-<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Улучшенная политика</div><div class="news-feature-desc">Обновлённые условия со свайпом и аккордеонами</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Ракетка ушла на переработку</div><div class="news-feature-desc">Режим временно закрыт — вернётся в обновлённом виде</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Единый стиль режимов</div><div class="news-feature-desc">Оформление всех экранов приведено к общему виду</div></div></div>
+<div class="news-feature new"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Оптимизация и мелкие правки</div><div class="news-feature-desc">Ускорили работу интерфейса и починили баги анимаций</div></div></div>
 </div>
 </div>
 <div class="news-version-card current">
@@ -790,7 +789,7 @@ body{padding:16px}
 </div>
 <div class="news-version-card future">
 <div class="news-version-head">
-<div class="news-version-tag future">v2.2</div>
+<div class="news-version-tag future">v2.1</div>
 <div class="news-version-head-right"><span class="news-version-type plans">ПЛАНЫ</span></div>
 </div>
 <div class="news-version-title">Что будет дальше</div>
@@ -975,7 +974,7 @@ const ROLL_COLORS=[
 {from:'#3a3a4a',to:'#1a1a26',text:'#8a8a95'},   // 0
 {from:'#c0392b',to:'#7a1f15',text:'#fff'},      // 0.5
 {from:'#ff4757',to:'#c0392b',text:'#fff'},      // 3
-{from:'#ffd93d',to:'#ff9500',text:'#000'}       // 5 (золото)
+{from:'#ffd93d',to:'#ff9500',text:'#000'}       // 3 (золото)
 ];
 
 let CATALOG=[];
@@ -1034,9 +1033,13 @@ function loadState(){try{const inv=JSON.parse(localStorage.getItem(INV_KEY)||'nu
 function hexToRgba(hex,a){const h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
 function updateBalanceUI(){const b=$('balance');if(b){b.textContent=fmtBalance(balance);b.title=String(balance);}const sb=$('shop-balance');if(sb)sb.textContent=fmtBalance(balance);const chip=$('plus-btn');if(chip){chip.classList.add('pulse');setTimeout(()=>chip.classList.remove('pulse'),500);}}
 function goToMenu(){if(currentScreen==='menu')return;currentScreen='menu';document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-menu').classList.add('active');updateLogo();}
-function goToScreen(name){currentScreen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+name).classList.add('active');updateLogo();if(name==='rocket'){updateRocketButtonLabel();if(rocketPhase!=='flying'){resetRocketVisual();}}if(name==='shop')renderShop();if(name==='cases')renderCases();if(name==='roll'){updateRollUI();resetRollVisual();}syncRocketVisual();}
+function goToScreen(name){
+if(name==='roll'&&!rollAccess()){sndError();return;}
+if(name==='rocket'&&!rocketAccess()){/*rocket доступна визуально всем, но с лока��ом*/}
+currentScreen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+name).classList.add('active');updateLogo();if(name==='rocket'){updateRocketButtonLabel();if(rocketPhase!=='flying'){resetRocketVisual();}}if(name==='shop')renderShop();if(name==='cases')renderCases();if(name==='roll'){updateRollUI();resetRollVisual();}syncRocketVisual();}
 function updateLogo(){const l=$('logo');if(l)l.classList.toggle('disabled',currentScreen==='menu');}
 function rocketAccess(){return isAdmin();}
+function rollAccess(){return isAdmin();}
 
 function buildMenuCards(){
 const grid=$('menu-grid');if(!grid)return;
@@ -1056,12 +1059,12 @@ grid.innerHTML=`
 <div class="menu-card-title">${rocketTitle}</div>
 <div class="menu-card-desc ${admin?'':'locked'}">${rocketDesc}</div>
 </button>
-<button class="menu-card" data-mode="roll" type="button" style="--card-glow: rgba(255,217,61,0.6);">
+${isAdmin()?`<button class="menu-card" data-mode="roll" type="button" style="--card-glow: rgba(255,217,61,0.6);">
 <div class="menu-card-badge">NEW</div>
 <div class="menu-card-icon"><div class="roll-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#ffd93d" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6.5" stroke-dasharray="3 2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/><circle cx="12" cy="12" r="2.5" fill="#ffd93d"/></svg></div></div>
 <div class="menu-card-title">Roll</div>
 <div class="menu-card-desc">Колесо фортуны</div>
-</button>
+</button>`:''}
 <button class="menu-card" data-mode="cases" type="button" style="--card-glow: rgba(255,71,87,0.5);">
 <div class="menu-card-icon"><div class="gicon" data-gift="${MENU_GIFT_CASES}"></div></div>
 <div class="menu-card-title">Кейсы</div>
@@ -1342,10 +1345,10 @@ const tp=_r$('rocket-trail-path');if(tp){tp.setAttribute('d','');tp.style.opacit
 const tf=_r$('rocket-trail-fill');if(tf){tf.setAttribute('d','');tf.style.opacity='';tf.style.transition='';}
 const ic=_r$('rocket-icon');
 if(ic){
-ic.style.transition='transform .3s ease, opacity .4s';
+ic.style.transition='';
 ic.style.opacity='1';
 ic.style.filter='';
-ic.style.transform='translate3d(-50%,-50%,0)';
+ic.style.transform='';
 ic.innerHTML=iconHTML({name:'Stellar Rocket'},128);
 ic.className='rocket-ship idle';
 }
@@ -1735,6 +1738,7 @@ const cv=$('roll-center-value');if(cv)cv.textContent='—';
 }
 function spinRoll(){
 if(rollSpinning||testEnded)return;
+if(!rollAccess()){sndError();return;}
 const betVal=parseInt($('roll-bet')?.value,10)||0;
 if(betVal<=0){sndError();showGlobalToast('error','Введи сумму ставки');return;}
 if(betVal>balance){sndError();showGlobalToast('error','Недостаточно звёзд');return;}
@@ -1746,10 +1750,14 @@ const N=12;
 const segAngle=360/N;
 const idx=Math.floor(Math.random()*N);
 const mult=ROLL_MULTS[idx];
-/* wheel rotation: указатель сверху. Чтобы сегмент idx был под указателем (сверху), нужно повернуть колесо так чтобы центр сегмента idx был на 270deg от начальной (в svg 0deg сверху, но у нас -90 сдвиг, сделаем проще) */
-/* Сегмент i занимает углы от i*segAngle до (i+1)*segAngle в svg, где 0 - сверху (после -90*2 сдвига в path). Центр сегмента i - (i+0.5)*segAngle. */
+/* указатель сверху. Сегмент i в SVG начинается сверху (после -180° сдвига в path). 
+   Центр сегмента i в исходной системе: (i+0.5)*segAngle от верхней точки.
+   Чтобы сегмент idx оказался ровно под указателем (сверху), нужно повернуть колесо на -centerAngle (т.е. 360-centerAngle).
+   Но т.к. в path мы уже применили -180°, нужно скомпенсировать: 450 - centerAngle. */
 const centerAngle=(idx+0.5)*segAngle;
-const targetRotation=360*6 + (360-centerAngle) + (Math.random()*0.6-0.3)*segAngle;
+const jitter=(Math.random()*0.5-0.25)*segAngle;
+const baseRotation=450 - centerAngle;
+const targetRotation=360*6 + ((baseRotation+jitter)%360+360)%360;
 rollCurrentRotation+=targetRotation;
 const w=$('roll-wheel');
 if(w){w.classList.add('spinning');w.style.transform='rotate('+rollCurrentRotation+'deg)';}
