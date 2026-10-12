@@ -374,65 +374,74 @@ body.perf-low .menu-card-icon svg.micon{animation:none}
 .roll-result-text{font-size:26px;font-weight:900;color:#fff;text-align:center;line-height:1.1;max-width:240px}
 .roll-result-sub{font-size:15px;font-weight:900;color:#c0b8ff}
 .roll-result-pop.lose .roll-result-text{color:#ff8590}
-/* ==================== ЗОЛОТАЯ ШАХТА v3 ==================== */
-.mine-scene{position:relative;flex:1;min-height:500px;border-radius:22px;overflow:hidden;border:1px solid rgba(80,160,60,.45);margin-bottom:10px;box-shadow:0 20px 60px rgba(0,0,0,.75);background:linear-gradient(180deg,#1a4a8a 0%,#3a7ab0 30%,#a8c8e0 60%,#c8a868 100%)}
-.mine-sky{position:absolute;top:0;left:0;right:0;height:52%;z-index:1;background:linear-gradient(180deg,#2a6ab8 0%,#5a9ad0 40%,#a8c8e0 72%,#e8d0a0 100%)}
-.mine-sun{position:absolute;top:7%;right:12%;width:78px;height:78px;border-radius:50%;z-index:2;background:radial-gradient(circle,#fffff0 0%,#ffea70 25%,#ffb030 60%,#ff7010 100%);box-shadow:0 0 60px rgba(255,220,90,.95),0 0 120px rgba(255,170,60,.6),0 0 180px rgba(255,120,30,.3);animation:sunPulse 5s ease-in-out infinite}
-.mine-sun::before,.mine-sun::after{content:'';position:absolute;top:50%;left:50%;border-radius:50%;border:2px solid rgba(255,240,150,.55);transform:translate(-50%,-50%);animation:sunRay 6s ease-out infinite;pointer-events:none}
+/* ==================== ЗОЛОТАЯ ШАХТА v4 — CRACKS ON GRASS ==================== */
+.mine-scene{position:relative;flex:1;min-height:520px;border-radius:22px;overflow:hidden;border:1px solid rgba(90,180,80,.5);margin-bottom:10px;box-shadow:0 20px 60px rgba(0,0,0,.75);background:#3a8828}
+.mine-sky{position:absolute;top:0;left:0;right:0;height:48%;z-index:1;background:linear-gradient(180deg,#2a6ab8 0%,#5a9ad0 40%,#a8c8e0 72%,#e8d0a0 100%)}
+.mine-sun{position:absolute;top:6%;right:11%;width:76px;height:76px;border-radius:50%;z-index:2;background:radial-gradient(circle,#fffff0 0%,#ffea70 25%,#ffb030 60%,#ff7010 100%);box-shadow:0 0 60px rgba(255,220,90,.95),0 0 120px rgba(255,170,60,.6);animation:sunPulse 5s ease-in-out infinite}
+.mine-sun::before,.mine-sun::after{content:'';position:absolute;top:50%;left:50%;border-radius:50%;border:2px solid rgba(255,240,150,.5);transform:translate(-50%,-50%);animation:sunRay 6s ease-out infinite;pointer-events:none}
 .mine-sun::before{width:100px;height:100px}
 .mine-sun::after{width:140px;height:140px;animation-delay:1.6s}
 @keyframes sunRay{0%{opacity:.8;transform:translate(-50%,-50%) scale(.5)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
-@keyframes sunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.06);filter:brightness(1.15)}}
-.mine-cloud{position:absolute;height:26px;background:rgba(255,255,255,.92);border-radius:30px;z-index:2;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.18))}
+@keyframes sunPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.mine-cloud{position:absolute;height:24px;background:rgba(255,255,255,.95);border-radius:30px;z-index:2;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(0,0,0,.15))}
 .mine-cloud::before,.mine-cloud::after{content:'';position:absolute;background:inherit;border-radius:50%}
 .mine-cloud::before{width:60%;height:200%;top:-70%;left:8%}
 .mine-cloud::after{width:50%;height:170%;top:-55%;left:52%}
-.mine-cloud.c1{top:12%;left:-20%;width:120px;animation:cloudDrift 55s linear infinite}
-.mine-cloud.c2{top:20%;left:-30%;width:90px;animation:cloudDrift 70s linear infinite 12s}
-.mine-cloud.c3{top:8%;left:-15%;width:80px;animation:cloudDrift 60s linear infinite 26s}
+.mine-cloud.c1{top:10%;left:-20%;width:110px;animation:cloudDrift 55s linear infinite}
+.mine-cloud.c2{top:20%;left:-30%;width:85px;animation:cloudDrift 70s linear infinite 12s}
+.mine-cloud.c3{top:5%;left:-15%;width:75px;animation:cloudDrift 60s linear infinite 26s}
 @keyframes cloudDrift{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 200px))}}
-.mine-mountains{position:absolute;top:40%;left:0;right:0;height:18%;z-index:2;pointer-events:none}
+.mine-mountains{position:absolute;top:36%;left:0;right:0;height:16%;z-index:2;pointer-events:none}
 .mine-mountains svg{width:100%;height:100%;display:block}
-.mine-ground{position:absolute;bottom:0;left:0;right:0;height:52%;z-index:1;background:linear-gradient(180deg,#3a8828 0%,#4aa838 2.5%,#2a6a1a 3.5%,#5a3818 5%,#4a2c14 30%,#2a1808 60%,#0a0502 100%)}
-.mine-ground::after{content:'';position:absolute;top:12%;left:0;right:0;bottom:0;pointer-events:none;background-image:radial-gradient(2px 2px at 10% 20%,rgba(100,70,35,.55),transparent),radial-gradient(1px 1px at 25% 55%,rgba(0,0,0,.4),transparent),radial-gradient(2px 2px at 45% 15%,rgba(100,70,35,.5),transparent),radial-gradient(3px 3px at 65% 45%,rgba(0,0,0,.35),transparent),radial-gradient(2px 2px at 85% 30%,rgba(120,80,40,.5),transparent),radial-gradient(1px 1px at 15% 75%,rgba(0,0,0,.4),transparent),radial-gradient(2px 2px at 55% 80%,rgba(100,70,35,.45),transparent),radial-gradient(1px 1px at 92% 65%,rgba(0,0,0,.35),transparent);background-size:200px 200px}
-.mine-grass-line{position:absolute;bottom:calc(52% - 10px);left:0;right:0;height:22px;z-index:2;pointer-events:none}
-.mine-grass-line svg{width:100%;height:100%;display:block}
-.mine-holes{position:absolute;bottom:5%;left:5%;right:5%;height:46%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);gap:12px;z-index:3}
-.mine-hole{position:relative;cursor:pointer;aspect-ratio:1/1;border-radius:50%;background:radial-gradient(ellipse 100% 90% at 50% 55%,#000 0%,#050201 35%,#0e0703 55%,#1e1006 75%,#3a2410 95%);box-shadow:inset 0 10px 18px rgba(0,0,0,1),inset 0 -4px 10px rgba(120,70,30,.5),inset 0 4px 8px rgba(0,0,0,1),0 0 0 3px #5a3818,0 0 0 5px #7a5228,0 0 0 7px #4a2c14,0 0 0 9px rgba(74,44,20,.5),0 6px 14px rgba(0,0,0,.85);transition:transform .15s,box-shadow .3s,filter .3s;overflow:hidden}
-.mine-hole::before{content:'';position:absolute;top:-3%;left:50%;transform:translateX(-50%);width:88%;height:22%;border-radius:50%;background:radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.85),rgba(0,0,0,.5) 50%,transparent 80%);pointer-events:none;z-index:2}
-.mine-hole::after{content:'';position:absolute;bottom:-4%;left:50%;transform:translateX(-50%);width:92%;height:20%;border-radius:50%;background:radial-gradient(ellipse at 50% 0%,rgba(90,56,24,.7),transparent 70%);pointer-events:none;z-index:2}
-.mine-hole:active:not(.done):not(.digging){transform:scale(.9)}
+.mine-grass{position:absolute;top:48%;left:0;right:0;bottom:0;z-index:1;background:linear-gradient(180deg,#a8c880 0%,#6aaa48 6%,#4a9838 20%,#3a8828 50%,#2a6a1a 90%,#1a4a10 100%)}
+.mine-grass::before{content:'';position:absolute;inset:0;background-image:
+  radial-gradient(1px 1px at 20px 30px,rgba(255,255,255,.15),transparent),
+  radial-gradient(2px 2px at 60px 90px,rgba(255,255,255,.12),transparent),
+  radial-gradient(1px 1px at 120px 40px,rgba(180,230,140,.5),transparent),
+  radial-gradient(1px 1px at 180px 120px,rgba(180,230,140,.4),transparent),
+  radial-gradient(2px 2px at 240px 60px,rgba(255,255,255,.1),transparent),
+  radial-gradient(1px 1px at 90px 180px,rgba(140,220,100,.4),transparent),
+  radial-gradient(1px 1px at 200px 200px,rgba(255,255,255,.12),transparent);
+  background-size:280px 280px;pointer-events:none;opacity:.85}
+.mine-grass::after{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 60%);pointer-events:none;z-index:0}
+/* Grass blades at horizon */
+.mine-horizon-grass{position:absolute;top:47.5%;left:0;right:0;height:26px;z-index:2;pointer-events:none}
+.mine-horizon-grass svg{width:100%;height:100%;display:block}
+.mine-holes{position:absolute;top:54%;left:4%;right:4%;bottom:6%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);gap:8px;z-index:3;perspective:600px}
+.mine-hole{position:relative;cursor:pointer;aspect-ratio:1/1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.55));transition:transform .15s;transform-style:preserve-3d}
+.mine-hole svg.hole-crack{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
+.mine-hole .hole-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;height:60%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:4}
+.mine-hole:active:not(.done):not(.digging){transform:scale(.92) rotateX(6deg)}
 .mine-hole.digging{animation:holeShake .12s ease-in-out infinite}
 @keyframes holeShake{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(-2px,1px) rotate(-2deg)}75%{transform:translate(2px,-1px) rotate(2deg)}}
 .mine-hole.done{cursor:default}
-.mine-hole.done .gem-slot,.mine-hole.done .dyn-slot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;pointer-events:none}
-.mine-hole.done.diamond{box-shadow:inset 0 10px 18px rgba(0,0,0,1),inset 0 -4px 10px rgba(120,70,30,.5),0 0 0 3px #5a3818,0 0 0 5px #2a9a9a,0 0 0 7px #1a5a5a,0 0 20px rgba(94,224,224,.7),0 6px 14px rgba(0,0,0,.85);animation:diamondPop .55s cubic-bezier(.34,1.56,.64,1)}
-@keyframes diamondPop{0%{transform:scale(.7)}55%{transform:scale(1.15)}100%{transform:scale(1)}}
-.mine-hole.done.diamond .gem-slot{width:70%;height:70%;filter:drop-shadow(0 0 14px rgba(94,224,224,1));animation:gemBounce 1.8s ease-in-out infinite}
-@keyframes gemBounce{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}}
-.mine-hole.done.diamond .gem-slot svg{width:100%;height:100%;display:block}
-.mine-hole.done.dynamite{box-shadow:inset 0 10px 18px rgba(0,0,0,1),inset 0 -4px 10px rgba(120,70,30,.5),0 0 0 3px #5a3818,0 0 0 5px #c0392b,0 0 0 7px #7a1a20,0 0 22px rgba(255,71,87,.85),0 6px 14px rgba(0,0,0,.85);animation:dynPop .55s cubic-bezier(.34,1.56,.64,1)}
-@keyframes dynPop{0%{transform:scale(.7)}55%{transform:scale(1.15)}100%{transform:scale(1)}}
-.mine-hole.done.dynamite .dyn-slot{width:58%;height:78%;filter:drop-shadow(0 0 12px rgba(255,71,87,1))}
-.mine-hole.done.dynamite .dyn-slot svg{width:100%;height:100%;display:block}
-.mine-hand{position:absolute;z-index:15;width:60px;height:70px;pointer-events:none;transform:translate(-50%,-100%);transition:transform .28s cubic-bezier(.4,.2,.6,1),opacity .25s ease-out;filter:drop-shadow(0 4px 10px rgba(0,0,0,.85))}
+.mine-hole.done.diamond .hole-inner{width:68%;height:68%;filter:drop-shadow(0 0 16px rgba(94,224,224,1))}
+.mine-hole.done.diamond .hole-inner svg{width:100%;height:100%;display:block;animation:gemBounce 1.8s ease-in-out infinite}
+@keyframes gemBounce{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.mine-hole.done.dynamite .hole-inner{width:56%;height:78%;filter:drop-shadow(0 0 14px rgba(255,71,87,1))}
+.mine-hole.done.dynamite .hole-inner svg{width:100%;height:100%;display:block}
+/* Hand */
+.mine-hand{position:absolute;z-index:15;width:70px;height:82px;pointer-events:none;transform:translate(-50%,-100%);transition:transform .32s cubic-bezier(.34,1.3,.5,1),opacity .35s ease;filter:drop-shadow(0 6px 12px rgba(0,0,0,.75))}
 .mine-hand svg{width:100%;height:100%;display:block}
-.mine-hand.going-in{transform:translate(-50%,-30%) scale(.85)}
-.mine-hand.digging{animation:handDigAnim .28s ease-in-out infinite}
-@keyframes handDigAnim{0%,100%{transform:translate(-50%,-30%) scale(.85) rotate(-4deg)}50%{transform:translate(-50%,-30%) scale(.85) rotate(4deg)}}
-.mine-hand.pulling-out{transform:translate(-50%,-160%) scale(1.15) rotate(-8deg)}
-.mine-flying-gem{position:absolute;z-index:20;width:40px;height:40px;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 0 16px rgba(94,224,224,1))}
+.mine-hand.going-in{transform:translate(-50%,-28%) scale(.82);opacity:1}
+.mine-hand.digging{animation:handDigAnim .26s ease-in-out infinite}
+@keyframes handDigAnim{0%,100%{transform:translate(-50%,-28%) scale(.82) rotate(-4deg)}50%{transform:translate(-50%,-28%) scale(.82) rotate(4deg)}}
+.mine-hand.pulling-out{transform:translate(-50%,-170%) scale(1.18) rotate(-10deg);opacity:0;transition:transform .6s cubic-bezier(.34,1.4,.5,1),opacity .45s ease .35s}
+/* Flying gem */
+.mine-flying-gem{position:absolute;z-index:20;width:44px;height:44px;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 0 18px rgba(94,224,224,1))}
 .mine-flying-gem svg{width:100%;height:100%;display:block}
-.mine-bag{position:absolute;bottom:8px;right:14px;width:80px;height:100px;z-index:8;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.9))}
+/* Bag */
+.mine-bag{position:absolute;bottom:8px;right:14px;width:88px;height:108px;z-index:8;pointer-events:none;filter:drop-shadow(0 12px 20px rgba(0,0,0,.9))}
 .mine-bag svg{width:100%;height:100%;display:block}
-.mine-bag.bump{animation:bagBump .4s cubic-bezier(.34,1.56,.64,1)}
+.mine-bag.bump{animation:bagBump .45s cubic-bezier(.34,1.56,.64,1)}
 @keyframes bagBump{0%{transform:scale(1)}40%{transform:scale(1.22) rotate(-5deg)}100%{transform:scale(1) rotate(0)}}
-.mine-bag-count{position:absolute;bottom:112px;right:24px;padding:3px 9px;border-radius:11px;background:linear-gradient(135deg,#5ee0e0,#2a9a9a);color:#000;font-size:12px;font-weight:900;z-index:9;pointer-events:none;border:1.5px solid rgba(255,255,255,.55);min-width:26px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.7)}
-.mine-dynamite{position:absolute;z-index:19;width:36px;height:48px;pointer-events:none;transform:translate(-50%,-50%)}
+.mine-bag-count{position:absolute;bottom:120px;right:30px;padding:3px 10px;border-radius:12px;background:linear-gradient(135deg,#5ee0e0,#2a9a9a);color:#000;font-size:12px;font-weight:900;z-index:9;pointer-events:none;border:1.5px solid rgba(255,255,255,.6);min-width:28px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.7)}
+/* Dynamite */
+.mine-dynamite{position:absolute;z-index:19;width:40px;height:54px;pointer-events:none;transform:translate(-50%,-50%)}
 .mine-dynamite svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 12px rgba(255,71,87,.9))}
-.mine-fuse{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd93d 40%,#ff9500 80%);box-shadow:0 0 16px #ffd93d,0 0 32px #ff9500,0 0 48px #ff4757;z-index:21;pointer-events:none;transform:translate(-50%,-50%);animation:fuseSpark .1s infinite alternate}
+.mine-fuse{position:absolute;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd93d 40%,#ff9500 80%);box-shadow:0 0 16px #ffd93d,0 0 32px #ff9500,0 0 48px #ff4757;z-index:21;pointer-events:none;transform:translate(-50%,-50%);animation:fuseSpark .1s infinite alternate}
 @keyframes fuseSpark{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(-50%,-50%) scale(1.7);opacity:.55}}
-.mine-timer{position:absolute;z-index:22;padding:3px 10px;border-radius:11px;background:linear-gradient(135deg,#ff4757,#c0392b);color:#fff;font-size:12px;font-weight:900;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(255,71,87,.95);border:1.5px solid rgba(255,255,255,.5);min-width:26px;text-align:center}
+/* Explosion */
 .mine-explosion-flash{position:absolute;inset:0;z-index:40;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,1) 0%,rgba(255,240,200,.95) 12%,rgba(255,180,80,.7) 30%,rgba(255,80,40,.35) 55%,transparent 80%);animation:mineExplFlash 1s cubic-bezier(.15,.9,.3,1) forwards;opacity:0}
 @keyframes mineExplFlash{0%{opacity:0;transform:scale(.3)}8%{opacity:1;transform:scale(1.05)}30%{opacity:.95;transform:scale(1.2)}100%{opacity:0;transform:scale(2.5)}}
 .mine-shock-ring{position:absolute;width:40px;height:40px;border-radius:50%;pointer-events:none;z-index:38;transform:translate(-50%,-50%);border:5px solid rgba(255,240,150,1);animation:mineRingExpand 1.3s cubic-bezier(.15,.9,.3,1) forwards;opacity:0}
@@ -443,7 +452,7 @@ body.perf-low .menu-card-icon svg.micon{animation:none}
 @keyframes mineDebrisFly{0%{opacity:0;transform:translate(-50%,-50%) scale(1.2)}12%{opacity:1;transform:translate(-50%,-50%) scale(1)}70%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15) rotate(720deg)}}
 .mine-spark{position:absolute;pointer-events:none;z-index:42;transform:translate(-50%,-50%);animation:mineSparkFly 2s ease-out forwards;opacity:0}
 @keyframes mineSparkFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}15%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.3) rotate(540deg)}}
-.mine-overlay-dark{position:absolute;inset:0;background:#000;opacity:0;z-index:60;pointer-events:none;transition:opacity 1s ease}
+.mine-overlay-dark{position:absolute;inset:0;background:#000;opacity:0;z-index:60;pointer-events:none;transition:opacity 1.1s ease}
 .mine-overlay-dark.active{opacity:1}
 .mine-scene.shake{animation:mineSceneShake .65s cubic-bezier(.36,.07,.19,.97) both}
 @keyframes mineSceneShake{0%,100%{transform:translate(0,0)}10%{transform:translate(-10px,6px) rotate(-.8deg)}20%{transform:translate(10px,-6px) rotate(.8deg)}30%{transform:translate(-8px,-5px)}40%{transform:translate(8px,5px)}50%{transform:translate(-6px,4px)}60%{transform:translate(6px,-4px)}70%{transform:translate(-3px,2px)}80%{transform:translate(3px,-2px)}}
@@ -695,28 +704,37 @@ body{padding:16px}
 <path d="M0 100 L0 78 L50 62 L100 76 L150 58 L200 74 L250 60 L300 76 L350 62 L400 76 L400 100 Z" fill="#1a3a54"/>
 </svg>
 </div>
-<div class="mine-ground"></div>
-<div class="mine-grass-line">
-<svg viewBox="0 0 400 22" preserveAspectRatio="none">
-<path d="M0 22 L0 12 Q5 7 10 12 T20 12 T30 12 T40 12 T50 12 T60 12 T70 12 T80 12 T90 12 T100 12 T110 12 T120 12 T130 12 T140 12 T150 12 T160 12 T170 12 T180 12 T190 12 T200 12 T210 12 T220 12 T230 12 T240 12 T250 12 T260 12 T270 12 T280 12 T290 12 T300 12 T310 12 T320 12 T330 12 T340 12 T350 12 T360 12 T370 12 T380 12 T390 12 T400 12 L400 22 Z" fill="#4aa838"/>
-<path d="M0 22 L0 15 L3 10 L6 15 L9 8 L12 14 L15 11 L18 6 L21 13 L24 10 L27 15 L30 7 L33 14 L36 10 L39 15 L42 9 L45 14 L48 11 L51 6 L54 13 L57 10 L60 15 L63 8 L66 14 L69 10 L72 15 L75 7 L78 13 L81 10 L84 15 L87 9 L90 14 L93 11 L96 6 L99 13 L102 10 L105 15 L108 8 L111 14 L114 10 L117 15 L120 7 L123 13 L126 10 L129 15 L132 9 L135 14 L138 11 L141 6 L144 13 L147 10 L150 15 L153 8 L156 14 L159 10 L162 15 L165 7 L168 13 L171 10 L174 15 L177 9 L180 14 L183 11 L186 6 L189 13 L192 10 L195 15 L198 8 L201 14 L204 10 L207 15 L210 7 L213 13 L216 10 L219 15 L222 9 L225 14 L228 11 L231 6 L234 13 L237 10 L240 15 L243 8 L246 14 L249 10 L252 15 L255 7 L258 13 L261 10 L264 15 L267 9 L270 14 L273 11 L276 6 L279 13 L282 10 L285 15 L288 8 L291 14 L294 10 L297 15 L300 7 L303 13 L306 10 L309 15 L312 9 L315 14 L318 11 L321 6 L324 13 L327 10 L330 15 L333 8 L336 14 L339 10 L342 15 L345 7 L348 13 L351 10 L354 15 L357 9 L360 14 L363 11 L366 6 L369 13 L372 10 L375 15 L378 8 L381 14 L384 10 L387 15 L390 7 L393 13 L396 10 L399 15 L400 15 L400 22 Z" fill="#3a8828"/>
+<div class="mine-grass"></div>
+<div class="mine-horizon-grass">
+<svg viewBox="0 0 400 26" preserveAspectRatio="none">
+<path d="M0 26 L0 16 Q2 8 4 16 L6 10 L8 16 Q10 6 12 16 L14 11 L16 16 Q18 5 20 16 L22 10 L24 16 Q26 7 28 16 L30 12 L32 16 Q34 4 36 16 L38 9 L40 16 Q42 7 44 16 L46 11 L48 16 Q50 5 52 16 L54 10 L56 16 Q58 8 60 16 L62 13 L64 16 Q66 6 68 16 L70 11 L72 16 Q74 4 76 16 L78 10 L80 16 Q82 7 84 16 L86 12 L88 16 Q90 5 92 16 L94 10 L96 16 Q98 8 100 16 L102 13 L104 16 Q106 6 108 16 L110 11 L112 16 Q114 4 116 16 L118 10 L120 16 Q122 7 124 16 L126 12 L128 16 Q130 5 132 16 L134 10 L136 16 Q138 8 140 16 L142 13 L144 16 Q146 6 148 16 L150 11 L152 16 Q154 4 156 16 L158 10 L160 16 Q162 7 164 16 L166 12 L168 16 Q170 5 172 16 L174 10 L176 16 Q178 8 180 16 L182 13 L184 16 Q186 6 188 16 L190 11 L192 16 Q194 4 196 16 L198 10 L200 16 Q202 7 204 16 L206 12 L208 16 Q210 5 212 16 L214 10 L216 16 Q218 8 220 16 L222 13 L224 16 Q226 6 228 16 L230 11 L232 16 Q234 4 236 16 L238 10 L240 16 Q242 7 244 16 L246 12 L248 16 Q250 5 252 16 L254 10 L256 16 Q258 8 260 16 L262 13 L264 16 Q266 6 268 16 L270 11 L272 16 Q274 4 276 16 L278 10 L280 16 Q282 7 284 16 L286 12 L288 16 Q290 5 292 16 L294 10 L296 16 Q298 8 300 16 L302 13 L304 16 Q306 6 308 16 L310 11 L312 16 Q314 4 316 16 L318 10 L320 16 Q322 7 324 16 L326 12 L328 16 Q330 5 332 16 L334 10 L336 16 Q338 8 340 16 L342 13 L344 16 Q346 6 348 16 L350 11 L352 16 Q354 4 356 16 L358 10 L360 16 Q362 7 364 16 L366 12 L368 16 Q370 5 372 16 L374 10 L376 16 Q378 8 380 16 L382 13 L384 16 Q386 6 388 16 L390 11 L392 16 Q394 4 396 16 L398 10 L400 16 L400 26 Z" fill="#4aa838"/>
+<path d="M0 26 L0 20 Q3 14 6 20 L8 15 L10 20 Q13 10 16 20 L18 15 L20 20 Q23 12 26 20 L28 16 L30 20 Q33 8 36 20 L38 14 L40 20 Q43 13 46 20 L48 16 L50 20 Q53 9 56 20 L58 14 L60 20 Q63 12 66 20 L68 17 L70 20 Q73 10 76 20 L78 14 L80 20 Q83 13 86 20 L88 17 L90 20 Q93 9 96 20 L98 14 L100 20 Q103 12 106 20 L108 17 L110 20 Q113 10 116 20 L118 14 L120 20 Q123 13 126 20 L128 17 L130 20 Q133 9 136 20 L138 14 L140 20 Q143 12 146 20 L148 17 L150 20 Q153 10 156 20 L158 14 L160 20 Q163 13 166 20 L168 17 L170 20 Q173 9 176 20 L178 14 L180 20 Q183 12 186 20 L188 17 L190 20 Q193 10 196 20 L198 14 L200 20 Q203 13 206 20 L208 17 L210 20 Q213 9 216 20 L218 14 L220 20 Q223 12 226 20 L228 17 L230 20 Q233 10 236 20 L238 14 L240 20 Q243 13 246 20 L248 17 L250 20 Q253 9 256 20 L258 14 L260 20 Q263 12 266 20 L268 17 L270 20 Q273 10 276 20 L278 14 L280 20 Q283 13 286 20 L288 17 L290 20 Q293 9 296 20 L298 14 L300 20 Q303 12 306 20 L308 17 L310 20 Q313 10 316 20 L318 14 L320 20 Q323 13 326 20 L328 17 L330 20 Q333 9 336 20 L338 14 L340 20 Q343 12 346 20 L348 17 L350 20 Q353 10 356 20 L358 14 L360 20 Q363 13 366 20 L368 17 L370 20 Q373 9 376 20 L378 14 L380 20 Q383 12 386 20 L388 17 L390 20 Q393 10 396 20 L398 14 L400 20 L400 26 Z" fill="#3a8828"/>
 </svg>
 </div>
 <div class="mine-holes" id="saper-grid"></div>
 <div class="mine-bag" id="mine-bag">
-<svg viewBox="0 0 76 96">
+<svg viewBox="0 0 88 108">
 <defs>
-<linearGradient id="bagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a87028"/><stop offset="40%" stop-color="#6a4218"/><stop offset="100%" stop-color="#2a1808"/></linearGradient>
-<linearGradient id="bagTie" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8b070"/><stop offset="100%" stop-color="#8a6028"/></linearGradient>
+<linearGradient id="bagBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b87838"/><stop offset="25%" stop-color="#8a5424"/><stop offset="70%" stop-color="#5a3414"/><stop offset="100%" stop-color="#2a1808"/></linearGradient>
+<linearGradient id="bagTie" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0b878"/><stop offset="50%" stop-color="#a87a3a"/><stop offset="100%" stop-color="#6a4820"/></linearGradient>
+<linearGradient id="bagBuckle" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0d888"/><stop offset="50%" stop-color="#c8a040"/><stop offset="100%" stop-color="#8a6820"/></linearGradient>
+<radialGradient id="bagShine" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="rgba(255,220,160,.4)"/><stop offset="100%" stop-color="rgba(255,220,160,0)"/></radialGradient>
 </defs>
-<ellipse cx="38" cy="92" rx="34" ry="6" fill="rgba(0,0,0,.7)"/>
-<path d="M14 30 Q 12 60 20 84 Q 30 92 38 92 Q 46 92 56 84 Q 64 60 62 30 Q 50 22 38 22 Q 26 22 14 30 Z" fill="url(#bagG)" stroke="#2a1808" stroke-width="2"/>
-<path d="M14 30 Q 24 24 38 24 Q 52 24 62 30 L 60 36 Q 50 30 38 30 Q 26 30 16 36 Z" fill="url(#bagTie)"/>
-<rect x="30" y="14" width="16" height="12" rx="4" fill="url(#bagTie)" stroke="#2a1808" stroke-width="1.5"/>
-<circle cx="28" cy="52" r="2.5" fill="#ffd93d" opacity=".85"/>
-<circle cx="48" cy="60" r="2" fill="#ffd93d" opacity=".75"/>
-<circle cx="38" cy="70" r="2.2" fill="#5ee0e0" opacity=".7"/>
-<circle cx="24" cy="68" r="1.8" fill="#5ee0e0" opacity=".6"/>
+<ellipse cx="44" cy="104" rx="38" ry="5" fill="rgba(0,0,0,.75)"/>
+<path d="M14 36 Q 10 66 20 90 Q 30 100 44 100 Q 58 100 68 90 Q 78 66 74 36 Q 62 26 44 26 Q 26 26 14 36 Z" fill="url(#bagBody)" stroke="#1a0e04" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M14 36 Q 10 66 20 90 Q 30 100 44 100 Q 58 100 68 90 Q 78 66 74 36 Q 62 26 44 26 Q 26 26 14 36 Z" fill="url(#bagShine)"/>
+<path d="M18 38 Q 30 32 44 32 Q 58 32 70 38 L 68 44 Q 56 38 44 38 Q 32 38 20 44 Z" fill="url(#bagTie)" stroke="#3a2408" stroke-width="1.2"/>
+<path d="M18 38 Q 30 32 44 32 Q 58 32 70 38" fill="none" stroke="#f0d888" stroke-width="1" stroke-dasharray="2 2" opacity=".7"/>
+<rect x="36" y="14" width="16" height="14" rx="4" fill="url(#bagTie)" stroke="#2a1808" stroke-width="1.5"/>
+<rect x="34" y="13" width="20" height="6" rx="3" fill="url(#bagBuckle)" stroke="#5a3a10" stroke-width="1"/>
+<circle cx="44" cy="16" r="2" fill="#3a2408"/>
+<path d="M22 55 Q 20 70 26 84" fill="none" stroke="#f0d888" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>
+<path d="M66 55 Q 68 70 62 84" fill="none" stroke="#f0d888" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>
+<circle cx="32" cy="60" r="3" fill="#ffd93d" opacity=".85" filter="drop-shadow(0 0 4px #ffd93d)"/>
+<circle cx="54" cy="70" r="2.4" fill="#5ee0e0" opacity=".8" filter="drop-shadow(0 0 4px #5ee0e0)"/>
+<circle cx="44" cy="82" r="2.6" fill="#ffd93d" opacity=".75" filter="drop-shadow(0 0 4px #ffd93d)"/>
+<circle cx="26" cy="76" r="2.2" fill="#5ee0e0" opacity=".7" filter="drop-shadow(0 0 4px #5ee0e0)"/>
+<circle cx="60" cy="58" r="2" fill="#ffd93d" opacity=".7"/>
 </svg>
 </div>
 <div class="mine-bag-count" id="mine-bag-count">0</div>
@@ -1383,7 +1401,424 @@ updateRollUI();
 }
 $('roll-spin').addEventListener('click',()=>{ sndClick(); spinRoll(); });
 
-/* ============ ЗОЛОТАЯ ШАХТА v2 — РУКА, ЛУНКИ, МЕШОК ============ */
+/* ============ ЗОЛОТАЯ ШАХТА v4 — CRACKS ============ */
+const CRACK_SHAPES=[
+"M50 12 L62 9 L74 15 L82 26 L86 40 L83 54 L76 68 L66 80 L54 87 L40 88 L26 82 L16 72 L10 58 L8 44 L13 30 L23 18 L36 12 Z",
+"M48 10 L60 8 L72 14 L82 22 L87 36 L86 52 L78 66 L70 76 L58 84 L44 88 L30 84 L18 74 L11 60 L7 46 L12 32 L22 20 L34 12 Z",
+"M52 8 L64 12 L76 18 L85 30 L88 46 L84 60 L74 72 L62 82 L48 87 L34 84 L22 76 L13 62 L8 48 L11 34 L20 22 L34 13 L46 9 Z",
+"M46 14 L58 8 L72 11 L82 20 L88 34 L86 50 L82 64 L72 76 L60 84 L46 88 L32 84 L20 76 L12 62 L7 48 L10 34 L18 22 L32 13 Z",
+"M50 10 L66 8 L78 16 L86 28 L88 44 L84 58 L76 72 L64 82 L50 88 L36 86 L24 78 L14 66 L8 52 L10 36 L18 22 L32 14 L44 10 Z",
+"M48 12 L62 10 L76 16 L84 28 L87 44 L84 58 L76 70 L64 82 L50 87 L36 84 L22 76 L13 64 L8 50 L11 36 L20 22 L34 14 L44 11 Z"
+];
+const SVG_HAND='<svg viewBox="0 0 70 82"><defs><linearGradient id="hSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0cdA0"/><stop offset="0.5" stop-color="#d8a878"/><stop offset="1" stop-color="#a87848"/></linearGradient><linearGradient id="hSkin2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8bd90"/><stop offset="1" stop-color="#a87040"/></linearGradient><linearGradient id="hSleeve" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a7a5a"/><stop offset="50%" stop-color="#3a4a3a"/><stop offset="1" stop-color="#1a2a1a"/></linearGradient><linearGradient id="hSleeveShine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgba(255,255,255,0)"/><stop offset="0.5" stop-color="rgba(255,255,255,.25)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/></linearGradient></defs><path d="M14 82 L 16 62 Q 18 54 26 52 L 44 52 Q 52 54 54 62 L 56 82 Z" fill="url(#hSleeve)" stroke="#0a1a0a" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 82 L 16 62 Q 18 54 26 52 L 44 52 Q 52 54 54 62 L 56 82 Z" fill="url(#hSleeveShine)"/><path d="M18 74 L 52 74 M 17 66 L 53 66" stroke="#0a1a0a" stroke-width="1" opacity=".7"/><path d="M16 60 L 20 54 M 54 60 L 50 54" stroke="#0a1a0a" stroke-width="1.2" opacity=".6"/><rect x="16" y="46" width="38" height="10" rx="4" fill="url(#hSkin2)" stroke="#5a3a1a" stroke-width="1.8"/><path d="M6 34 Q 4 22 12 17 Q 17 14 20 20 L 22 28 Q 25 18 30 15 Q 35 13 36 20 L 36 30 Q 40 19 45 19 Q 50 19 50 26 L 49 40 Q 48 46 42 50 L 28 53 Q 16 52 11 45 Q 7 41 6 34 Z" fill="url(#hSkin)" stroke="#5a3a1a" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 26 L 20 42 M 28 23 L 28 40 M 36 26 L 36 41 M 45 28 L 45 41" stroke="#8a5a3a" stroke-width="1.3" opacity=".55"/><ellipse cx="20" cy="23" rx="2.6" ry="2" fill="#8a5a3a" opacity=".55"/><ellipse cx="28" cy="20" rx="2.6" ry="2" fill="#8a5a3a" opacity=".55"/><ellipse cx="36" cy="23" rx="2.6" ry="2" fill="#8a5a3a" opacity=".55"/><ellipse cx="45" cy="26" rx="2.4" ry="1.8" fill="#8a5a3a" opacity=".55"/><path d="M18 22 Q 16 20 17 18 Q 19 16 21 19 Q 20 21 18 22 Z" fill="#fff8f0" opacity=".85"/><path d="M26 19 Q 24 17 25 15 Q 27 13 29 16 Q 28 18 26 19 Z" fill="#fff8f0" opacity=".85"/><path d="M34 22 Q 32 20 33 18 Q 35 16 37 19 Q 36 21 34 22 Z" fill="#fff8f0" opacity=".85"/><path d="M43 25 Q 41 23 42 21 Q 44 19 46 22 Q 45 24 43 25 Z" fill="#fff8f0" opacity=".85"/><ellipse cx="26" cy="44" rx="6" ry="2.4" fill="#8a5a3a" opacity=".25"/><ellipse cx="42" cy="41" rx="4" ry="1.8" fill="#8a5a3a" opacity=".25"/><ellipse cx="14" cy="30" rx="3" ry="2" fill="rgba(255,255,255,.3)"/></svg>';
+const SVG_GEM_BIG='<svg viewBox="0 0 40 40"><defs><linearGradient id="gemBigG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8faff"/><stop offset="0.4" stop-color="#5ee0e0"/><stop offset="1" stop-color="#2a8a8a"/></linearGradient></defs><polygon points="20,6 32,14 32,26 20,34 8,26 8,14" fill="url(#gemBigG)" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><polygon points="20,6 32,14 20,18 8,14" fill="rgba(255,255,255,0.5)"/><polygon points="20,6 20,18 12,16" fill="rgba(255,255,255,0.75)"/><line x1="20" y1="18" x2="20" y2="34" stroke="#fff" stroke-width="0.6" opacity=".6"/><line x1="8" y1="14" x2="32" y2="14" stroke="#fff" stroke-width="0.6" opacity=".6"/><line x1="8" y1="26" x2="20" y2="18" stroke="#fff" stroke-width="0.5" opacity=".5"/><line x1="32" y1="26" x2="20" y2="18" stroke="#fff" stroke-width="0.5" opacity=".5"/></svg>';
+const SVG_DYN_BIG='<svg viewBox="0 0 40 54"><defs><linearGradient id="dynRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a0e1a"/><stop offset="0.3" stop-color="#c02535"/><stop offset="0.55" stop-color="#ff5566"/><stop offset="0.8" stop-color="#c02535"/><stop offset="1" stop-color="#5a0e1a"/></linearGradient><linearGradient id="dynCap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2010"/><stop offset="1" stop-color="#1a0e04"/></linearGradient></defs><rect x="9" y="18" width="22" height="34" rx="3" fill="url(#dynRed)" stroke="#1a0508" stroke-width="1.5"/><rect x="9" y="24" width="22" height="3" fill="#1a0508" opacity=".7"/><rect x="9" y="38" width="22" height="3" fill="#1a0508" opacity=".7"/><ellipse cx="15" cy="30" rx="2" ry="6" fill="rgba(255,255,255,.28)"/><rect x="14" y="10" width="12" height="14" rx="2" fill="url(#dynCap)" stroke="#0a0502" stroke-width="1.2"/><path d="M20 10 Q 22 4 26 0 Q 28 -2 30 0" stroke="#8a5a30" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="30" cy="0" r="2" fill="#ffd93d" opacity=".95"/></svg>';
+
+let CATALOG=[], balance=STARTING_BALANCE, inventory=[], history=[];
+let stats={wins:0,losses:0,wagered:0,bestDrop:0,games:0};
+let referrals={count:0,earned:0,invited:[],freeSpins:0,shared:0};
+let selectedItems=[], targetItem=null, chance=0, multiplier=0, isSpinning=false;
+let invSearch='',invMin=null,invMax=null, targetSearch='',targetMin=null,targetMax=null;
+let shopSearch='',shopMin=null,shopMax=null, currentScreen='menu';
+let rocketPhase='waiting', rocketPhaseStart=Date.now(), rocketPhaseDuration=ROCKET_WAIT;
+let rocketBetGift=null, rocketBetActive=false, rocketCrashAt=0, rocketCurrentMult=1, rocketStartTime=0;
+let rocketHistory=[], rocketLastTick=0, rocketMilestoneReached={};
+let autoWdEnabled=localStorage.getItem(AWD_KEY+'_enabled')==='true';
+let autoWdValue=parseFloat(localStorage.getItem(AWD_KEY+'_value')||'0')||0;
+let rocketCashedOut=false, rocketCashoutMult=0;
+let saperState='idle', saperBetGift=null, saperStepIndex=3;
+let saperHoles=[], saperBagCount=0, saperDigging=false, saperPotentialMult=0.80;
+const SAPER_SIZE=15;
+let rollHistory=[], rollStats={last:0,best:0,lastSeg:null,bestSeg:null};
+let rollCurrentRotation=0, rollSpinning=false, _svgBuildCounter=0;
+
+const $=id=>document.getElementById(id);
+function sumSelected(){ return selectedItems.reduce((s,it)=>s+(it.value||0),0); }
+function getRarity(v){ if(v<100)return '#4b69ff'; if(v<500)return '#8847ff'; if(v<2000)return '#d32ce6'; if(v<10000)return '#eb4b4b'; if(v<50000)return '#ffd700'; return '#ff9500'; }
+function fmtBalance(n){ if(!n||isNaN(n))return '0'; n=Math.floor(n); if(n>=1e9)return Math.floor(n/1e9)+'B'; if(n>=1e6)return Math.floor(n/1e6)+'M'; if(n>=1e3)return Math.floor(n/1e3)+'K'; return String(n); }
+function iconHTML(item,size){ size=size||128; if(!item||!item.name)return ''; var name=String(item.name).replace(/\s+/g,''); var slug=String(item.name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,''); var apiSize=size>=256?256:128; var api='https://api.changes.tg/original/'+encodeURIComponent(name)+'.png?size='+apiSize; var frag='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+apiSize+'&h='+apiSize+'&fit=contain'; return '<img src="'+api+'" data-fb="'+frag+'" alt="" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb;}else{this.style.opacity=0.15;}">'; }
+function chanceFromRatio(r){ let c=100/r; if(c>99)c=99; if(c<0.01)c=0.01; return Math.round(c*100)/100; }
+function chanceLabel(c){ if(c>=60)return 'высокий'; if(c>=30)return 'средний'; if(c>=10)return 'низкий'; if(c>=1)return 'очень низкий'; return 'безумие'; }
+function recomputeChance(){ if(!selectedItems.length||!targetItem){ chance=0;multiplier=0;return; } const sum=sumSelected(); if(!sum){ chance=0;multiplier=0;return; } const r=targetItem.value/sum; chance=chanceFromRatio(r); multiplier=Math.round(r*100)/100; }
+function updatePercentUI(){ if(!selectedItems.length||!targetItem){ const p=$('wheel-percent');if(p)p.textContent='—'; const l=$('wheel-label');if(l)l.textContent='—'; const arc=$('win-arc');if(arc)arc.setAttribute('d',''); highlightMult();updateBtn();return; } $('wheel-percent').textContent=chance.toFixed(2).replace(/\.00$/,'')+'%'; $('wheel-label').textContent=chanceLabel(chance); updateArc(); highlightMult(); updateBtn(); }
+function highlightMult(){ document.querySelectorAll('.mult-btn').forEach(b=>{ if(!multiplier){b.classList.remove('active');return;} b.classList.toggle('active',Math.abs(parseFloat(b.dataset.mult)-multiplier)<0.15); }); }
+function updateArc(){ const arc=$('win-arc');if(!arc)return; const cx=50,cy=50; const c=Math.min(99.9,Math.max(0.01,chance)); const half=c*3.6/2; const a0=180-half,a1=180+half; const rad=d=>d*Math.PI/180; const large=(a1-a0)>180?1:0; const ro=49,ri=39; const p=(r,ang)=>[cx+r*Math.sin(rad(ang)),cy-r*Math.cos(rad(ang))]; const [xo1,yo1]=p(ro,a0),[xo2,yo2]=p(ro,a1); const [xi1,yi1]=p(ri,a0),[xi2,yi2]=p(ri,a1); arc.setAttribute('d','M '+xo1.toFixed(3)+' '+yo1.toFixed(3)+' A '+ro+' '+ro+' 0 '+large+' 1 '+xo2.toFixed(3)+' '+yo2.toFixed(3)+' L '+xi2.toFixed(3)+' '+yi2.toFixed(3)+' A '+ri+' '+ri+' 0 '+large+' 0 '+xi1.toFixed(3)+' '+yi1.toFixed(3)+' Z'); }
+function saveState(){ try{ localStorage.setItem(INV_KEY,JSON.stringify(inventory)); localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,80))); localStorage.setItem(BALANCE_KEY,String(balance)); localStorage.setItem(STATS_KEY,JSON.stringify(stats)); localStorage.setItem(RH_KEY,JSON.stringify(rocketHistory.slice(0,20))); localStorage.setItem(RLL_KEY,JSON.stringify(rollHistory.slice(0,15))); localStorage.setItem(RLS_KEY,JSON.stringify({last:rollStats.last,best:rollStats.best})); localStorage.setItem(REF_KEY,JSON.stringify(referrals)); }catch{} cloudSave(); }
+function loadState(){ try{ const inv=JSON.parse(localStorage.getItem(INV_KEY)||'null'); const his=JSON.parse(localStorage.getItem(HISTORY_KEY)||'null'); const bal=localStorage.getItem(BALANCE_KEY); const st=JSON.parse(localStorage.getItem(STATS_KEY)||'null'); const rh=JSON.parse(localStorage.getItem(RH_KEY)||'null'); const rll=JSON.parse(localStorage.getItem(RLL_KEY)||'null'); const rls=JSON.parse(localStorage.getItem(RLS_KEY)||'null'); const ref=JSON.parse(localStorage.getItem(REF_KEY)||'null'); if(Array.isArray(inv))inventory=inv.filter(x=>x&&x.name).map(x=>({name:String(x.name),value:Number(x.value)||0})); if(Array.isArray(his))history=his; if(bal!==null)balance=parseInt(bal,10)||0; if(st)stats={wins:0,losses:0,wagered:0,bestDrop:0,games:0,...st}; if(Array.isArray(rh))rocketHistory=rh; if(Array.isArray(rll))rollHistory=rll; if(rls&&typeof rls==='object')rollStats={last:rls.last||0,best:rls.best||0,lastSeg:null,bestSeg:null}; if(ref&&typeof ref==='object')referrals={count:ref.count||0,earned:ref.earned||0,invited:ref.invited||[],freeSpins:ref.freeSpins||0,shared:ref.shared||0}; }catch{} }
+function updateBalanceUI(){ const b=$('balance'); if(b){b.textContent=fmtBalance(balance);b.title=String(balance);} const sb=$('shop-balance'); if(sb)sb.textContent=fmtBalance(balance); const chip=$('plus-btn'); if(chip){chip.classList.add('pulse');setTimeout(()=>chip.classList.remove('pulse'),500);} }
+function goToMenu(){ if(currentScreen==='menu')return; if(currentScreen==='saper'&&saperState==='playing')return; currentScreen='menu'; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $('screen-menu').classList.add('active'); updateLogo(); }
+function goToScreen(name){ if(currentScreen==='saper'&&saperState==='playing')return; currentScreen=name; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $('screen-'+name).classList.add('active'); updateLogo(); if(name==='rocket'){updateRocketButtonLabel();if(rocketPhase!=='flying'){resetRocketVisual();}} if(name==='shop')renderShop(); if(name==='roll'){updateRollUI();resetRollVisual();} if(name==='saper'){renderSaperHoles();updateSaperButtons();} syncRocketVisual(); }
+function updateLogo(){ const l=$('logo'); if(l)l.classList.toggle('disabled',currentScreen==='menu'); }
+function rocketAccess(){ return true; }
+
+const ICON_ROCKET='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="rkB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dde3f5"/><stop offset="0.4" stop-color="#ffffff"/><stop offset="1" stop-color="#8a94b8"/></linearGradient><linearGradient id="rkSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a86ff"/><stop offset="1" stop-color="#2b5cbf"/></linearGradient><linearGradient id="rkF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.25" stop-color="#ffd93d"/><stop offset="0.6" stop-color="#ff9500"/><stop offset="1" stop-color="#ff4757"/></linearGradient><radialGradient id="rkW" cx="0.35" cy="0.35" r="0.75"><stop offset="0" stop-color="#e0f4ff"/><stop offset="0.5" stop-color="#4a86ff"/><stop offset="1" stop-color="#1a3a6b"/></radialGradient><radialGradient id="rkGlow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="rgba(168,85,247,0.6)"/><stop offset="1" stop-color="rgba(168,85,247,0)"/></radialGradient></defs><circle cx="32" cy="30" r="28" fill="url(#rkGlow)"/><path d="M27 48 Q 25 56 28 62 Q 30 64 32 62 Q 34 64 36 62 Q 39 56 37 48 Z" fill="url(#rkF)"/><path d="M30 48 Q 30 55 32 60 Q 34 55 34 48 Z" fill="#ffffff" opacity="0.85"/><path d="M19 38 L 9 54 L 19 50 L 19 38 Z" fill="url(#rkSh)" stroke="#1a3a8a" stroke-width="1.2" stroke-linejoin="round"/><path d="M45 38 L 55 54 L 45 50 L 45 38 Z" fill="url(#rkSh)" stroke="#1a3a8a" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 3 Q 45 16 45 34 L 45 47 Q 38 50 32 50 Q 26 50 19 47 L 19 34 Q 19 16 32 3 Z" fill="url(#rkB)" stroke="#5a6a9a" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 3 Q 24 12 22 26 Q 27 14 32 3 Z" fill="#ffffff" opacity="0.7"/><path d="M19 30 L 45 30 L 45 34 L 19 34 Z" fill="url(#rkSh)" opacity="0.6"/><circle cx="32" cy="21" r="6.5" fill="url(#rkW)" stroke="#5a6a9a" stroke-width="1.4"/><ellipse cx="30" cy="19" rx="2" ry="1.4" fill="#ffffff" opacity="0.8"/><circle cx="10" cy="12" r="1.2" fill="#ffd93d"/><circle cx="54" cy="9" r="1.5" fill="#ffffff"/><circle cx="56" cy="32" r="1" fill="#c0c8ff"/></svg>';
+const ICON_UPGRADER='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="upG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="50%" stop-color="#c0c8ff"/><stop offset="100%" stop-color="#a855f7"/></linearGradient><linearGradient id="crG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0d8ff"/><stop offset="100%" stop-color="#6a48c8"/></linearGradient></defs><path d="M32 4 L14 24 L24 24 L24 36 L40 36 L40 24 L50 24 Z" fill="url(#upG)" stroke="#a855f7" stroke-width="2" stroke-linejoin="round"/><polygon points="32,42 44,50 32,60 20,50" fill="url(#crG)" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16" cy="14" r="1.5" fill="#ffd93d"/><circle cx="48" cy="10" r="1.5" fill="#ffd93d"/><circle cx="52" cy="40" r="1.2" fill="#c0c8ff"/></svg>';
+const ICON_MINE='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="mnD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a4a20"/><stop offset="100%" stop-color="#3a2410"/></linearGradient><linearGradient id="mnG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8c0"/><stop offset="50%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#ff9500"/></linearGradient></defs><ellipse cx="32" cy="46" rx="26" ry="10" fill="url(#mnD)"/><ellipse cx="32" cy="44" rx="22" ry="7" fill="#1a0e04"/><ellipse cx="32" cy="42" rx="14" ry="4" fill="#000"/><polygon points="32,8 44,22 32,36 20,22" fill="url(#mnG)" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><line x1="26" y1="20" x2="32" y2="14" stroke="#fff" stroke-width="1" opacity=".7"/><circle cx="14" cy="30" r="1.5" fill="#ffd93d"/><circle cx="50" cy="28" r="1.5" fill="#ffd93d"/></svg>';
+const ICON_SHOP='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="bxG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4a68"/><stop offset="100%" stop-color="#1a1a2e"/></linearGradient><linearGradient id="ribG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="50%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#ff9500"/></linearGradient></defs><rect x="12" y="26" width="40" height="32" rx="4" fill="url(#bxG)" stroke="#7a7a9a" stroke-width="1.5"/><rect x="10" y="20" width="44" height="10" rx="3" fill="url(#bxG)" stroke="#7a7a9a" stroke-width="1.5"/><rect x="28" y="20" width="8" height="38" fill="url(#ribG)"/><path d="M32 20 Q 18 8 24 6 Q 32 5 32 18" fill="url(#ribG)" stroke="#c88000" stroke-width="1"/><path d="M32 20 Q 46 8 40 6 Q 32 5 32 18" fill="url(#ribG)" stroke="#c88000" stroke-width="1"/></svg>';
+
+function buildMenuCards(){
+const grid=$('menu-grid'); if(!grid)return;
+grid.innerHTML=`
+<button class="menu-card wide roll-hero-card" data-mode="roll" type="button">
+<div class="roll-hero-glow"></div>
+<div class="menu-card-badge red">🔥 ГЛАВНЫЙ</div>
+<div class="roll-hero-inner">
+<div class="roll-hero-icon"><svg viewBox="0 0 100 100"><defs><linearGradient id="mGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e0d8ff"/><stop offset="50%" stop-color="#a855f7"/><stop offset="100%" stop-color="#4a86ff"/></linearGradient><radialGradient id="mCenter" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#2a2a44"/><stop offset="100%" stop-color="#05050a"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="none" stroke="url(#mGold)" stroke-width="3"/><circle cx="50" cy="50" r="40" fill="url(#mCenter)" stroke="rgba(168,85,247,0.35)"/>${[0,1,2,3,4,5,6,7].map(i=>{const a=(i*45-90)*Math.PI/180;const x1=50+26*Math.cos(a),y1=50+26*Math.sin(a);const x2=50+40*Math.cos(a),y2=50+40*Math.sin(a);return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(168,85,247,0.6)" stroke-width="0.7"/>`;}).join('')}<circle cx="50" cy="50" r="24" fill="rgba(0,0,0,0.7)" stroke="url(#mGold)" stroke-width="1.5"/><text x="50" y="49" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="11" fill="url(#mGold)">ROLL</text><text x="50" y="58" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="5.5" fill="#c0b8ff" letter-spacing="2">UP</text></svg></div>
+<div class="roll-hero-text"><div class="roll-hero-title">ROLL</div><div class="roll-hero-sub">Крути за 100 ⭐ · до 400 ⭐</div><div class="roll-hero-tags"><span class="roll-hero-tag">🎁 ГИФТЫ</span><span class="roll-hero-tag">⭐ ЗВЁЗДЫ</span><span class="roll-hero-tag">💎 ДЖЕКПОТ</span></div></div>
+<div class="roll-hero-arrow">→</div>
+</div>
+</button>
+<button class="menu-card" data-mode="upgrader" type="button" style="--card-glow: rgba(120,100,255,0.5);">
+<div class="menu-card-badge">ТОП</div>
+<div class="menu-card-icon">${ICON_UPGRADER}</div>
+<div class="menu-card-title">Апгрейдер</div>
+<div class="menu-card-desc">Прокачивай гифты</div>
+</button>
+<button class="menu-card" data-mode="saper" type="button" style="--card-glow: rgba(255,217,61,0.55);">
+<div class="menu-card-icon">${ICON_MINE}</div>
+<div class="menu-card-title">Золотая Шахта</div>
+<div class="menu-card-desc">Копай и находи алмазы</div>
+</button>
+<button class="menu-card" data-mode="rocket" type="button" style="--card-glow: rgba(46,204,113,0.6);">
+<div class="menu-card-icon">${ICON_ROCKET}</div>
+<div class="menu-card-title">Ракетка</div>
+<div class="menu-card-desc">Крути и забирай!</div>
+</button>
+<button class="menu-card" data-mode="shop" type="button" style="--card-glow: rgba(255,217,61,0.5);">
+<div class="menu-card-icon">${ICON_SHOP}</div>
+<div class="menu-card-title">Магазин</div>
+<div class="menu-card-desc">Купить гифты</div>
+</button>`;
+grid.querySelectorAll('.menu-card').forEach(card=>{ card.addEventListener('click',function(e){ e.preventDefault(); sndClick(); const m=this.dataset.mode; if(m==='upgrader')goToScreen('upgrader'); else if(m==='rocket')goToScreen('rocket'); else if(m==='roll')goToScreen('roll'); else if(m==='saper'){goToScreen('saper');resetSaperUI();} else if(m==='shop'){goToScreen('shop');renderShop();} }); });
+}
+$('logo').addEventListener('click',function(e){ if(currentScreen==='menu')return; if(currentScreen==='saper'&&saperState==='playing')return; e.preventDefault(); sndClick(); goToMenu(); });
+
+function renderArena(){
+if(selectedItems.length===0){ $('from-icon').className='slot-icon';$('from-icon').innerHTML='';$('from-name').textContent='Выбери гифты';$('from-value').textContent='—'; }
+else if(selectedItems.length===1){ const it=selectedItems[0]; $('from-icon').className='slot-icon';$('from-icon').innerHTML=iconHTML(it,128);$('from-name').textContent=it.name;$('from-value').textContent=(it.value||0)+' ⭐'; }
+else { const total=sumSelected(); const show=selectedItems.slice(0,3); $('from-icon').className='slot-icon multi';$('from-icon').innerHTML=show.map(it=>iconHTML(it,128)).join('');$('from-name').textContent='Выбрано: '+selectedItems.length;$('from-value').textContent=total+' ⭐'; }
+if(targetItem){ $('to-icon').innerHTML=iconHTML(targetItem,128);$('to-name').textContent=targetItem.name;$('to-value').textContent=(targetItem.value||0)+' ⭐'; }
+else { $('to-icon').innerHTML='';$('to-name').textContent='—';$('to-value').textContent='—'; }
+$('from-card').className='item-slot';$('to-card').className='item-slot';
+}
+function renderInventory(){
+const grid=$('inv-grid');if(!grid)return;grid.innerHTML='';
+$('inv-count').textContent='('+inventory.length+')';
+const list=inventory.filter(it=>{ if(invSearch && !it.name.toLowerCase().includes(invSearch.toLowerCase()))return false; if(invMin!==null && (it.value||0)<invMin)return false; if(invMax!==null && (it.value||0)>invMax)return false; return true; }).sort((a,b)=>(a.value||0)-(b.value||0));
+if(!list.length){ grid.innerHTML='<div class="empty">—</div>'; return; }
+list.forEach(item=>{ const isSel=selectedItems.indexOf(item)>=0; const s=document.createElement('div'); s.className='slot'+(isSel?' selected':''); s.style.setProperty('--rar-color',getRarity(item.value||0)); s.innerHTML='<div class="slot-icon-sm">'+iconHTML(item,64)+'</div><div class="slot-name">'+item.name+'</div><div class="slot-price">'+(item.value||0)+'⭐</div>'; s.addEventListener('click',()=>{ if(isSpinning)return; sndClick(); const pos=selectedItems.indexOf(item); if(pos>=0)selectedItems.splice(pos,1); else selectedItems.push(item); if(targetItem && (targetItem.value||0)<=sumSelected())targetItem=null; renderInventory();renderArena();renderTargets(); if(targetItem)recomputeChance(); else {chance=0;multiplier=0;} updatePercentUI(); }); grid.appendChild(s); });
+}
+function renderTargets(){
+const grid=$('target-grid');if(!grid)return;grid.innerHTML='';
+if(!selectedItems.length){ grid.innerHTML='<div class="empty">Сначала выбери свои гифты</div>'; return; }
+const sum=sumSelected();
+const list=CATALOG.filter(it=>{ if((it.value||0)<=sum)return false; if(targetSearch && !it.name.toLowerCase().includes(targetSearch.toLowerCase()))return false; if(targetMin!==null && (it.value||0)<targetMin)return false; if(targetMax!==null && (it.value||0)>targetMax)return false; return true; }).sort((a,b)=>(a.value||0)-(b.value||0));
+if(!list.length){ grid.innerHTML='<div class="empty">—</div>'; return; }
+list.forEach(item=>{ const s=document.createElement('div'); s.className='slot'+(targetItem && targetItem.name===item.name ? ' selected':''); s.style.setProperty('--rar-color',getRarity(item.value||0)); s.innerHTML='<div class="slot-icon-sm">'+iconHTML(item,64)+'</div><div class="slot-name">'+item.name+'</div><div class="slot-price">'+(item.value||0)+'⭐</div>'; s.addEventListener('click',()=>{ if(isSpinning)return; sndClick(); targetItem={name:item.name,value:item.value||0}; recomputeChance();updatePercentUI();renderTargets();renderArena(); }); grid.appendChild(s); });
+}
+function renderShop(){
+const grid=$('shop-grid');if(!grid)return;grid.innerHTML='';
+const list=CATALOG.filter(it=>{ if(shopSearch && !it.name.toLowerCase().includes(shopSearch.toLowerCase()))return false; if(shopMin!==null && (it.value||0)<shopMin)return false; if(shopMax!==null && (it.value||0)>shopMax)return false; return true; }).sort((a,b)=>(a.value||0)-(b.value||0));
+if(!list.length){ grid.innerHTML='<div class="empty">—</div>'; return; }
+list.forEach(item=>{ const s=document.createElement('div'); s.className='slot'+((item.value||0)>balance?' disabled':''); s.style.setProperty('--rar-color',getRarity(item.value||0)); s.innerHTML='<div class="slot-icon-sm">'+iconHTML(item,64)+'</div><div class="slot-name">'+item.name+'</div><div class="slot-price">'+(item.value||0)+'⭐</div>'; s.addEventListener('click',()=>{ if(isSpinning)return; sndClick(); openBuy(item); }); grid.appendChild(s); });
+}
+let buyItem=null;
+function openBuy(item){ buyItem=item; $('buy-icon').innerHTML=iconHTML(item,128); $('buy-name').textContent=item.name; $('buy-price').textContent=(item.value||0)+' ⭐'; $('buy-confirm').disabled=(item.value||0)>balance; $('buy-modal').classList.add('active'); }
+function closeBuy(){ $('buy-modal').classList.remove('active'); buyItem=null; }
+$('buy-cancel').addEventListener('click',()=>{sndClick();closeBuy();});
+$('buy-confirm').addEventListener('click',()=>{ if(!buyItem||(buyItem.value||0)>balance)return; balance-=(buyItem.value||0);updateBalanceUI(); inventory.push({name:buyItem.name,value:buyItem.value||0}); inventory.sort((a,b)=>(a.value||0)-(b.value||0)); saveState();sndBuy();closeBuy(); renderInventory();renderArena();renderTargets();renderShop();updateBtn(); });
+function renderMult(){ const grid=$('mult-grid');if(!grid)return;grid.innerHTML=''; MULTIPLIERS.forEach(m=>{ const b=document.createElement('button'); b.type='button';b.className='mult-btn';b.dataset.mult=m; const c=chanceFromRatio(m); b.innerHTML='×'+m+'<span class="c">'+c.toFixed(c<10?1:0)+'%</span>'; b.addEventListener('click',()=>{ if(isSpinning||!selectedItems.length)return; sndClick(); const sum=sumSelected(); const target=sum*m; const cands=CATALOG.filter(it=>(it.value||0)>sum); if(!cands.length)return; const best=cands.reduce((p,c2)=>Math.abs((c2.value||0)-target)<Math.abs((p.value||0)-target)?c2:p); targetItem={name:best.name,value:best.value||0}; recomputeChance();updatePercentUI();renderTargets();renderArena(); }); grid.appendChild(b); }); }
+function updateBtn(){ const b=$('upgrade-btn'); if(b)b.disabled=isSpinning||!selectedItems.length||!targetItem; }
+function confetti(){ if(optimizeEnabled)return; const colors=['#fff','#2ecc71','#4a86ff','#a855f7','#ffd93d','#ff4757','#ff9500']; const cx=window.innerWidth/2,cy=window.innerHeight/2; for(let i=0;i<60;i++){ const p=document.createElement('div'); p.style.position='fixed';p.style.width='7px';p.style.height='7px'; p.style.background=colors[Math.floor(Math.random()*colors.length)]; p.style.left=cx+'px';p.style.top=cy+'px'; p.style.borderRadius=Math.random()>0.5?'50%':'2px'; p.style.pointerEvents='none';p.style.zIndex=999; const a=Math.random()*Math.PI*2; const v=180+Math.random()*420; const dx=Math.cos(a)*v,dy=Math.sin(a)*v-120; p.animate([{transform:'translate(0,0) rotate(0) scale(1)',opacity:1},{transform:'translate('+dx+'px,'+dy+'px) rotate(720deg) scale(0.2)',opacity:0}],{duration:1800,easing:'cubic-bezier(0.15,0.9,0.3,1)',fill:'forwards'}); document.body.appendChild(p); setTimeout(()=>p.remove(),2000); } }
+let hb=null,tickInterval=null;
+function startSpin(){ const s=$('stage'); s.classList.remove('snap','snap-back'); if(!optimizeEnabled)requestAnimationFrame(()=>s.classList.add('zooming')); $('wheel-wrap').classList.add('spinning'); sndSpinStart(); const TICK_START=150,TICK_END=35,EFF=SPIN_DURATION-500; let elapsed=0; const loop=()=>{ sndTick(); const prog=Math.min(1,elapsed/EFF); const delay=TICK_START-(TICK_START-TICK_END)*prog; elapsed+=delay; if(elapsed<EFF)tickInterval=setTimeout(loop,delay); }; loop(); }
+function endSpin(win){ clearInterval(hb);clearTimeout(tickInterval); const s=$('stage'); s.classList.remove('zooming'); if(!optimizeEnabled){ s.classList.add('snap'); setTimeout(()=>{ s.classList.remove('snap'); s.classList.add('snap-back'); setTimeout(()=>s.classList.remove('snap-back'),700); },180); } $('wheel-wrap').classList.remove('spinning'); if(win)sndWin(); else sndLose(); }
+function spin(ch,predetWin){ return new Promise(resolve=>{ const p=$('wheel-pointer'); const half=Math.min(179.9,ch*3.6/2); const s0=180-half,s1=180+half; let angle; if(predetWin){ const span=Math.max(.1,s1-s0-.2); angle=s0+.1+Math.random()*span; } else { const out=Math.max(.1,360-(s1-s0)-.2); angle=s1+.1+Math.random()*out; if(angle>360)angle-=360; } const turns=8+Math.floor(Math.random()*4); const total=turns*360+angle; p.style.transition='none';p.style.transform='rotate(0deg)'; void p.offsetWidth; p.style.transition='transform '+SPIN_DURATION+'ms cubic-bezier(0.15,0.7,0.15,1)'; p.style.transform='rotate('+total+'deg)'; const fin=((total%360)+360)%360; setTimeout(()=>resolve(fin>=s0&&fin<=s1),SPIN_DURATION+100); }); }
+async function doUpgrade(){
+if(isSpinning||!selectedItems.length||!targetItem)return;
+isSpinning=true;$('upgrade-btn').disabled=true;
+$('from-card').className='item-slot';$('to-card').className='item-slot';
+const sum=sumSelected();
+const wantWin=Math.random()*100<chance;
+const fromCopy=selectedItems.slice();
+const toCopy={name:targetItem.name,value:targetItem.value||0};
+stats.wagered+=sum;stats.games++;
+if(wantWin){
+fromCopy.forEach(it=>{const idx=inventory.indexOf(it);if(idx>=0)inventory.splice(idx,1);});
+const newItem={name:targetItem.name,value:targetItem.value||0};
+inventory.push(newItem);inventory.sort((a,b)=>(a.value||0)-(b.value||0));
+selectedItems=[];targetItem=null;stats.wins++;
+if(newItem.value>stats.bestDrop)stats.bestDrop=newItem.value;
+} else {
+fromCopy.forEach(it=>{const idx=inventory.indexOf(it);if(idx>=0)inventory.splice(idx,1);});
+selectedItems=[];targetItem=null;stats.losses++;
+}
+saveState();
+startSpin();
+const win=await spin(chance,wantWin);
+endSpin(win);
+if(win){ $('to-card').classList.add('win'); confetti(); }
+else { $('to-card').classList.add('lose'); }
+renderInventory();renderArena();renderTargets();
+if(selectedItems.length&&targetItem)recomputeChance();else{chance=0;multiplier=0;}
+updatePercentUI();
+setTimeout(()=>{isSpinning=false;updateBtn();},500);
+}
+document.querySelectorAll('.tab').forEach(tb=>{ tb.addEventListener('click',()=>{ sndClick(); document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); document.querySelectorAll('.panel-view').forEach(x=>x.classList.remove('active')); tb.classList.add('active'); const view=$('view-'+tb.dataset.tab); if(view)view.classList.add('active'); if(tb.dataset.tab==='target')renderTargets(); }); });
+
+/* ROCKET */
+function generateCrashPoint(){ if(Math.random()<0.05)return 1.00; const u=Math.random(); return Math.max(1.00,Math.min(100,(1-0.05)/(1-u))); }
+function multAt(e){ return Math.pow(1.15,e); }
+function findGiftInInventory(gift){ if(!gift)return -1; return inventory.findIndex(i=>i.name===gift.name&&(i.value||0)===(gift.value||0)); }
+function renderRocketHistory(){ const el=$('rocket-history');if(!el)return; el.innerHTML=rocketHistory.slice(0,12).map(h=>{ let cls; if(h<1.5)cls='low'; else if(h<10)cls='mid'; else cls='high'; return '<div class="rh-item '+cls+'">'+h.toFixed(2)+'x</div>'; }).join(''); }
+function rocketProgress(m){ const c=Math.min(1,m/100); return Math.pow(c,0.35); }
+function rocketY(m){ const progress=rocketProgress(m); return ROCKET_START_Y-progress*(ROCKET_START_Y-ROCKET_END_Y); }
+function buildRocketMilestones(){ const box=$('rocket-milestones');if(!box)return; box.innerHTML=''; ROCKET_MILESTONES.forEach(ms=>{ const el=document.createElement('div'); el.className='rocket-milestone'+(ms.mega?' mega':''); el.dataset.value=ms.value; el.style.top=ms.topPct+'%'; el.innerHTML='<span class="dot"></span>'+ms.label; box.appendChild(el); }); }
+function buildRocketSpeedlines(){ const box=$('rocket-speedlines');if(!box)return; box.innerHTML=''; for(let i=0;i<18;i++){ const line=document.createElement('div'); line.className='line'; line.style.left=(3+Math.random()*94)+'%'; line.style.animationDelay=(Math.random()*1.2)+'s'; line.style.animationDuration=(0.6+Math.random()*0.5)+'s'; line.style.opacity=(0.35+Math.random()*0.6); box.appendChild(line); } }
+function resetRocketVisual(){ var tp=$('rocket-trail-path');if(tp){tp.setAttribute('d','');tp.style.opacity='';tp.style.transition='';} var tf=$('rocket-trail-fill');if(tf){tf.setAttribute('d','');tf.style.opacity='';tf.style.transition='';} var ic=$('rocket-icon'); if(ic){ ic.style.transition='left .06s linear, top .06s linear, transform .25s, opacity .4s'; ic.style.left='50%';ic.style.top=ROCKET_START_Y+'%';ic.style.width='66px';ic.style.height='66px'; ic.style.opacity='1';ic.style.transform='translate(-50%,-50%) rotate(0deg)'; ic.innerHTML=iconHTML({name:'Stellar Rocket'},128); ic.className='rocket-ship idle'; } document.querySelectorAll('.rocket-explosion-flash,.rocket-shock-ring,.rocket-fireball,.rocket-debris,.rocket-spark').forEach(el=>el.remove()); var badge=$('rocket-gift-badge');if(badge){badge.classList.add('hidden');badge.innerHTML='';badge.style.opacity='';} var m=$('rocket-mult');if(m){m.className='rocket-mult-hero';m.textContent='1.00x';m.style.opacity='';} var toast=$('rocket-cashout-toast');if(toast)toast.classList.remove('show'); var hero=$('rocket-hero');if(hero)hero.classList.remove('flying','shaking'); document.querySelectorAll('.rocket-milestone').forEach(el=>{el.classList.remove('visible','reached','fade-out');}); rocketMilestoneReached={}; document.querySelectorAll('.rocket-stars-layer').forEach(el=>{el.style.opacity='';}); var planet=$('rocket-planet');if(planet)planet.style.opacity=''; const pf=$('rocket-progress-fill');if(pf)pf.style.width='0%'; rocketCashedOut=false;rocketCashoutMult=0; }
+function setRocketIcon(){ var ic=$('rocket-icon'); if(ic){ic.innerHTML=iconHTML({name:'Stellar Rocket'},128);ic.className='rocket-ship flying';} var badge=$('rocket-gift-badge'); if(badge){ if(rocketBetActive&&rocketBetGift){badge.innerHTML=iconHTML(rocketBetGift,64);badge.classList.remove('hidden');} else {badge.classList.add('hidden');badge.innerHTML='';} } }
+function updateRocketButtonLabel(){ const btn=$('rocket-btn');if(!btn)return; const row=$('rocket-bet-row');if(!row)return; const phase=$('rocket-phase');const phaseText=$('rocket-phase-text'); if(rocketPhase==='waiting'){ if(phase)phase.className='rocket-phase waiting'; if(phaseText)phaseText.textContent='Приём ставок'; if(rocketBetActive){btn.textContent='Ставка принята';btn.disabled=true;btn.classList.remove('cashout','cashed');} else if(rocketBetGift){btn.textContent='Поставить';btn.disabled=false;btn.classList.remove('cashout','cashed');} else {btn.textContent='Выбери гифт';btn.disabled=true;btn.classList.remove('cashout','cashed');} } else if(rocketPhase==='flying'){ if(phase)phase.className='rocket-phase flying'; if(phaseText)phaseText.textContent=rocketCashedOut?'Летит дальше':'Взлёт'; if(rocketBetActive&&!rocketCashedOut){btn.textContent='Забрать '+rocketCurrentMult.toFixed(2)+'x';btn.classList.add('cashout');btn.disabled=false;btn.classList.remove('cashed');} else if(rocketCashedOut){btn.textContent='Забрано на '+rocketCashoutMult.toFixed(2)+'x';btn.classList.remove('cashout');btn.classList.add('cashed');btn.disabled=true;} else {btn.textContent='Не участвую';btn.disabled=true;btn.classList.remove('cashout','cashed');} } else { if(phase)phase.className='rocket-phase result'; if(phaseText)phaseText.textContent='Результат'; btn.textContent='Ждите раунд';btn.disabled=true;btn.classList.remove('cashout','cashed'); } if(rocketBetGift){ row.className='bet-gift-row'; const showEdit=(rocketPhase==='waiting'&&!rocketBetActive); row.innerHTML='<div class="bet-gift-icon">'+iconHTML(rocketBetGift,64)+'</div><div class="bet-gift-info"><div class="bet-gift-name">'+rocketBetGift.name+'</div><div class="bet-gift-value">'+(rocketBetGift.value||0)+' ⭐'+(rocketBetActive?' · СТАВКА ПРИНЯТА':'')+'</div></div>'+(showEdit?'<div class="bet-gift-edit">Изменить</div>':''); } else { row.className='bet-gift-row empty-bet'; row.innerHTML='<div class="bg-label">Нажми чтобы выбрать гифт</div>'; } const awdRow=$('rocket-autowd-row'); if(awdRow)awdRow.classList.toggle('disabled',rocketPhase!=='waiting'); }
+function setRocketTimer(sec){ const el=$('rocket-timer');if(!el)return; const s=Math.max(0,Math.ceil(sec)); if(el.textContent!==String(s))el.textContent=s; }
+function syncRocketVisual(){ const ic2=$('rocket-icon');if(ic2)ic2.style.opacity='1'; const m2=$('rocket-mult');if(m2)m2.style.opacity='1'; if(rocketPhase==='waiting'){resetRocketVisual();updateRocketButtonLabel();} else if(rocketPhase==='flying'){setRocketIcon();const m=$('rocket-mult');if(m)m.className='rocket-mult-hero growing';updateRocketButtonLabel();} else updateRocketButtonLabel(); }
+function renderRocketFrame(m){ const x=50; const y=rocketY(m); const progress=rocketProgress(m); const ic=$('rocket-icon'); if(ic){ ic.style.left=x+'%'; ic.style.top=y+'%'; let scale=1; if(progress<0.15)scale=1+progress*0.7; else if(progress>0.9)scale=Math.max(0.7,1-(progress-0.9)*2); ic.style.transform='translate(-50%,-50%) rotate(0deg) scale('+scale.toFixed(2)+')'; } const trailStart=ROCKET_START_Y+8; const trailEnd=Math.max(ROCKET_END_Y,y); const path='M 50 '+trailStart.toFixed(2)+' L 50 '+trailEnd.toFixed(2); const fillPath='M 48.5 '+trailStart.toFixed(2)+' L 48.5 '+trailEnd.toFixed(2)+' L 51.5 '+trailEnd.toFixed(2)+' L 51.5 '+trailStart.toFixed(2)+' Z'; const tp=$('rocket-trail-path');if(tp){tp.setAttribute('d',path);tp.style.opacity='1';} const tf=$('rocket-trail-fill');if(tf){tf.setAttribute('d',fillPath);tf.style.opacity='1';} const badge=$('rocket-gift-badge'); if(badge&&!badge.classList.contains('hidden')){badge.style.left=(x+8)+'%';badge.style.top=(y-8)+'%';} const mult=$('rocket-mult'); if(mult){ mult.textContent=m.toFixed(2)+'x'; mult.classList.toggle('hot',m>=5); } const pf=$('rocket-progress-fill'); if(pf)pf.style.width=(progress*100).toFixed(1)+'%'; document.querySelectorAll('.rocket-milestone').forEach(el=>{ const val=parseFloat(el.dataset.value); if(isNaN(val))return; if(progress>=0.1||m>=val*0.9)el.classList.add('visible'); if(m>=val&&!rocketMilestoneReached[val]){ rocketMilestoneReached[val]=true; el.classList.add('reached'); if(currentScreen==='rocket')sndRocketMilestone(); } }); }
+function rocketCycleTick(){
+try{
+const elapsed=(Date.now()-rocketPhaseStart)/1000;
+const remaining=Math.max(0,rocketPhaseDuration-elapsed);
+if(currentScreen==='rocket'||rocketPhase!=='waiting')setRocketTimer(remaining);
+if(rocketPhase==='waiting'){ if(remaining<=0){ rocketPhase='flying'; rocketPhaseStart=Date.now(); rocketPhaseDuration=ROCKET_FLY_MAX; rocketCrashAt=generateCrashPoint(); rocketCurrentMult=1; rocketStartTime=Date.now(); rocketLastTick=0; rocketMilestoneReached={}; rocketCashedOut=false; rocketCashoutMult=0; setRocketIcon(); const hero=$('rocket-hero');if(hero)hero.classList.add('flying'); buildRocketSpeedlines(); if(currentScreen==='rocket')sndRocketStart(); const m=$('rocket-mult');if(m)m.className='rocket-mult-hero growing'; updateRocketButtonLabel(); } }
+else if(rocketPhase==='flying'){ const elapsedFly=(Date.now()-rocketStartTime)/1000; const m=multAt(elapsedFly); rocketCurrentMult=m; if(elapsedFly-rocketLastTick>.1){ rocketLastTick=elapsedFly; if(rocketBetActive&&!rocketCashedOut&&currentScreen==='rocket')sndRocketTick(); } if(autoWdEnabled&&rocketBetActive&&!rocketCashedOut&&autoWdValue>=1.01&&m>=autoWdValue){ cashOutRocket(true); } if(m>=rocketCrashAt||remaining<=0){ rocketCurrentMult=Math.min(rocketCrashAt,m); if(currentScreen==='rocket')renderRocketFrame(rocketCurrentMult); endRocketFlight(); } else { if(currentScreen==='rocket')renderRocketFrame(m); if(rocketBetActive&&!rocketCashedOut)updateRocketButtonLabel(); } }
+else if(rocketPhase==='result'){ if(remaining<=0){ rocketPhase='waiting'; rocketPhaseStart=Date.now(); rocketPhaseDuration=ROCKET_WAIT; rocketBetActive=false; rocketCurrentMult=1; rocketCashedOut=false; resetRocketVisual(); updateRocketButtonLabel(); } }
+}catch(e){ console.error('rocket tick',e); }
+}
+function spawnRocketExplosion(xPct,yPct,isMega){
+const hero=$('rocket-hero');if(!hero)return;
+const px=xPct,py=yPct;
+const flash=document.createElement('div');flash.className='rocket-explosion-flash';hero.appendChild(flash);
+setTimeout(()=>{try{flash.remove();}catch(e){}},1100);
+for(let i=0;i<4;i++){ const ring=document.createElement('div'); ring.className='rocket-shock-ring'; ring.style.left=px;ring.style.top=py; ring.style.animationDelay=(i*0.1)+'s'; hero.appendChild(ring); setTimeout(()=>{try{ring.remove();}catch(e){}},1600); }
+const fire=document.createElement('div');fire.className='rocket-fireball';fire.style.left=px;fire.style.top=py;hero.appendChild(fire);
+setTimeout(()=>{try{fire.remove();}catch(e){}},1600);
+setTimeout(()=>{
+const fire2=document.createElement('div');fire2.className='rocket-fireball';fire2.style.left=(parseFloat(px)+15)+'%';fire2.style.top=(parseFloat(py)+10)+'%';hero.appendChild(fire2);
+setTimeout(()=>{try{fire2.remove();}catch(e){}},1400);
+},200);
+const debrisCount=isMega?60:40;
+const colors=['#ff9500','#ff4757','#ffd93d','#fff','#ff7a18','#ffb020','#ff5566'];
+for(let i=0;i<debrisCount;i++){
+const p=document.createElement('div'); p.className='rocket-debris';
+const angle=(i/debrisCount)*360+(Math.random()-0.5)*30;
+const dist=140+Math.random()*260;
+const dx=Math.cos(angle*Math.PI/180)*dist,dy=Math.sin(angle*Math.PI/180)*dist;
+p.style.left=px;p.style.top=py;
+p.style.setProperty('--dx',dx.toFixed(1)+'px');
+p.style.setProperty('--dy',dy.toFixed(1)+'px');
+p.style.animationDelay=(Math.random()*0.1)+'s';
+const color=colors[Math.floor(Math.random()*colors.length)];
+p.style.background=color;
+p.style.boxShadow='0 0 12px '+color+',0 0 24px '+color;
+const sz=(4+Math.random()*9);
+p.style.width=sz+'px';p.style.height=sz+'px';
+hero.appendChild(p);
+setTimeout(()=>{try{p.remove();}catch(e){}},2100);
+}
+for(let i=0;i<45;i++){
+const s=document.createElement('div'); s.className='rocket-spark';
+const angle=Math.random()*360;
+const dist=160+Math.random()*280;
+const dx=Math.cos(angle*Math.PI/180)*dist,dy=Math.sin(angle*Math.PI/180)*dist;
+s.style.left=px;s.style.top=py;
+s.style.width=(1+Math.random()*2)+'px';
+s.style.height=(10+Math.random()*18)+'px';
+s.style.background='linear-gradient(180deg,#fff,#ffd93d 40%,#ff9500)';
+s.style.transform='rotate('+angle+'deg)';
+s.style.setProperty('--dx',dx.toFixed(1)+'px');
+s.style.setProperty('--dy',dy.toFixed(1)+'px');
+s.style.animationDelay=(Math.random()*0.15)+'s';
+hero.appendChild(s);
+setTimeout(()=>{try{s.remove();}catch(e){}},2200);
+}
+hero.classList.remove('shaking');void hero.offsetWidth;hero.classList.add('shaking');
+setTimeout(()=>{hero.classList.remove('shaking');},700);
+}
+function endRocketFlight(){
+if(rocketPhase!=='flying')return;
+rocketPhase='result';rocketPhaseStart=Date.now();rocketPhaseDuration=ROCKET_RESULT;
+const hero=$('rocket-hero');if(hero)hero.classList.remove('flying');
+const ic=$('rocket-icon');const mult=$('rocket-mult');const planet=$('rocket-planet');
+const badge=$('rocket-gift-badge');const tp=$('rocket-trail-path');const tf=$('rocket-trail-fill');
+const xPct=ic&&ic.style.left?ic.style.left:'50%';
+const yPct=ic&&ic.style.top?ic.style.top:(ROCKET_START_Y+'%');
+
+spawnRocketExplosion(xPct,yPct,rocketCurrentMult>=10);
+if(currentScreen==='rocket')sndExplosion();
+
+setTimeout(()=>{
+if(ic){ ic.style.transition='opacity 1s ease, transform 1.2s ease'; ic.style.transform='translate(-50%,-50%) scale(1.8) rotate(20deg)'; ic.style.opacity='0'; }
+if(badge){ badge.style.transition='opacity 1s ease'; badge.style.opacity='0'; }
+if(tp){ tp.style.transition='opacity 1s ease'; tp.style.opacity='0'; }
+if(tf){ tf.style.transition='opacity 1s ease'; tf.style.opacity='0'; }
+if(planet){ planet.style.transition='opacity 1.2s ease'; planet.style.opacity='0'; }
+document.querySelectorAll('.rocket-milestone').forEach(el=>{
+el.style.transition='opacity .9s ease, transform .9s ease';
+el.style.opacity='0'; el.style.transform='translateX(-20px)';
+});
+document.querySelectorAll('.rocket-stars-layer').forEach(el=>{
+el.style.transition='opacity 1.2s ease';
+el.style.opacity='0';
+});
+}, 250);
+
+if(mult){
+mult.className='rocket-mult-hero crashed';
+mult.textContent=rocketCurrentMult.toFixed(2)+'x';
+setTimeout(()=>{ if(mult){ mult.style.transition='opacity 1.4s ease'; mult.style.opacity='0'; } }, 1400);
+}
+
+if(rocketBetActive&&!rocketCashedOut&&rocketBetGift){
+rocketHistory.unshift(rocketCurrentMult);rocketHistory=rocketHistory.slice(0,20);
+renderRocketHistory();
+stats.losses++;stats.wagered+=rocketBetGift.value||0;stats.games++;
+saveState();
+} else if(!rocketCashedOut){
+rocketHistory.unshift(rocketCurrentMult);rocketHistory=rocketHistory.slice(0,20);
+renderRocketHistory();
+}
+rocketBetActive=false;
+updateRocketButtonLabel();
+}
+function placeRocketBet(){ if(rocketPhase!=='waiting')return; if(rocketBetActive)return; if(!rocketBetGift){sndError();showGlobalToast('error','Сначала выбери гифт');return;} const idx=findGiftInInventory(rocketBetGift); if(idx<0){rocketBetGift=null;updateRocketButtonLabel();sndError();return;} const removed=inventory[idx];inventory.splice(idx,1); const selIdx=selectedItems.indexOf(removed);if(selIdx>=0)selectedItems.splice(selIdx,1); rocketBetActive=true;saveState(); renderInventory();renderArena();renderTargets(); updatePercentUI();updateRocketButtonLabel(); sndBuy(); }
+function cashOutRocket(isAuto){ if(rocketPhase!=='flying')return; if(!rocketBetActive||rocketCashedOut)return; const betValue=rocketBetGift?(rocketBetGift.value||0):0; const winAmount=Math.floor(betValue*rocketCurrentMult); balance+=winAmount;updateBalanceUI();saveState(); rocketCashedOut=true;rocketCashoutMult=rocketCurrentMult; stats.wins++;stats.wagered+=betValue;stats.games++; if(winAmount>stats.bestDrop)stats.bestDrop=winAmount; saveState(); const mult=$('rocket-mult');if(mult)mult.className='rocket-mult-hero cashed'; const toast=$('rocket-cashout-toast'); if(toast&&currentScreen==='rocket'){toast.textContent=(isAuto?'Авто · ':'')+'+'+fmtBalance(winAmount)+'⭐';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200);} if(currentScreen==='rocket')confetti(); updateRocketButtonLabel(); }
+$('rocket-btn').addEventListener('click',()=>{ sndClick(); if(rocketPhase==='waiting'&&!rocketBetActive)placeRocketBet(); else if(rocketPhase==='flying'&&rocketBetActive&&!rocketCashedOut)cashOutRocket(false); });
+$('rocket-bet-row').addEventListener('click',()=>{ if(rocketPhase!=='waiting')return; if(rocketBetActive)return; if(!inventory.length){sndError();showGlobalToast('error','У тебя нет гифтов');return;} sndClick();openGiftPicker('rocket'); });
+(function(){ const inp=$('rocket-autowd-input'); const btnOn=$('autowd-on');const btnOff=$('autowd-off'); if(inp){inp.value=autoWdValue>0?autoWdValue:'';} if(autoWdEnabled&&btnOn&&btnOff){btnOn.classList.add('active');btnOff.classList.remove('active');} else if(btnOn&&btnOff){btnOff.classList.add('active');btnOn.classList.remove('active');} if(inp){inp.addEventListener('input',()=>{const v=parseFloat(inp.value);autoWdValue=isNaN(v)?0:v;try{localStorage.setItem(AWD_KEY+'_value',String(autoWdValue));}catch(e){}});} if(btnOn){btnOn.addEventListener('click',()=>{autoWdEnabled=true;try{localStorage.setItem(AWD_KEY+'_enabled','true');}catch(e){}btnOn.classList.add('active');btnOff.classList.remove('active');sndClick();});} if(btnOff){btnOff.addEventListener('click',()=>{autoWdEnabled=false;try{localStorage.setItem(AWD_KEY+'_enabled','false');}catch(e){}btnOff.classList.add('active');btnOn.classList.remove('active');sndClick();});} })();
+
+/* ROLL */
+function starPointsStr(cx,cy,outerR,innerR,points){ let pts=[]; for(let i=0;i<points*2;i++){ const r=i%2===0?outerR:innerR; const angle=(i*Math.PI/points)-Math.PI/2; pts.push((cx+r*Math.cos(angle)).toFixed(2)+','+(cy+r*Math.sin(angle)).toFixed(2)); } return pts.join(' '); }
+function buildRollWheel(){
+const svg=$('roll-wheel-svg');if(!svg)return;
+_svgBuildCounter++;
+const BID='w'+_svgBuildCounter+'_';
+const N=ROLL_SEGMENTS.length;
+const segAngle=360/N;
+const cx=100,cy=100;
+const rOuter=92,rInner=46;
+const rIcon=70, iconSize=22, starOut=13, starIn=5.5;
+let h='<defs>';
+h+='<linearGradient id="'+BID+'gold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff8c0"/><stop offset="25%" stop-color="#ffd93d"/><stop offset="50%" stop-color="#c88000"/><stop offset="75%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#fff8c0"/></linearGradient>';
+h+='<filter id="'+BID+'glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+ROLL_SEGMENTS.forEach((seg,i)=>{ h+=`<linearGradient id="${BID}seg${i}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${seg.colors[0]}"/><stop offset="100%" stop-color="${seg.colors[1]}"/></linearGradient>`; });
+h+='</defs>';
+h+=`<circle cx="${cx}" cy="${cy}" r="${rOuter+20}" fill="#000"/>`;
+h+=`<circle cx="${cx}" cy="${cy}" r="${rOuter+12}" fill="none" stroke="url(#${BID}gold)" stroke-width="6" filter="url(#${BID}glow)"/>`;
+for(let i=0;i<N;i++){ const sCW=i*segAngle-segAngle/2,eCW=i*segAngle+segAngle/2; const sM=(sCW-90)*Math.PI/180,eM=(eCW-90)*Math.PI/180; const p0x=(cx+rOuter*Math.cos(sM)).toFixed(2),p0y=(cy+rOuter*Math.sin(sM)).toFixed(2); const p1x=(cx+rOuter*Math.cos(eM)).toFixed(2),p1y=(cy+rOuter*Math.sin(eM)).toFixed(2); const p2x=(cx+rInner*Math.cos(eM)).toFixed(2),p2y=(cy+rInner*Math.sin(eM)).toFixed(2); const p3x=(cx+rInner*Math.cos(sM)).toFixed(2),p3y=(cy+rInner*Math.sin(sM)).toFixed(2); const path=`M ${p0x} ${p0y} A ${rOuter} ${rOuter} 0 0 1 ${p1x} ${p1y} L ${p2x} ${p2y} A ${rInner} ${rInner} 0 0 0 ${p3x} ${p3y} Z`; h+=`<path d="${path}" fill="url(#${BID}seg${i})" stroke="rgba(255,217,61,0.7)" stroke-width="0.9"/>`; }
+for(let i=0;i<N;i++){ const a=(i*segAngle-segAngle/2-90)*Math.PI/180; const x1=cx+rInner*Math.cos(a),y1=cy+rInner*Math.sin(a); const x2=cx+rOuter*Math.cos(a),y2=cy+rOuter*Math.sin(a); h+=`<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" stroke="rgba(255,217,61,1)" stroke-width="1.2"/>`; }
+for(let i=0;i<N;i++){
+const seg=ROLL_SEGMENTS[i];
+h+=`<g transform="rotate(${i*segAngle} ${cx} ${cy})">`;
+if(seg.type==='gift'){
+const imgName=seg.name.replace(/\s+/g,'');
+const imgUrl=`https://api.changes.tg/original/${encodeURIComponent(imgName)}.png?size=128`;
+h+=`<image href="${imgUrl}" x="${cx-iconSize/2}" y="${cy-rIcon-iconSize/2}" width="${iconSize}" height="${iconSize}" preserveAspectRatio="xMidYMid meet" filter="drop-shadow(0 0 3px rgba(255,217,61,0.9))"/>`;
+h+=`<text x="${cx}" y="${cy-rIcon+18}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="8" fill="#ffd93d" style="paint-order:stroke;stroke:rgba(0,0,0,1);stroke-width:3.5px;letter-spacing:-0.3px;">${fmtBalance(seg.value)}</text>`;
+} else {
+const amt=seg.amount;
+const isHigh=amt>=100;
+h+=`<polygon points="${starPointsStr(cx,cy-rIcon,starOut,starIn,5)}" fill="url(#${BID}gold)" stroke="${isHigh?'#ffd93d':'#fff'}" stroke-width="0.7" filter="url(#${BID}glow)"/>`;
+h+=`<text x="${cx}" y="${cy-rIcon+18}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="8.5" fill="${isHigh?'#ffd93d':'#fff'}" style="paint-order:stroke;stroke:rgba(0,0,0,1);stroke-width:3.5px;letter-spacing:-0.3px;">${amt}</text>`;
+}
+h+=`</g>`;
+}
+h+=`<circle cx="${cx}" cy="${cy}" r="${rInner}" fill="none" stroke="url(#${BID}gold)" stroke-width="2.5"/>`;
+svg.innerHTML=h;
+}
+function segDisplayHTML(seg){ if(!seg)return '—'; if(seg.type==='gift'){ const item=CATALOG.find(c=>c.name===seg.name)||{name:seg.name,value:seg.value||0}; return '<span class="cv-icon">'+iconHTML(item,128)+'</span><span class="cv-txt">'+fmtBalance(seg.value)+'⭐</span>'; } if(seg.amount===0)return '<span class="cv-mult" style="color:#ff8590;">0⭐</span>'; return '<span class="cv-mult">'+seg.amount+'⭐</span>'; }
+function segShortLabel(seg){ if(!seg)return '—'; if(seg.type==='gift')return seg.name.split(' ')[0]; return seg.amount+'⭐'; }
+function updateRollUI(){
+const lastEl=$('roll-last'); if(lastEl)lastEl.textContent=rollStats.lastSeg?segShortLabel(rollStats.lastSeg):'—';
+const bestEl=$('roll-best'); if(bestEl)bestEl.textContent=rollStats.bestSeg?segShortLabel(rollStats.bestSeg):'—';
+const rh=$('roll-history'); if(rh){ rh.innerHTML=rollHistory.slice(0,12).map(h=>{ if(h.seg.type==='gift')return '<div class="rh-item gift">'+iconHTML({name:h.seg.name},64)+'</div>'; const win=h.seg.amount>=100; return '<div class="rh-item '+(win?'win':'lose')+'">'+h.seg.amount+'⭐</div>'; }).join(''); }
+const btn=$('roll-spin');
+const badge=$('roll-free-badge'); const badgeTxt=$('roll-free-text');
+if(referrals.freeSpins>0){ if(badge){badge.style.display='flex'; if(badgeTxt)badgeTxt.textContent='У тебя '+referrals.freeSpins+' бесплатный'+(referrals.freeSpins>1?'(-ых) прокрут(а)':' прокрут');} }
+else { if(badge)badge.style.display='none'; }
+if(btn){
+if(referrals.freeSpins>0){ btn.textContent='Бесплатный прокрут ('+referrals.freeSpins+')'; btn.classList.add('free'); btn.disabled=rollSpinning; }
+else { btn.textContent='Крутить за '+ROLL_COST+' ⭐'; btn.classList.remove('free'); btn.disabled=rollSpinning||balance<ROLL_COST; }
+}
+}
+function resetRollVisual(){ const w=$('roll-wheel'); if(w){ w.classList.remove('spinning'); w.style.transition='none'; w.style.transform='rotate('+rollCurrentRotation+'deg)'; requestAnimationFrame(()=>{w.style.transition='';}); } const wrap=$('roll-wheel-wrap'); if(wrap)wrap.classList.remove('spinning'); const cv=$('roll-center-value'); if(cv)cv.textContent='—'; const board=$('roll-board'); if(board)board.classList.remove('shake','flash-win'); document.querySelectorAll('.roll-fx').forEach(el=>el.remove()); }
+function rollResultFx(win,seg,gain){ const board=$('roll-board'); if(!board)return; document.querySelectorAll('.roll-fx').forEach(el=>el.remove()); const fx=document.createElement('div'); fx.className='roll-fx '+(win?'win':'lose'); const pop=document.createElement('div'); pop.className='roll-result-pop'+(win?'':' lose'); let html=''; if(seg.type==='gift'){ const item=CATALOG.find(c=>c.name===seg.name)||{name:seg.name,value:seg.value||0}; html+='<div class="roll-result-icon">'+iconHTML(item,256)+'</div>'; html+='<div class="roll-result-text">'+seg.name+'</div>'; html+='<div class="roll-result-sub">+'+fmtBalance(seg.value)+'⭐</div>'; } else { if(win && seg.amount>0){ html+='<div class="roll-result-text">+'+seg.amount+'⭐</div>'; } else { html+='<div class="roll-result-text" style="color:#ff8590;">-'+ROLL_COST+'⭐</div>'; } } pop.innerHTML=html; fx.appendChild(pop); board.appendChild(fx); requestAnimationFrame(()=>fx.classList.add('show')); if(!win){ board.classList.remove('shake');void board.offsetWidth;board.classList.add('shake'); setTimeout(()=>board.classList.remove('shake'),700); } else { board.classList.remove('flash-win');void board.offsetWidth;board.classList.add('flash-win'); setTimeout(()=>board.classList.remove('flash-win'),700); } setTimeout(()=>{try{fx.remove();}catch(e){}},2400); }
+function spinRoll(){
+if(rollSpinning)return;
+const useFree=referrals.freeSpins>0;
+if(!useFree && balance<ROLL_COST){ sndError(); showGlobalToast('error','Нужно '+ROLL_COST+' ⭐'); return; }
+rollSpinning=true;
+if(useFree){ referrals.freeSpins--; saveState(); } else { balance-=ROLL_COST; updateBalanceUI(); saveState(); }
+sndRollSpin();
+const wrap=$('roll-wheel-wrap');if(wrap)wrap.classList.add('spinning');
+const N=ROLL_SEGMENTS.length;
+const segAngle=360/N;
+const totalW=ROLL_SEGMENTS.reduce((s,x)=>s+x.weight,0);
+let r=Math.random()*totalW;
+let idx=0;
+for(let i=0;i<N;i++){ r-=ROLL_SEGMENTS[i].weight; if(r<=0){ idx=i; break; } }
+const centerAngle=idx*segAngle;
+const jitter=(Math.random()*0.4-0.2)*segAngle;
+const baseRotation=((360-centerAngle+jitter)%360+360)%360;
+const targetRotation=360*6+baseRotation;
+rollCurrentRotation+=targetRotation;
+const w=$('roll-wheel');
+if(w){ w.style.transition=''; w.classList.add('spinning'); w.style.transform='rotate('+rollCurrentRotation+'deg)'; }
+let ticks=0;const tickMax=80;
+const tickInt=setInterval(()=>{ ticks++; sndRollTick(); if(ticks>=tickMax)clearInterval(tickInt); }, 5000/tickMax);
+setTimeout(()=>{
+clearInterval(tickInt);
+rollSpinning=false;
+if(wrap)wrap.classList.remove('spinning');
+if(w){ w.style.transition='none'; rollCurrentRotation=((rollCurrentRotation%360)+360)%360; w.style.transform='rotate('+rollCurrentRotation+'deg)'; void w.offsetWidth; requestAnimationFrame(()=>{ if(w)w.style.transition=''; }); }
+const _n=ROLL_SEGMENTS.length;
+const _deg=360/_n;
+let _landed=Math.round((360-rollCurrentRotation)/_deg)%_n;
+if(_landed<0)_landed+=_n;
+const seg=ROLL_SEGMENTS[_landed];
+stats.wagered+=ROLL_COST; stats.games++;
+const cv=$('roll-center-value');
+if(seg.type==='gift'){
+inventory.push({name:seg.name,value:seg.value}); inventory.sort((a,b)=>(a.value||0)-(b.value||0));
+rollStats.last=seg.value; rollStats.lastSeg=seg;
+if(seg.value>(rollStats.best||0)){ rollStats.best=seg.value; rollStats.bestSeg=seg; }
+stats.wins++; if(seg.value>stats.bestDrop)stats.bestDrop=seg.value;
+rollHistory.unshift({seg});
+if(cv)cv.innerHTML=segDisplayHTML(seg);
+sndRollBigWin(); confetti(); rollResultFx(true,seg,seg.value);
+renderInventory(); renderArena(); renderTargets(); renderShop();
+} else {
+const amount=seg.amount;
+if(amount>0)balance+=amount;
+rollStats.last=amount; rollStats.lastSeg=seg;
+if(amount>(rollStats.best||0)){ rollStats.best=amount; rollStats.bestSeg=seg; }
+if(amount>=100){
+stats.wins++; if(amount>stats.bestDrop)stats.bestDrop=amount;
+rollHistory.unshift({seg});
+if(cv)cv.innerHTML=segDisplayHTML(seg);
+sndRollWin(); rollResultFx(true,seg,amount);
+} else {
+stats.losses++;
+rollHistory.unshift({seg});
+if(cv)cv.innerHTML=segDisplayHTML(seg);
+sndLose(); rollResultFx(false,seg,amount);
+}
+updateBalanceUI();
+}
+rollHistory=rollHistory.slice(0,15);
+saveState();
+updateRollUI();
+}, 5200);
+}
+$('roll-spin').addEventListener('click',()=>{ sndClick(); spinRoll(); });
+
+/* ============ ЗОЛОТАЯ ШАХТА v4 — CRACKS ============ */
 function saperStepValue(){ return saperStepIndex/10; }
 function saperMineCountFn(){ return 3+(saperStepIndex-1); }
 function saperStartMult(){ return 0.80; }
@@ -1405,7 +1840,7 @@ updateSaperStepLabel();
 const row=$('saper-bet-row');
 if(saperBetGift){ row.className='bet-gift-row'; row.innerHTML='<div class="bet-gift-icon">'+iconHTML(saperBetGift,64)+'</div><div class="bet-gift-info"><div class="bet-gift-name">'+saperBetGift.name+'</div><div class="bet-gift-value">'+(saperBetGift.value||0)+' ⭐</div></div>'+(saperState==='idle'?'<div class="bet-gift-edit">Изменить</div>':''); }
 else { row.className='bet-gift-row empty-bet'; row.innerHTML='<div class="bg-label">Нажми чтобы выбрать гифт</div>'; }
-$('mine-bag-count').textContent=saperBagCount;
+const bc=$('mine-bag-count'); if(bc)bc.textContent=saperBagCount;
 }
 function renderSaperHoles(){
 const grid=$('saper-grid'); if(!grid)return; grid.innerHTML='';
@@ -1413,11 +1848,45 @@ for(let i=0;i<SAPER_SIZE;i++){
 const hole=document.createElement('div');
 hole.className='mine-hole';
 hole.dataset.idx=i;
+const shape=CRACK_SHAPES[i%CRACK_SHAPES.length];
 const data=saperHoles[i];
+// grass color palettes to vary — small subtle differences
+const seed=i*137+17;
+const g1=['#5ac848','#4cb83c','#62d050','#56c844'][i%4];
+const g2=['#3a8828','#347a24','#408a2c','#367c26'][i%4];
+const innerGradId='crackInner_'+i;
+const innerGrad2Id='crackInner2_'+i;
+const edgeGradId='crackEdge_'+i;
+let svgHTML='<svg class="hole-crack" viewBox="0 0 100 100" preserveAspectRatio="none">';
+svgHTML+='<defs>';
+svgHTML+='<radialGradient id="'+innerGradId+'" cx="50%" cy="45%" r="60%"><stop offset="0%" stop-color="#000"/><stop offset="45%" stop-color="#050201"/><stop offset="75%" stop-color="#0e0603"/><stop offset="100%" stop-color="#2a1408"/></radialGradient>';
+svgHTML+='<radialGradient id="'+innerGrad2Id+'" cx="50%" cy="30%" r="70%"><stop offset="0%" stop-color="rgba(0,0,0,.9)"/><stop offset="60%" stop-color="rgba(0,0,0,.4)"/><stop offset="100%" stop-color="rgba(0,0,0,0)"/></radialGradient>';
+svgHTML+='<linearGradient id="'+edgeGradId+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a3818"/><stop offset="100%" stop-color="#2a1408"/></linearGradient>';
+svgHTML+='</defs>';
+// grass rim (light highlight around crack)
+svgHTML+='<path d="'+shape+'" fill="'+g1+'" stroke="'+g1+'" stroke-width="7" stroke-linejoin="round" opacity="0.95"/>';
+// soil edge (dark brown thick border)
+svgHTML+='<path d="'+shape+'" fill="url(#'+edgeGradId+')" stroke="#3a2010" stroke-width="3" stroke-linejoin="round"/>';
+// deep hole interior
+svgHTML+='<path d="'+shape+'" fill="url(#'+innerGradId+')"/>';
+// inner top shadow for depth
+svgHTML+='<path d="'+shape+'" fill="url(#'+innerGrad2Id+')"/>';
+// bottom inner reflection (light from grass above)
+svgHTML+='<path d="'+shape+'" fill="none" stroke="rgba(255,220,140,.15)" stroke-width="1.5" stroke-linejoin="round" transform="translate(0,2) scale(0.9) translate(5,4)"/>';
+svgHTML+='</svg>';
+hole.innerHTML=svgHTML;
+const inner=document.createElement('div');
+inner.className='hole-inner';
 if(data && data.revealed){
-if(data.dynamite){ hole.classList.add('done','dynamite'); }
-else { hole.classList.add('done','diamond'); }
+if(data.dynamite){
+hole.classList.add('done','dynamite');
+inner.innerHTML=SVG_DYN_BIG;
+} else {
+hole.classList.add('done','diamond');
+inner.innerHTML=SVG_GEM_BIG;
 }
+}
+hole.appendChild(inner);
 hole.addEventListener('click',()=>clickMineHole(i));
 grid.appendChild(hole);
 }
@@ -1437,43 +1906,39 @@ const holeRect=hole.getBoundingClientRect();
 const holeX=holeRect.left - sceneRect.left + holeRect.width/2;
 const holeY=holeRect.top - sceneRect.top + holeRect.height/2;
 
-// рука над лункой
 const hand=document.createElement('div');
 hand.className='mine-hand';
 hand.innerHTML=SVG_HAND;
 hand.style.left=holeX+'px';
 hand.style.top=(holeY - holeRect.height/2)+'px';
 hand.style.opacity='0';
+hand.style.transform='translate(-50%,-100%)';
 scene.appendChild(hand);
 hole.classList.add('digging');
 
-// появление руки
 requestAnimationFrame(()=>{
 hand.style.opacity='1';
-hand.classList.add('going-in');
+setTimeout(()=>{ hand.classList.add('going-in'); }, 30);
 });
 
-// рука лезет в лунку и копает
 setTimeout(()=>{
 hand.classList.remove('going-in');
 hand.classList.add('digging');
 sndDig();
-}, 300);
+}, 340);
 
-// через 2 сек — рука резко вытаскивает
 setTimeout(()=>{
 hand.classList.remove('digging');
 hand.classList.add('pulling-out');
 
 if(data.dynamite){
-// ДИНАМИТ — рука выкидывает его рядом с лункой
+data.revealed=true;
 setTimeout(()=>{
 try{hand.remove();}catch(e){}
 hole.classList.remove('digging');
 spawnDynamite(i, holeX, holeY);
-}, 250);
+}, 700);
 } else {
-// АЛМАЗ — рука вытаскивает, летит в мешок
 data.revealed=true;
 hole.classList.add('done','diamond');
 setTimeout(()=>{
@@ -1484,10 +1949,9 @@ sndGem();
 saperBagCount++;
 updateSaperButtons();
 saperDigging=false;
-// проверка: собрали все алмазы?
 const totalGems=SAPER_SIZE - saperMineCountFn();
 if(saperBagCount >= totalGems){ setTimeout(()=>cashOutSaper(), 700); }
-}, 250);
+}, 700);
 }
 }, 2300);
 }
@@ -1512,7 +1976,7 @@ const startX=fromX, startY=fromY;
 function anim(){
 const t=Math.min(1,(Date.now()-startTime)/dur);
 const ease=t*t*(3-2*t);
-const arc=Math.sin(t*Math.PI)*70;
+const arc=Math.sin(t*Math.PI)*80;
 const x=startX + (bagX-startX)*ease;
 const y=startY + (bagY-startY)*ease - arc;
 gem.style.left=x+'px';
@@ -1522,19 +1986,19 @@ if(t<1) requestAnimationFrame(anim);
 else {
 try{gem.remove();}catch(e){}
 bag.classList.add('bump');
-setTimeout(()=>bag.classList.remove('bump'), 400);
+setTimeout(()=>bag.classList.remove('bump'), 450);
 }
 }
 requestAnimationFrame(anim);
 }
 function spawnDynamite(i, holeX, holeY){
 const scene=$('mine-scene');
-const data=saperHoles[i];
-data.revealed=true;
 const hole=document.querySelector('.mine-hole[data-idx="'+i+'"]');
-if(hole){ hole.classList.add('done','dynamite'); hole.classList.remove('digging'); }
+if(hole){ hole.classList.add('done','dynamite'); hole.classList.remove('digging');
+const inner=hole.querySelector('.hole-inner');
+if(inner) inner.innerHTML=SVG_DYN_BIG;
+}
 
-// динамит летит от лунки чуть в сторону
 const dynX=holeX + (Math.random()*40-20);
 const dynY=holeY - 30;
 
@@ -1550,7 +2014,7 @@ dyn.style.left=dynX+'px';
 dyn.style.top=dynY+'px';
 });
 
-// фитиль загорается через 500ms
+// fuse lights up after 500ms — NO TIMER TEXT
 setTimeout(()=>{
 sndFuse();
 const fuse=document.createElement('div');
@@ -1559,25 +2023,9 @@ fuse.style.left=(dynX+10)+'px';
 fuse.style.top=(dynY-22)+'px';
 scene.appendChild(fuse);
 
-const timer=document.createElement('div');
-timer.className='mine-timer';
-timer.style.left=(dynX+10)+'px';
-timer.style.top=(dynY-50)+'px';
-timer.textContent='3';
-scene.appendChild(timer);
-
-let sec=3;
-const secInt=setInterval(()=>{
-sec--;
-if(sec>0) timer.textContent=sec;
-else clearInterval(secInt);
-}, 1000);
-
-// через 3 сек — ВЗРЫВ
+// 3 seconds of fuse burning
 setTimeout(()=>{
-clearInterval(secInt);
 try{fuse.remove();}catch(e){}
-try{timer.remove();}catch(e){}
 try{dyn.remove();}catch(e){}
 explodeMine(dynX, dynY);
 }, 3000);
@@ -1588,13 +2036,11 @@ const scene=$('mine-scene');
 if(!scene)return;
 sndExplosion();
 
-// flash
 const flash=document.createElement('div');
 flash.className='mine-explosion-flash';
 scene.appendChild(flash);
 setTimeout(()=>{try{flash.remove();}catch(e){}}, 1200);
 
-// rings
 for(let i=0;i<4;i++){
 const ring=document.createElement('div');
 ring.className='mine-shock-ring';
@@ -1603,7 +2049,6 @@ ring.style.animationDelay=(i*0.1)+'s';
 scene.appendChild(ring);
 setTimeout(()=>{try{ring.remove();}catch(e){}}, 1600);
 }
-// fireballs
 const fire=document.createElement('div');
 fire.className='mine-fireball';
 fire.style.left=x+'px'; fire.style.top=y+'px';
@@ -1618,7 +2063,6 @@ scene.appendChild(fire2);
 setTimeout(()=>{try{fire2.remove();}catch(e){}}, 1400);
 }, 200);
 
-// debris
 const colors=['#ff9500','#ff4757','#ffd93d','#fff','#ff7a18','#ffb020'];
 for(let i=0;i<50;i++){
 const p=document.createElement('div'); p.className='mine-debris';
@@ -1636,7 +2080,6 @@ p.style.width=sz+'px'; p.style.height=sz+'px';
 scene.appendChild(p);
 setTimeout(()=>{try{p.remove();}catch(e){}}, 2100);
 }
-// sparks
 for(let i=0;i<40;i++){
 const s=document.createElement('div'); s.className='mine-spark';
 const angle=Math.random()*360;
@@ -1652,11 +2095,9 @@ s.style.transform='rotate('+angle+'deg)';
 scene.appendChild(s);
 setTimeout(()=>{try{s.remove();}catch(e){}}, 2200);
 }
-// shake
 scene.classList.remove('shake');void scene.offsetWidth;scene.classList.add('shake');
 setTimeout(()=>scene.classList.remove('shake'), 700);
 
-// обнуление: тёмный overlay + reset
 setTimeout(()=>{
 const dark=$('mine-overlay-dark');
 if(dark)dark.classList.add('active');
@@ -1672,8 +2113,8 @@ updateSaperButtons();
 setTimeout(()=>{
 resetSaperUI();
 const dark=$('mine-overlay-dark');
-if(dark)setTimeout(()=>dark.classList.remove('active'), 100);
-}, 2200);
+if(dark)setTimeout(()=>dark.classList.remove('active'), 150);
+}, 2400);
 }
 function startSaper(){
 if(saperState==='playing')return;
@@ -1723,7 +2164,7 @@ saperDigging=false;
 saperBetGift=null;
 const dark=$('mine-overlay-dark');
 if(dark)dark.classList.remove('active');
-document.querySelectorAll('.mine-hand,.mine-dynamite,.mine-fuse,.mine-timer,.mine-flying-gem').forEach(el=>el.remove());
+document.querySelectorAll('.mine-hand,.mine-dynamite,.mine-fuse,.mine-flying-gem').forEach(el=>el.remove());
 renderSaperHoles();
 updateSaperButtons();
 }
