@@ -2172,7 +2172,7 @@ $('saper-start-btn').addEventListener('click',()=>{ sndClick(); startSaper(); })
 $('saper-cash-btn').addEventListener('click',()=>{ sndClick(); cashOutSaper(); });
 $('saper-bet-row').addEventListener('click',()=>{ if(saperState!=='idle')return; if(!inventory.length){ sndError(); showGlobalToast('error','У тебя нет гифтов'); return; } sndClick(); openGiftPicker('saper'); });
 $('saper-slider').addEventListener('input',(e)=>{ if(saperState!=='idle'){ e.target.value=saperStepIndex; return; } saperStepIndex=parseInt(e.target.value,10)||3; sndClick(); updateSaperButtons(); });
-
+  
 /* GIFT PICKER */
 let giftPickerMode=null;
 function openGiftPicker(mode){
