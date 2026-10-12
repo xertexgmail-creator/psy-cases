@@ -374,51 +374,65 @@ body.perf-low .menu-card-icon svg.micon{animation:none}
 .roll-result-text{font-size:26px;font-weight:900;color:#fff;text-align:center;line-height:1.1;max-width:240px}
 .roll-result-sub{font-size:15px;font-weight:900;color:#c0b8ff}
 .roll-result-pop.lose .roll-result-text{color:#ff8590}
-/* ==================== ЗОЛОТАЯ ШАХТА v2 ==================== */
-.mine-scene{position:relative;flex:1;min-height:460px;border-radius:22px;overflow:hidden;border:1px solid rgba(255,180,60,.4);margin-bottom:10px;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.7),inset 0 0 80px rgba(0,0,0,.4)}
-.mine-sky{position:absolute;top:0;left:0;right:0;height:42%;background:linear-gradient(180deg,#0a1a3a 0%,#2a4a8a 40%,#a86a40 85%,#d89060 100%);z-index:1}
-.mine-sun{position:absolute;top:8%;right:14%;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,#fff8c0 0%,#ffd93d 40%,#ff9500 75%,transparent 100%);box-shadow:0 0 40px rgba(255,217,61,.9),0 0 80px rgba(255,149,0,.6);z-index:2;animation:sunPulse 4s ease-in-out infinite}
-@keyframes sunPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.mine-cloud{position:absolute;height:18px;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.3));border-radius:20px;opacity:.55;z-index:2;pointer-events:none}
-.mine-cloud.c1{top:14%;left:-20%;width:90px;height:20px;animation:cloudDrift 40s linear infinite}
-.mine-cloud.c2{top:22%;left:-40%;width:70px;height:16px;animation:cloudDrift 55s linear infinite 10s}
-.mine-cloud.c3{top:9%;left:-15%;width:60px;height:14px;animation:cloudDrift 45s linear infinite 20s}
-@keyframes cloudDrift{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 100px))}}
-.mine-decor{position:absolute;top:36%;left:0;right:0;height:12%;z-index:2;pointer-events:none}
-.mine-decor svg{width:100%;height:100%;display:block}
-.mine-ground{position:absolute;bottom:0;left:0;right:0;height:58%;background:linear-gradient(180deg,#7a4a20 0%,#5a3a18 20%,#3a2410 55%,#1a0e04 85%,#08040a 100%);z-index:1}
-.mine-ground::before{content:'';position:absolute;inset:0;background-image:radial-gradient(2px 2px at 20% 30%,rgba(255,180,80,.35),transparent),radial-gradient(3px 3px at 70% 50%,rgba(255,180,80,.25),transparent),radial-gradient(2px 2px at 40% 80%,rgba(255,180,80,.3),transparent),radial-gradient(1px 1px at 85% 25%,rgba(255,180,80,.35),transparent),radial-gradient(2px 2px at 15% 60%,rgba(255,180,80,.25),transparent),radial-gradient(1px 1px at 55% 15%,rgba(255,180,80,.3),transparent);background-size:220px 220px;pointer-events:none}
-.mine-ground::after{content:'';position:absolute;top:0;left:0;right:0;height:14px;background:linear-gradient(180deg,rgba(255,217,61,.25),rgba(255,180,80,.1),transparent);pointer-events:none}
-.mine-holes{position:absolute;bottom:6%;left:6%;right:6%;height:50%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);gap:10px;z-index:3}
-.mine-hole{position:relative;border-radius:50%;background:radial-gradient(ellipse at 50% 65%,#000 0%,#0a0604 45%,#3a2410 85%,#5a3a18 100%);box-shadow:inset 0 -3px 8px rgba(255,180,80,.45),inset 0 6px 14px rgba(0,0,0,1),0 4px 10px rgba(0,0,0,.8);cursor:pointer;transition:transform .15s,box-shadow .3s;aspect-ratio:1/1;overflow:visible;border:0}
-.mine-hole::before{content:'';position:absolute;top:-8%;left:50%;transform:translateX(-50%);width:90%;height:30%;background:radial-gradient(ellipse at 50% 100%,rgba(255,180,80,.5),transparent 70%);border-radius:50%;pointer-events:none;filter:blur(2px)}
-.mine-hole::after{content:'';position:absolute;inset:8%;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,transparent 40%,rgba(0,0,0,.7) 100%);pointer-events:none}
+/* ==================== ЗОЛОТАЯ ШАХТА v3 ==================== */
+.mine-scene{position:relative;flex:1;min-height:500px;border-radius:22px;overflow:hidden;border:1px solid rgba(80,160,60,.45);margin-bottom:10px;box-shadow:0 20px 60px rgba(0,0,0,.75);background:linear-gradient(180deg,#1a4a8a 0%,#3a7ab0 30%,#a8c8e0 60%,#c8a868 100%)}
+.mine-sky{position:absolute;top:0;left:0;right:0;height:52%;z-index:1;background:linear-gradient(180deg,#2a6ab8 0%,#5a9ad0 40%,#a8c8e0 72%,#e8d0a0 100%)}
+.mine-sun{position:absolute;top:7%;right:12%;width:78px;height:78px;border-radius:50%;z-index:2;background:radial-gradient(circle,#fffff0 0%,#ffea70 25%,#ffb030 60%,#ff7010 100%);box-shadow:0 0 60px rgba(255,220,90,.95),0 0 120px rgba(255,170,60,.6),0 0 180px rgba(255,120,30,.3);animation:sunPulse 5s ease-in-out infinite}
+.mine-sun::before,.mine-sun::after{content:'';position:absolute;top:50%;left:50%;border-radius:50%;border:2px solid rgba(255,240,150,.55);transform:translate(-50%,-50%);animation:sunRay 6s ease-out infinite;pointer-events:none}
+.mine-sun::before{width:100px;height:100px}
+.mine-sun::after{width:140px;height:140px;animation-delay:1.6s}
+@keyframes sunRay{0%{opacity:.8;transform:translate(-50%,-50%) scale(.5)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+@keyframes sunPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.06);filter:brightness(1.15)}}
+.mine-cloud{position:absolute;height:26px;background:rgba(255,255,255,.92);border-radius:30px;z-index:2;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.18))}
+.mine-cloud::before,.mine-cloud::after{content:'';position:absolute;background:inherit;border-radius:50%}
+.mine-cloud::before{width:60%;height:200%;top:-70%;left:8%}
+.mine-cloud::after{width:50%;height:170%;top:-55%;left:52%}
+.mine-cloud.c1{top:12%;left:-20%;width:120px;animation:cloudDrift 55s linear infinite}
+.mine-cloud.c2{top:20%;left:-30%;width:90px;animation:cloudDrift 70s linear infinite 12s}
+.mine-cloud.c3{top:8%;left:-15%;width:80px;animation:cloudDrift 60s linear infinite 26s}
+@keyframes cloudDrift{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 200px))}}
+.mine-mountains{position:absolute;top:40%;left:0;right:0;height:18%;z-index:2;pointer-events:none}
+.mine-mountains svg{width:100%;height:100%;display:block}
+.mine-ground{position:absolute;bottom:0;left:0;right:0;height:52%;z-index:1;background:linear-gradient(180deg,#3a8828 0%,#4aa838 2.5%,#2a6a1a 3.5%,#5a3818 5%,#4a2c14 30%,#2a1808 60%,#0a0502 100%)}
+.mine-ground::after{content:'';position:absolute;top:12%;left:0;right:0;bottom:0;pointer-events:none;background-image:radial-gradient(2px 2px at 10% 20%,rgba(100,70,35,.55),transparent),radial-gradient(1px 1px at 25% 55%,rgba(0,0,0,.4),transparent),radial-gradient(2px 2px at 45% 15%,rgba(100,70,35,.5),transparent),radial-gradient(3px 3px at 65% 45%,rgba(0,0,0,.35),transparent),radial-gradient(2px 2px at 85% 30%,rgba(120,80,40,.5),transparent),radial-gradient(1px 1px at 15% 75%,rgba(0,0,0,.4),transparent),radial-gradient(2px 2px at 55% 80%,rgba(100,70,35,.45),transparent),radial-gradient(1px 1px at 92% 65%,rgba(0,0,0,.35),transparent);background-size:200px 200px}
+.mine-grass-line{position:absolute;bottom:calc(52% - 10px);left:0;right:0;height:22px;z-index:2;pointer-events:none}
+.mine-grass-line svg{width:100%;height:100%;display:block}
+.mine-holes{position:absolute;bottom:5%;left:5%;right:5%;height:46%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);gap:12px;z-index:3}
+.mine-hole{position:relative;cursor:pointer;aspect-ratio:1/1;border-radius:50%;background:radial-gradient(ellipse 100% 90% at 50% 55%,#000 0%,#050201 35%,#0e0703 55%,#1e1006 75%,#3a2410 95%);box-shadow:inset 0 10px 18px rgba(0,0,0,1),inset 0 -4px 10px rgba(120,70,30,.5),inset 0 4px 8px rgba(0,0,0,1),0 0 0 3px #5a3818,0 0 0 5px #7a5228,0 0 0 7px #4a2c14,0 0 0 9px rgba(74,44,20,.5),0 6px 14px rgba(0,0,0,.85);transition:transform .15s,box-shadow .3s,filter .3s;overflow:hidden}
+.mine-hole::before{content:'';position:absolute;top:-3%;left:50%;transform:translateX(-50%);width:88%;height:22%;border-radius:50%;background:radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.85),rgba(0,0,0,.5) 50%,transparent 80%);pointer-events:none;z-index:2}
+.mine-hole::after{content:'';position:absolute;bottom:-4%;left:50%;transform:translateX(-50%);width:92%;height:20%;border-radius:50%;background:radial-gradient(ellipse at 50% 0%,rgba(90,56,24,.7),transparent 70%);pointer-events:none;z-index:2}
 .mine-hole:active:not(.done):not(.digging){transform:scale(.9)}
 .mine-hole.digging{animation:holeShake .12s ease-in-out infinite}
 @keyframes holeShake{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(-2px,1px) rotate(-2deg)}75%{transform:translate(2px,-1px) rotate(2deg)}}
 .mine-hole.done{cursor:default}
-.mine-hole.done.diamond{background:radial-gradient(ellipse at 50% 45%,rgba(94,224,224,.85) 0%,#2a9a9a 50%,#0a3a3a 100%);box-shadow:inset 0 3px 10px rgba(94,224,224,.9),0 0 24px rgba(94,224,224,.7),inset 0 -3px 6px rgba(0,0,0,.6);animation:diamondPop .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes diamondPop{0%{transform:scale(.6)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
-.mine-hole.done.dynamite{background:radial-gradient(ellipse at 50% 45%,rgba(255,71,87,.95) 0%,#aa1a2a 55%,#3a0810 100%);box-shadow:inset 0 3px 10px rgba(255,71,87,.9),0 0 28px rgba(255,71,87,.9),inset 0 -3px 6px rgba(0,0,0,.6);animation:dynPop .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes dynPop{0%{transform:scale(.6)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
-.mine-hand{position:absolute;z-index:15;width:56px;height:56px;pointer-events:none;transform:translate(-50%,-100%);transition:transform .25s ease-out,opacity .25s ease-out}
-.mine-hand svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.85))}
-.mine-hand.going-in{transform:translate(-50%,-30%) scale(.9)}
-.mine-hand.digging{animation:handDigAnim .3s ease-in-out infinite}
-@keyframes handDigAnim{0%,100%{transform:translate(-50%,-30%) scale(.9) rotate(-3deg)}50%{transform:translate(-50%,-30%) scale(.9) rotate(3deg)}}
-.mine-hand.pulling-out{transform:translate(-50%,-140%) scale(1.1)}
-.mine-flying-gem{position:absolute;z-index:20;width:38px;height:38px;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 0 14px rgba(94,224,224,1))}
+.mine-hole.done .gem-slot,.mine-hole.done .dyn-slot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;pointer-events:none}
+.mine-hole.done.diamond{box-shadow:inset 0 10px 18px rgba(0,0,0,1),inset 0 -4px 10px rgba(120,70,30,.5),0 0 0 3px #5a3818,0 0 0 5px #2a9a9a,0 0 0 7px #1a5a5a,0 0 20px rgba(94,224,224,.7),0 6px 14px rgba(0,0,0,.85);animation:diamondPop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes diamondPop{0%{transform:scale(.7)}55%{transform:scale(1.15)}100%{transform:scale(1)}}
+.mine-hole.done.diamond .gem-slot{width:70%;height:70%;filter:drop-shadow(0 0 14px rgba(94,224,224,1));animation:gemBounce 1.8s ease-in-out infinite}
+@keyframes gemBounce{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+.mine-hole.done.diamond .gem-slot svg{width:100%;height:100%;display:block}
+.mine-hole.done.dynamite{box-shadow:inset 0 10px 18px rgba(0,0,0,1),inset 0 -4px 10px rgba(120,70,30,.5),0 0 0 3px #5a3818,0 0 0 5px #c0392b,0 0 0 7px #7a1a20,0 0 22px rgba(255,71,87,.85),0 6px 14px rgba(0,0,0,.85);animation:dynPop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes dynPop{0%{transform:scale(.7)}55%{transform:scale(1.15)}100%{transform:scale(1)}}
+.mine-hole.done.dynamite .dyn-slot{width:58%;height:78%;filter:drop-shadow(0 0 12px rgba(255,71,87,1))}
+.mine-hole.done.dynamite .dyn-slot svg{width:100%;height:100%;display:block}
+.mine-hand{position:absolute;z-index:15;width:60px;height:70px;pointer-events:none;transform:translate(-50%,-100%);transition:transform .28s cubic-bezier(.4,.2,.6,1),opacity .25s ease-out;filter:drop-shadow(0 4px 10px rgba(0,0,0,.85))}
+.mine-hand svg{width:100%;height:100%;display:block}
+.mine-hand.going-in{transform:translate(-50%,-30%) scale(.85)}
+.mine-hand.digging{animation:handDigAnim .28s ease-in-out infinite}
+@keyframes handDigAnim{0%,100%{transform:translate(-50%,-30%) scale(.85) rotate(-4deg)}50%{transform:translate(-50%,-30%) scale(.85) rotate(4deg)}}
+.mine-hand.pulling-out{transform:translate(-50%,-160%) scale(1.15) rotate(-8deg)}
+.mine-flying-gem{position:absolute;z-index:20;width:40px;height:40px;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 0 16px rgba(94,224,224,1))}
 .mine-flying-gem svg{width:100%;height:100%;display:block}
-.mine-bag{position:absolute;bottom:6px;right:12px;width:76px;height:96px;z-index:8;pointer-events:none;filter:drop-shadow(0 8px 16px rgba(0,0,0,.85))}
+.mine-bag{position:absolute;bottom:8px;right:14px;width:80px;height:100px;z-index:8;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,.9))}
 .mine-bag svg{width:100%;height:100%;display:block}
 .mine-bag.bump{animation:bagBump .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes bagBump{0%{transform:scale(1)}40%{transform:scale(1.22) rotate(-5deg)}100%{transform:scale(1) rotate(0)}}
-.mine-bag-count{position:absolute;top:-4px;left:50%;transform:translateX(-50%);padding:2px 8px;border-radius:10px;background:linear-gradient(135deg,#5ee0e0,#2a9a9a);color:#000;font-size:11px;font-weight:900;z-index:9;pointer-events:none;border:1px solid rgba(255,255,255,.5);min-width:24px;text-align:center}
-.mine-dynamite{position:absolute;z-index:19;width:34px;height:42px;pointer-events:none;transform:translate(-50%,-50%)}
-.mine-dynamite svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 10px rgba(255,71,87,.85))}
-.mine-fuse{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd93d 40%,#ff9500 80%);box-shadow:0 0 14px #ffd93d,0 0 28px #ff9500,0 0 42px #ff4757;z-index:21;pointer-events:none;transform:translate(-50%,-50%);animation:fuseSpark .12s infinite alternate}
-@keyframes fuseSpark{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(-50%,-50%) scale(1.6);opacity:.6}}
-.mine-timer{position:absolute;z-index:22;padding:2px 8px;border-radius:10px;background:linear-gradient(135deg,#ff4757,#c0392b);color:#fff;font-size:11px;font-weight:900;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(255,71,87,.9);border:1px solid rgba(255,255,255,.4);min-width:24px;text-align:center}
+.mine-bag-count{position:absolute;bottom:112px;right:24px;padding:3px 9px;border-radius:11px;background:linear-gradient(135deg,#5ee0e0,#2a9a9a);color:#000;font-size:12px;font-weight:900;z-index:9;pointer-events:none;border:1.5px solid rgba(255,255,255,.55);min-width:26px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.7)}
+.mine-dynamite{position:absolute;z-index:19;width:36px;height:48px;pointer-events:none;transform:translate(-50%,-50%)}
+.mine-dynamite svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 12px rgba(255,71,87,.9))}
+.mine-fuse{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd93d 40%,#ff9500 80%);box-shadow:0 0 16px #ffd93d,0 0 32px #ff9500,0 0 48px #ff4757;z-index:21;pointer-events:none;transform:translate(-50%,-50%);animation:fuseSpark .1s infinite alternate}
+@keyframes fuseSpark{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(-50%,-50%) scale(1.7);opacity:.55}}
+.mine-timer{position:absolute;z-index:22;padding:3px 10px;border-radius:11px;background:linear-gradient(135deg,#ff4757,#c0392b);color:#fff;font-size:12px;font-weight:900;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(255,71,87,.95);border:1.5px solid rgba(255,255,255,.5);min-width:26px;text-align:center}
 .mine-explosion-flash{position:absolute;inset:0;z-index:40;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,1) 0%,rgba(255,240,200,.95) 12%,rgba(255,180,80,.7) 30%,rgba(255,80,40,.35) 55%,transparent 80%);animation:mineExplFlash 1s cubic-bezier(.15,.9,.3,1) forwards;opacity:0}
 @keyframes mineExplFlash{0%{opacity:0;transform:scale(.3)}8%{opacity:1;transform:scale(1.05)}30%{opacity:.95;transform:scale(1.2)}100%{opacity:0;transform:scale(2.5)}}
 .mine-shock-ring{position:absolute;width:40px;height:40px;border-radius:50%;pointer-events:none;z-index:38;transform:translate(-50%,-50%);border:5px solid rgba(255,240,150,1);animation:mineRingExpand 1.3s cubic-bezier(.15,.9,.3,1) forwards;opacity:0}
@@ -429,25 +443,22 @@ body.perf-low .menu-card-icon svg.micon{animation:none}
 @keyframes mineDebrisFly{0%{opacity:0;transform:translate(-50%,-50%) scale(1.2)}12%{opacity:1;transform:translate(-50%,-50%) scale(1)}70%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15) rotate(720deg)}}
 .mine-spark{position:absolute;pointer-events:none;z-index:42;transform:translate(-50%,-50%);animation:mineSparkFly 2s ease-out forwards;opacity:0}
 @keyframes mineSparkFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}15%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.3) rotate(540deg)}}
-.mine-overlay-dark{position:absolute;inset:0;background:#000;opacity:0;z-index:60;pointer-events:none;transition:opacity 1.2s ease}
-.mine-overlay-dark.active{opacity:.85}
+.mine-overlay-dark{position:absolute;inset:0;background:#000;opacity:0;z-index:60;pointer-events:none;transition:opacity 1s ease}
+.mine-overlay-dark.active{opacity:1}
 .mine-scene.shake{animation:mineSceneShake .65s cubic-bezier(.36,.07,.19,.97) both}
 @keyframes mineSceneShake{0%,100%{transform:translate(0,0)}10%{transform:translate(-10px,6px) rotate(-.8deg)}20%{transform:translate(10px,-6px) rotate(.8deg)}30%{transform:translate(-8px,-5px)}40%{transform:translate(8px,5px)}50%{transform:translate(-6px,4px)}60%{transform:translate(6px,-4px)}70%{transform:translate(-3px,2px)}80%{transform:translate(3px,-2px)}}
 .mine-info{display:flex;justify-content:space-around;align-items:center;background:radial-gradient(ellipse 90% 120% at 50% 0%,rgba(255,217,61,.12),transparent 60%),linear-gradient(180deg,rgba(34,34,50,.95),rgba(14,14,20,.98));border:1px solid rgba(255,217,61,.25);border-radius:18px;padding:12px 16px;margin-bottom:8px;flex-shrink:0;gap:6px}
 .mine-stat{text-align:center;flex:1}
-.mine-stat .lbl{font-size:9px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.1em;font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px}
-.mine-stat .lbl svg{width:10px;height:10px;opacity:.7}
+.mine-stat .lbl{font-size:9px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.1em;font-weight:800}
 .mine-stat .val{font-size:18px;font-weight:900;margin-top:5px;font-variant-numeric:tabular-nums}
 .mine-stat .val.green{color:var(--green);text-shadow:0 0 20px rgba(46,204,113,.7)}
 .mine-stat .val.gold{color:var(--gold);text-shadow:0 0 20px rgba(255,217,61,.7)}
 .mine-stat .val.red{color:var(--red);text-shadow:0 0 20px rgba(255,71,87,.7)}
 .mine-step-row{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(22,22,32,.9),rgba(14,14,20,.9));border:1px solid rgba(255,217,61,.2);border-radius:12px;padding:10px 12px;margin-bottom:8px;flex-shrink:0;gap:10px}
 .mine-step-label{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim)}
-.mine-step-label svg{width:12px;height:12px;color:var(--gold)}
 .mine-step-value{font-size:15px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
 .mine-slider{width:100%;margin-bottom:10px;flex-shrink:0;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,#2ecc71,#ffd93d 50%,#ff4757);outline:none;cursor:pointer}
 .mine-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#fff,#d0d4ff);border:2px solid rgba(0,0,0,.3)}
-.mine-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#fff,#d0d4ff);border:2px solid rgba(0,0,0,.3)}
 .mine-btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;flex-shrink:0}
 .mine-btn{padding:18px;border-radius:15px;border:none;font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:inherit}
 .mine-btn:active:not(:disabled){transform:scale(.97)}
@@ -677,27 +688,35 @@ body{padding:16px}
 <div class="mine-cloud c1"></div>
 <div class="mine-cloud c2"></div>
 <div class="mine-cloud c3"></div>
-<div class="mine-decor">
+<div class="mine-mountains">
 <svg viewBox="0 0 400 100" preserveAspectRatio="none">
-<path d="M0 100 L0 60 Q 30 30 60 55 Q 80 20 110 45 Q 140 10 170 40 Q 200 25 230 50 Q 260 15 290 45 Q 320 25 350 50 Q 375 30 400 55 L400 100 Z" fill="#3a2810" opacity="0.6"/>
-<path d="M0 100 L0 75 Q 40 55 80 70 Q 120 50 160 65 Q 200 40 240 60 Q 280 45 320 65 Q 360 50 400 70 L400 100 Z" fill="#2a1a08" opacity="0.75"/>
+<path d="M0 100 L0 45 L30 25 L55 40 L80 15 L110 38 L140 20 L165 42 L195 18 L225 40 L255 25 L285 48 L315 30 L345 50 L375 32 L400 48 L400 100 Z" fill="#3a5a7a" opacity="0.85"/>
+<path d="M0 100 L0 65 L40 45 L75 62 L110 42 L150 60 L190 40 L230 58 L270 44 L310 62 L350 46 L400 60 L400 100 Z" fill="#2a4a68" opacity="0.9"/>
+<path d="M0 100 L0 78 L50 62 L100 76 L150 58 L200 74 L250 60 L300 76 L350 62 L400 76 L400 100 Z" fill="#1a3a54"/>
 </svg>
 </div>
 <div class="mine-ground"></div>
+<div class="mine-grass-line">
+<svg viewBox="0 0 400 22" preserveAspectRatio="none">
+<path d="M0 22 L0 12 Q5 7 10 12 T20 12 T30 12 T40 12 T50 12 T60 12 T70 12 T80 12 T90 12 T100 12 T110 12 T120 12 T130 12 T140 12 T150 12 T160 12 T170 12 T180 12 T190 12 T200 12 T210 12 T220 12 T230 12 T240 12 T250 12 T260 12 T270 12 T280 12 T290 12 T300 12 T310 12 T320 12 T330 12 T340 12 T350 12 T360 12 T370 12 T380 12 T390 12 T400 12 L400 22 Z" fill="#4aa838"/>
+<path d="M0 22 L0 15 L3 10 L6 15 L9 8 L12 14 L15 11 L18 6 L21 13 L24 10 L27 15 L30 7 L33 14 L36 10 L39 15 L42 9 L45 14 L48 11 L51 6 L54 13 L57 10 L60 15 L63 8 L66 14 L69 10 L72 15 L75 7 L78 13 L81 10 L84 15 L87 9 L90 14 L93 11 L96 6 L99 13 L102 10 L105 15 L108 8 L111 14 L114 10 L117 15 L120 7 L123 13 L126 10 L129 15 L132 9 L135 14 L138 11 L141 6 L144 13 L147 10 L150 15 L153 8 L156 14 L159 10 L162 15 L165 7 L168 13 L171 10 L174 15 L177 9 L180 14 L183 11 L186 6 L189 13 L192 10 L195 15 L198 8 L201 14 L204 10 L207 15 L210 7 L213 13 L216 10 L219 15 L222 9 L225 14 L228 11 L231 6 L234 13 L237 10 L240 15 L243 8 L246 14 L249 10 L252 15 L255 7 L258 13 L261 10 L264 15 L267 9 L270 14 L273 11 L276 6 L279 13 L282 10 L285 15 L288 8 L291 14 L294 10 L297 15 L300 7 L303 13 L306 10 L309 15 L312 9 L315 14 L318 11 L321 6 L324 13 L327 10 L330 15 L333 8 L336 14 L339 10 L342 15 L345 7 L348 13 L351 10 L354 15 L357 9 L360 14 L363 11 L366 6 L369 13 L372 10 L375 15 L378 8 L381 14 L384 10 L387 15 L390 7 L393 13 L396 10 L399 15 L400 15 L400 22 Z" fill="#3a8828"/>
+</svg>
+</div>
 <div class="mine-holes" id="saper-grid"></div>
 <div class="mine-bag" id="mine-bag">
 <svg viewBox="0 0 76 96">
 <defs>
-<linearGradient id="bagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a20"/><stop offset="50%" stop-color="#5a3a10"/><stop offset="100%" stop-color="#2a1808"/></linearGradient>
-<linearGradient id="bagTie" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8a060"/><stop offset="100%" stop-color="#7a5a20"/></linearGradient>
+<linearGradient id="bagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a87028"/><stop offset="40%" stop-color="#6a4218"/><stop offset="100%" stop-color="#2a1808"/></linearGradient>
+<linearGradient id="bagTie" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8b070"/><stop offset="100%" stop-color="#8a6028"/></linearGradient>
 </defs>
-<ellipse cx="38" cy="92" rx="34" ry="6" fill="rgba(0,0,0,.6)"/>
-<path d="M14 30 Q 12 60 20 84 Q 30 92 38 92 Q 46 92 56 84 Q 64 60 62 30 Q 50 22 38 22 Q 26 22 14 30 Z" fill="url(#bagG)" stroke="#3a2408" stroke-width="2"/>
+<ellipse cx="38" cy="92" rx="34" ry="6" fill="rgba(0,0,0,.7)"/>
+<path d="M14 30 Q 12 60 20 84 Q 30 92 38 92 Q 46 92 56 84 Q 64 60 62 30 Q 50 22 38 22 Q 26 22 14 30 Z" fill="url(#bagG)" stroke="#2a1808" stroke-width="2"/>
 <path d="M14 30 Q 24 24 38 24 Q 52 24 62 30 L 60 36 Q 50 30 38 30 Q 26 30 16 36 Z" fill="url(#bagTie)"/>
-<rect x="30" y="14" width="16" height="12" rx="4" fill="url(#bagTie)" stroke="#3a2408" stroke-width="1.5"/>
-<circle cx="30" cy="55" r="2" fill="#ffd93d" opacity=".7"/>
-<circle cx="48" cy="62" r="1.5" fill="#ffd93d" opacity=".6"/>
-<circle cx="38" cy="72" r="1.8" fill="#ffd93d" opacity=".5"/>
+<rect x="30" y="14" width="16" height="12" rx="4" fill="url(#bagTie)" stroke="#2a1808" stroke-width="1.5"/>
+<circle cx="28" cy="52" r="2.5" fill="#ffd93d" opacity=".85"/>
+<circle cx="48" cy="60" r="2" fill="#ffd93d" opacity=".75"/>
+<circle cx="38" cy="70" r="2.2" fill="#5ee0e0" opacity=".7"/>
+<circle cx="24" cy="68" r="1.8" fill="#5ee0e0" opacity=".6"/>
 </svg>
 </div>
 <div class="mine-bag-count" id="mine-bag-count">0</div>
@@ -709,7 +728,7 @@ body{padding:16px}
 <div class="mine-stat"><div class="lbl">Динамит</div><div class="val red" id="saper-mines">3</div></div>
 </div>
 <div class="mine-step-row">
-<div class="mine-step-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Риск за клетку</div>
+<div class="mine-step-label">Риск за клетку</div>
 <div class="mine-step-value" id="saper-step-value">+0.30x</div>
 </div>
 <input type="range" class="mine-slider" id="saper-slider" min="1" max="7" step="1" value="3">
