@@ -215,7 +215,6 @@ body.perf-low .menu-card-icon .gicon{animation:none}
 .news-feature-name{font-size:11px;font-weight:800;margin-bottom:2px}
 .news-feature-desc{font-size:10px;color:var(--text-mute);line-height:1.35}
 .news-feature-desc b{color:#fff;font-weight:900}
-/* UPGRADER */
 .arena{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:stretch;margin-bottom:8px;flex-shrink:0}
 .item-slot{background:linear-gradient(180deg,rgba(24,24,36,.92),rgba(10,10,18,.96));border-radius:16px;padding:18px 6px 12px;text-align:center;border:1px solid var(--border);min-height:155px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.6)}
 .item-slot::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,var(--slot-glow,transparent),transparent 65%);opacity:.8;pointer-events:none}
@@ -261,7 +260,6 @@ body.perf-low .menu-card-icon .gicon{animation:none}
 .items-scroll{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 .items-scroll::-webkit-scrollbar{width:3px}
 .items-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
-/* Inventory grid — 3 per row чтобы не залазили */
 .item-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .slot{background:linear-gradient(180deg,rgba(24,24,36,.75),rgba(10,10,18,.75));border:1px solid var(--border);border-bottom:2px solid var(--rar-color,transparent);border-radius:10px;padding:8px 5px 7px;cursor:pointer;text-align:center;position:relative;min-width:0}
 .slot:active{transform:scale(.95)}
@@ -272,7 +270,6 @@ body.perf-low .menu-card-icon .gicon{animation:none}
 .slot-name{font-size:8px;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
 .slot-price{font-size:9px;font-weight:800;margin-top:2px;color:var(--gold)}
 .empty{grid-column:1/-1;text-align:center;color:var(--text-mute);font-size:11px;padding:24px 8px}
-/* ROCKET */
 .rocket-status-bar{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(24,24,36,.9),rgba(12,12,22,.9));border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px;flex-shrink:0;gap:10px}
 .rocket-phase{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
 .rocket-phase.waiting{color:var(--gold)}.rocket-phase.flying{color:var(--green)}.rocket-phase.result{color:var(--text-dim)}
@@ -369,7 +366,6 @@ body.perf-low .menu-card-icon .gicon{animation:none}
 .rocket-btn:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
 .rocket-btn.cashout{background:linear-gradient(135deg,#ffcf44,#ff7a18)}
 .rocket-btn.cashed{background:linear-gradient(135deg,#303038,#1c1c22);color:var(--green)}
-/* ========== ROLL — PREMIUM ========== */
 .roll-board{position:relative;width:100%;flex:1;min-height:460px;display:flex;align-items:center;justify-content:center;background:
 radial-gradient(ellipse 70% 50% at 50% 15%,rgba(200,220,255,.22),transparent 55%),
 radial-gradient(ellipse 50% 40% at 15% 90%,rgba(168,120,255,.16),transparent 60%),
@@ -452,7 +448,6 @@ body.perf-low .roll-board::before{animation:none}
 .roll-history .rh-item.gift{color:var(--gold);border-color:rgba(255,207,68,.45);background:linear-gradient(180deg,rgba(255,207,68,.14),rgba(255,207,68,.03))}
 .roll-particle{position:absolute;pointer-events:none;z-index:15;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%);animation:rollParticleFly 1.3s cubic-bezier(.15,.9,.3,1) forwards;opacity:0}
 @keyframes rollParticleFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.2) rotate(360deg)}}
-/* CASES */
 .cases-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:12px}
 .case-card{position:relative;overflow:hidden;background:linear-gradient(155deg,rgba(30,30,48,.98),rgba(12,12,22,.99));border:1px solid rgba(255,255,255,.1);border-radius:20px;cursor:pointer;font-family:inherit;color:var(--text);display:flex;flex-direction:column;text-align:center;box-shadow:0 12px 44px rgba(0,0,0,.75);transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .3s}
 .case-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 25%,var(--case-glow,rgba(168,120,255,.15)) 0%,transparent 55%);pointer-events:none;z-index:0}
@@ -657,7 +652,7 @@ body{padding:16px}
 <div class="news-feed-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9"/><path d="M18 14H10M18 18H10M18 10H10"/></svg></div>
 <div class="news-feed-info">
 <div class="news-feed-title">Новости проекта <span class="news-feed-badge-inline">NEW</span></div>
-<div class="news-feed-sub">v2.0.6 · ROLL 3.0 · живая лента и новый дизайн</div>
+<div class="news-feed-sub">v2.0.7 · ROLL · синхрон результата и фиксы</div>
 </div>
 <div class="news-feed-arrow">→</div>
 </div>
@@ -838,14 +833,24 @@ body{padding:16px}
 </a>
 <div class="news-version-card hot">
 <div class="news-version-head">
+<div class="news-version-tag hot">v2.0.7</div>
+<div class="news-version-head-right"><span class="news-version-type hot">🔥 ФИКС</span></div>
+</div>
+<div class="news-version-title">Синхронизация результата колеса</div>
+<div class="news-feature-list">
+<div class="news-feature hot"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Что видно — то и падает</div><div class="news-feature-desc">Результат теперь читается из <b>фактического</b> угла остановки колеса. Больше никаких подарков вместо кэфов</div></div></div>
+<div class="news-feature hot"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Ракетка: таймер стабилен</div><div class="news-feature-desc">Дубль-таймер для цикла — время теперь идёт всегда, даже в фоне</div></div></div>
+</div>
+</div>
+<div class="news-version-card hot">
+<div class="news-version-head">
 <div class="news-version-tag hot">v2.0.6</div>
 <div class="news-version-head-right"><span class="news-version-type hot">🔥 ROLL 3.0</span></div>
 </div>
 <div class="news-version-title">ROLL стал по-настоящему живым</div>
 <div class="news-feature-list">
-<div class="news-feature hot"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Живая лента выигрышей</div><div class="news-feature-desc">Сверху теперь бежит тикер с последними дропами других игроков — кто выбил подарок, кто забрал жирный множитель</div></div></div>
-<div class="news-feature hot"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Меньше слотов — больше атмосферы</div><div class="news-feature-desc">12 крупных секторов вместо 16 мелких. Каждый виден, каждый читается. Ничего не наслаивается</div></div></div>
-<div class="news-feature hot"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Свет вернулся</div><div class="news-feature-desc">Золото, фиолет, синева — цвета теперь работают в связке. Тёмная тема с сочными акцентами вместо серости</div></div></div>
+<div class="news-feature hot"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Живая лента выигрышей</div><div class="news-feature-desc">Сверху бежит тикер с последними дропами игроков</div></div></div>
+<div class="news-feature hot"><div class="news-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg></div><div class="news-feature-body"><div class="news-feature-name">Свет вернулся</div><div class="news-feature-desc">Золото, фиолет, синева — тёмная тема с сочными акцентами</div></div></div>
 </div>
 </div>
 <div class="news-version-card patch">
@@ -1052,7 +1057,6 @@ const ROCKET_MILESTONES=[{value:1.5,label:'1.5x',topPct:78,mega:false},{value:2,
 const ROCKET_START_Y=90;
 const ROCKET_END_Y=3;
 
-/* ROLL — 12 крупных сегментов с цветными градиентами */
 const ROLL_TEMPLATE=[
 {type:'stars',mult:0,weight:22,colors:['#2a2a36','#0a0a12'],glow:'rgba(120,120,140,0.3)'},
 {type:'stars',mult:0.5,weight:11,colors:['#4a2028','#1a0a10'],glow:'rgba(255,120,120,0.35)'},
@@ -1106,7 +1110,6 @@ let rollCurrentSegments=null;
 let rollBuiltForBet=0;
 let rollBetDebounce=null;
 let _svgBuildCounter=0;
-/* live wins ticker */
 let liveWins=[];
 
 const $=id=>document.getElementById(id);
@@ -1127,9 +1130,10 @@ function loadState(){try{const inv=JSON.parse(localStorage.getItem(INV_KEY)||'nu
 function hexToRgba(hex,a){const h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
 function updateBalanceUI(){const b=$('balance');if(b){b.textContent=fmtBalance(balance);b.title=String(balance);}const sb=$('shop-balance');if(sb)sb.textContent=fmtBalance(balance);const chip=$('plus-btn');if(chip){chip.classList.add('pulse');setTimeout(()=>chip.classList.remove('pulse'),500);}}
 function goToMenu(){if(currentScreen==='menu')return;currentScreen='menu';document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-menu').classList.add('active');updateLogo();}
-function goToScreen(name){currentScreen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+name).classList.add('active');updateLogo();if(name==='rocket'){updateRocketButtonLabel();if(rocketPhase!=='flying'){resetRocketVisual();}}if(name==='shop')renderShop();if(name==='cases')renderCases();if(name==='roll'){rebuildRollForBet(true);updateRollUI();resetRollVisual();}syncRocketVisual();}
+function goToScreen(name){if(name==='roll'&&!rollAccess()){sndError();return;}currentScreen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+name).classList.add('active');updateLogo();if(name==='rocket'){updateRocketButtonLabel();if(rocketPhase!=='flying'){resetRocketVisual();}}if(name==='shop')renderShop();if(name==='cases')renderCases();if(name==='roll'){rebuildRollForBet(true);updateRollUI();resetRollVisual();}syncRocketVisual();}
 function updateLogo(){const l=$('logo');if(l)l.classList.toggle('disabled',currentScreen==='menu');}
 function rocketAccess(){return isAdmin();}
+function rollAccess(){return isAdmin();}
 
 function buildMenuCards(){
 const grid=$('menu-grid');if(!grid)return;
@@ -1137,7 +1141,6 @@ const admin=isAdmin();
 const rocketTitle='Ракетка';
 const rocketDesc=admin?'Земля круглая!':'НА ПЕРЕРАБОТКЕ';
 const rocketLocked=admin?'':'locked';
-/* SVG icons for hero tags */
 const iconGift='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>';
 const iconStar='<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>';
 const iconDiamond='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3L8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>';
@@ -1200,6 +1203,7 @@ return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" 
 <div class="menu-card-title">Магазин</div>
 <div class="menu-card-desc">Купить гифты</div>
 </button>`;
+if(!isAdmin()){const _rc=grid.querySelector('[data-mode="roll"]');if(_rc)_rc.remove();}
 grid.querySelectorAll('.menu-card').forEach(card=>{
 card.addEventListener('click',function(e){
 e.preventDefault();sndClick();
@@ -1642,7 +1646,6 @@ setTimeout(()=>{try{p.remove();}catch(e){}},1400);
 const wrapEl=$('roll-wheel-wrap');
 if(wrapEl){wrapEl.classList.add('landed');setTimeout(()=>wrapEl.classList.remove('landed'),1400);}
 }
-/* live wins ticker */
 function pushLiveWin(text,cls){
 liveWins.unshift({text:text,cls:cls||'',time:Date.now()});
 if(liveWins.length>20)liveWins=liveWins.slice(0,20);
@@ -1681,7 +1684,6 @@ const totalW=rollCurrentSegments.reduce((s,x)=>s+x.weight,0);
 let r=Math.random()*totalW;
 let idx=0;
 for(let i=0;i<N;i++){r-=rollCurrentSegments[i].weight;if(r<=0){idx=i;break;}}
-const seg=rollCurrentSegments[idx];
 const centerAngle=idx*segAngle;
 const jitter=(Math.random()*0.4-0.2)*segAngle;
 const baseRotation=((360-centerAngle+jitter)%360+360)%360;
@@ -1702,6 +1704,12 @@ w.style.transform='rotate('+rollCurrentRotation+'deg)';
 void w.offsetWidth;
 requestAnimationFrame(()=>{if(w)w.style.transition='';});
 }
+/* ⚡ Bulletproof: победитель читается из фактического угла остановки */
+const _n=rollCurrentSegments.length;
+const _deg=360/_n;
+let _landed=Math.round((360-rollCurrentRotation)/_deg)%_n;
+if(_landed<0)_landed+=_n;
+const seg=rollCurrentSegments[_landed];
 stats.wagered+=betVal;stats.games++;
 const cv=$('roll-center-value');
 if(seg.type==='gift'){
@@ -2122,7 +2130,24 @@ el.textContent=onlineCurrent;
 setInterval(()=>{const drift=(Math.random()-0.5)*1.5;onlineTarget=Math.max(1,Math.min(6,onlineTarget+drift));},15000+Math.random()*10000);
 setInterval(()=>{if(onlineCurrent<onlineTarget)onlineCurrent+=.1;else if(onlineCurrent>onlineTarget)onlineCurrent-=.1;if(el)el.textContent=Math.max(1,Math.round(onlineCurrent));},3500);
 }
-function startGameLoop(){const loop=()=>{rocketCycleTick();requestAnimationFrame(loop);};requestAnimationFrame(loop);}
+/* ⚡ Fixed game loop — rAF + setInterval backup */
+let _gameLoopStarted=false;
+let _lastGameLoopCall=0;
+function startGameLoop(){
+if(_gameLoopStarted)return;
+_gameLoopStarted=true;
+const loop=()=>{
+const now=Date.now();
+if(now-_lastGameLoopCall>28){_lastGameLoopCall=now;rocketCycleTick();}
+requestAnimationFrame(loop);
+};
+requestAnimationFrame(loop);
+/* надёжный бэкап — работает даже когда rAF стоит в фоне */
+setInterval(()=>{
+const now=Date.now();
+if(now-_lastGameLoopCall>60){_lastGameLoopCall=now;rocketCycleTick();}
+},80);
+}
 function startLiveTickerLoop(){
 renderLiveTicker();
 setInterval(()=>{
