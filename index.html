@@ -927,7 +927,7 @@ function updateLogo(){ const l=$('logo'); if(l)l.classList.toggle('disabled',cur
 
 const ICON_ROCKET='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="rkB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dde3f5"/><stop offset="0.4" stop-color="#ffffff"/><stop offset="1" stop-color="#8a94b8"/></linearGradient><linearGradient id="rkSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a86ff"/><stop offset="1" stop-color="#2b5cbf"/></linearGradient><linearGradient id="rkF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.25" stop-color="#ffd93d"/><stop offset="0.6" stop-color="#ff9500"/><stop offset="1" stop-color="#ff4757"/></linearGradient><radialGradient id="rkW" cx="0.35" cy="0.35" r="0.75"><stop offset="0" stop-color="#e0f4ff"/><stop offset="0.5" stop-color="#4a86ff"/><stop offset="1" stop-color="#1a3a6b"/></radialGradient></defs><path d="M27 48 Q 25 56 28 62 Q 30 64 32 62 Q 34 64 36 62 Q 39 56 37 48 Z" fill="url(#rkF)"/><path d="M30 48 Q 30 55 32 60 Q 34 55 34 48 Z" fill="#ffffff" opacity="0.85"/><path d="M19 38 L 9 54 L 19 50 L 19 38 Z" fill="url(#rkSh)" stroke="#1a3a8a" stroke-width="1.2" stroke-linejoin="round"/><path d="M45 38 L 55 54 L 45 50 L 45 38 Z" fill="url(#rkSh)" stroke="#1a3a8a" stroke-width="1.2" stroke-linejoin="round"/><path d="M32 3 Q 45 16 45 34 L 45 47 Q 38 50 32 50 Q 26 50 19 47 L 19 34 Q 19 16 32 3 Z" fill="url(#rkB)" stroke="#5a6a9a" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 3 Q 24 12 22 26 Q 27 14 32 3 Z" fill="#ffffff" opacity="0.7"/><path d="M19 30 L 45 30 L 45 34 L 19 34 Z" fill="url(#rkSh)" opacity="0.6"/><circle cx="32" cy="21" r="6.5" fill="url(#rkW)" stroke="#5a6a9a" stroke-width="1.4"/><ellipse cx="30" cy="19" rx="2" ry="1.4" fill="#ffffff" opacity="0.8"/><circle cx="10" cy="12" r="1.2" fill="#ffd93d"/><circle cx="54" cy="9" r="1.5" fill="#ffffff"/></svg>';
 const ICON_UPGRADER='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="upG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="50%" stop-color="#c0c8ff"/><stop offset="100%" stop-color="#a855f7"/></linearGradient><linearGradient id="crG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0d8ff"/><stop offset="100%" stop-color="#6a48c8"/></linearGradient></defs><path d="M32 4 L14 24 L24 24 L24 36 L40 36 L40 24 L50 24 Z" fill="url(#upG)" stroke="#a855f7" stroke-width="2" stroke-linejoin="round"/><polygon points="32,42 44,50 32,60 20,50" fill="url(#crG)" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16" cy="14" r="1.5" fill="#ffd93d"/><circle cx="48" cy="10" r="1.5" fill="#ffd93d"/></svg>';
-const ICON_MINE='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="mnD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a4a20"/><stop offset="100%" stop-color="#3a2410"/></linearGradient><linearGradient id="mnG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8c0"/><stop offset="50%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#ff9500"/></linearGradient></defs><ellipse cx="32" cy="46" rx="26" ry="10" fill="url(#mnD)"/><ellipse cx="32" cy="44" rx="22" ry="7" fill="#1a0e04"/><ellipse cx="32" cy="42" rx="14" ry="4" fill="#000"/><polygon points="32,8 44,22 32,36 20,22" fill="url(#mnG)" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><line x1="26" y1="20" x2="32" y2="14" stroke="#fff" stroke-width="1" opacity=".7"/><circle cx="14" cy="30" r="1.5" fill="#ffd93d"/><circle cx="50" cy="28" r="1.5" fill="#ffd93d"/></svg>';
+const ICON_MINE='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="mnBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2814"/><stop offset="100%" stop-color="#1a1008"/></linearGradient><linearGradient id="mnGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8c0"/><stop offset="50%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#ff9500"/></linearGradient><linearGradient id="mnBeam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a2a"/><stop offset="100%" stop-color="#3a2010"/></linearGradient></defs><rect x="6" y="8" width="52" height="48" rx="8" fill="url(#mnBg)" stroke="url(#mnGold)" stroke-width="2"/><rect x="10" y="12" width="44" height="4" fill="url(#mnBeam)"/><rect x="10" y="48" width="44" height="4" fill="url(#mnBeam)"/><rect x="10" y="12" width="4" height="40" fill="url(#mnBeam)"/><rect x="50" y="12" width="4" height="40" fill="url(#mnBeam)"/><path d="M26 20 L40 34 L36 38 L22 24 Z" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="1"/><path d="M20 30 Q 16 34 20 40 L 28 40 L 24 30 Z" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="1"/><path d="M42 20 Q 48 24 42 30 L 36 24 Z" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="1"/><circle cx="48" cy="20" r="2" fill="#fff8c0"/><circle cx="18" cy="44" r="1.5" fill="#fff8c0" opacity=".8"/><circle cx="46" cy="44" r="1.5" fill="#fff8c0" opacity=".8"/><circle cx="32" cy="44" r="2.5" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="0.8"/></svg>';
 const ICON_SHOP='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="bxG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4a68"/><stop offset="100%" stop-color="#1a1a2e"/></linearGradient><linearGradient id="ribG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="50%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#ff9500"/></linearGradient></defs><rect x="12" y="26" width="40" height="32" rx="4" fill="url(#bxG)" stroke="#7a7a9a" stroke-width="1.5"/><rect x="10" y="20" width="44" height="10" rx="3" fill="url(#bxG)" stroke="#7a7a9a" stroke-width="1.5"/><rect x="28" y="20" width="8" height="38" fill="url(#ribG)"/><path d="M32 20 Q 18 8 24 6 Q 32 5 32 18" fill="url(#ribG)" stroke="#c88000" stroke-width="1"/><path d="M32 20 Q 46 8 40 6 Q 32 5 32 18" fill="url(#ribG)" stroke="#c88000" stroke-width="1"/><circle cx="20" cy="38" r="1.5" fill="#ffd93d"/><circle cx="44" cy="44" r="1.5" fill="#ffd93d"/></svg>';
 
 function buildMenuCards(){
@@ -1235,7 +1235,340 @@ updateRollUI();
 }
 $('roll-spin').addEventListener('click',()=>{ sndClick(); spinRoll(); });
 
-const ICON_MINE='<svg class="micon" viewBox="0 0 64 64"><defs><linearGradient id="mnBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2814"/><stop offset="100%" stop-color="#1a1008"/></linearGradient><linearGradient id="mnGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8c0"/><stop offset="50%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#ff9500"/></linearGradient><linearGradient id="mnBeam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a2a"/><stop offset="100%" stop-color="#3a2010"/></linearGradient></defs><rect x="6" y="8" width="52" height="48" rx="8" fill="url(#mnBg)" stroke="url(#mnGold)" stroke-width="2"/><rect x="10" y="12" width="44" height="4" fill="url(#mnBeam)"/><rect x="10" y="48" width="44" height="4" fill="url(#mnBeam)"/><rect x="10" y="12" width="4" height="40" fill="url(#mnBeam)"/><rect x="50" y="12" width="4" height="40" fill="url(#mnBeam)"/><path d="M26 20 L40 34 L36 38 L22 24 Z" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="1"/><path d="M20 30 Q 16 34 20 40 L 28 40 L 24 30 Z" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="1"/><path d="M42 20 Q 48 24 42 30 L 36 24 Z" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="1"/><circle cx="48" cy="20" r="2" fill="#fff8c0"/><circle cx="18" cy="44" r="1.5" fill="#fff8c0" opacity=".8"/><circle cx="46" cy="44" r="1.5" fill="#fff8c0" opacity=".8"/><circle cx="32" cy="44" r="2.5" fill="url(#mnGold)" stroke="#5a3a10" stroke-width="0.8"/></svg>';
+/* ============ GOLD MINE SLOT v7 ============ */
+const GM_COLS=5, GM_ROWS=4, GM_SIZE=20;
+const GM_SPIN_COST=100;
+const GM_SYMBOLS={
+coin:{e:'🪙',pay:{3:0.5,4:1.5,5:4}},
+nugget:{e:'🟨',pay:{3:0.8,4:2.5,5:6}},
+pick:{e:'⛏️',pay:{3:1.2,4:4,5:10}},
+crystal:{e:'💎',pay:{3:2,4:6,5:15}},
+chest:{e:'🎁',pay:{3:3,4:10,5:25}},
+star:{e:'⭐',pay:{3:5,4:20,5:50}},
+bomb:{e:'💣',pay:null},
+drill:{e:'🔩',pay:null}
+};
+const GM_POOL=['coin','coin','coin','coin','coin','coin','coin','coin','nugget','nugget','nugget','nugget','nugget','nugget','nugget','pick','pick','pick','pick','pick','pick','crystal','crystal','crystal','crystal','chest','chest','chest','star','star','bomb','bomb','bomb','bomb','drill','drill','drill'];
+const GM_CASCADE_MULT=[1,1,2,3,5,10,20,50,100];
+let gmGrid=[], gmSpinning=false, gmCascadeLevel=0, gmTotalWin=0, gmXp=0, gmLevel=1;
+
+function gmRand(){ return GM_POOL[Math.floor(Math.random()*GM_POOL.length)]; }
+function gmBuildCell(idx, sym){
+  const cell=document.createElement('div');
+  cell.className='gm-cell';
+  cell.dataset.idx=idx;
+  if(sym && GM_SYMBOLS[sym]){
+    const ic=document.createElement('div');
+    ic.className='gm-icon';
+    ic.textContent=GM_SYMBOLS[sym].e;
+    cell.appendChild(ic);
+  }
+  return cell;
+}
+function gmRenderAll(){
+  const grid=$('gm-grid'); if(!grid) return;
+  grid.innerHTML='';
+  for(let c=0;c<GM_COLS;c++){
+    const col=document.createElement('div');
+    col.className='gm-col'; col.dataset.col=c;
+    for(let r=0;r<GM_ROWS;r++){
+      col.appendChild(gmBuildCell(r*GM_COLS+c, gmGrid[r*GM_COLS+c]));
+    }
+    grid.appendChild(col);
+  }
+}
+function gmCellEl(idx){
+  const grid=$('gm-grid'); if(!grid) return null;
+  const col=grid.children[Math.floor(idx/GM_COLS)];
+  return col?col.children[idx%GM_COLS]:null;
+}
+function gmSetCell(idx, sym){
+  const cell=gmCellEl(idx); if(!cell) return;
+  cell.className='gm-cell'; cell.innerHTML='';
+  if(sym && GM_SYMBOLS[sym]){
+    const ic=document.createElement('div');
+    ic.className='gm-icon';
+    ic.textContent=GM_SYMBOLS[sym].e;
+    cell.appendChild(ic);
+  }
+}
+function gmSetMascot(text){
+  const el=$('gm-mascot-text'); if(!el) return;
+  el.textContent=text;
+  el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse');
+}
+function gmUpdateLvl(){ const el=$('gm-lvl-text'); if(el) el.textContent='Ур. '+gmLevel; }
+function gmSpawnParticles(idx, count){
+  const cell=gmCellEl(idx); const scene=$('gm-scene'); if(!cell||!scene) return;
+  const sr=scene.getBoundingClientRect(); const cr=cell.getBoundingClientRect();
+  const cx=cr.left-sr.left+cr.width/2, cy=cr.top-sr.top+cr.height/2;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div'); p.className='gm-particle';
+    p.style.left=cx+'px'; p.style.top=cy+'px';
+    const ang=Math.random()*Math.PI*2; const d=40+Math.random()*70;
+    p.style.setProperty('--dx',(Math.cos(ang)*d).toFixed(1)+'px');
+    p.style.setProperty('--dy',(Math.sin(ang)*d).toFixed(1)+'px');
+    scene.appendChild(p);
+    setTimeout(()=>{try{p.remove();}catch(e){}},1300);
+  }
+}
+function gmFloat(idx, text){
+  const cell=gmCellEl(idx); const scene=$('gm-scene'); if(!cell||!scene) return;
+  const sr=scene.getBoundingClientRect(); const cr=cell.getBoundingClientRect();
+  const el=document.createElement('div'); el.className='gm-float'; el.textContent=text;
+  el.style.left=(cr.left-sr.left+cr.width/2)+'px';
+  el.style.top=(cr.top-sr.top+cr.height/2)+'px';
+  scene.appendChild(el);
+  setTimeout(()=>{try{el.remove();}catch(e){}},1600);
+}
+function gmShake(){ const sc=$('gm-scene'); if(!sc) return; sc.classList.remove('shake'); void sc.offsetWidth; sc.classList.add('shake'); setTimeout(()=>sc.classList.remove('shake'),900); }
+function gmShowCascade(level, mult){
+  const el=$('gm-cascade'); if(!el) return;
+  el.className='gm-cascade';
+  el.innerHTML='<div class="gm-cascade-label">CASCADE</div><div class="gm-cascade-value">x'+level+' · x'+mult+'</div>';
+  void el.offsetWidth; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),1200);
+}
+function gmShowResult(amount, casc){
+  const el=$('gm-result'); if(!el) return;
+  el.className='gm-result';
+  el.innerHTML = amount>0
+    ? '<div class="gm-result-icon">🏆</div><div class="gm-result-label">Победа</div><div class="gm-result-text">+'+fmtBalance(amount)+'⭐</div>'+(casc>1?'<div class="gm-result-sub">CASCADE x'+casc+'</div>':'')
+    : '<div class="gm-result-icon">😢</div><div class="gm-result-label">Провал</div><div class="gm-result-sub">Крути ещё!</div>';
+  void el.offsetWidth; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2600);
+}
+function gmFindWins(){
+  const cells=new Set(), groups=[];
+  const dirs=[[1,0],[0,1],[1,1],[1,-1]];
+  for(let r=0;r<GM_ROWS;r++){
+    for(let c=0;c<GM_COLS;c++){
+      const idx=r*GM_COLS+c; const s=gmGrid[idx];
+      if(!s || !GM_SYMBOLS[s].pay) continue;
+      for(const [dr,dc] of dirs){
+        const pr=r-dr, pc=c-dc;
+        if(pr>=0&&pr<GM_ROWS&&pc>=0&&pc<GM_COLS){
+          if(gmGrid[pr*GM_COLS+pc]===s) continue;
+        }
+        const grp=[idx]; let rr=r+dr, cc=c+dc;
+        while(rr>=0&&rr<GM_ROWS&&cc>=0&&cc<GM_COLS){
+          const nidx=rr*GM_COLS+cc;
+          if(gmGrid[nidx]!==s) break;
+          grp.push(nidx); rr+=dr; cc+=dc;
+        }
+        if(grp.length>=3){
+          groups.push({cells:grp, symbol:s, len:grp.length});
+          grp.forEach(x=>cells.add(x));
+        }
+      }
+    }
+  }
+  return {cells, groups};
+}
+function gmCascadeFall(){
+  for(let c=0;c<GM_COLS;c++){
+    const col=[];
+    for(let r=0;r<GM_ROWS;r++){
+      const idx=r*GM_COLS+c;
+      if(gmGrid[idx]) col.push(gmGrid[idx]);
+    }
+    while(col.length<GM_ROWS) col.unshift(gmRand());
+    for(let r=0;r<GM_ROWS;r++) gmGrid[r*GM_COLS+c]=col[r];
+  }
+  for(let i=0;i<GM_SIZE;i++){
+    const cell=gmCellEl(i);
+    if(cell){
+      cell.className='gm-cell gm-fall-cell'; cell.innerHTML='';
+      const ic=document.createElement('div');
+      ic.className='gm-icon';
+      ic.textContent=GM_SYMBOLS[gmGrid[i]].e;
+      cell.appendChild(ic);
+      setTimeout(()=>{if(cell)cell.classList.remove('gm-fall-cell');},420);
+    }
+  }
+}
+function gmEndSpin(){
+  const btn=$('gm-spin-btn');
+  if(btn){ btn.disabled=false; btn.classList.remove('spinning'); btn.textContent='КРУТИТЬ · '+GM_SPIN_COST+' ⭐'; }
+  if(gmTotalWin>0){
+    balance += gmTotalWin; updateBalanceUI();
+    gmXp += Math.floor(gmTotalWin/10);
+    const nl = 1 + Math.floor(gmXp/500);
+    if(nl>gmLevel){ gmLevel=nl; gmSetMascot('🎉 Новый уровень '+gmLevel+'!'); try{sndPromo();}catch(e){} }
+    gmUpdateLvl(); saveState();
+    gmShowResult(gmTotalWin, gmCascadeLevel);
+    try{sndRollBigWin();}catch(e){}
+    try{confetti();}catch(e){}
+  } else {
+    gmShowResult(0,0);
+    gmSetMascot('Пусто... крути ещё! 😅');
+  }
+  gmSpinning=false;
+}
+function gmProcessSpecials(specials){
+  if(gmCascadeLevel>25){ gmEndSpin(); return; }
+  const sp=specials[0];
+  if(sp.type==='bomb'){
+    const r=Math.floor(sp.idx/GM_COLS), c=sp.idx%GM_COLS;
+    const targets=new Set();
+    for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+      const rr=r+dr, cc=c+dc;
+      if(rr>=0&&rr<GM_ROWS&&cc>=0&&cc<GM_COLS) targets.add(rr*GM_COLS+cc);
+    }
+    const cell=gmCellEl(sp.idx);
+    if(cell) cell.classList.add('bomb-cell');
+    gmSetMascot('💣 БОМБА!');
+    try{sndFuse();}catch(e){}
+    setTimeout(()=>{
+      if(cell){ cell.classList.remove('bomb-cell'); cell.classList.add('bomb-explode'); }
+      targets.forEach(idx=>{
+        if(idx===sp.idx) return;
+        const t=gmCellEl(idx);
+        if(t){ t.classList.add('destroy'); gmSpawnParticles(idx,7); }
+      });
+      gmShake();
+      try{sndExplosion();}catch(e){}
+      const bonus=GM_SPIN_COST*5;
+      gmTotalWin += bonus;
+      gmFloat(sp.idx, '+'+fmtBalance(bonus)+'⭐');
+      setTimeout(()=>{
+        targets.forEach(idx=>{ gmGrid[idx]=null; });
+        gmCascadeFall();
+        setTimeout(()=>gmProcessCascade(), 550);
+      }, 700);
+    }, 500);
+  } else if(sp.type==='drill'){
+    const r=Math.floor(sp.idx/GM_COLS);
+    const targets=new Set();
+    for(let c=0;c<GM_COLS;c++) targets.add(r*GM_COLS+c);
+    const cell=gmCellEl(sp.idx);
+    if(cell) cell.classList.add('drill-cell');
+    gmSetMascot('🔩 ДРЕЛЬ ПРОСВЕРЛИВАЕТ РЯД!');
+    try{sndRocketStart();}catch(e){}
+    setTimeout(()=>{
+      if(cell) cell.classList.remove('drill-cell');
+      targets.forEach(idx=>{
+        const t=gmCellEl(idx);
+        if(t){ t.classList.add('drill-row'); gmSpawnParticles(idx,5); }
+      });
+      gmShake();
+      try{sndExplosion();}catch(e){}
+      const bonus=GM_SPIN_COST*4;
+      gmTotalWin += bonus;
+      gmFloat(sp.idx, '+'+fmtBalance(bonus)+'⭐');
+      setTimeout(()=>{
+        targets.forEach(idx=>{ gmGrid[idx]=null; });
+        gmCascadeFall();
+        setTimeout(()=>gmProcessCascade(), 550);
+      }, 700);
+    }, 400);
+  }
+}
+function gmProcessCascade(){
+  if(gmCascadeLevel>25){ gmEndSpin(); return; }
+  gmCascadeLevel++;
+  const specials=[];
+  for(let i=0;i<GM_SIZE;i++){
+    if(gmGrid[i]==='bomb'||gmGrid[i]==='drill') specials.push({idx:i,type:gmGrid[i]});
+  }
+  if(specials.length>0){ gmProcessSpecials(specials); return; }
+  const {cells, groups}=gmFindWins();
+  if(cells.size===0){ gmEndSpin(); return; }
+  const cm=GM_CASCADE_MULT[Math.min(gmCascadeLevel-1, GM_CASCADE_MULT.length-1)];
+  let roundWin=0;
+  groups.forEach(g=>{
+    const pay=GM_SYMBOLS[g.symbol].pay;
+    if(pay){ const m=pay[Math.min(g.len,5)]||0; roundWin += GM_SPIN_COST * m; }
+  });
+  roundWin=Math.floor(roundWin*cm);
+  gmTotalWin += roundWin;
+  gmShowCascade(gmCascadeLevel, cm);
+  gmSetMascot(gmCascadeLevel===1?'💰 Есть комбинация!':'🔥 CASCADE x'+gmCascadeLevel+'!');
+  cells.forEach(idx=>{ const cell=gmCellEl(idx); if(cell) cell.classList.add('win'); });
+  try{sndWin();}catch(e){}
+  setTimeout(()=>{
+    cells.forEach(idx=>{
+      const cell=gmCellEl(idx); if(!cell) return;
+      cell.classList.remove('win'); cell.classList.add('destroy');
+      gmSpawnParticles(idx,6);
+    });
+    if(roundWin>0){ const f=Array.from(cells)[0]; gmFloat(f, '+'+fmtBalance(roundWin)+'⭐'); }
+    setTimeout(()=>{
+      cells.forEach(idx=>{ gmGrid[idx]=null; });
+      gmCascadeFall();
+      setTimeout(()=>gmProcessCascade(), 550);
+    }, 620);
+  }, 420);
+}
+async function gmSpin(){
+  if(gmSpinning) return;
+  if(balance < GM_SPIN_COST){ try{sndError();}catch(e){} showGlobalToast('error','Нужно '+GM_SPIN_COST+' ⭐'); return; }
+  gmSpinning=true;
+  balance -= GM_SPIN_COST; updateBalanceUI(); saveState();
+  const btn=$('gm-spin-btn');
+  if(btn){ btn.disabled=true; btn.classList.add('spinning'); btn.textContent='КРУТИМ...'; }
+  gmSetMascot('🎰 Барабаны крутятся...');
+  gmCascadeLevel=0; gmTotalWin=0;
+
+  const grid=$('gm-grid'); if(!grid){ gmSpinning=false; return; }
+  const finalGrid=[];
+  for(let i=0;i<GM_SIZE;i++) finalGrid.push(gmRand());
+
+  const colIntervals=[];
+  for(let c=0;c<GM_COLS;c++){
+    const col=grid.children[c];
+    colIntervals.push(setInterval(()=>{
+      for(let r=0;r<GM_ROWS;r++){
+        const cell=col.children[r]; if(!cell) continue;
+        cell.innerHTML='';
+        const ic=document.createElement('div');
+        ic.className='gm-icon';
+        ic.textContent=GM_SYMBOLS[gmRand()].e;
+        cell.appendChild(ic);
+      }
+    }, 60));
+  }
+
+  try{sndSpinStart();}catch(e){}
+
+  for(let c=0;c<GM_COLS;c++){
+    await new Promise(r=>setTimeout(r, c===0?900:(c===GM_COLS-1?800:400)));
+    clearInterval(colIntervals[c]);
+    const col=grid.children[c];
+    for(let r=0;r<GM_ROWS;r++){
+      const idx=r*GM_COLS+c;
+      const cell=col.children[r]; if(!cell) continue;
+      cell.className='gm-cell'; cell.innerHTML='';
+      const ic=document.createElement('div');
+      ic.className='gm-icon';
+      ic.textContent=GM_SYMBOLS[finalGrid[idx]].e;
+      cell.appendChild(ic);
+    }
+    try{sndClick();}catch(e){}
+  }
+
+  gmGrid=finalGrid.slice();
+  await new Promise(r=>setTimeout(r,600));
+  gmSetMascot('🔍 Проверяем комбинации...');
+  gmProcessCascade();
+}
+function resetSaperUI(){
+  gmSpinning=false; gmCascadeLevel=0; gmTotalWin=0;
+  gmGrid=[];
+  for(let i=0;i<GM_SIZE;i++) gmGrid.push(gmRand());
+  gmRenderAll();
+  gmUpdateLvl();
+  gmSetMascot('Крути барабаны, ищи золото! ⛏️');
+  const btn=$('gm-spin-btn');
+  if(btn){ btn.disabled=false; btn.classList.remove('spinning'); btn.textContent='КРУТИТЬ · '+GM_SPIN_COST+' ⭐'; }
+}
+function renderSaperHoles(){ gmRenderAll(); }
+function updateSaperButtons(){}
+
+(function gmBind(){
+  const btn=$('gm-spin-btn');
+  if(btn) btn.addEventListener('click', gmSpin);
+})();
   
 /* GIFT PICKER */
 let giftPickerMode=null;
