@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0a0a12">
+<meta name="theme-color" content="#08080f">
 <title>RollUp 2.0.1</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
@@ -48,55 +48,85 @@ body::before{
 
 /* ==================== LOADING ==================== */
 .loading{
-  position:fixed;inset:0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 40%,#1a0a3e 0%,#0a0518 40%,#08080f 100%);
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,#1a0a3e 0%,#0a0518 40%,#08080f 100%);
   z-index:10000;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:24px;
+  gap:20px;
+  padding:max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom)) 20px;
   transition:opacity .7s ease,visibility .7s;
-  padding:20px;
-  will-change:opacity
+  will-change:opacity;
+  overflow:hidden
 }
 .loading.hide{opacity:0;visibility:hidden;pointer-events:none}
 .loading-logo{
   font-size:56px;
   font-weight:900;
   letter-spacing:-.04em;
+  line-height:1;
   background:linear-gradient(135deg,#fff 0%,#c0c8ff 30%,#a855f7 60%,#ffd93d 100%);
   background-size:200% 200%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   background-clip:text;
   animation:logoShift 3s ease infinite,logoPulse 2.2s ease-in-out infinite;
-  position:relative
+  margin:0;
+  padding:0
 }
 @keyframes logoShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes logoPulse{0%,100%{filter:drop-shadow(0 0 22px rgba(168,85,247,.55)) drop-shadow(0 0 40px rgba(255,217,61,.25))}50%{filter:drop-shadow(0 0 42px rgba(168,85,247,.95)) drop-shadow(0 0 80px rgba(255,217,61,.5))}}
-.loading-sub{font-size:11px;color:var(--dim);letter-spacing:.24em;text-transform:uppercase;margin-top:-14px;opacity:.7;font-weight:600}
+.loading-sub{
+  font-size:10px;
+  color:var(--dim);
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  opacity:.7;
+  font-weight:600;
+  margin:0;
+  padding:0;
+  line-height:1
+}
 .loading-bar-wrap{
-  width:250px;max-width:80vw;height:5px;
+  width:240px;
+  max-width:80vw;
+  height:4px;
   background:rgba(255,255,255,.06);
-  border-radius:3px;
+  border-radius:2px;
   overflow:hidden;
   position:relative;
-  box-shadow:inset 0 1px 2px rgba(0,0,0,.5)
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.5);
+  margin:0;
+  flex-shrink:0
 }
 .loading-bar{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#4a86ff,#a855f7,#ffd93d,#a855f7,#4a86ff);
   background-size:200% 100%;
-  border-radius:3px;
+  border-radius:2px;
   animation:barShift 2s linear infinite;
   box-shadow:0 0 12px rgba(168,85,247,.7);
-  will-change:width
+  will-change:width;
+  transition:width .12s linear
 }
 @keyframes barShift{from{background-position:0% 0}to{background-position:200% 0}}
-.loading-text{font-size:10px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;min-height:16px;font-weight:700;transition:opacity .3s}
+.loading-text{
+  font-size:9px;
+  color:var(--dim);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  min-height:14px;
+  font-weight:700;
+  transition:opacity .3s;
+  margin:0;
+  padding:0;
+  line-height:1;
+  text-align:center
+}
 
 /* ==================== HEADER ==================== */
 .header{
@@ -193,53 +223,103 @@ body::before{
 }
 .ms{text-align:center;font-size:11px;color:var(--mute);margin-bottom:12px}
 
-/* ==================== LIVE DROPS ==================== */
+/* ==================== LIVE DROPS (компактно) ==================== */
 .drops-section{
-  background:linear-gradient(135deg,rgba(255,217,61,.06),rgba(168,85,247,.04)),linear-gradient(160deg,rgba(28,28,44,.95),rgba(14,14,22,.98));
-  border:1px solid rgba(255,217,61,.22);
-  border-radius:16px;padding:11px 13px;margin-bottom:11px;flex-shrink:0;
-  position:relative;overflow:hidden;
-  box-shadow:0 4px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04)
+  background:linear-gradient(135deg,rgba(255,217,61,.04),rgba(168,85,247,.03)),linear-gradient(160deg,rgba(24,24,38,.92),rgba(14,14,22,.96));
+  border:1px solid rgba(255,217,61,.14);
+  border-radius:12px;
+  padding:8px 10px;
+  margin-bottom:10px;
+  flex-shrink:0;
+  overflow:hidden
 }
-.drops-section::before{
-  content:'';position:absolute;top:-40%;right:-10%;width:140px;height:140px;
-  background:radial-gradient(circle,rgba(255,217,61,.14),transparent 70%);
-  pointer-events:none
-}
-.drops-header{display:flex;align-items:center;gap:7px;margin-bottom:9px;position:relative;z-index:1}
+.drops-header{display:flex;align-items:center;gap:6px;margin-bottom:6px}
 .drops-header-txt{
-  font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.16em;
-  background:linear-gradient(135deg,#fff8c0,#ffd93d,#ff9500);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent
+  font-size:9px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.15em;
+  color:rgba(255,217,61,.65)
 }
-.drops-header svg{width:13px;height:13px;color:var(--gd);filter:drop-shadow(0 0 6px rgba(255,217,61,.8));animation:dropFlame 1.5s ease-in-out infinite alternate}
-@keyframes dropFlame{from{transform:scale(1) rotate(-4deg)}to{transform:scale(1.12) rotate(4deg)}}
 .drops-dot{
-  width:5px;height:5px;border-radius:50%;background:var(--gr);
-  box-shadow:0 0 8px var(--gr);animation:op 1.2s infinite;margin-left:auto
+  width:4px;height:4px;border-radius:50%;
+  background:rgba(46,204,113,.7);
+  box-shadow:0 0 5px rgba(46,204,113,.7);
+  animation:op 2.4s infinite;
+  margin-left:auto
 }
-.drops-track{display:flex;gap:6px;overflow:hidden;position:relative;min-height:56px;align-items:center;z-index:1}
-.drops-item{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:6px 8px;min-width:58px;
-  background:rgba(0,0,0,.42);
-  border:1px solid var(--rar-bd,rgba(255,255,255,.1));
-  border-radius:10px;flex-shrink:0;
-  animation:dropsIn .5s cubic-bezier(.34,1.56,.64,1);
+.drops-track{
+  display:flex;
+  gap:5px;
+  overflow:hidden;
   position:relative;
-  box-shadow:0 0 10px var(--rar-glow,transparent),inset 0 1px 0 rgba(255,255,255,.05)
+  min-height:46px;
+  align-items:center
+}
+.drops-item{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 6px;
+  min-width:auto;
+  background:rgba(0,0,0,.28);
+  border:1px solid var(--rar-bd,rgba(255,255,255,.06));
+  border-radius:7px;
+  flex-shrink:0;
+  animation:dropsIn .6s ease;
+  position:relative
 }
 .drops-item.no-anim{animation:none}
-@keyframes dropsIn{from{opacity:0;transform:translateX(30px) scale(.75)}to{opacity:1;transform:none}}
-.drops-item-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;position:relative}
-.drops-item-icon::before{
-  content:'';position:absolute;inset:-3px;border-radius:50%;
-  background:radial-gradient(circle,var(--rar-glow,transparent) 0%,transparent 68%);
-  filter:blur(5px);z-index:0
+@keyframes dropsIn{
+  from{opacity:0;transform:translateX(6px)}
+  to{opacity:1;transform:none}
 }
-.drops-item-icon img{width:100%;height:100%;object-fit:contain;position:relative;z-index:1}
-.drops-item-nm{font-size:7px;color:var(--tx);font-weight:800;max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
-.drops-item-vl{font-size:8px;color:var(--rar-color,var(--dim));font-weight:900}
+.drops-item-icon{
+  width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  flex-shrink:0
+}
+.drops-item-icon::before{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--rar-glow,transparent) 0%,transparent 70%);
+  filter:blur(3px);
+  z-index:0;
+  opacity:.7
+}
+.drops-item-icon img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  position:relative;
+  z-index:1
+}
+.drops-item-info{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  min-width:0
+}
+.drops-item-nm{
+  font-size:7px;
+  color:rgba(255,255,255,.75);
+  font-weight:700;
+  max-width:56px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  line-height:1.1
+}
+.drops-item-vl{
+  font-size:7px;
+  color:var(--rar-color,rgba(255,255,255,.4));
+  font-weight:800;
+  line-height:1.1
+}
 
 /* ==================== NEWS ==================== */
 .news{
@@ -344,14 +424,26 @@ body::before{
 .hero-a{margin-left:auto;font-size:26px;font-weight:900;color:#c0b8ff;flex-shrink:0;opacity:.85}
 
 /* ==================== MODALS ==================== */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:300;padding:16px}
-.ov.on{display:flex;animation:ovIn .2s ease}
+.ov{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  z-index:300;
+  padding:max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch
+}
+.ov.on{display:flex;align-items:center;justify-content:center;animation:ovIn .2s ease}
 @keyframes ovIn{from{opacity:0}to{opacity:1}}
 .modal{
   background:linear-gradient(180deg,#1a1a26,#0e0e16);
   border:1px solid var(--bds);
-  border-radius:20px;padding:22px;
-  max-width:360px;width:100%;max-height:85vh;overflow-y:auto;
+  border-radius:20px;
+  padding:22px;
+  max-width:360px;
+  width:100%;
+  flex-shrink:0;
   animation:modalIn .22s cubic-bezier(.34,1.56,.64,1);
   box-shadow:0 20px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06)
 }
@@ -795,17 +887,6 @@ body::before{
 @keyframes btnShine{0%{transform:translateX(-100%)}50%,100%{transform:translateX(100%)}}
 .rspin:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 .rspin:disabled::before{display:none}
-.rrhist{display:flex;gap:5px;overflow-x:auto;padding:8px 0;flex-shrink:0;scrollbar-width:none}
-.rrhist::-webkit-scrollbar{display:none}
-.rrhist .rh{
-  border-radius:9px;font-size:11px;font-weight:900;padding:6px 10px;
-  display:flex;align-items:center;gap:4px;flex-shrink:0;
-  background:rgba(22,22,32,.8);border:1px solid var(--bd);color:var(--dim)
-}
-.rrhist .rh img{width:18px;height:18px;object-fit:contain}
-.rrhist .rh.win{color:var(--gr);border-color:rgba(46,204,113,.4)}
-.rrhist .rh.lose{color:var(--rd);border-color:rgba(255,71,87,.4)}
-.rrhist .rh.gift{color:var(--gd);border-color:rgba(255,217,61,.45)}
 .roll-result{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%) scale(0);
@@ -941,7 +1022,7 @@ body::before{
 
 /* NEWS MODAL */
 .news-m{
-  max-width:440px;padding:0;display:flex;flex-direction:column;max-height:88vh;
+  max-width:440px;padding:0;display:flex;flex-direction:column;max-height:calc(100dvh - 32px);
   overflow:hidden;position:relative;
   background:linear-gradient(180deg,#0f0f1e 0%,#08080f 100%);
   border:1px solid rgba(120,100,255,.4)
@@ -1098,7 +1179,6 @@ body{padding:16px}
 
 <div class="drops-section">
 <div class="drops-header">
-<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
 <span class="drops-header-txt">Live Drops</span>
 <span class="drops-dot"></span>
 </div>
@@ -1187,7 +1267,6 @@ body{padding:16px}
 <div class="ris"><div class="lbl">Лучший</div><div class="val green" id="rollBest">—</div></div>
 </div>
 <button class="rspin" id="rollSpinBtn" type="button">Крутить за 100 ⭐</button>
-<div class="rrhist" id="rollHist"></div>
 </div>
 
 <div class="scr" id="scr-shop">
@@ -1267,7 +1346,7 @@ body{padding:16px}
 <div class="nvti">🎉 RollUp стал ещё удобнее и красивее!</div>
 <div class="nf"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div class="nfn">Улучшенная система наград</div><div class="nfd">Каждый прокрут в <b>Roll</b> теперь даёт ровно столько, сколько написано на секторе. Никаких сюрпризов — только честные награды</div></div></div>
 <div class="nf"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Редкости со свечением</div><div class="nfd">Каждый предмет имеет свой цвет — от серого (Common) до золотого (Mythic). Ищи <b>легендарки</b> — они светятся ярче всех!</div></div></div>
-<div class="nf"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div><div class="nfn">Анонимный Live Drop</div><div class="nfd">Смотри что выпадает другим игрокам в реальном времени прямо в меню</div></div></div>
+<div class="nf"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div><div class="nfn">Live-лента дропов</div><div class="nfd">Смотри что выпадает другим игрокам в реальном времени прямо в меню</div></div></div>
 <div class="nf"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 14l6-6 5 5 5-5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg></div><div><div class="nfn">Быстрее и плавнее</div><div class="nfd">Оптимизировали всё для мобильных устройств — играй на телефоне без лагов</div></div></div>
 <div class="nf"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div><div><div class="nfn">Новое оформление</div><div class="nfd">Загрузочный экран, улучшенные иконки, приятные анимации</div></div></div>
 </div>
@@ -1284,7 +1363,7 @@ window.onerror = function(msg, url, line, col){
 (function(){
 "use strict";
 
-/* ==================== SAFE STORAGE ==================== */
+/* SAFE STORAGE */
 var memStore = {};
 var Store = {
   get: function(k){ try{ var v = window.localStorage.getItem(k); return v===null ? (memStore[k]||null) : v; }catch(e){ return memStore[k] || null; } },
@@ -1292,7 +1371,7 @@ var Store = {
   remove: function(k){ delete memStore[k]; try{ window.localStorage.removeItem(k); }catch(e){} }
 };
 
-/* ==================== TELEGRAM ==================== */
+/* TELEGRAM */
 var tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
 if(!tg){ tg = { ready:function(){}, expand:function(){}, initDataUnsafe:{}, CloudStorage:null }; }
 else { try{ tg.ready(); }catch(e){} try{ tg.expand(); }catch(e){} }
@@ -1303,7 +1382,7 @@ var P = 'rollup_'+UID+'_';
 var ADMIN_NAMES = ['xertex_grace','onyurknees','romasik09','malindak'];
 var isAdmin = (function(){ var u=TGU&&TGU.username; return u && ADMIN_NAMES.indexOf(String(u).toLowerCase())>=0; })();
 
-/* ==================== STATE ==================== */
+/* STATE */
 var balance = parseInt(Store.get(P+'balance')||'10000',10);
 if(isNaN(balance) || balance < 0) balance = 10000;
 if(isAdmin) balance = 20000;
@@ -1337,7 +1416,7 @@ var FALLBACK = [
 ];
 CATALOG = FALLBACK.slice();
 
-/* ==================== RARITY ==================== */
+/* RARITY */
 function rarityInfo(v){
   if(v < 100) return {name:'Common', color:'#8a8a95', glow:'rgba(138,138,149,0.5)', bd:'rgba(138,138,149,0.3)'};
   if(v < 500) return {name:'Uncommon', color:'#4b69ff', glow:'rgba(75,105,255,0.6)', bd:'rgba(75,105,255,0.55)'};
@@ -1362,7 +1441,7 @@ function iconTag(name, size){
   return '<img src="'+primary+'" data-fb="'+fb+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.style.opacity=0.3}">';
 }
 
-/* ==================== AUDIO ==================== */
+/* AUDIO */
 var actx = null;
 function ia(){ if(actx) return; try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
 function tone(f,d,t,v,dl){ try{ if(!sndOn||!actx) return; if(actx.state==='suspended') actx.resume(); var t0=actx.currentTime+(dl||0); var o=actx.createOscillator(); var g=actx.createGain(); o.type=t||'sine'; o.frequency.setValueAtTime(f||440,t0); g.gain.setValueAtTime(v||.15,t0); g.gain.exponentialRampToValueAtTime(.001,t0+(d||.1)); o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0+(d||.1)); }catch(e){} }
@@ -1406,7 +1485,7 @@ function isUsed(c){ return used.indexOf(c)>=0; }
 
 var curScreen = 'menu';
 
-/* ==================== LIVE DROPS (с предзаполнением) ==================== */
+/* ==================== LIVE DROPS ==================== */
 function pickWeightedGift(){
   var roll = Math.random();
   var cat = [];
@@ -1421,30 +1500,35 @@ function createDropEl(gift, animate){
   var el = document.createElement('div');
   el.className = 'drops-item' + (animate ? '' : ' no-anim');
   applyRarity(el, gift.value);
-  el.innerHTML = '<div class="drops-item-icon">'+iconTag(gift.name, 64)+'</div><div class="drops-item-nm">' + gift.name + '</div><div class="drops-item-vl">' + fmt(gift.value) + '⭐</div>';
+  el.innerHTML = '<div class="drops-item-icon">'+iconTag(gift.name, 48)+'</div>' +
+    '<div class="drops-item-info">' +
+      '<div class="drops-item-nm">' + gift.name + '</div>' +
+      '<div class="drops-item-vl">' + fmt(gift.value) + '⭐</div>' +
+    '</div>';
   return el;
 }
 function startDrops(){
   var track = document.getElementById('dropsTrack');
   if(!track) return;
   track.innerHTML = '';
-  // Предзаполняем 3 дропа БЕЗ анимации — как будто они уже были
-  for(var i=0;i<3;i++){
+  // 5 дропов без анимации — как будто лента уже была
+  for(var i=0;i<5;i++){
     var gift = pickWeightedGift();
     track.appendChild(createDropEl(gift, false));
   }
-  // Планируем новые с рандомной задержкой
   scheduleNextDrop();
 }
 function scheduleNextDrop(){
-  var delay = 3000 + Math.random()*5000;
+  // Медленно и незаметно: 8-18 секунд
+  var delay = 8000 + Math.random()*10000;
   setTimeout(function(){
     if(curScreen === 'menu'){
       var track = document.getElementById('dropsTrack');
       if(track){
         var gift = pickWeightedGift();
         track.insertBefore(createDropEl(gift, true), track.firstChild);
-        while(track.children.length > 4){
+        // Держим 5 элементов
+        while(track.children.length > 5){
           track.removeChild(track.lastChild);
         }
       }
@@ -2164,7 +2248,7 @@ document.getElementById('rocket-bet-row').addEventListener('click', function(){
   }
 })();
 
-/* ==================== ROLL — ЧЕСТНО ==================== */
+/* ==================== ROLL ==================== */
 var ROLL_COST = 100;
 var ROLL_SEG = [
   {type:'stars', amount:0,    weight:5,  colors:['#3a3a4a','#1a1a26']},
@@ -2227,14 +2311,6 @@ function rollSegHTML(seg){
 function updateRollUI(){
   var l = document.getElementById('rollLast'); if(l) l.textContent = rollLast ? fmt(rollLast)+'⭐' : '—';
   var b = document.getElementById('rollBest'); if(b) b.textContent = rollBest ? fmt(rollBest)+'⭐' : '—';
-  var h = document.getElementById('rollHist');
-  if(h){
-    h.innerHTML = rollHistory.slice(0,12).map(function(r){
-      if(r.type === 'gift') return '<div class="rh gift">'+iconTag(r.name,64)+'</div>';
-      var w = r.amount >= 100;
-      return '<div class="rh '+(w?'win':'lose')+'">'+r.amount+'⭐</div>';
-    }).join('');
-  }
   var btn = document.getElementById('rollSpinBtn');
   if(btn){ btn.textContent = 'Крутить за '+ROLL_COST+' ⭐'; btn.disabled = rollSpinning || (!isAdmin && balance < ROLL_COST); }
 }
@@ -2260,12 +2336,6 @@ function showRollResult(seg, isLose){
   requestAnimationFrame(function(){ pop.classList.add('show'); });
   setTimeout(function(){ try{pop.remove();}catch(e){} }, 2400);
 }
-
-// ========= КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ =========
-// Раньше: idx выбирался по весам, но награда могла НЕ совпадать с визуалом из-за jitter
-// Теперь: после анимации вычисляем landed по ФИНАЛЬНОМУ углу колеса
-// Гарантия: что видишь на указателе = то и получаешь
-
 function spinRoll(){
   if(rollSpinning) return;
   if(!isAdmin && balance < ROLL_COST){ sErr(); toast('error', 'Нужно '+ROLL_COST+' ⭐'); return; }
@@ -2275,21 +2345,16 @@ function spinRoll(){
   var wrap = document.getElementById('rWW'); if(wrap) wrap.classList.add('spinning');
   var N = ROLL_SEG.length; var sA = 360/N;
   
-  // 1. Выбираем по весам (правильные шансы)
+  // Выбираем по весам
   var tot = ROLL_SEG.reduce(function(s,x){ return s+x.weight; }, 0);
   var r = Math.random()*tot; var idx = 0;
   for(var i=0;i<N;i++){ r -= ROLL_SEG[i].weight; if(r<=0){ idx=i; break; } }
   
-  // 2. Вычисляем угол, чтобы СЕКТОР idx оказался под указателем (12 часов = 0°)
-  // Центр сектора idx в колесе = idx*sA (в градусах, где 0° = верх)
-  // После поворота колеса на θ центр сектора в позиции idx*sA + θ
-  // Чтобы центр был в 0°: θ = -idx*sA (mod 360) = 360 - idx*sA
-  // Небольшой jitter ±3° для натуральности (внутри сектора = ±15°)
-  var jitter = (Math.random() - 0.5) * 6;  // ±3°
+  // Крутим так, чтобы сектор idx попал под указатель
+  var jitter = (Math.random() - 0.5) * 6;
   var targetAngle = (360 - idx*sA + jitter) % 360;
   if(targetAngle < 0) targetAngle += 360;
   
-  // 3. Анимируем к этому углу (+6 полных оборотов)
   rollRot = rollRot + 360*6 + (targetAngle - (rollRot % 360) + 360) % 360;
   
   var w = document.getElementById('rollWheel');
@@ -2308,14 +2373,9 @@ function spinRoll(){
     if(wrap) wrap.classList.remove('spinning');
     if(w){ rollRot = ((rollRot%360)+360)%360; w.style.transform = 'rotate('+rollRot+'deg)'; }
     
-    // 4. ОПРЕДЕЛЯЕМ РЕЗУЛЬТАТ ПО ФИНАЛЬНОМУ УГЛУ
-    // Центр сектора landed находится в (landed*sA + rollRot) mod 360
-    // Указатель в 0°, значит landed*sA + rollRot ≡ 0 (mod 360)
-    // → landed = ((360 - rollRot) / sA) mod N
+    // ЧЕСТНО: определяем по финальному углу
     var landed = Math.round(((360 - (rollRot % 360)) % 360) / sA) % N;
     if(landed < 0) landed += N;
-    
-    // 5. Используем landed (а не idx!) — что видишь = то получаешь
     var seg = ROLL_SEG[landed];
     var cv = document.getElementById('rollCenter');
     
@@ -2530,10 +2590,9 @@ function setLoadProgress(p, text){
   var bar = document.getElementById('loadingBar');
   var txt = document.getElementById('loadingText');
   if(bar) bar.style.width = p + '%';
-  if(txt && text) txt.textContent = text;
+  if(txt && text !== undefined) txt.textContent = text;
 }
 
-// Плавный прогресс через requestAnimationFrame — БЕЗ СКАЧКОВ
 function runLoadingProgress(duration, onDone){
   var start = performance.now();
   var stages = [
@@ -2550,13 +2609,11 @@ function runLoadingProgress(duration, onDone){
   function tick(now){
     var progress = Math.min(1, (now - start) / duration);
     setLoadProgress(progress * 100);
-    // Обновляем текст только при смене стейджа
     for(var i = stages.length-1; i >= 0; i--){
       if(progress >= stages[i].t){
         if(i > lastStage){
           lastStage = i;
-          var txt = document.getElementById('loadingText');
-          if(txt) txt.textContent = stages[i].s;
+          setLoadProgress(progress * 100, stages[i].s);
         }
         break;
       }
@@ -2590,7 +2647,6 @@ function loadCatalog(cb){
 }
 
 function boot(){
-  // Параллельно: инициализация + загрузка каталога + плавная анимация загрузки
   try{ updBal(); }catch(e){}
   try{ buildMenu(); }catch(e){ console.error(e); }
   try{ renderMult(); renderInv(); renderArena(); renderTargets(); updatePctUI(); }catch(e){}
@@ -2600,7 +2656,6 @@ function boot(){
     try{ renderInv(); renderArena(); renderTargets(); renderShop(); }catch(e){}
   });
   
-  // Плавная загрузка длиной 2.6 секунды
   runLoadingProgress(2600, function(){
     var loading = document.getElementById('loading');
     if(loading) loading.classList.add('hide');
