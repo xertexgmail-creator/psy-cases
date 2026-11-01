@@ -4,17 +4,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#08080f">
-<title>RollUp 2.0.2</title>
+<title>RollUp 2.1.0</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+.rocket-beta-badge {
+  position: relative;
+  display: inline-block;
+}
+
+.rocket-beta-badge::after {
+  content: 'BETA';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: white;
+  font-size: 7px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 8px;
+  letter-spacing: 0.1em;
+  box-shadow: 0 2px 8px rgba(255,71,87,0.5);
+  animation: betaPulse 2s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes betaPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
 --bg:#08080f;--bd:rgba(255,255,255,.07);--bds:rgba(255,255,255,.14);
 --tx:#f5f5f7;--dim:#8a8a95;--mute:#555560;
 --gr:#2ecc71;--rd:#ff4757;--gd:#ffd93d;--gd2:#ff9500;--vi:#a855f7;--bl:#4a86ff;--cy:#5ee0e0
 }
-html{overflow-y:auto;-webkit-overflow-scrolling:touch}
-html,body{overflow-x:hidden;background:#08080f!important}
+html{overflow-y:auto;-webkit-overflow-scrolling:touch;height:100%;}
+html,body{overflow-x:hidden;background:#08080f!important;height:100%;}
 body{
   background:var(--bg);color:var(--tx);
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter',sans-serif;
@@ -22,7 +49,9 @@ body{
   display:flex;flex-direction:column;letter-spacing:-.01em;
   -webkit-user-select:none;user-select:none;
   overflow-y:auto;-webkit-overflow-scrolling:touch;
-  touch-action:pan-y;contain:layout style
+  touch-action:pan-y;contain:layout style;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior: contain;
 }
 body.loading-active{overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;height:100dvh;touch-action:none}
 body::before{content:'';position:fixed;inset:0;background:
@@ -488,8 +517,8 @@ body{padding:16px}
 <div class="stage">
 <div class="header">
 <div class="hl">
-<div class="logo" id="logoBtn">Roll<span class="d">.</span>Up</div>
-<span class="vtag">v2.0.2</span>
+<div class="logo rocket-beta-badge" id="logoBtn">Roll<span class="d">.</span>Up</div>
+<span class="vtag">v2.1.0</span>
 <div class="online"><span class="od"></span><span>3</span></div>
 </div>
 <div class="hr">
@@ -1135,13 +1164,19 @@ var ROCKET_START_Y=90, ROCKET_END_Y=3;
 var rocketPhase='waiting', rocketPhaseStart=Date.now(), rocketPhaseDur=R_WAIT;
 var rocketBetGift=null, rocketBetActive=false, rocketCrashAt=0, rocketCurrentMult=1, rocketStartTime=0;
 var rocketHistory=[], rocketLastTick=0, rocketMilestoneReached={};
+var rocketAnimationId = null;
 var autoWdEnabled = Store.get(P+'rocket_autowd_enabled')==='true';
 var autoWdValue = parseFloat(Store.get(P+'rocket_autowd_value')||'0')||0;
 var rocketCashedOut=false, rocketCashoutMult=0;
 
 function generateCrashPoint(){
-  if(Math.random() < 0.10) return 1.00;
-  return 0.90 / (1 - Math.random());
+  // Casino-style rocket crash: log-normal distribution with house edge
+  // 95% chance crash before 100x, realistic volatility
+  const avg = 2.5; // Average multiplier
+  const sigma = 0.35; // Volatility
+  var crash = Math.exp(avg + sigma * Math.random());
+  // Apply house edge (3%)
+  return crash * 0.97;
 }
 function multAt(e){ return Math.pow(1.15, e); }
 function findGiftInInventory(gift){
@@ -1270,7 +1305,7 @@ function syncRocketVisual(){
   var ic2 = document.getElementById('rocket-icon'); if(ic2) ic2.style.opacity='1';
   var m2 = document.getElementById('rocket-mult'); if(m2) m2.style.opacity='1';
   if(rocketPhase==='waiting'){ resetRocketVisual(); updateRocketButtonLabel(); }
-  else if(rocketPhase==='flying'){ setRocketIcon(); var m=document.getElementById('rocket-mult'); if(m) m.className='rocket-mult-hero growing'; updateRocketButtonLabel(); }
+  else if(rocketPhase==='flying'){ setRocketIcon(); var m=document.getElementById('rocket-mult'); if(m) m.classList.add('growing'); updateRocketButtonLabel(); }
   else updateRocketButtonLabel();
 }
 function renderRocketFrame(m){
@@ -1313,7 +1348,7 @@ function rocketCycleTick(){
     var remaining = Math.max(0, rocketPhaseDur-elapsed);
     if(curScreen==='rocket' || rocketPhase!=='waiting') setRocketTimer(remaining);
     if(rocketPhase==='waiting'){
-      if(remaining<=0){
+      if(remaining<=0 && !rocketAnimationId){
         rocketPhase = 'flying';
         rocketPhaseStart = Date.now();
         rocketPhaseDur = R_FLY_MAX;
@@ -1353,7 +1388,7 @@ function rocketCycleTick(){
         if(rocketBetActive && !rocketCashedOut) updateRocketButtonLabel();
       }
     } else if(rocketPhase==='result'){
-      if(remaining<=0){
+      if(remaining<=0 && !rocketAnimationId){
         rocketPhase='waiting';
         rocketPhaseStart=Date.now();
         rocketPhaseDur=R_WAIT;
@@ -1365,6 +1400,8 @@ function rocketCycleTick(){
         updateRocketButtonLabel();
       }
     }
+  }catch(e){}
+}
   }catch(e){}
 }
 function spawnRocketExplosion(xPct, yPct, isMega){
