@@ -2,11 +2,10 @@
   --bg: #030304; --bg2: #0a0a0f; --glass: rgba(20, 20, 25, 0.65); --glass-hover: rgba(30, 30, 38, 0.8); --bd: rgba(255, 255, 255, 0.08); --bd2: rgba(255, 255, 255, 0.15); --tx: #E2E8F0; --dim: #94A3B8; --mute: #475569; --gold: #FFD700; --crimson: #FF2A55; --cyan: #00F0FF; --purple: #A855F7; --gr: #10b981;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { background: var(--bg); width: 100%; height: 100%; overflow: hidden; /* Фикс скролла */ }
+html, body { background: var(--bg); width: 100%; height: 100%; overflow: hidden; }
 body { color: var(--tx); font-family: 'Inter', sans-serif; font-size: 14px; display: flex; flex-direction: column; overscroll-behavior: none; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; user-select: none; }
 body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(circle at 15% 0%, rgba(255, 215, 0, 0.06), transparent 50%), radial-gradient(circle at 85% 100%, rgba(255, 42, 85, 0.06), transparent 50%); }
 
-/* ГЛОБАЛЬНЫЕ АНИМАЦИИ НАЖАТИЯ */
 button, .card, .ib, .bal, .slot, .mbtn, .tab, .invcs {
   transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s, background-color 0.2s !important;
 }
@@ -15,24 +14,24 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
   opacity: 0.8;
 }
 
+/* ИНДИКАТОР ОНЛАЙНА */
+.online-indicator {
+  display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--gr); font-weight: 800; margin-left: 6px; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3); box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+}
+.online-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gr); box-shadow: 0 0 6px var(--gr); animation: pulse 2s infinite; }
+
 .glass-panel { background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--bd); box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); border-radius: 16px; }
 #err { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--crimson); color: #fff; font-size: 11px; padding: 8px 12px; z-index: 99999; word-break: break-all; font-family: ui-monospace, monospace; max-height: 30vh; overflow-y: auto; }
-
-/* ОСНОВНОЙ КОНТЕЙНЕР (фикс скролла) */
 .stage { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-
-/* ЭКРАНЫ */
 .scr { display: none; flex-direction: column; flex: 1; padding: 14px; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 40px; }
 .scr.on { display: flex; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-/* ЛОАДЕР ПЕРЕХОДОВ */
 .page-loader { position: fixed; inset: 0; background: rgba(3,3,4,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 99998; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .page-loader.active { opacity: 1; pointer-events: auto; }
 .spinner { width: 40px; height: 40px; border: 3px solid rgba(255, 215, 0, 0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ОСТАЛЬНЫЕ СТИЛИ ИЗ ПРЕМИУМ ВЕРСИИ */
 .loading { position: fixed; inset: 0; z-index: 10000; background: radial-gradient(circle at center, #0a0a0f 0%, #030304 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 24px; transition: opacity .6s, visibility .6s; overflow: hidden; touch-action: none; }
 .loading.hide { opacity: 0; visibility: hidden; pointer-events: none; }
 .loading canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
@@ -49,7 +48,6 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .hl, .hr { display: flex; align-items: center; gap: 8px; }
 .logo { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; color: #fff; cursor: pointer; }
 .logo .d { color: var(--gold); }
-.beta { font-size: 8px; font-weight: 900; color: var(--gold); background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.3); padding: 2px 6px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
 .bal { display: flex; align-items: center; gap: 6px; padding: 8px 12px; height: 36px; border-radius: 999px; font-size: 14px; font-weight: 800; color: var(--gold); cursor: pointer; }
 .bal .plus { font-size: 16px; opacity: 0.8; }
 .ib { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--dim); cursor: pointer; padding: 0; }
@@ -251,12 +249,6 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .rcl { font-size: 7px; font-weight: 900; color: rgba(255, 215, 0, .55); text-transform: uppercase; margin-bottom: 3px; letter-spacing: .15em; }
 .rcv { font-size: 22px; font-weight: 900; color: #fff; line-height: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 100%; }
 .rcv .cvm { font-size: 24px; color: var(--gold); font-weight: 900; text-shadow: 0 0 16px rgba(255, 215, 0, .9); }
-.rinfo { display: flex; justify-content: space-around; padding: 12px; margin-bottom: 10px; flex-shrink: 0; gap: 6px; }
-.ris { text-align: center; flex: 1; }
-.ris .lbl { font-size: 8px; color: var(--dim); text-transform: uppercase; font-weight: 800; letter-spacing: .1em; }
-.ris .val { font-size: 14px; font-weight: 900; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ris .val.gold { color: var(--gold); }
-.ris .val.green { color: var(--gr); }
 .rspin { width: 100%; padding: 17px; background: linear-gradient(180deg, var(--crimson), #dc2626); border: none; border-radius: 12px; color: #fff; font-size: 14px; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: inherit; margin-bottom: 10px; flex-shrink: 0; position: relative; overflow: hidden; letter-spacing: .08em; box-shadow: 0 6px 24px -4px rgba(255, 42, 85, .5), 0 1px 0 rgba(255,255,255,.15) inset; }
 .rspin::before { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.3) 50%, transparent 70%); animation: btnShine 2.8s ease-in-out infinite; pointer-events: none; }
 @keyframes btnShine { 0%{transform:translateX(-100%)}50%,100%{transform:translateX(100%)} }
@@ -367,7 +359,6 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
   .ib { width: 28px; height: 28px; }
   .bal { font-size: 11px; padding: 6px 10px; height: 30px; max-width: 100px; }
   .logo { font-size: 15px; }
-  .beta { font-size: 7px; padding: 1px 4px; }
   .card.hero { min-height: 160px; padding: 16px 14px; }
   .hero-ic { width: 80px; height: 80px; }
   .hero-t { font-size: 26px; }
