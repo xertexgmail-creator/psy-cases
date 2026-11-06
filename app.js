@@ -33,8 +33,36 @@ function save(){try{Store.set(P+'balance',String(balance));Store.set(P+'inv',JSO
 function markUsed(c){if(used.indexOf(c)<0){used.push(c);save()}}
 function isUsed(c){return used.indexOf(c)>=0}
 function toast(type,text){var t=document.createElement('div');t.className='toast '+type;var ic={success:'✓',error:'✕',info:'i'};t.innerHTML='<span style="font-weight:900;">'+ic[type]+'</span><span>'+text+'</span>';document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('show')});setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},450)},3000)}
-(function(){var cv=document.getElementById('loadingCanvas');if(!cv)return;var ctx=cv.getContext('2d');var particles=[];var W=0,H=0;function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}resize();window.addEventListener('resize',resize);for(var i=0;i<40;i++){particles.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,r:1+Math.random()*2,life:Math.random()*Math.PI*2,speed:.01+Math.random()*.02})}var animating=true;function loop(){if(!animating)return;ctx.clearRect(0,0,W,H);particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.life+=p.speed;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;var alpha=.3+.5*Math.sin(p.life);ctx.fillStyle='rgba(251,191,36,'+alpha+')';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);g.addColorStop(0,'rgba(251,191,36,'+(alpha*.3)+')');g.addColorStop(1,'rgba(251,191,36,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2);ctx.fill()});requestAnimationFrame(loop)}loop();window.__stopLoadingParticles=function(){animating=false}})();
-var curScreen='menu';function goScreen(name){curScreen=name;document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});var el=document.getElementById('scr-'+name);if(el)el.classList.add('on');if(name==='rocket'){Rocket.init()}if(name==='roll'){Roll.initCanvas()}}
+(function(){var cv=document.getElementById('loadingCanvas');if(!cv)return;var ctx=cv.getContext('2d');var particles=[];var W=0,H=0;function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}resize();window.addEventListener('resize',resize);for(var i=0;i<40;i++){particles.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,r:1+Math.random()*2,life:Math.random()*Math.PI*2,speed:.01+Math.random()*.02})}var animating=true;function loop(){if(!animating)return;ctx.clearRect(0,0,W,H);particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.life+=p.speed;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;var alpha=.3+.5*Math.sin(p.life);ctx.fillStyle='rgba(255,215,0,'+alpha+')';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);g.addColorStop(0,'rgba(255,215,0,'+(alpha*.3)+')');g.addColorStop(1,'rgba(255,215,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2);ctx.fill()});requestAnimationFrame(loop)}loop();window.__stopLoadingParticles=function(){animating=false}})();
+
+/* === ОБНОВЛЕННАЯ ФУНКЦИЯ ПЕРЕХОДА С ЛОАДЕРОМ === */
+var curScreen='menu';
+function goScreen(name) {
+  if (curScreen === name) return;
+  const loader = document.getElementById('pageLoader');
+  if (loader) {
+    loader.classList.add('active');
+    setTimeout(() => {
+      document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+      const el = document.getElementById('scr-' + name);
+      if (el) el.classList.add('on');
+      curScreen = name;
+      
+      if (name === 'rocket') Rocket.init();
+      if (name === 'roll') Roll.initCanvas();
+      
+      setTimeout(() => { loader.classList.remove('active'); }, 100);
+    }, 400); // 400мс задержка для красоты
+  } else {
+    curScreen = name;
+    document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+    const el = document.getElementById('scr-' + name);
+    if (el) el.classList.add('on');
+    if (name === 'rocket') Rocket.init();
+    if (name === 'roll') Roll.initCanvas();
+  }
+}
+
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}});g.appendChild(b)})}
 function pickWeightedGift(){var r=Math.random();var cat=[];if(r<.72)cat=FALLBACK.filter(function(g){return g.value<200});else if(r<.92)cat=FALLBACK.filter(function(g){return g.value>=200&&g.value<2000});else if(r<.99)cat=FALLBACK.filter(function(g){return g.value>=2000&&g.value<20000});else cat=FALLBACK.filter(function(g){return g.value>=20000});if(!cat.length)cat=FALLBACK;return cat[Math.floor(Math.random()*cat.length)]}
 function createDropEl(gift,animate){var el=document.createElement('div');el.className='live-item'+(animate?'':' no-anim');applyRar(el,gift.value);el.innerHTML='<div class="live-icon">'+iconTag(gift.name,48)+'</div><div class="live-info"><div class="live-name">'+gift.name+'</div><div class="live-val">'+fmt(gift.value)+'★</div></div>';return el}
