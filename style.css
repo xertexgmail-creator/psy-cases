@@ -6,12 +6,21 @@ html, body { background: var(--bg); width: 100%; height: 100%; overflow: hidden;
 body { color: var(--tx); font-family: 'Inter', sans-serif; font-size: 14px; display: flex; flex-direction: column; overscroll-behavior: none; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; user-select: none; }
 body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(circle at 15% 0%, rgba(255, 215, 0, 0.06), transparent 50%), radial-gradient(circle at 85% 100%, rgba(255, 42, 85, 0.06), transparent 50%); }
 
-button, .card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card {
+button, .card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card, .invc {
   transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s, background-color 0.2s !important;
 }
-button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active, .tab:active, .invcs:active, .case-menu-card:active {
+button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active, .tab:active, .invcs:active, .case-menu-card:active, .invc:active {
   transform: scale(0.92) !important;
   opacity: 0.8;
+}
+
+/* АНИМАЦИЯ ИКОНОК РЕЖИМОВ */
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.02); }
+}
+.card-ic img, .hero-ic img {
+  animation: floatIcon 3s ease-in-out infinite;
 }
 
 /* КРАСИВЫЕ КРЕСТИКИ */
@@ -270,7 +279,7 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .bgic::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, var(--rar-glow, transparent), transparent 68%); filter: blur(10px); z-index: 0; }
 .bgic img { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 1; }
 
-/* CASES (МЕНЮ С БЕГУЩЕЙ СТРОКОЙ) */
+/* CASES (БЕСКОНЕЧНЫЙ СКРОЛЛ) */
 .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 
 .case-menu-card {
@@ -287,7 +296,9 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .case-menu-card[data-rarity="5"] { border-color: #ffd700; }
 
 .case-menu-track-wrap { position: absolute; top: 0; left: 0; right: 0; bottom: 30px; overflow: hidden; display: flex; align-items: center; }
-.case-menu-track { display: flex; gap: 5px; padding: 5px; position: absolute; left: 0; will-change: transform; }
+.case-menu-track { display: flex; gap: 5px; padding: 5px; position: absolute; left: 0; will-change: transform; animation: scrollLeft 15s linear infinite; }
+@keyframes scrollLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.case-menu-track:hover { animation-play-state: paused; }
 .case-menu-track .cm-item { width: 60px; height: 60px; flex-shrink: 0; border-radius: 8px; background: rgba(0,0,0,0.4); border: 1px solid var(--bd); display: flex; align-items: center; justify-content: center; }
 .case-menu-track .cm-item img { width: 80%; height: 80%; object-fit: contain; }
 
@@ -327,10 +338,10 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 
 /* ПРОФИЛЬ */
 .profile-header-bg { height: 80px; background: linear-gradient(90deg, var(--crimson), var(--purple)); opacity: 0.8; }
-.profile-header { display: flex; align-items: center; gap: 15px; padding: 0 20px; margin-top: -40px; position: relative; z-index: 2; }
+.profile-header { display: flex; align-items: flex-start; gap: 15px; padding: 0 20px; margin-top: -40px; position: relative; z-index: 2; }
 .ava-lg { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #FFA500); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: #000; border: 4px solid var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.5); overflow: hidden; flex-shrink: 0; }
 .ava-lg img { width: 100%; height: 100%; object-fit: cover; }
-.profile-info { padding-top: 35px; }
+.profile-info { padding-top: 45px; } /* Опустил текст ниже баннера */
 .pn-lg { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 4px; text-shadow: 0 2px 4px #000; }
 .pc-lg { display: flex; gap: 6px; }
 .pchip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; background: rgba(0,0,0,0.5); border: 1px solid var(--bd); border-radius: 6px; font-size: 9px; font-weight: 800; color: var(--dim); backdrop-filter: blur(4px); }
@@ -347,6 +358,8 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .pinv-list .invc img { width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
 .pinv-list .invc .iname { font-size: 10px; font-weight: 800; color: #fff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 .pinv-list .invc .iprice { font-size: 11px; font-weight: 900; color: var(--rar-color,var(--gold)); }
+.pinv-list .invc .sell-btn { width: 100%; padding: 6px; border-radius: 6px; border: none; background: rgba(255, 215, 0, 0.15); color: var(--gold); font-size: 10px; font-weight: 900; cursor: pointer; margin-top: 5px; transition: all 0.2s; }
+.pinv-list .invc .sell-btn:active { background: rgba(255, 215, 0, 0.3); }
 
 /* ОСТАЛЬНЫЕ МОДАЛКИ (УЛУЧШЕННЫЕ) */
 .ov { position: fixed; inset: 0; background: rgba(0,0,0,.85); backdrop-filter: blur(8px); display: none; z-index: 300; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); overflow-y: auto; }
@@ -420,8 +433,6 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
   .case-pool-grid { grid-template-columns: repeat(3, 1fr); }
   .pinv-list { grid-template-columns: 1fr 1fr; }
   .ava-lg { width: 60px; height: 60px; font-size: 24px; }
-  .profile-info { padding-top: 25px; }
+  .profile-info { padding-top: 45px; }
   .pn-lg { font-size: 16px; }
-  .case-menu-card { height: 90px; }
-  .case-menu-track .cm-item { width: 50px; height: 50px; }
 }
