@@ -18,6 +18,7 @@ function sBuy(){ia();tone(523,.1,'sine',.15,0);tone(659,.1,'sine',.15,.08);tone(
 function sPromo(){ia();tone(784,.1,'sine',.15,0);tone(1047,.1,'sine',.15,.08);tone(1319,.25,'sine',.15,.16)}
 function sExplosion(){if(curScreen!=='rocket')return;ia();tone(80,.6,'sawtooth',.25,0);tone(50,.8,'sawtooth',.22,.05);tone(120,.4,'square',.15,.15);haptic('heavy')}
 function sRocketTick(){if(curScreen!=='rocket')return;ia();tone(1400+Math.random()*200,.01,'square',.02)}
+function sOpenCase(){ia();tone(200,.3,'sawtooth',.15,0);tone(400,.2,'square',.1,.1);haptic('heavy')}
 var balance=parseInt(Store.get(P+'balance')||'10000',10);if(isNaN(balance)||balance<0)balance=10000;if(isAdmin)balance=20000;
 var inventory=[];try{var inv=JSON.parse(Store.get(P+'inv')||'[]');if(Array.isArray(inv))inventory=inv.filter(function(x){return x&&x.name})}catch(e){}
 var used=[];try{var u=JSON.parse(Store.get(P+'used')||'[]');if(Array.isArray(u))used=u}catch(e){}
@@ -86,7 +87,7 @@ function goScreen(name) {
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Loot Bag'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// НОВЫЕ КЕЙСЫ
+// НОВЫЕ КЕЙСЫ (3D СУНДУКИ)
 // ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, icon: 'Crystal Ball', pool: FALLBACK.filter(f => f.value <= 200) },
@@ -107,13 +108,15 @@ function renderCases() {
         el.className = 'case-box-card';
         el.setAttribute('data-rarity', c.rarity);
         
-        // Берем 3 случайных гифта из пула для превью
         var previews = c.pool.slice().sort(() => 0.5 - Math.random()).slice(0, 3);
         var previewHTML = previews.map(p => iconTag(p.name, 64)).join('');
 
         el.innerHTML = `
             <div class="cc-gifts">${previewHTML}</div>
-            <div class="box-bg"></div>
+            <div class="box-container">
+                <div class="box-base"></div>
+                <div class="box-lid"></div>
+            </div>
             <div class="cc-name">${c.name}</div>
             <div class="cc-price">${fmt(c.price)} ★</div>
         `;
@@ -129,7 +132,6 @@ function openCaseModal(c) {
     document.getElementById('caseModalTitle').textContent = c.name;
     document.getElementById('casePriceBtn').textContent = fmt(c.price);
     
-    // Рендер содержимого (все гифты)
     var poolGrid = document.getElementById('casePoolGrid');
     poolGrid.innerHTML = '';
     var sortedPool = c.pool.slice().sort((a,b) => a.value - b.value);
@@ -141,13 +143,11 @@ function openCaseModal(c) {
         poolGrid.appendChild(d);
     });
 
-    // Сброс состояний
     document.getElementById('casePreOpen').style.display = 'flex';
     document.getElementById('caseRollingArea').style.display = 'none';
     document.getElementById('acceptCaseBtn').style.display = 'none';
     document.getElementById('caseResultText').textContent = '';
     
-    // Очистка трека
     var track = document.getElementById('caseTrack');
     track.style.transition = 'none';
     track.style.transform = 'translateX(0)';
@@ -157,7 +157,7 @@ function openCaseModal(c) {
 }
 
 document.getElementById('closeCaseModal').addEventListener('click', function() {
-    if (isCaseSpinning) return; // Нельзя закрыть во время прокрута
+    if (isCaseSpinning) return;
     sClick();
     document.getElementById('caseModal').classList.remove('on');
 });
@@ -169,68 +169,82 @@ document.getElementById('openCaseBtn').addEventListener('click', function() {
     
     isCaseSpinning = true;
     if (!isAdmin) { balance -= c.price; updBal(); save(); }
-    sClick();
+    sOpenCase();
     
-    document.getElementById('casePreOpen').style.display = 'none';
-    document.getElementById('caseRollingArea').style.display = 'flex';
+    document.getElementById('openCaseBtn').textContent = 'Открывается...';
+    document.getElementById('openCaseBtn').disabled = true;
     
-    var track = document.getElementById('caseTrack');
-    track.style.transition = 'none';
-    track.style.transform = 'translateX(0)';
-    track.innerHTML = '';
-    
-    // Логика выбора
-    var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
-    var r = Math.random();
-    var winIdx = 0;
-    if (r < 0.6) winIdx = Math.floor(Math.random() * Math.floor(pool.length * 0.6));
-    else if (r < 0.9) winIdx = Math.floor(pool.length * 0.6 + Math.random() * (pool.length * 0.3));
-    else winIdx = Math.floor(pool.length * 0.9 + Math.random() * (pool.length * 0.1));
-    if (winIdx >= pool.length) winIdx = pool.length - 1;
-    var winItem = pool[winIdx];
-    
-    // Генерация трека (50 элементов)
-    var items = [];
-    for (var i = 0; i < 50; i++) {
-        items.push(pool[Math.floor(Math.random() * pool.length)]);
-    }
-    var targetIdx = 45;
-    items[targetIdx] = winItem;
-    
-    items.forEach(function(it) {
-        var d = document.createElement('div');
-        d.className = 'case-item';
-        applyRar(d, it.value);
-        d.innerHTML = iconTag(it.name, 128);
-        track.appendChild(d);
-    });
-    
-    // Анимация
-    var itemWidth = 90 + 8;
-    var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
-    var offset = (targetIdx * itemWidth) - (wrapWidth / 2) + (itemWidth / 2);
+    // Анимация тряски кейса
+    var chest = document.getElementById('caseBigChest');
+    chest.style.animation = 'lidShake 0.1s infinite alternate';
     
     setTimeout(function() {
-        track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
-        track.style.transform = 'translateX(-' + offset + 'px)';
+        chest.style.animation = 'none';
+        document.getElementById('casePreOpen').style.display = 'none';
+        document.getElementById('caseRollingArea').style.display = 'flex';
+        document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
+        document.getElementById('openCaseBtn').disabled = false;
         
-        var tickInt = setInterval(function(){ sTick(); }, 150);
+        var track = document.getElementById('caseTrack');
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0)';
+        track.innerHTML = '';
+        
+        var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
+        var r = Math.random();
+        var winIdx = 0;
+        if (r < 0.6) winIdx = Math.floor(Math.random() * Math.floor(pool.length * 0.6));
+        else if (r < 0.9) winIdx = Math.floor(pool.length * 0.6 + Math.random() * (pool.length * 0.3));
+        else winIdx = Math.floor(pool.length * 0.9 + Math.random() * (pool.length * 0.1));
+        if (winIdx >= pool.length) winIdx = pool.length - 1;
+        var winItem = pool[winIdx];
+        
+        var items = [];
+        for (var i = 0; i < 50; i++) {
+            items.push(pool[Math.floor(Math.random() * pool.length)]);
+        }
+        var targetIdx = 45;
+        items[targetIdx] = winItem;
+        
+        items.forEach(function(it) {
+            var d = document.createElement('div');
+            d.className = 'case-item';
+            applyRar(d, it.value);
+            d.innerHTML = iconTag(it.name, 128);
+            track.appendChild(d);
+        });
+        
+        var itemWidth = 84 + 8;
+        var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
+        var offset = (targetIdx * itemWidth) - (wrapWidth / 2) + (itemWidth / 2);
         
         setTimeout(function() {
-            clearInterval(tickInt);
-            isCaseSpinning = false;
-            inventory.push(winItem);
-            inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});
-            save();
+            track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
+            track.style.transform = 'translateX(-' + offset + 'px)';
             
-            document.getElementById('caseResultText').innerHTML = `Выпал: <span style="color:${rarityInfo(winItem.value).c}">${winItem.name}</span>`;
-            document.getElementById('acceptCaseBtn').style.display = 'block';
+            var tickInt = setInterval(function(){ sTick(); }, 150);
             
-            if (winItem.value > c.price * 1.5) { sWin(); confetti(); } 
-            else { sBuy(); }
-            
-        }, 6100);
-    }, 100);
+            setTimeout(function() {
+                clearInterval(tickInt);
+                isCaseSpinning = false;
+                inventory.push(winItem);
+                inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});
+                save();
+                
+                var trackItems = track.querySelectorAll('.case-item');
+                if(trackItems[targetIdx]) {
+                    trackItems[targetIdx].classList.add('win-flash');
+                }
+                
+                document.getElementById('caseResultText').innerHTML = `Выпал: <span style="color:${rarityInfo(winItem.value).c}; text-shadow:0 0 10px ${rarityInfo(winItem.value).c}">${winItem.name}</span>`;
+                document.getElementById('acceptCaseBtn').style.display = 'block';
+                
+                if (winItem.value > c.price * 1.5) { sWin(); confetti(); } 
+                else { sBuy(); }
+                
+            }, 6100);
+        }, 100);
+    }, 800);
 });
 
 document.getElementById('acceptCaseBtn').addEventListener('click', function() {
