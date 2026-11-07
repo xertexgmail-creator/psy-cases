@@ -88,7 +88,7 @@ function goScreen(name) {
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Loot Bag'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// НОВЫЕ КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ
+// КЕЙСЫ
 // ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, icon: 'Crystal Ball', pool: FALLBACK.filter(f => f.value <= 200) },
@@ -158,7 +158,7 @@ function startCaseLoop(c) {
             caseLoopX = 0;
         }
         track.style.transform = 'translateX(' + caseLoopX + 'px)';
-    }, 30); // Медленная прокрутка
+    }, 30);
 }
 
 function openCaseModal(c) {
@@ -218,7 +218,7 @@ document.getElementById('openCaseBtn').addEventListener('click', function() {
     balance -= c.price; updBal(); save();
     sOpenCase();
     
-    clearInterval(caseLoopInterval); // Останавливаем медленный прокрут
+    clearInterval(caseLoopInterval);
     
     document.getElementById('openCaseBtn').textContent = 'Открывается...';
     document.getElementById('openCaseBtn').disabled = true;
@@ -277,10 +277,8 @@ document.getElementById('openCaseBtn').addEventListener('click', function() {
             document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
             document.getElementById('openCaseBtn').disabled = false;
             
-            // Открываем модалку с выигрышем
             openGiftModal(winItem);
             
-            // Эффекты
             if (winItem.value > c.price * 1.5) { 
                 sWin(); 
                 confetti(); 
@@ -409,6 +407,8 @@ function renderProfile(){
   document.getElementById('pName').textContent=name;
   document.getElementById('pInvCount').textContent=inventory.length;
   document.getElementById('pAdmin').style.display=isAdmin?'inline-flex':'none';
+  var admCard = document.getElementById('adminCard');
+  if(admCard) admCard.style.display = isAdmin ? 'block' : 'none';
   
   var il=document.getElementById('pInvList');
   if(il){
@@ -427,8 +427,17 @@ function renderProfile(){
     }
   }
 }
-document.getElementById('admClearInv').addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
-document.getElementById('admWipe').addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
+
+// Защита от вылетов (проверка на существование кнопок)
+var admClear = document.getElementById('admClearInv');
+if (admClear) {
+    admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
+}
+var admWipeBtn = document.getElementById('admWipe');
+if (admWipeBtn) {
+    admWipeBtn.addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
+}
+
 document.getElementById('newsBtn').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.add('on')});
 document.getElementById('newsClose').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.remove('on')});
 document.getElementById('logoBtn').addEventListener('click',function(){if(curScreen==='menu')return;sClick();goScreen('menu')});
