@@ -286,8 +286,9 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
   position: relative; height: 110px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; 
   background: linear-gradient(180deg, rgba(20,20,25,0.9), rgba(10,10,15,0.9));
   border: 2px solid var(--bd); border-radius: 12px; overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: transform 0.2s, box-shadow 0.2s;
 }
+.case-menu-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.6), 0 0 15px rgba(255,255,255,0.05); }
 .case-menu-card:active { transform: scale(0.95); }
 .case-menu-card[data-rarity="1"] { border-color: #4b69ff; }
 .case-menu-card[data-rarity="2"] { border-color: #8847ff; }
@@ -296,9 +297,7 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .case-menu-card[data-rarity="5"] { border-color: #ffd700; }
 
 .case-menu-track-wrap { position: absolute; top: 0; left: 0; right: 0; bottom: 30px; overflow: hidden; display: flex; align-items: center; }
-.case-menu-track { display: flex; gap: 5px; padding: 5px; position: absolute; left: 0; will-change: transform; animation: scrollLeft 15s linear infinite; }
-@keyframes scrollLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.case-menu-track:hover { animation-play-state: paused; }
+.case-menu-track { display: flex; gap: 5px; padding: 5px; position: absolute; left: 0; will-change: transform; }
 .case-menu-track .cm-item { width: 60px; height: 60px; flex-shrink: 0; border-radius: 8px; background: rgba(0,0,0,0.4); border: 1px solid var(--bd); display: flex; align-items: center; justify-content: center; }
 .case-menu-track .cm-item img { width: 80%; height: 80%; object-fit: contain; }
 
