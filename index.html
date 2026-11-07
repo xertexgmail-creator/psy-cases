@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -46,7 +46,6 @@
 <div class="scr on" id="scr-menu">
 <div class="menu-title">Режимы</div>
 <div class="menu-sub">Выбери игру</div>
-
 <div class="news-line glass-panel" id="newsBtn">
 <span class="news-dot"></span>
 <div class="news-text"><div class="news-title">Глобальное обновление</div><div class="news-ver">Новый режим и фиксы</div></div>
@@ -116,34 +115,49 @@
 <div class="shopwrap glass-panel"><div class="shopscr"><div class="igrid" id="shopGrid"></div></div></div>
 </div>
 
-<!-- НОВЫЙ ЭКРАН КЕЙСОВ -->
 <div class="scr" id="scr-cases">
   <div class="menu-title">Кейсы</div>
   <div class="menu-sub">Испытай удачу</div>
-  
-  <div class="case-grid" id="caseGrid">
-    <!-- Кейсы генерируются в JS -->
-  </div>
-  
-  <!-- Экран открытия кейса (скрыт по умолчанию) -->
-  <div class="case-open-area" id="caseOpenArea" style="display:none;">
-    <div class="case-title-top" id="caseOpenTitle">Открытие кейса</div>
-    <div class="case-track-wrap glass-panel">
-      <div class="case-pointer"></div>
-      <div class="case-track" id="caseTrack">
-        <!-- Элементы трека генерируются в JS -->
+  <div class="case-grid" id="caseGrid"></div>
+</div>
+
+<div class="footer">powered by <a href="https://t.me/RollUp_BOT" target="_blank">@RollUp_BOT</a> · v2.2.0</div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО ОТКРЫТИЯ КЕЙСА -->
+<div class="ov" id="caseModal">
+  <div class="modal case-modal-content glass-panel">
+    <button class="ib" id="closeCaseModal" style="position:absolute;top:10px;right:10px;z-index:100;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    
+    <div class="case-modal-header">
+      <div class="case-modal-title" id="caseModalTitle">Кейс</div>
+    </div>
+
+    <!-- Состояние ДО открытия -->
+    <div class="case-pre-open" id="casePreOpen">
+      <div class="case-big-img" id="caseBigImg"></div>
+      <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; padding:16px; margin-top:20px;">Открыть за <span id="casePriceBtn">500</span> ★</button>
+    </div>
+
+    <!-- Состояние ПОСЛЕ открытия (Рулетка) -->
+    <div class="case-rolling-area" id="caseRollingArea" style="display:none;">
+      <div class="case-track-wrap glass-panel">
+        <div class="case-pointer"></div>
+        <div class="case-track" id="caseTrack"></div>
       </div>
+      <div class="case-result-text" id="caseResultText"></div>
+      <button class="btn pri" id="acceptCaseBtn" type="button" style="width:100%; padding:16px; margin-top:15px; display:none;">Забрать</button>
     </div>
-    <div class="case-actions">
-      <button class="btn pri" id="closeCaseBtn" type="button">Забрать</button>
+
+    <!-- Содержимое кейса (2 ряда) -->
+    <div class="case-pool-wrapper">
+      <div class="case-pool-title">Содержимое кейса</div>
+      <div class="case-pool-grid" id="casePoolGrid"></div>
     </div>
   </div>
 </div>
 
-<div class="footer">powered by <a href="https://t.me/RollUp_BOT" target="_blank">@RollUp_BOT</a> · v2.1.0</div>
-</div>
-
-<!-- МОДАЛЬНЫЕ ОКНА -->
+<!-- ОСТАЛЬНЫЕ МОДАЛКИ -->
 <div class="ov" id="starsModal"><div class="modal glass-panel"><div class="modal-t">Пополнение</div><div class="modal-s">Введи сумму</div><input type="number" class="inp" id="starsAmt" placeholder="500" min="1"><div class="qrow"><button class="btn sec" data-q="100" type="button">100</button><button class="btn sec" data-q="500" type="button">500</button><button class="btn sec" data-q="1000" type="button">1K</button><button class="btn sec" data-q="10000" type="button">10K</button></div><div class="row"><button class="btn sec" id="starsClose" type="button">Закрыть</button><button class="btn pri" id="starsOk" type="button">Пополнить</button></div></div></div>
 <div class="ov" id="pickModal"><div class="modal glass-panel"><div class="modal-t">Выбери гифт</div><div class="pickgr" id="pickGrid"></div><div class="row"><button class="btn sec" id="pickClose" type="button">Отмена</button></div></div></div>
 <div class="ov" id="buyModal"><div class="modal glass-panel"><div class="bgic" id="buyIcon"></div><div class="modal-t" id="buyName">—</div><div class="modal-s" id="buyPrice" style="font-size:20px;font-weight:900;">—</div><div class="row"><button class="btn sec" id="buyCancel" type="button">Отмена</button><button class="btn pri" id="buyConfirm" type="button">Купить</button></div></div></div>
@@ -154,57 +168,21 @@
 <div class="ov" id="newsModal">
   <div class="modal news-m glass-panel">
     <div class="news-mh">
-      <div class="news-mi">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-      </div>
-      <div>
-        <div class="news-mt">Отчет для игроков</div>
-        <div class="news-ms">Обновление 2.2</div>
-      </div>
+      <div class="news-mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div><div class="news-mt">Отчет для игроков</div><div class="news-ms">Обновление 2.2</div></div>
     </div>
     <div class="news-c">
       <div class="nvc release glass-panel">
-        <div class="nvh">
-          <div class="nvt">Новое</div>
-          <div class="nvty">Релиз</div>
-        </div>
+        <div class="nvh"><div class="nvt">Новое</div><div class="nvty">Релиз</div></div>
         <div class="nvti">Добавлен режим Кейсы и новые эффекты!</div>
-        
-        <div class="nf glass-panel">
-          <div class="nfi">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-          </div>
-          <div>
-            <div class="nfn">Режим "Кейсы"</div>
-            <div class="nfd">Добавили 5 кейсов с разной ценой. Испытай удачу и выбей дорогой гифт!</div>
-          </div>
-        </div>
-
-        <div class="nf glass-panel">
-          <div class="nfi">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-          </div>
-          <div>
-            <div class="nfn">Улучшения</div>
-            <div class="nfd">Пофиксили звуки, улучшили баланс шансов и добавили красивые искры при кликах. Приятной игры!</div>
-          </div>
-        </div>
-
+        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><div class="nfn">Режим "Кейсы"</div><div class="nfd">Добавили 5 кейсов с разной ценой. Испытай удачу и выбей дорогой гифт!</div></div></div>
+        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Улучшения</div><div class="nfd">Пофиксили звуки, улучшили баланс шансов и добавили красивые искры при кликах. Приятной игры!</div></div></div>
       </div>
     </div>
-    <div class="news-btn-wrap">
-      <button class="btn pri" id="newsClose" type="button" style="width:100%;padding:14px;">Понятно</button>
-    </div>
+    <div class="news-btn-wrap"><button class="btn pri" id="newsClose" type="button" style="width:100%;padding:14px;">Понятно</button></div>
   </div>
 </div>
 
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>
