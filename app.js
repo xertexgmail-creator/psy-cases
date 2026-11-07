@@ -19,7 +19,8 @@ function sPromo(){ia();tone(784,.1,'sine',.15,0);tone(1047,.1,'sine',.15,.08);to
 function sExplosion(){if(curScreen!=='rocket')return;ia();tone(80,.6,'sawtooth',.25,0);tone(50,.8,'sawtooth',.22,.05);tone(120,.4,'square',.15,.15);haptic('heavy')}
 function sRocketTick(){if(curScreen!=='rocket')return;ia();tone(1400+Math.random()*200,.01,'square',.02)}
 function sOpenCase(){ia();tone(200,.3,'sawtooth',.15,0);tone(400,.2,'square',.1,.1);haptic('heavy')}
-var balance=parseInt(Store.get(P+'balance')||'10000',10);if(isNaN(balance)||balance<0)balance=10000;if(isAdmin)balance=20000;
+
+var balance=parseInt(Store.get(P+'balance')||'20000',10);if(isNaN(balance))balance=20000;
 var inventory=[];try{var inv=JSON.parse(Store.get(P+'inv')||'[]');if(Array.isArray(inv))inventory=inv.filter(function(x){return x&&x.name})}catch(e){}
 var used=[];try{var u=JSON.parse(Store.get(P+'used')||'[]');if(Array.isArray(u))used=u}catch(e){}
 var PROMO={'ROMANARMATURA777':10,'CHIHARDEDEP':20};
@@ -29,7 +30,7 @@ function rarityInfo(v){if(v<100)return{c:'#8a8a95',glow:'rgba(138,138,149,0.5)',
 function applyRar(el,v){var r=rarityInfo(v);el.style.setProperty('--rar-color',r.c);el.style.setProperty('--rar-glow',r.glow);el.style.setProperty('--rar-bd',r.bd)}
 function iconTag(name,size){size=size||64;var n=String(name).replace(/\s+/g,'');var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';return '<img src="'+primary+'" data-fb="'+fb+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.style.opacity=0.3}">'}
 function fmt(n){n=Math.floor(n||0);if(n>=1e9)return Math.floor(n/1e9)+'B';if(n>=1e6)return Math.floor(n/1e6)+'M';if(n>=1e3)return Math.floor(n/1e3)+'K';return String(n)}
-function updBal(){if(isAdmin)balance=20000;var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance)}
+function updBal(){var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance)}
 function save(){try{Store.set(P+'balance',String(balance));Store.set(P+'inv',JSON.stringify(inventory));Store.set(P+'used',JSON.stringify(used))}catch(e){}try{if(tg.CloudStorage&&!isAdmin){tg.CloudStorage.setItem(P+'balance',String(balance),function(){});tg.CloudStorage.setItem(P+'inv',JSON.stringify(inventory),function(){})}}catch(e){}}
 function markUsed(c){if(used.indexOf(c)<0){used.push(c);save()}}
 function isUsed(c){return used.indexOf(c)>=0}
@@ -87,7 +88,7 @@ function goScreen(name) {
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Loot Bag'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// НОВЫЕ КЕЙСЫ (3D СУНДУКИ)
+// НОВЫЕ КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ
 // ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, icon: 'Crystal Ball', pool: FALLBACK.filter(f => f.value <= 200) },
@@ -98,6 +99,8 @@ var CASES_DATA = [
 ];
 var isCaseSpinning = false;
 var currentCaseData = null;
+var caseLoopInterval = null;
+var caseLoopX = 0;
 
 function renderCases() {
     var g = document.getElementById('caseGrid');
@@ -125,6 +128,39 @@ function renderCases() {
     });
 }
 
+function startCaseLoop(c) {
+    if (caseLoopInterval) clearInterval(caseLoopInterval);
+    caseLoopX = 0;
+    var track = document.getElementById('caseTrack');
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(0)';
+    track.innerHTML = '';
+    
+    var items = [];
+    for (var i = 0; i < 30; i++) {
+        items.push(c.pool[Math.floor(Math.random() * c.pool.length)]);
+    }
+    
+    items.forEach(function(it) {
+        var d = document.createElement('div');
+        d.className = 'case-item';
+        applyRar(d, it.value);
+        d.innerHTML = iconTag(it.name, 128);
+        d.onclick = function() { openGiftModal(it); };
+        track.appendChild(d);
+    });
+    
+    var itemWidth = 84 + 8;
+    caseLoopInterval = setInterval(function() {
+        if (isCaseSpinning) return;
+        caseLoopX -= 1;
+        if (Math.abs(caseLoopX) >= itemWidth * 15) {
+            caseLoopX = 0;
+        }
+        track.style.transform = 'translateX(' + caseLoopX + 'px)';
+    }, 30); // Медленная прокрутка
+}
+
 function openCaseModal(c) {
     currentCaseData = c;
     sClick();
@@ -139,117 +175,123 @@ function openCaseModal(c) {
         var d = document.createElement('div');
         d.className = 'cp-item';
         applyRar(d, item.value);
-        d.innerHTML = iconTag(item.name, 64);
+        d.innerHTML = iconTag(item.name, 64) + `<div class="cp-name">${item.name}</div>`;
+        d.onclick = function() { openGiftModal(item); };
         poolGrid.appendChild(d);
     });
 
-    document.getElementById('casePreOpen').style.display = 'flex';
-    document.getElementById('caseRollingArea').style.display = 'none';
-    document.getElementById('acceptCaseBtn').style.display = 'none';
-    document.getElementById('caseResultText').textContent = '';
-    
-    var track = document.getElementById('caseTrack');
-    track.style.transition = 'none';
-    track.style.transform = 'translateX(0)';
-    track.innerHTML = '';
-
     document.getElementById('caseModal').classList.add('on');
+    startCaseLoop(c);
 }
+
+function openGiftModal(item) {
+    sClick();
+    var modal = document.getElementById('giftModal');
+    var icon = document.getElementById('viewGiftIcon');
+    var name = document.getElementById('viewGiftName');
+    var price = document.getElementById('viewGiftPrice');
+    
+    icon.innerHTML = iconTag(item.name, 128);
+    applyRar(icon, item.value);
+    name.textContent = item.name;
+    price.textContent = (item.value || 0) + ' ★';
+    
+    modal.classList.add('on');
+}
+
+document.getElementById('closeGiftModal').addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
+document.getElementById('closeGiftBtn').addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
 
 document.getElementById('closeCaseModal').addEventListener('click', function() {
     if (isCaseSpinning) return;
     sClick();
+    clearInterval(caseLoopInterval);
     document.getElementById('caseModal').classList.remove('on');
 });
 
 document.getElementById('openCaseBtn').addEventListener('click', function() {
     if (isCaseSpinning) return;
     var c = currentCaseData;
-    if (!isAdmin && balance < c.price) { sErr(); toast('error', 'Не хватает звёзд'); return; }
+    if (balance < c.price) { sErr(); toast('error', 'Не хватает звёзд'); return; }
     
     isCaseSpinning = true;
-    if (!isAdmin) { balance -= c.price; updBal(); save(); }
+    balance -= c.price; updBal(); save();
     sOpenCase();
+    
+    clearInterval(caseLoopInterval); // Останавливаем медленный прокрут
     
     document.getElementById('openCaseBtn').textContent = 'Открывается...';
     document.getElementById('openCaseBtn').disabled = true;
     
-    // Анимация тряски кейса
-    var chest = document.getElementById('caseBigChest');
-    chest.style.animation = 'lidShake 0.1s infinite alternate';
+    var track = document.getElementById('caseTrack');
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(' + caseLoopX + 'px)';
+    track.innerHTML = '';
+    
+    var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
+    var r = Math.random();
+    var winIdx = 0;
+    if (r < 0.6) winIdx = Math.floor(Math.random() * Math.floor(pool.length * 0.6));
+    else if (r < 0.9) winIdx = Math.floor(pool.length * 0.6 + Math.random() * (pool.length * 0.3));
+    else winIdx = Math.floor(pool.length * 0.9 + Math.random() * (pool.length * 0.1));
+    if (winIdx >= pool.length) winIdx = pool.length - 1;
+    var winItem = pool[winIdx];
+    
+    var items = [];
+    for (var i = 0; i < 50; i++) {
+        items.push(pool[Math.floor(Math.random() * pool.length)]);
+    }
+    var targetIdx = 45;
+    items[targetIdx] = winItem;
+    
+    items.forEach(function(it) {
+        var d = document.createElement('div');
+        d.className = 'case-item';
+        applyRar(d, it.value);
+        d.innerHTML = iconTag(it.name, 128);
+        track.appendChild(d);
+    });
+    
+    var itemWidth = 84 + 8;
+    var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
+    var offset = (targetIdx * itemWidth) - (wrapWidth / 2) + (itemWidth / 2) - caseLoopX;
     
     setTimeout(function() {
-        chest.style.animation = 'none';
-        document.getElementById('casePreOpen').style.display = 'none';
-        document.getElementById('caseRollingArea').style.display = 'flex';
-        document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
-        document.getElementById('openCaseBtn').disabled = false;
+        track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
+        track.style.transform = 'translateX(-' + offset + 'px)';
         
-        var track = document.getElementById('caseTrack');
-        track.style.transition = 'none';
-        track.style.transform = 'translateX(0)';
-        track.innerHTML = '';
-        
-        var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
-        var r = Math.random();
-        var winIdx = 0;
-        if (r < 0.6) winIdx = Math.floor(Math.random() * Math.floor(pool.length * 0.6));
-        else if (r < 0.9) winIdx = Math.floor(pool.length * 0.6 + Math.random() * (pool.length * 0.3));
-        else winIdx = Math.floor(pool.length * 0.9 + Math.random() * (pool.length * 0.1));
-        if (winIdx >= pool.length) winIdx = pool.length - 1;
-        var winItem = pool[winIdx];
-        
-        var items = [];
-        for (var i = 0; i < 50; i++) {
-            items.push(pool[Math.floor(Math.random() * pool.length)]);
-        }
-        var targetIdx = 45;
-        items[targetIdx] = winItem;
-        
-        items.forEach(function(it) {
-            var d = document.createElement('div');
-            d.className = 'case-item';
-            applyRar(d, it.value);
-            d.innerHTML = iconTag(it.name, 128);
-            track.appendChild(d);
-        });
-        
-        var itemWidth = 84 + 8;
-        var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
-        var offset = (targetIdx * itemWidth) - (wrapWidth / 2) + (itemWidth / 2);
+        var tickInt = setInterval(function(){ sTick(); }, 150);
         
         setTimeout(function() {
-            track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
-            track.style.transform = 'translateX(-' + offset + 'px)';
+            clearInterval(tickInt);
+            isCaseSpinning = false;
+            inventory.push(winItem);
+            inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});
+            save();
             
-            var tickInt = setInterval(function(){ sTick(); }, 150);
+            var trackItems = track.querySelectorAll('.case-item');
+            if(trackItems[targetIdx]) {
+                trackItems[targetIdx].classList.add('win-flash');
+            }
             
-            setTimeout(function() {
-                clearInterval(tickInt);
-                isCaseSpinning = false;
-                inventory.push(winItem);
-                inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});
-                save();
-                
-                var trackItems = track.querySelectorAll('.case-item');
-                if(trackItems[targetIdx]) {
-                    trackItems[targetIdx].classList.add('win-flash');
-                }
-                
-                document.getElementById('caseResultText').innerHTML = `Выпал: <span style="color:${rarityInfo(winItem.value).c}; text-shadow:0 0 10px ${rarityInfo(winItem.value).c}">${winItem.name}</span>`;
-                document.getElementById('acceptCaseBtn').style.display = 'block';
-                
-                if (winItem.value > c.price * 1.5) { sWin(); confetti(); } 
-                else { sBuy(); }
-                
-            }, 6100);
-        }, 100);
-    }, 800);
-});
-
-document.getElementById('acceptCaseBtn').addEventListener('click', function() {
-    sClick();
-    document.getElementById('caseModal').classList.remove('on');
+            document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
+            document.getElementById('openCaseBtn').disabled = false;
+            
+            // Открываем модалку с выигрышем
+            openGiftModal(winItem);
+            
+            // Эффекты
+            if (winItem.value > c.price * 1.5) { 
+                sWin(); 
+                confetti(); 
+                document.body.style.animation = 'screenFlashGreen 0.5s';
+                setTimeout(() => { document.body.style.animation = ''; }, 500);
+            } else { 
+                sBuy(); 
+            }
+            
+        }, 6100);
+    }, 100);
 });
 // ============================================================
 
@@ -325,40 +367,66 @@ function endRocketFlight(){
   updateRocketBtn();
 }
 function placeRocketBet(){if(rocketPhase!=='waiting')return;if(rocketBetActive)return;if(!rocketBetGift){sErr();toast('error','Выбери гифт');return}var i=findGiftInInventory(rocketBetGift);if(i<0){rocketBetGift=null;updateRocketBtn();sErr();return}var removed=inventory[i];inventory.splice(i,1);var si=selItems.indexOf(removed);if(si>=0)selItems.splice(si,1);rocketBetActive=true;save();renderInv();renderArena();renderTargets();updatePctUI();updateRocketBtn();sBuy()}
-function cashOutRocket(isAuto){if(rocketPhase!=='flying')return;if(!rocketBetActive||rocketCashedOut)return;var bv=rocketBetGift?(rocketBetGift.value||0):0;var win=Math.floor(bv*rocketCurrentMult);if(!isAdmin){balance+=win;updBal()}rocketCashedOut=true;rocketCashoutMult=rocketCurrentMult;save();var mult=document.getElementById('rocket-mult');if(mult)mult.className='rocket-mult-hero cashed';var toastEl=document.getElementById('rocket-cashout-toast');if(toastEl&&curScreen==='rocket'){toastEl.textContent=(isAuto?'Авто · ':'')+'+'+fmt(win)+'★';toastEl.classList.add('show');setTimeout(function(){toastEl.classList.remove('show')},2200)}if(curScreen==='rocket')confetti();haptic('success');updateRocketBtn()}
+function cashOutRocket(isAuto){if(rocketPhase!=='flying')return;if(!rocketBetActive||rocketCashedOut)return;var bv=rocketBetGift?(rocketBetGift.value||0):0;var win=Math.floor(bv*rocketCurrentMult);balance+=win;updBal();rocketCashedOut=true;rocketCashoutMult=rocketCurrentMult;save();var mult=document.getElementById('rocket-mult');if(mult)mult.className='rocket-mult-hero cashed';var toastEl=document.getElementById('rocket-cashout-toast');if(toastEl&&curScreen==='rocket'){toastEl.textContent=(isAuto?'Авто · ':'')+'+'+fmt(win)+'★';toastEl.classList.add('show');setTimeout(function(){toastEl.classList.remove('show')},2200)}if(curScreen==='rocket')confetti();haptic('success');updateRocketBtn()}
 document.getElementById('rocket-btn').addEventListener('click',function(){sClick();if(rocketPhase==='waiting'&&!rocketBetActive)placeRocketBet();else if(rocketPhase==='flying'&&rocketBetActive&&!rocketCashedOut)cashOutRocket(false)});
 document.getElementById('rocket-bet-row').addEventListener('click',function(){if(rocketPhase!=='waiting')return;if(rocketBetActive)return;if(!inventory.length){sErr();toast('error','Нет гифтов');return}sClick();openPicker('rocket')});
 (function(){var inp=document.getElementById('rocket-autowd-input');var on=document.getElementById('autowd-on');var off=document.getElementById('autowd-off');if(inp)inp.value=autoWdValue>0?autoWdValue:'';if(autoWdEnabled&&on&&off){on.classList.add('active');off.classList.remove('active')}else if(on&&off){off.classList.add('active');on.classList.remove('active')}if(inp)inp.addEventListener('input',function(){var v=parseFloat(inp.value);autoWdValue=isNaN(v)?0:v;Store.set(P+'rocket_autowd_value',String(autoWdValue))});if(on)on.addEventListener('click',function(){autoWdEnabled=true;Store.set(P+'rocket_autowd_enabled','true');on.classList.add('active');off.classList.remove('active');sClick()});if(off)off.addEventListener('click',function(){autoWdEnabled=false;Store.set(P+'rocket_autowd_enabled','false');off.classList.add('active');on.classList.remove('active');sClick()})})();
 var ROLL_COST=100;var SEG_ANGLE=30;var ROLL_SEG=[{amount:500,realW:.8,c1:'#fbbf24',c2:'#d97706'},{amount:200,realW:.8,c1:'#a855f7',c2:'#7c3aed'},{amount:200,realW:.8,c1:'#a855f7',c2:'#7c3aed'},{amount:100,realW:.8,c1:'#06b6d4',c2:'#0891b2'},{amount:100,realW:.8,c1:'#06b6d4',c2:'#0891b2'},{amount:100,realW:.8,c1:'#06b6d4',c2:'#0891b2'},{amount:0,realW:5.0,c1:'#3a3a4a',c2:'#1a1a26'},{amount:10,realW:1.2,c1:'#1a3050',c2:'#0a1525'},{amount:10,realW:1.2,c1:'#1a3050',c2:'#0a1525'},{amount:25,realW:1.2,c1:'#3a2050',c2:'#180d28'},{amount:25,realW:1.2,c1:'#3a2050',c2:'#180d28'},{amount:50,realW:1.2,c1:'#1a4030',c2:'#0a1e18'}];var rollLast=0,rollBest=0,rollRot=0,rollSpinning=false;
 var Roll=(function(){var cv,ctx,anim,lastT=0;var particles=[];function initCanvas(){cv=document.getElementById('rollCanvas');if(!cv)return;var board=document.getElementById('rBoard');if(!board)return;cv.width=board.clientWidth||340;cv.height=board.clientHeight||440;ctx=cv.getContext('2d');if(!anim)loop()}function loop(){anim=requestAnimationFrame(loop);if(!ctx)return;var now=performance.now();var dt=Math.min(50,now-lastT)/1000||.016;lastT=now;var W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);for(var i=particles.length-1;i>=0;i--){var p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.15;p.life-=dt*1.2;if(p.life<=0){particles.splice(i,1);continue}ctx.globalAlpha=p.life;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}function burst(count){var W=cv.width,H=cv.height;var colors=['#fbbf24','#ff6b35','#a855f7','#06b6d4','#10b981'];for(var i=0;i<count;i++){var ang=Math.random()*Math.PI*2;var spd=2+Math.random()*8;particles.push({x:W*.5,y:H*.5,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd-2,life:1,size:3+Math.random()*5,color:colors[Math.floor(Math.random()*colors.length)]})}}function starPts(cx,cy,o,i,p){var a=[];for(var k=0;k<p*2;k++){var r=k%2===0?o:i;var an=(k*Math.PI/p)-Math.PI/2;a.push((cx+r*Math.cos(an)).toFixed(1)+','+(cy+r*Math.sin(an)).toFixed(1))}return a.join(' ')}
 function buildWheel(){var svg=document.getElementById('rollSvg');if(!svg)return;var N=ROLL_SEG.length;var sA=360/N;var cx=100,cy=100;var ro=92,ri=48,rI=72,sO=15,sI=6;var h='<defs>';h+='<linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff8c0"/><stop offset="25%" stop-color="#ffd93d"/><stop offset="50%" stop-color="#c88000"/><stop offset="75%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#fff8c0"/></linearGradient>';ROLL_SEG.forEach(function(seg,i){h+='<linearGradient id="sg'+i+'" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="'+seg.c1+'"/><stop offset="100%" stop-color="'+seg.c2+'"/></linearGradient>'});h+='</defs>';h+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(ro+22)+'" fill="#000"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(ro+14)+'" fill="none" stroke="url(#gold)" stroke-width="7"/>';for(var i=0;i<N;i++){var sC=i*sA-sA/2,eC=i*sA+sA/2;var sM=(sC-90)*Math.PI/180,eM=(eC-90)*Math.PI/180;var p0x=(cx+ro*Math.cos(sM)).toFixed(1),p0y=(cy+ro*Math.sin(sM)).toFixed(1);var p1x=(cx+ro*Math.cos(eM)).toFixed(1),p1y=(cy+ro*Math.sin(eM)).toFixed(1);var p2x=(cx+ri*Math.cos(eM)).toFixed(1),p2y=(cy+ri*Math.sin(eM)).toFixed(1);var p3x=(cx+ri*Math.cos(sM)).toFixed(1),p3y=(cy+ri*Math.sin(sM)).toFixed(1);h+='<path d="M '+p0x+' '+p0y+' A '+ro+' '+ro+' 0 0 1 '+p1x+' '+p1y+' L '+p2x+' '+p2y+' A '+ri+' '+ri+' 0 0 0 '+p3x+' '+p3y+' Z" fill="url(#sg'+i+')" stroke="rgba(255,217,61,0.85)" stroke-width="1.2"/>'}for(var i=0;i<N;i++){var seg=ROLL_SEG[i];h+='<g transform="rotate('+(i*sA)+' '+cx+' '+cy+')"><polygon points="'+starPts(cx,cy-rI,sO,sI,5)+'" fill="url(#gold)" stroke="'+(seg.amount>=100?'#ffd93d':'#fff')+'" stroke-width="0.9"/><text x="'+cx+'" y="'+(cy-rI+20)+'" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="9.5" fill="'+(seg.amount>=100?'#ffd93d':'#fff')+'" style="paint-order:stroke;stroke:rgba(0,0,0,1);stroke-width:4px;">'+seg.amount+'</text></g>'}h+='<circle cx="'+cx+'" cy="'+cy+'" r="'+ri+'" fill="none" stroke="url(#gold)" stroke-width="3"/>';svg.innerHTML=h}
-function update(){var btn=document.getElementById('rollSpinBtn');if(btn){btn.textContent='Крутить за '+ROLL_COST+' ★';btn.disabled=rollSpinning||(!isAdmin&&balance<ROLL_COST)}}
+function update(){var btn=document.getElementById('rollSpinBtn');if(btn){btn.textContent='Крутить за '+ROLL_COST+' ★';btn.disabled=rollSpinning||balance<ROLL_COST}}
 function pickByRealW(){var total=ROLL_SEG.reduce(function(s,x){return s+x.realW},0);var r=Math.random()*total;for(var i=0;i<ROLL_SEG.length;i++){r-=ROLL_SEG[i].realW;if(r<=0)return i}return ROLL_SEG.length-1}
 function getTargetAngle(idx){var base=idx*SEG_ANGLE;if(ROLL_SEG[idx].amount<100&&Math.random()<.25){for(var d=1;d<=2;d++){if(idx-d>=0&&ROLL_SEG[idx-d].amount>=100)return base-12+(Math.random()-.5)*3;if(idx+d<ROLL_SEG.length&&ROLL_SEG[idx+d].amount>=100)return base+12+(Math.random()-.5)*3}}return base+(Math.random()-.5)*8}
-function spin(){if(rollSpinning)return;if(!isAdmin&&balance<ROLL_COST){sErr();toast('error','Нужно '+ROLL_COST+' ★');return}rollSpinning=true;if(!isAdmin){balance-=ROLL_COST;updBal();save()}var wrap=document.getElementById('rWW');if(wrap)wrap.classList.add('spinning');var idx=pickByRealW();var targetAngle=getTargetAngle(idx);var finalRot=(360-targetAngle)%360;if(finalRot<0)finalRot+=360;rollRot=rollRot+360*6+((finalRot-(rollRot%360))+360)%360;var w=document.getElementById('rollWheel');if(w){w.style.transition='transform 5s cubic-bezier(.15,.7,.15,1)';w.style.transform='rotate('+rollRot+'deg)'}var tickCount=60;var tickIdx=0;var tickInt=setInterval(function(){sTick();tickIdx++;if(tickIdx>=tickCount)clearInterval(tickInt)},80);setTimeout(function(){clearInterval(tickInt);rollSpinning=false;if(wrap)wrap.classList.remove('spinning');if(w){rollRot=((rollRot%360)+360)%360;w.style.transform='rotate('+rollRot+'deg)'}var seg=ROLL_SEG[idx];var cv2=document.getElementById('rollCenter');if(seg.amount>0&&!isAdmin){balance+=seg.amount}rollLast=seg.amount;if(seg.amount>rollBest)rollBest=seg.amount;if(cv2){if(seg.amount===0)cv2.innerHTML='<span class="cvm" style="color:#ff6b7a;">0★</span>';else cv2.innerHTML='<span class="cvm">'+seg.amount+'★</span>'}if(seg.amount>=100){sRollBig();burst(60);confetti();haptic('success')}else if(seg.amount>0){sRollWin();burst(30);haptic('light')}else{sLose()}updBal();save();update()},5200)}
+function spin(){if(rollSpinning)return;if(balance<ROLL_COST){sErr();toast('error','Нужно '+ROLL_COST+' ★');return}rollSpinning=true;balance-=ROLL_COST;updBal();save();var wrap=document.getElementById('rWW');if(wrap)wrap.classList.add('spinning');var idx=pickByRealW();var targetAngle=getTargetAngle(idx);var finalRot=(360-targetAngle)%360;if(finalRot<0)finalRot+=360;rollRot=rollRot+360*6+((finalRot-(rollRot%360))+360)%360;var w=document.getElementById('rollWheel');if(w){w.style.transition='transform 5s cubic-bezier(.15,.7,.15,1)';w.style.transform='rotate('+rollRot+'deg)'}var tickCount=60;var tickIdx=0;var tickInt=setInterval(function(){sTick();tickIdx++;if(tickIdx>=tickCount)clearInterval(tickInt)},80);setTimeout(function(){clearInterval(tickInt);rollSpinning=false;if(wrap)wrap.classList.remove('spinning');if(w){rollRot=((rollRot%360)+360)%360;w.style.transform='rotate('+rollRot+'deg)'}var seg=ROLL_SEG[idx];var cv2=document.getElementById('rollCenter');if(seg.amount>0){balance+=seg.amount}rollLast=seg.amount;if(seg.amount>rollBest)rollBest=seg.amount;if(cv2){if(seg.amount===0)cv2.innerHTML='<span class="cvm" style="color:#ff6b7a;">0★</span>';else cv2.innerHTML='<span class="cvm">'+seg.amount+'★</span>'}if(seg.amount>=100){sRollBig();burst(60);confetti();haptic('success')}else if(seg.amount>0){sRollWin();burst(30);haptic('light')}else{sLose()}updBal();save();update()},5200)}
 return {initCanvas:initCanvas,buildWheel:buildWheel,update:update,spin:spin};})();
 document.getElementById('rollSpinBtn').addEventListener('click',function(){sClick();Roll.spin()});
 function renderShop(){var g=document.getElementById('shopGrid');if(!g)return;g.innerHTML='';var sS=document.getElementById('shopSearch'),sMin=document.getElementById('shopMin'),sMax=document.getElementById('shopMax');var q=sS?sS.value.toLowerCase():'';var mi=sMin&&sMin.value?parseFloat(sMin.value):null;var ma=sMax&&sMax.value?parseFloat(sMax.value):null;var list=CATALOG.filter(function(it){if(q&&it.name.toLowerCase().indexOf(q)<0)return false;if(mi!==null&&!isNaN(mi)&&(it.value||0)<mi)return false;if(ma!==null&&!isNaN(ma)&&(it.value||0)>ma)return false;return true}).sort(function(a,b){return(a.value||0)-(b.value||0)});if(!list.length){g.innerHTML='<div class="empty">—</div>';return}var frag=document.createDocumentFragment();list.forEach(function(item){var s=document.createElement('div');s.className='slot glass-panel'+((item.value||0)>balance?' disabled':'');applyRar(s,item.value||0);s.innerHTML='<div class="ssi">'+iconTag(item.name,64)+'</div><div class="sname">'+item.name+'</div><div class="sprice">'+(item.value||0)+'★</div>';s.addEventListener('click',function(){sClick();openBuy(item)});frag.appendChild(s)});g.appendChild(frag)}
-var buyItem=null;function openBuy(item){buyItem=item;var bi=document.getElementById('buyIcon');bi.innerHTML=iconTag(item.name,128);applyRar(bi,item.value||0);document.getElementById('buyName').textContent=item.name;document.getElementById('buyPrice').textContent=(item.value||0)+' ★';document.getElementById('buyConfirm').disabled=!isAdmin&&(item.value||0)>balance;document.getElementById('buyModal').classList.add('on')}
+var buyItem=null;function openBuy(item){buyItem=item;var bi=document.getElementById('buyIcon');bi.innerHTML=iconTag(item.name,128);applyRar(bi,item.value||0);document.getElementById('buyName').textContent=item.name;document.getElementById('buyPrice').textContent=(item.value||0)+' ★';document.getElementById('buyConfirm').disabled=(item.value||0)>balance;document.getElementById('buyModal').classList.add('on')}
 document.getElementById('buyCancel').addEventListener('click',function(){sClick();document.getElementById('buyModal').classList.remove('on')});
-document.getElementById('buyConfirm').addEventListener('click',function(){if(!buyItem)return;if(!isAdmin&&(buyItem.value||0)>balance)return;if(!isAdmin){balance-=(buyItem.value||0);updBal()}inventory.push({name:buyItem.name,value:buyItem.value||0});inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});save();sBuy();document.getElementById('buyModal').classList.remove('on');renderInv();renderArena();renderTargets();renderShop()});
+document.getElementById('buyConfirm').addEventListener('click',function(){if(!buyItem)return;if((buyItem.value||0)>balance)return;balance-=(buyItem.value||0);updBal();inventory.push({name:buyItem.name,value:buyItem.value||0});inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});save();sBuy();document.getElementById('buyModal').classList.remove('on');renderInv();renderArena();renderTargets();renderShop()});
 (function(){var s=document.getElementById('shopSearch');if(s)s.addEventListener('input',renderShop);var mn=document.getElementById('shopMin');if(mn)mn.addEventListener('input',renderShop);var mx=document.getElementById('shopMax');if(mx)mx.addEventListener('input',renderShop)})();
 var pickMode=null;function openPicker(mode){if(!inventory.length){sErr();return}pickMode=mode;var g=document.getElementById('pickGrid');if(!g)return;g.innerHTML='';var sorted=inventory.slice().sort(function(a,b){return(a.value||0)-(b.value||0)});sorted.forEach(function(it){var d=document.createElement('div');d.className='slot glass-panel';applyRar(d,it.value||0);d.innerHTML='<div class="ssi">'+iconTag(it.name,64)+'</div><div class="sname">'+it.name+'</div><div class="sprice">'+(it.value||0)+'★</div>';d.addEventListener('click',function(){sClick();if(pickMode==='rocket'){rocketBetGift={name:it.name,value:it.value||0};updateRocketBtn()}document.getElementById('pickModal').classList.remove('on')});g.appendChild(d)});document.getElementById('pickModal').classList.add('on')}
 document.getElementById('pickClose').addEventListener('click',function(){sClick();document.getElementById('pickModal').classList.remove('on')});
 document.getElementById('plusBtn').addEventListener('click',function(){sClick();document.getElementById('starsAmt').value='';document.getElementById('starsModal').classList.add('on')});
 document.getElementById('starsClose').addEventListener('click',function(){sClick();document.getElementById('starsModal').classList.remove('on')});
-document.getElementById('starsOk').addEventListener('click',function(){var amt=parseInt(document.getElementById('starsAmt').value,10);if(!amt||amt<=0){sErr();return}if(!isAdmin){balance+=amt;updBal();save()}sClick();toast('success','+'+fmt(amt)+' ★');setTimeout(function(){document.getElementById('starsModal').classList.remove('on')},500)});
+document.getElementById('starsOk').addEventListener('click',function(){var amt=parseInt(document.getElementById('starsAmt').value,10);if(!amt||amt<=0){sErr();return}balance+=amt;updBal();save();sClick();toast('success','+'+fmt(amt)+' ★');setTimeout(function(){document.getElementById('starsModal').classList.remove('on')},500)});
 document.querySelectorAll('#starsModal [data-q]').forEach(function(b){b.addEventListener('click',function(){sClick();document.getElementById('starsAmt').value=b.getAttribute('data-q')})});
 document.getElementById('promoBtn').addEventListener('click',function(){sClick();document.getElementById('promoMsg').textContent='';document.getElementById('promoInput').value='';document.getElementById('promoModal').classList.add('on')});
 document.getElementById('promoClose').addEventListener('click',function(){sClick();document.getElementById('promoModal').classList.remove('on')});
-document.getElementById('promoOk').addEventListener('click',function(){var code=document.getElementById('promoInput').value.trim().toUpperCase();var m=document.getElementById('promoMsg');if(!code){m.style.color='#ef4444';m.textContent='Введи код';sErr();return}if(!PROMO[code]){m.style.color='#ef4444';m.textContent='Неверный';sErr();return}if(isUsed(code)){m.style.color='#ef4444';m.textContent='Использован';sErr();return}var r=PROMO[code];if(!isAdmin){balance+=r;updBal()}markUsed(code);save();m.style.color='#10b981';m.textContent='+'+r+' ★';sPromo();haptic('success');setTimeout(function(){document.getElementById('promoModal').classList.remove('on')},1200)});
+document.getElementById('promoOk').addEventListener('click',function(){var code=document.getElementById('promoInput').value.trim().toUpperCase();var m=document.getElementById('promoMsg');if(!code){m.style.color='#ef4444';m.textContent='Введи код';sErr();return}if(!PROMO[code]){m.style.color='#ef4444';m.textContent='Неверный';sErr();return}if(isUsed(code)){m.style.color='#ef4444';m.textContent='Использован';sErr();return}var r=PROMO[code];balance+=r;updBal();markUsed(code);save();m.style.color='#10b981';m.textContent='+'+r+' ★';sPromo();haptic('success');setTimeout(function(){document.getElementById('promoModal').classList.remove('on')},1200)});
 document.getElementById('settingsBtn').addEventListener('click',function(){sClick();document.getElementById('vibToggle').checked=vibOn;document.getElementById('sndToggle').checked=sndOn;document.getElementById('settingsModal').classList.add('on')});
 document.getElementById('settingsClose').addEventListener('click',function(){sClick();document.getElementById('settingsModal').classList.remove('on')});
 document.getElementById('vibToggle').addEventListener('change',function(e){vibOn=e.target.checked;Store.set('rollup_vib',vibOn?'true':'false')});
 document.getElementById('sndToggle').addEventListener('change',function(e){sndOn=e.target.checked;Store.set('rollup_snd',sndOn?'true':'false')});
+
 document.getElementById('profileBtn').addEventListener('click',function(){sClick();renderProfile();document.getElementById('profileModal').classList.add('on')});
 document.getElementById('profileClose').addEventListener('click',function(){sClick();document.getElementById('profileModal').classList.remove('on')});
-function renderProfile(){var u=TGU||{};var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));var av=document.getElementById('pAva');if(av){if(u.photo_url)av.innerHTML='<img src="'+u.photo_url+'" alt="">';else av.textContent=(u.first_name||'И').charAt(0).toUpperCase()}document.getElementById('pName').textContent=name;document.getElementById('pInv').textContent=inventory.length+' шт';document.getElementById('pAdmin').style.display=isAdmin?'inline-flex':'none';document.getElementById('adminCard').style.display=isAdmin?'block':'none';var il=document.getElementById('pInvList');if(il){il.innerHTML='';if(!inventory.length){il.innerHTML='<div class="empty" style="grid-column:1/-1;text-align:center;color:var(--dim);font-size:11px;padding:24px 8px;">Пусто</div>'}else{var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});srt.forEach(function(it){var c=document.createElement('div');c.className='invc glass-panel';applyRar(c,it.value||0);c.innerHTML='<div class="invci">'+iconTag(it.name,128)+'</div><div class="invcn">'+it.name+'</div><div class="invcp">'+(it.value||0)+' ★</div><button class="invcs">Продать</button>';c.querySelector('.invcs').addEventListener('click',function(){if(!isAdmin){balance+=(it.value||0);updBal()}var i=inventory.indexOf(it);if(i>=0)inventory.splice(i,1);save();sBuy();renderProfile();renderInv();renderArena();renderTargets()});il.appendChild(c)})}}}
+function renderProfile(){
+  var u=TGU||{};
+  var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));
+  var av=document.getElementById('pAva');
+  if(av){if(u.photo_url)av.innerHTML='<img src="'+u.photo_url+'" alt="">';else av.textContent=(u.first_name||'И').charAt(0).toUpperCase()}
+  document.getElementById('pName').textContent=name;
+  document.getElementById('pInvCount').textContent=inventory.length;
+  document.getElementById('pAdmin').style.display=isAdmin?'inline-flex':'none';
+  
+  var il=document.getElementById('pInvList');
+  if(il){
+    il.innerHTML='';
+    if(!inventory.length){il.innerHTML='<div class="empty" style="grid-column:1/-1;text-align:center;color:var(--dim);font-size:11px;padding:24px 8px;">Пусто</div>'}
+    else{
+      var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
+      srt.forEach(function(it){
+        var c=document.createElement('div');
+        c.className='invc';
+        applyRar(c,it.value||0);
+        c.innerHTML=`<img src="${iconTag(it.name, 128).match(/src="([^"]+)"/)[1]}"><div class="iname">${it.name}</div><div class="iprice">${(it.value||0)} ★</div>`;
+        c.onclick = function() { openGiftModal(it); };
+        il.appendChild(c);
+      });
+    }
+  }
+}
 document.getElementById('admClearInv').addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
 document.getElementById('admWipe').addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
 document.getElementById('newsBtn').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.add('on')});
