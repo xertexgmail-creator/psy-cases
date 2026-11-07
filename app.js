@@ -89,7 +89,7 @@ function goScreen(name) {
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Loot Bag'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// КЕЙСЫ С БЕСШОВНЫМ ПРОКРУТОМ
+// КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ (CSS)
 // ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, pool: FALLBACK.filter(f => f.value <= 200) },
@@ -100,24 +100,25 @@ var CASES_DATA = [
 ];
 var isCaseSpinning = false;
 var currentCaseData = null;
-var caseLoopX = 0;
-var menuTracks = [];
-var animationFrameId = null;
 
 function renderCases() {
     var g = document.getElementById('caseGrid');
     if (!g) return;
     g.innerHTML = '';
-    menuTracks = [];
     
     CASES_DATA.forEach(function(c) {
         var el = document.createElement('div');
         el.className = 'case-menu-card';
         el.setAttribute('data-rarity', c.rarity);
         
-        // Создаем бегущую строку внутри карточки
+        // Создаем ДВЕ ленты подряд, чтобы анимация CSS была бесшовной
         var trackHTML = '<div class="case-menu-track-wrap"><div class="case-menu-track">';
-        for (var i = 0; i < 15; i++) {
+        for (var i = 0; i < 10; i++) {
+            var item = c.pool[Math.floor(Math.random() * c.pool.length)];
+            trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
+        }
+        // Дубликат для бесшовности
+        for (var i = 0; i < 10; i++) {
             var item = c.pool[Math.floor(Math.random() * c.pool.length)];
             trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
         }
@@ -131,54 +132,18 @@ function renderCases() {
             </div>
         `;
         
-        var track = el.querySelector('.case-menu-track');
-        menuTracks.push({ el: track, speed: 1, offset: 0 });
-        
-        el.addEventListener('click', function() { openCaseModal(c, track); });
+        el.addEventListener('click', function() { openCaseModal(c); });
         g.appendChild(el);
     });
-    
-    startMenuLoop();
 }
 
-function startMenuLoop() {
-    if (animationFrameId) cancelAnimationFrame(animationFrameId);
-    
-    function animate() {
-        if (curScreen !== 'cases' || isCaseSpinning) {
-            animationFrameId = requestAnimationFrame(animate);
-            return;
-        }
-        
-        menuTracks.forEach(function(t) {
-            t.offset -= t.speed;
-            // Если уехало слишком далеко, сбрасываем (визуально не заметно из-за одинаковых элементов)
-            if (Math.abs(t.offset) >= (60 + 5) * 15) {
-                t.offset = 0;
-            }
-            t.el.style.transform = `translateX(${t.offset}px)`;
-        });
-        
-        animationFrameId = requestAnimationFrame(animate);
-    }
-    animate();
-}
-
-function openCaseModal(c, clickedTrack) {
+function openCaseModal(c) {
     currentCaseData = c;
     sClick();
     
     document.getElementById('caseModalTitle').textContent = c.name;
     document.getElementById('casePriceBtn').textContent = fmt(c.price);
     
-    // Запоминаем текущую позицию ленты, чтобы начать прокрут с того же места
-    var startOffset = 0;
-    if (clickedTrack) {
-        var matrix = new WebKitCSSMatrix(window.getComputedStyle(clickedTrack).transform);
-        startOffset = matrix.m41;
-    }
-    caseLoopX = startOffset;
-
     var poolGrid = document.getElementById('casePoolGrid');
     poolGrid.innerHTML = '';
     var sortedPool = c.pool.slice().sort((a,b) => a.value - b.value);
@@ -193,11 +158,11 @@ function openCaseModal(c, clickedTrack) {
 
     var track = document.getElementById('caseTrack');
     track.style.transition = 'none';
-    track.style.transform = `translateX(${caseLoopX}px)`;
+    track.style.transform = 'translateX(0)';
     track.innerHTML = '';
     
-    // Заполняем трек в модалке
-    for (var i = 0; i < 30; i++) {
+    // Изначально заполняем для показа
+    for (var i = 0; i < 50; i++) {
         var it = c.pool[Math.floor(Math.random() * c.pool.length)];
         var d = document.createElement('div');
         d.className = 'case-item';
@@ -226,13 +191,11 @@ function openGiftModal(item) {
     modal.classList.add('on');
 }
 
-// Закрытие гифта
 var closeGift = document.getElementById('closeGiftModal');
 if (closeGift) closeGift.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
 var closeGiftBtn = document.getElementById('closeGiftBtn');
 if (closeGiftBtn) closeGiftBtn.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
 
-// Закрытие кейса
 var closeCase = document.getElementById('closeCaseModal');
 if (closeCase) closeCase.addEventListener('click', function() {
     if (isCaseSpinning) return;
@@ -254,10 +217,8 @@ if (openCaseBtn) openCaseBtn.addEventListener('click', function() {
     document.getElementById('openCaseBtn').disabled = true;
     
     var track = document.getElementById('caseTrack');
-    
-    // Очищаем и заполняем новую ленту для выигрыша
     track.style.transition = 'none';
-    track.style.transform = `translateX(${caseLoopX}px)`;
+    track.style.transform = 'translateX(0)';
     track.innerHTML = '';
     
     var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
@@ -280,13 +241,11 @@ if (openCaseBtn) openCaseBtn.addEventListener('click', function() {
     
     var itemWidth = 84 + 8;
     var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
-    // Вычисляем, куда нужно прокрутить. Вычитаем caseLoopX, чтобы анимация началась с текущей точки.
-    var targetScroll = -(45 * itemWidth) + (wrapWidth / 2) - (itemWidth / 2);
-    var finalOffset = targetScroll + caseLoopX;
+    var offset = (45 * itemWidth) - (wrapWidth / 2) + (itemWidth / 2);
     
     setTimeout(function() {
         track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
-        track.style.transform = `translateX(${finalOffset}px)`;
+        track.style.transform = `translateX(-${offset}px)`;
         
         var tickInt = setInterval(function(){ sTick(); }, 150);
         
@@ -425,8 +384,10 @@ document.getElementById('settingsClose').addEventListener('click',function(){sCl
 document.getElementById('vibToggle').addEventListener('change',function(e){vibOn=e.target.checked;Store.set('rollup_vib',vibOn?'true':'false')});
 document.getElementById('sndToggle').addEventListener('change',function(e){sndOn=e.target.checked;Store.set('rollup_snd',sndOn?'true':'false')});
 
+// ПРОФИЛЬ И ПРОДАЖА
 document.getElementById('profileBtn').addEventListener('click',function(){sClick();renderProfile();document.getElementById('profileModal').classList.add('on')});
 document.getElementById('profileClose').addEventListener('click',function(){sClick();document.getElementById('profileModal').classList.remove('on')});
+
 function renderProfile(){
   var u=TGU||{};
   var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));
@@ -444,16 +405,55 @@ function renderProfile(){
     if(!inventory.length){il.innerHTML='<div class="empty" style="grid-column:1/-1;text-align:center;color:var(--dim);font-size:11px;padding:24px 8px;">Пусто</div>'}
     else{
       var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
-      srt.forEach(function(it){
+      srt.forEach(function(it, index){
         var c=document.createElement('div');
         c.className='invc';
         applyRar(c,it.value||0);
-        c.innerHTML=`<img src="${getIconUrl(it.name)}"><div class="iname">${it.name}</div><div class="iprice">${(it.value||0)} ★</div>`;
-        c.onclick = function() { openGiftModal(it); };
+        
+        // Добавил кнопку продажи
+        c.innerHTML=`
+            <img src="${getIconUrl(it.name)}" onclick="event.stopPropagation(); window.openGiftFromProfile(${index})">
+            <div class="iname">${it.name}</div>
+            <div class="iprice">${(it.value||0)} ★</div>
+            <button class="sell-btn" onclick="event.stopPropagation(); window.sellItem(${index})">Продать</button>
+        `;
         il.appendChild(c);
       });
     }
   }
+}
+
+// Глобальные функции для onclick в HTML
+window.sellItem = function(index) {
+    if(isAdmin) { sErr(); toast('error', 'Админ не может продавать'); return; }
+    var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
+    var item = srt[index];
+    if(!item) return;
+    
+    balance += item.value;
+    updBal();
+    inventory.splice(inventory.indexOf(item), 1);
+    save();
+    sBuy();
+    renderProfile();
+    renderInv();
+    renderArena();
+    renderTargets();
+    toast('success', 'Продано за +' + fmt(item.value) + ' ★');
+}
+
+window.openGiftFromProfile = function(index) {
+    var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
+    var item = srt[index];
+    if(item) openGiftModal(item);
+}
+
+var withdrawBtn = document.getElementById('withdrawBtn');
+if(withdrawBtn) {
+    withdrawBtn.addEventListener('click', function() {
+        sClick();
+        toast('info', 'Вывод доступен с 2.1.0 (в разработке)');
+    });
 }
 
 var admClear = document.getElementById('admClearInv');
