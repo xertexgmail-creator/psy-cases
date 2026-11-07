@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -121,10 +121,10 @@
   <div class="case-grid" id="caseGrid"></div>
 </div>
 
-<div class="footer">powered by <a href="https://t.me/RollUp_BOT" target="_blank">@RollUp_BOT</a> · v2.2.0</div>
+<div class="footer">powered by <a href="https://t.me/RollUp_BOT" target="_blank">@RollUp_BOT</a> · v2.3.0</div>
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО ОТКРЫТИЯ КЕЙСА -->
+<!-- МОДАЛЬНОЕ ОКНО КЕЙСА -->
 <div class="ov" id="caseModal">
   <div class="modal case-modal-content glass-panel">
     <button class="ib" id="closeCaseModal" style="position:absolute;top:10px;right:10px;z-index:100;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
@@ -133,15 +133,19 @@
       <div class="case-modal-title" id="caseModalTitle">Кейс</div>
     </div>
 
-    <!-- Состояние ДО открытия -->
     <div class="case-pre-open" id="casePreOpen">
-      <div class="case-big-img" id="caseBigImg"></div>
-      <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; padding:16px; margin-top:20px;">Открыть за <span id="casePriceBtn">500</span> ★</button>
+      <div class="case-big-chest" id="caseBigChest">
+        <div class="chest-lid"></div>
+        <div class="chest-base"></div>
+        <div class="chest-glow"></div>
+      </div>
+      <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; padding:16px; margin-top:20px; font-size:15px;">Открыть за <span id="casePriceBtn">500</span> ★</button>
     </div>
 
-    <!-- Состояние ПОСЛЕ открытия (Рулетка) -->
     <div class="case-rolling-area" id="caseRollingArea" style="display:none;">
       <div class="case-track-wrap glass-panel">
+        <div class="track-fade-left"></div>
+        <div class="track-fade-right"></div>
         <div class="case-pointer"></div>
         <div class="case-track" id="caseTrack"></div>
       </div>
@@ -149,7 +153,6 @@
       <button class="btn pri" id="acceptCaseBtn" type="button" style="width:100%; padding:16px; margin-top:15px; display:none;">Забрать</button>
     </div>
 
-    <!-- Содержимое кейса (2 ряда) -->
     <div class="case-pool-wrapper">
       <div class="case-pool-title">Содержимое кейса</div>
       <div class="case-pool-grid" id="casePoolGrid"></div>
@@ -169,20 +172,20 @@
   <div class="modal news-m glass-panel">
     <div class="news-mh">
       <div class="news-mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-      <div><div class="news-mt">Отчет для игроков</div><div class="news-ms">Обновление 2.2</div></div>
+      <div><div class="news-mt">Отчет для игроков</div><div class="news-ms">Обновление 2.3</div></div>
     </div>
     <div class="news-c">
       <div class="nvc release glass-panel">
         <div class="nvh"><div class="nvt">Новое</div><div class="nvty">Релиз</div></div>
-        <div class="nvti">Добавлен режим Кейсы и новые эффекты!</div>
-        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><div class="nfn">Режим "Кейсы"</div><div class="nfd">Добавили 5 кейсов с разной ценой. Испытай удачу и выбей дорогой гифт!</div></div></div>
-        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Улучшения</div><div class="nfd">Пофиксили звуки, улучшили баланс шансов и добавили красивые искры при кликах. Приятной игры!</div></div></div>
+        <div class="nvti">Кейсы стали в 10 раз азартнее!</div>
+        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><div class="nfn">Новый дизайн</div><div class="nfd">Сделали настоящие 3D сундуки с гифтами, как в CS:GO, и крутой прокрут со свечением.</div></div></div>
+        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Фиксы</div><div class="nfd">Пофиксили звуки ракетки, обновили баланс шансов и добавили красивые партиклы при кликах.</div></div></div>
       </div>
     </div>
     <div class="news-btn-wrap"><button class="btn pri" id="newsClose" type="button" style="width:100%;padding:14px;">Понятно</button></div>
   </div>
 </div>
 
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
