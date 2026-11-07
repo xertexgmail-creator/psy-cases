@@ -28,6 +28,7 @@ var FALLBACK=[{name:'Heart Locket',value:15},{name:'Toy Bear',value:15},{name:'J
 var CATALOG=FALLBACK.slice();
 function rarityInfo(v){if(v<100)return{c:'#8a8a95',glow:'rgba(138,138,149,0.5)',bd:'rgba(138,138,149,0.3)'};if(v<500)return{c:'#4b69ff',glow:'rgba(75,105,255,0.6)',bd:'rgba(75,105,255,0.55)'};if(v<2000)return{c:'#8847ff',glow:'rgba(136,71,255,0.7)',bd:'rgba(136,71,255,0.6)'};if(v<10000)return{c:'#d32ce6',glow:'rgba(211,44,230,0.75)',bd:'rgba(211,44,230,0.65)'};if(v<50000)return{c:'#eb4b4b',glow:'rgba(235,75,75,0.85)',bd:'rgba(235,75,75,0.7)'};return{c:'#ffd700',glow:'rgba(255,215,0,0.9)',bd:'rgba(255,215,0,0.8)'}}
 function applyRar(el,v){var r=rarityInfo(v);el.style.setProperty('--rar-color',r.c);el.style.setProperty('--rar-glow',r.glow);el.style.setProperty('--rar-bd',r.bd)}
+function getIconUrl(name){var n=String(name).replace(/\s+/g,'');return 'https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size=128';}
 function iconTag(name,size){size=size||64;var n=String(name).replace(/\s+/g,'');var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';return '<img src="'+primary+'" data-fb="'+fb+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.style.opacity=0.3}">'}
 function fmt(n){n=Math.floor(n||0);if(n>=1e9)return Math.floor(n/1e9)+'B';if(n>=1e6)return Math.floor(n/1e6)+'M';if(n>=1e3)return Math.floor(n/1e3)+'K';return String(n)}
 function updBal(){var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance)}
@@ -88,86 +89,96 @@ function goScreen(name) {
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Loot Bag'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// КЕЙСЫ
+// КЕЙСЫ С БЕСШОВНЫМ ПРОКРУТОМ
 // ============================================================
 var CASES_DATA = [
-    { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, icon: 'Crystal Ball', pool: FALLBACK.filter(f => f.value <= 200) },
-    { id: 'c2', name: 'Редкий', price: 2500, rarity: 2, icon: 'Diamond Ring', pool: FALLBACK.filter(f => f.value >= 150 && f.value <= 2000) },
-    { id: 'c3', name: 'Эпический', price: 10000, rarity: 3, icon: 'Neko Helmet', pool: FALLBACK.filter(f => f.value >= 1000 && f.value <= 10000) },
-    { id: 'c4', name: 'Легендарный', price: 50000, rarity: 4, icon: 'Evil Eye', pool: FALLBACK.filter(f => f.value >= 5000 && f.value <= 50000) },
-    { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, icon: 'Mirage Lamp', pool: FALLBACK.filter(f => f.value >= 20000) }
+    { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, pool: FALLBACK.filter(f => f.value <= 200) },
+    { id: 'c2', name: 'Редкий', price: 2500, rarity: 2, pool: FALLBACK.filter(f => f.value >= 150 && f.value <= 2000) },
+    { id: 'c3', name: 'Эпический', price: 10000, rarity: 3, pool: FALLBACK.filter(f => f.value >= 1000 && f.value <= 10000) },
+    { id: 'c4', name: 'Легендарный', price: 50000, rarity: 4, pool: FALLBACK.filter(f => f.value >= 5000 && f.value <= 50000) },
+    { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, pool: FALLBACK.filter(f => f.value >= 20000) }
 ];
 var isCaseSpinning = false;
 var currentCaseData = null;
-var caseLoopInterval = null;
 var caseLoopX = 0;
+var menuTracks = [];
+var animationFrameId = null;
 
 function renderCases() {
     var g = document.getElementById('caseGrid');
     if (!g) return;
     g.innerHTML = '';
+    menuTracks = [];
+    
     CASES_DATA.forEach(function(c) {
         var el = document.createElement('div');
-        el.className = 'case-box-card';
+        el.className = 'case-menu-card';
         el.setAttribute('data-rarity', c.rarity);
         
-        var previews = c.pool.slice().sort(() => 0.5 - Math.random()).slice(0, 3);
-        var previewHTML = previews.map(p => iconTag(p.name, 64)).join('');
-
+        // Создаем бегущую строку внутри карточки
+        var trackHTML = '<div class="case-menu-track-wrap"><div class="case-menu-track">';
+        for (var i = 0; i < 15; i++) {
+            var item = c.pool[Math.floor(Math.random() * c.pool.length)];
+            trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
+        }
+        trackHTML += '</div></div>';
+        
         el.innerHTML = `
-            <div class="cc-gifts">${previewHTML}</div>
-            <div class="box-container">
-                <div class="box-base"></div>
-                <div class="box-lid"></div>
+            ${trackHTML}
+            <div class="case-menu-bottom">
+                <div class="cc-name">${c.name}</div>
+                <div class="cc-price">${fmt(c.price)} ★</div>
             </div>
-            <div class="cc-name">${c.name}</div>
-            <div class="cc-price">${fmt(c.price)} ★</div>
         `;
-        el.addEventListener('click', function() { openCaseModal(c); });
+        
+        var track = el.querySelector('.case-menu-track');
+        menuTracks.push({ el: track, speed: 1, offset: 0 });
+        
+        el.addEventListener('click', function() { openCaseModal(c, track); });
         g.appendChild(el);
     });
+    
+    startMenuLoop();
 }
 
-function startCaseLoop(c) {
-    if (caseLoopInterval) clearInterval(caseLoopInterval);
-    caseLoopX = 0;
-    var track = document.getElementById('caseTrack');
-    track.style.transition = 'none';
-    track.style.transform = 'translateX(0)';
-    track.innerHTML = '';
+function startMenuLoop() {
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
     
-    var items = [];
-    for (var i = 0; i < 30; i++) {
-        items.push(c.pool[Math.floor(Math.random() * c.pool.length)]);
-    }
-    
-    items.forEach(function(it) {
-        var d = document.createElement('div');
-        d.className = 'case-item';
-        applyRar(d, it.value);
-        d.innerHTML = iconTag(it.name, 128);
-        d.onclick = function() { openGiftModal(it); };
-        track.appendChild(d);
-    });
-    
-    var itemWidth = 84 + 8;
-    caseLoopInterval = setInterval(function() {
-        if (isCaseSpinning) return;
-        caseLoopX -= 1;
-        if (Math.abs(caseLoopX) >= itemWidth * 15) {
-            caseLoopX = 0;
+    function animate() {
+        if (curScreen !== 'cases' || isCaseSpinning) {
+            animationFrameId = requestAnimationFrame(animate);
+            return;
         }
-        track.style.transform = 'translateX(' + caseLoopX + 'px)';
-    }, 30);
+        
+        menuTracks.forEach(function(t) {
+            t.offset -= t.speed;
+            // Если уехало слишком далеко, сбрасываем (визуально не заметно из-за одинаковых элементов)
+            if (Math.abs(t.offset) >= (60 + 5) * 15) {
+                t.offset = 0;
+            }
+            t.el.style.transform = `translateX(${t.offset}px)`;
+        });
+        
+        animationFrameId = requestAnimationFrame(animate);
+    }
+    animate();
 }
 
-function openCaseModal(c) {
+function openCaseModal(c, clickedTrack) {
     currentCaseData = c;
     sClick();
     
     document.getElementById('caseModalTitle').textContent = c.name;
     document.getElementById('casePriceBtn').textContent = fmt(c.price);
     
+    // Запоминаем текущую позицию ленты, чтобы начать прокрут с того же места
+    var startOffset = 0;
+    if (clickedTrack) {
+        var matrix = new WebKitCSSMatrix(window.getComputedStyle(clickedTrack).transform);
+        startOffset = matrix.m41;
+    }
+    caseLoopX = startOffset;
+
     var poolGrid = document.getElementById('casePoolGrid');
     poolGrid.innerHTML = '';
     var sortedPool = c.pool.slice().sort((a,b) => a.value - b.value);
@@ -180,8 +191,24 @@ function openCaseModal(c) {
         poolGrid.appendChild(d);
     });
 
+    var track = document.getElementById('caseTrack');
+    track.style.transition = 'none';
+    track.style.transform = `translateX(${caseLoopX}px)`;
+    track.innerHTML = '';
+    
+    // Заполняем трек в модалке
+    for (var i = 0; i < 30; i++) {
+        var it = c.pool[Math.floor(Math.random() * c.pool.length)];
+        var d = document.createElement('div');
+        d.className = 'case-item';
+        applyRar(d, it.value);
+        d.innerHTML = iconTag(it.name, 128);
+        track.appendChild(d);
+    }
+
+    document.getElementById('openCaseBtn').disabled = false;
+    document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
     document.getElementById('caseModal').classList.add('on');
-    startCaseLoop(c);
 }
 
 function openGiftModal(item) {
@@ -199,17 +226,22 @@ function openGiftModal(item) {
     modal.classList.add('on');
 }
 
-document.getElementById('closeGiftModal').addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
-document.getElementById('closeGiftBtn').addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
+// Закрытие гифта
+var closeGift = document.getElementById('closeGiftModal');
+if (closeGift) closeGift.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
+var closeGiftBtn = document.getElementById('closeGiftBtn');
+if (closeGiftBtn) closeGiftBtn.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
 
-document.getElementById('closeCaseModal').addEventListener('click', function() {
+// Закрытие кейса
+var closeCase = document.getElementById('closeCaseModal');
+if (closeCase) closeCase.addEventListener('click', function() {
     if (isCaseSpinning) return;
     sClick();
-    clearInterval(caseLoopInterval);
     document.getElementById('caseModal').classList.remove('on');
 });
 
-document.getElementById('openCaseBtn').addEventListener('click', function() {
+var openCaseBtn = document.getElementById('openCaseBtn');
+if (openCaseBtn) openCaseBtn.addEventListener('click', function() {
     if (isCaseSpinning) return;
     var c = currentCaseData;
     if (balance < c.price) { sErr(); toast('error', 'Не хватает звёзд'); return; }
@@ -218,14 +250,14 @@ document.getElementById('openCaseBtn').addEventListener('click', function() {
     balance -= c.price; updBal(); save();
     sOpenCase();
     
-    clearInterval(caseLoopInterval);
-    
     document.getElementById('openCaseBtn').textContent = 'Открывается...';
     document.getElementById('openCaseBtn').disabled = true;
     
     var track = document.getElementById('caseTrack');
+    
+    // Очищаем и заполняем новую ленту для выигрыша
     track.style.transition = 'none';
-    track.style.transform = 'translateX(' + caseLoopX + 'px)';
+    track.style.transform = `translateX(${caseLoopX}px)`;
     track.innerHTML = '';
     
     var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
@@ -237,28 +269,24 @@ document.getElementById('openCaseBtn').addEventListener('click', function() {
     if (winIdx >= pool.length) winIdx = pool.length - 1;
     var winItem = pool[winIdx];
     
-    var items = [];
     for (var i = 0; i < 50; i++) {
-        items.push(pool[Math.floor(Math.random() * pool.length)]);
-    }
-    var targetIdx = 45;
-    items[targetIdx] = winItem;
-    
-    items.forEach(function(it) {
+        var it = (i === 45) ? winItem : pool[Math.floor(Math.random() * pool.length)];
         var d = document.createElement('div');
         d.className = 'case-item';
         applyRar(d, it.value);
         d.innerHTML = iconTag(it.name, 128);
         track.appendChild(d);
-    });
+    }
     
     var itemWidth = 84 + 8;
     var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
-    var offset = (targetIdx * itemWidth) - (wrapWidth / 2) + (itemWidth / 2) - caseLoopX;
+    // Вычисляем, куда нужно прокрутить. Вычитаем caseLoopX, чтобы анимация началась с текущей точки.
+    var targetScroll = -(45 * itemWidth) + (wrapWidth / 2) - (itemWidth / 2);
+    var finalOffset = targetScroll + caseLoopX;
     
     setTimeout(function() {
         track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
-        track.style.transform = 'translateX(-' + offset + 'px)';
+        track.style.transform = `translateX(${finalOffset}px)`;
         
         var tickInt = setInterval(function(){ sTick(); }, 150);
         
@@ -270,8 +298,8 @@ document.getElementById('openCaseBtn').addEventListener('click', function() {
             save();
             
             var trackItems = track.querySelectorAll('.case-item');
-            if(trackItems[targetIdx]) {
-                trackItems[targetIdx].classList.add('win-flash');
+            if(trackItems[45]) {
+                trackItems[45].classList.add('win-flash');
             }
             
             document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
@@ -420,7 +448,7 @@ function renderProfile(){
         var c=document.createElement('div');
         c.className='invc';
         applyRar(c,it.value||0);
-        c.innerHTML=`<img src="${iconTag(it.name, 128).match(/src="([^"]+)"/)[1]}"><div class="iname">${it.name}</div><div class="iprice">${(it.value||0)} ★</div>`;
+        c.innerHTML=`<img src="${getIconUrl(it.name)}"><div class="iname">${it.name}</div><div class="iprice">${(it.value||0)} ★</div>`;
         c.onclick = function() { openGiftModal(it); };
         il.appendChild(c);
       });
@@ -428,7 +456,6 @@ function renderProfile(){
   }
 }
 
-// Защита от вылетов (проверка на существование кнопок)
 var admClear = document.getElementById('admClearInv');
 if (admClear) {
     admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
