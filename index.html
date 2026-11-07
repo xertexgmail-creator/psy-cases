@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -36,7 +36,7 @@
 <div class="online-indicator"><span class="online-dot"></span><span id="onlineCount">1</span></div>
 </div>
 <div class="hr">
-<div class="bal glass-panel" id="plusBtn"><span class="star">★</span><span id="balTxt">10000</span><span class="plus">+</span></div>
+<div class="bal glass-panel" id="plusBtn"><span class="star">★</span><span id="balTxt">20000</span><span class="plus">+</span></div>
 <button class="ib glass-panel" id="promoBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
 <button class="ib glass-panel" id="settingsBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 <button class="ib glass-panel" id="profileBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
@@ -110,7 +110,7 @@
 </div>
 
 <div class="scr" id="scr-shop">
-<div class="shopbar glass-panel"><span class="lbl">Баланс</span><span class="val"><span id="shopBal">10000</span> ★</span></div>
+<div class="shopbar glass-panel"><span class="lbl">Баланс</span><span class="val"><span id="shopBal">20000</span> ★</span></div>
 <div class="shoprow"><div class="sbox glass-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="shopSearch" placeholder="Поиск..."></div><input type="number" class="ninput glass-panel" id="shopMin" placeholder="От"><input type="number" class="ninput glass-panel" id="shopMax" placeholder="До"></div>
 <div class="shopwrap glass-panel"><div class="shopscr"><div class="igrid" id="shopGrid"></div></div></div>
 </div>
@@ -121,38 +121,35 @@
   <div class="case-grid" id="caseGrid"></div>
 </div>
 
-<div class="footer">powered by <a href="https://t.me/RollUp_BOT" target="_blank">@RollUp_BOT</a> · v2.3.0</div>
+<div class="footer">powered by <a href="https://t.me/RollUp_BOT" target="_blank">@RollUp_BOT</a> · v2.4.0</div>
 </div>
 
 <!-- МОДАЛЬНОЕ ОКНО КЕЙСА -->
 <div class="ov" id="caseModal">
   <div class="modal case-modal-content glass-panel">
-    <button class="ib" id="closeCaseModal" style="position:absolute;top:10px;right:10px;z-index:100;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="close-btn" id="closeCaseModal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
     
     <div class="case-modal-header">
       <div class="case-modal-title" id="caseModalTitle">Кейс</div>
     </div>
 
-    <div class="case-pre-open" id="casePreOpen">
-      <div class="case-big-chest" id="caseBigChest">
-        <div class="chest-lid"></div>
-        <div class="chest-base"></div>
-        <div class="chest-glow"></div>
-      </div>
-      <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; padding:16px; margin-top:20px; font-size:15px;">Открыть за <span id="casePriceBtn">500</span> ★</button>
-    </div>
-
-    <div class="case-rolling-area" id="caseRollingArea" style="display:none;">
+    <!-- Прокрут всегда виден -->
+    <div class="case-rolling-area" id="caseRollingArea">
       <div class="case-track-wrap glass-panel">
         <div class="track-fade-left"></div>
         <div class="track-fade-right"></div>
         <div class="case-pointer"></div>
         <div class="case-track" id="caseTrack"></div>
       </div>
-      <div class="case-result-text" id="caseResultText"></div>
-      <button class="btn pri" id="acceptCaseBtn" type="button" style="width:100%; padding:16px; margin-top:15px; display:none;">Забрать</button>
     </div>
 
+    <div class="case-actions" style="width:100%; margin-top:15px;">
+      <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; padding:16px; font-size:15px;">Открыть за <span id="casePriceBtn">500</span> ★</button>
+    </div>
+
+    <!-- Содержимое кейса -->
     <div class="case-pool-wrapper">
       <div class="case-pool-title">Содержимое кейса</div>
       <div class="case-pool-grid" id="casePoolGrid"></div>
@@ -160,32 +157,73 @@
   </div>
 </div>
 
+<!-- МОДАЛКА ПРОСМОТРА ГИФТА -->
+<div class="ov" id="giftModal">
+  <div class="modal glass-panel" style="max-width: 300px; text-align: center;">
+    <button class="close-btn" id="closeGiftModal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="bgic" id="viewGiftIcon" style="width: 120px; height: 120px; margin-bottom: 15px;"></div>
+    <div class="modal-t" id="viewGiftName" style="font-size: 20px; margin-bottom: 5px;">Гифт</div>
+    <div class="modal-s" style="font-size: 16px; font-weight: 900; color: var(--gold);" id="viewGiftPrice">— ★</div>
+    <button class="btn sec" id="closeGiftBtn" style="margin-top: 15px;">Закрыть</button>
+  </div>
+</div>
+
 <!-- ОСТАЛЬНЫЕ МОДАЛКИ -->
-<div class="ov" id="starsModal"><div class="modal glass-panel"><div class="modal-t">Пополнение</div><div class="modal-s">Введи сумму</div><input type="number" class="inp" id="starsAmt" placeholder="500" min="1"><div class="qrow"><button class="btn sec" data-q="100" type="button">100</button><button class="btn sec" data-q="500" type="button">500</button><button class="btn sec" data-q="1000" type="button">1K</button><button class="btn sec" data-q="10000" type="button">10K</button></div><div class="row"><button class="btn sec" id="starsClose" type="button">Закрыть</button><button class="btn pri" id="starsOk" type="button">Пополнить</button></div></div></div>
-<div class="ov" id="pickModal"><div class="modal glass-panel"><div class="modal-t">Выбери гифт</div><div class="pickgr" id="pickGrid"></div><div class="row"><button class="btn sec" id="pickClose" type="button">Отмена</button></div></div></div>
-<div class="ov" id="buyModal"><div class="modal glass-panel"><div class="bgic" id="buyIcon"></div><div class="modal-t" id="buyName">—</div><div class="modal-s" id="buyPrice" style="font-size:20px;font-weight:900;">—</div><div class="row"><button class="btn sec" id="buyCancel" type="button">Отмена</button><button class="btn pri" id="buyConfirm" type="button">Купить</button></div></div></div>
-<div class="ov" id="promoModal"><div class="modal glass-panel"><div class="modal-t">Промокод</div><div class="modal-s">Введи код</div><input type="text" class="inp" id="promoInput" placeholder="ПРОМОКОД"><div id="promoMsg" style="font-size:11px;font-weight:700;min-height:16px;text-align:center;margin-bottom:12px;"></div><div class="row"><button class="btn sec" id="promoClose" type="button">Закрыть</button><button class="btn pri" id="promoOk" type="button">Активировать</button></div></div></div>
-<div class="ov" id="settingsModal"><div class="modal glass-panel"><div class="modal-t">Настройки</div><div class="srow"><span class="slbl">Вибрация</span><label class="sw"><input type="checkbox" id="vibToggle"><span class="sl"></span></label></div><div class="srow"><span class="slbl">Звук</span><label class="sw"><input type="checkbox" id="sndToggle"><span class="sl"></span></label></div><div class="row" style="margin-top:14px;"><button class="btn pri" id="settingsClose" type="button">Готово</button></div></div></div>
-<div class="ov" id="profileModal"><div class="modal glass-panel" style="max-width:400px;"><div class="ph glass-panel"><div class="ava" id="pAva">?</div><div class="pi"><div class="pn" id="pName">Игрок</div><div class="pc"><span class="pchip gold" id="pInv">0</span><span class="pchip admin" id="pAdmin" style="display:none;">ADMIN</span></div></div></div><div class="pinv-wrap glass-panel"><div class="invgrid" id="pInvList"></div></div><div class="acard glass-panel" id="adminCard" style="display:none;"><div class="acard-t">Панель модера</div><div class="abtns"><button class="abtn red" id="admClearInv" type="button">Очистить</button><button class="abtn red" id="admWipe" type="button">Вайп</button></div></div><div class="row" style="margin-top:14px;"><button class="btn sec" id="profileClose" type="button">Закрыть</button></div></div></div>
+<div class="ov" id="starsModal"><div class="modal glass-panel"><button class="close-btn" id="starsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Пополнение</div><div class="modal-s">Введи сумму</div><input type="number" class="inp" id="starsAmt" placeholder="500" min="1"><div class="qrow"><button class="btn sec" data-q="100" type="button">100</button><button class="btn sec" data-q="500" type="button">500</button><button class="btn sec" data-q="1000" type="button">1K</button><button class="btn sec" data-q="10000" type="button">10K</button></div><div class="row"><button class="btn pri" id="starsOk" type="button">Пополнить</button></div></div></div>
+<div class="ov" id="pickModal"><div class="modal glass-panel"><button class="close-btn" id="pickClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Выбери гифт</div><div class="pickgr" id="pickGrid"></div></div></div>
+<div class="ov" id="buyModal"><div class="modal glass-panel"><button class="close-btn" id="buyCancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="bgic" id="buyIcon"></div><div class="modal-t" id="buyName">—</div><div class="modal-s" id="buyPrice" style="font-size:20px;font-weight:900;">—</div><div class="row"><button class="btn pri" id="buyConfirm" type="button" style="width:100%;">Купить</button></div></div></div>
+<div class="ov" id="promoModal"><div class="modal glass-panel"><button class="close-btn" id="promoClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Промокод</div><div class="modal-s">Введи код</div><input type="text" class="inp" id="promoInput" placeholder="ПРОМОКОД"><div id="promoMsg" style="font-size:11px;font-weight:700;min-height:16px;text-align:center;margin-bottom:12px;"></div><div class="row"><button class="btn pri" id="promoOk" type="button" style="width:100%;">Активировать</button></div></div></div>
+<div class="ov" id="settingsModal"><div class="modal glass-panel"><button class="close-btn" id="settingsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Настройки</div><div class="srow"><span class="slbl">Вибрация</span><label class="sw"><input type="checkbox" id="vibToggle"><span class="sl"></span></label></div><div class="srow"><span class="slbl">Звук</span><label class="sw"><input type="checkbox" id="sndToggle"><span class="sl"></span></label></div></div></div>
+
+<!-- НОВЫЙ ПРОФИЛЬ -->
+<div class="ov" id="profileModal">
+  <div class="modal glass-panel" style="max-width:420px; padding:0; overflow:hidden;">
+    <button class="close-btn" id="profileClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    
+    <div class="profile-header-bg"></div>
+    <div class="profile-header">
+      <div class="ava-lg" id="pAva">?</div>
+      <div class="profile-info">
+        <div class="pn-lg" id="pName">Игрок</div>
+        <div class="pc-lg">
+          <span class="pchip gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span id="pInvCount">0</span> гифтов</span>
+          <span class="pchip admin" id="pAdmin" style="display:none;">ADMIN</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="btn sec" style="font-size:11px; padding:10px;">Пополнить</button>
+      <button class="btn pri" style="font-size:11px; padding:10px;">Вывести</button>
+    </div>
+
+    <div class="profile-inventory-wrapper">
+      <div class="profile-inv-title">Инвентарь</div>
+      <div class="pinv-list" id="pInvList"></div>
+    </div>
+  </div>
+</div>
 
 <div class="ov" id="newsModal">
   <div class="modal news-m glass-panel">
+    <button class="close-btn" id="newsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="news-mh">
       <div class="news-mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-      <div><div class="news-mt">Отчет для игроков</div><div class="news-ms">Обновление 2.3</div></div>
+      <div><div class="news-mt">Отчет для игроков</div><div class="news-ms">Обновление 2.4</div></div>
     </div>
     <div class="news-c">
       <div class="nvc release glass-panel">
         <div class="nvh"><div class="nvt">Новое</div><div class="nvty">Релиз</div></div>
         <div class="nvti">Кейсы стали в 10 раз азартнее!</div>
-        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><div class="nfn">Новый дизайн</div><div class="nfd">Сделали настоящие 3D сундуки с гифтами, как в CS:GO, и крутой прокрут со свечением.</div></div></div>
-        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Фиксы</div><div class="nfd">Пофиксили звуки ракетки, обновили баланс шансов и добавили красивые партиклы при кликах.</div></div></div>
+        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><div class="nfn">Новый дизайн</div><div class="nfd">Добавили бесконечную прокрутку в меню кейсов и удобные панельки для просмотра гифтов.</div></div></div>
+        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Профиль</div><div class="nfd">Полностью переработали профиль. Теперь инвентарь выглядит как в настоящем казино.</div></div></div>
       </div>
     </div>
-    <div class="news-btn-wrap"><button class="btn pri" id="newsClose" type="button" style="width:100%;padding:14px;">Понятно</button></div>
   </div>
 </div>
 
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
