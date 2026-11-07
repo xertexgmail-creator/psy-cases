@@ -86,10 +86,10 @@ function goScreen(name) {
   }
 }
 
-function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Loot Bag'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
+function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Gift Box'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ (CSS)
+// КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ
 // ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, pool: FALLBACK.filter(f => f.value <= 200) },
@@ -100,6 +100,8 @@ var CASES_DATA = [
 ];
 var isCaseSpinning = false;
 var currentCaseData = null;
+var menuOffset = 0;
+var menuRaf = null;
 
 function renderCases() {
     var g = document.getElementById('caseGrid');
@@ -111,14 +113,13 @@ function renderCases() {
         el.className = 'case-menu-card';
         el.setAttribute('data-rarity', c.rarity);
         
-        // Создаем ДВЕ ленты подряд, чтобы анимация CSS была бесшовной
         var trackHTML = '<div class="case-menu-track-wrap"><div class="case-menu-track">';
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 15; i++) {
             var item = c.pool[Math.floor(Math.random() * c.pool.length)];
             trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
         }
         // Дубликат для бесшовности
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 15; i++) {
             var item = c.pool[Math.floor(Math.random() * c.pool.length)];
             trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
         }
@@ -135,6 +136,40 @@ function renderCases() {
         el.addEventListener('click', function() { openCaseModal(c); });
         g.appendChild(el);
     });
+    
+    startMenuLoop();
+}
+
+function startMenuLoop() {
+    if (menuRaf) cancelAnimationFrame(menuRaf);
+    var lastTime = performance.now();
+    
+    function animate() {
+        if (curScreen !== 'cases' || isCaseSpinning) {
+            lastTime = performance.now();
+            menuRaf = requestAnimationFrame(animate);
+            return;
+        }
+        
+        var now = performance.now();
+        var dt = now - lastTime;
+        lastTime = now;
+        
+        // Скорость прокрутки (пикселей в миллисекунду)
+        menuOffset -= 0.05 * dt; 
+        
+        // Сброс, если уехали на длину первой половины (15 элементов по 65px)
+        if (Math.abs(menuOffset) >= 15 * 65) {
+            menuOffset = 0;
+        }
+        
+        document.querySelectorAll('.case-menu-track').forEach(track => {
+            track.style.transform = `translateX(${menuOffset}px)`;
+        });
+        
+        menuRaf = requestAnimationFrame(animate);
+    }
+    animate();
 }
 
 function openCaseModal(c) {
@@ -161,7 +196,6 @@ function openCaseModal(c) {
     track.style.transform = 'translateX(0)';
     track.innerHTML = '';
     
-    // Изначально заполняем для показа
     for (var i = 0; i < 50; i++) {
         var it = c.pool[Math.floor(Math.random() * c.pool.length)];
         var d = document.createElement('div');
@@ -362,7 +396,7 @@ function buildWheel(){var svg=document.getElementById('rollSvg');if(!svg)return;
 function update(){var btn=document.getElementById('rollSpinBtn');if(btn){btn.textContent='Крутить за '+ROLL_COST+' ★';btn.disabled=rollSpinning||balance<ROLL_COST}}
 function pickByRealW(){var total=ROLL_SEG.reduce(function(s,x){return s+x.realW},0);var r=Math.random()*total;for(var i=0;i<ROLL_SEG.length;i++){r-=ROLL_SEG[i].realW;if(r<=0)return i}return ROLL_SEG.length-1}
 function getTargetAngle(idx){var base=idx*SEG_ANGLE;if(ROLL_SEG[idx].amount<100&&Math.random()<.25){for(var d=1;d<=2;d++){if(idx-d>=0&&ROLL_SEG[idx-d].amount>=100)return base-12+(Math.random()-.5)*3;if(idx+d<ROLL_SEG.length&&ROLL_SEG[idx+d].amount>=100)return base+12+(Math.random()-.5)*3}}return base+(Math.random()-.5)*8}
-function spin(){if(rollSpinning)return;if(balance<ROLL_COST){sErr();toast('error','Нужно '+ROLL_COST+' ★');return}rollSpinning=true;balance-=ROLL_COST;updBal();save();var wrap=document.getElementById('rWW');if(wrap)wrap.classList.add('spinning');var idx=pickByRealW();var targetAngle=getTargetAngle(idx);var finalRot=(360-targetAngle)%360;if(finalRot<0)finalRot+=360;rollRot=rollRot+360*6+((finalRot-(rollRot%360))+360)%360;var w=document.getElementById('rollWheel');if(w){w.style.transition='transform 5s cubic-bezier(.15,.7,.15,1)';w.style.transform='rotate('+rollRot+'deg)'}var tickCount=60;var tickIdx=0;var tickInt=setInterval(function(){sTick();tickIdx++;if(tickIdx>=tickCount)clearInterval(tickInt)},80);setTimeout(function(){clearInterval(tickInt);rollSpinning=false;if(wrap)wrap.classList.remove('spinning');if(w){rollRot=((rollRot%360)+360)%360;w.style.transform='rotate('+rollRot+'deg)'}var seg=ROLL_SEG[idx];var cv2=document.getElementById('rollCenter');if(seg.amount>0){balance+=seg.amount}rollLast=seg.amount;if(seg.amount>rollBest)rollBest=seg.amount;if(cv2){if(seg.amount===0)cv2.innerHTML='<span class="cvm" style="color:#ff6b7a;">0★</span>';else cv2.innerHTML='<span class="cvm">'+seg.amount+'★</span>'}if(seg.amount>=100){sRollBig();burst(60);confetti();haptic('success')}else if(seg.amount>0){sRollWin();burst(30);haptic('light')}else{sLose()}updBal();save();update()},5200)}
+function spin(){if(rollSpinning)return;if(balance<ROLL_COST){sErr();toast('error','Нужно '+ROLL_COST+' ★');return}rollSpinning=true;balance-=ROLL_COST;updBal();save();var wrap=document.getElementById('rWW');if(wrap)wrap.classList.add('spinning');var idx=pickByRealW();var targetAngle=getTargetAngle(idx);var finalRot=(360-targetAngle)%360;if(finalRot<0)finalRot+=360;rollRot=rollRot+360*6+((finalRot-(rollRot%360))+360)%360;var w=document.getElementById('rollWheel');if(w){w.style.transition='transform 5s cubic-bezier(.15,.7,.15,1)';w.style.transform='rotate('+rollRot+'deg)'}var tickCount=60;var tickIdx=0;var tickInt=setInterval(function(){sTick();tickIdx++;if(tickIdx>=tickCount)clearInterval(tickInt)},80);setTimeout(function(){clearInterval(tickInt);rollSpinning=false;if(wrap)wrap.classList.remove('spinning');if(w){rollRot=((rollRot%360)+360)%360;w.style.transform='rotate('+rollRot+'deg)'}var seg=ROLL_SEG[idx];var cv2=document.getElementById('rollCenter');if(seg.amount>0){balance+=seg.amount}rollLast=seg.amount;if(seg.amount>rollBest)rollBest=seg.amount;if(cv2){if(seg.amount===0){cv2.innerHTML='<span class="cvm" style="color:#ff6b7a;">0★</span>';sLose();}else if(seg.amount>=100){cv2.innerHTML='<span class="cvm">'+seg.amount+'★</span>';sRollBig();burst(60);confetti();haptic('success');}else{cv2.innerHTML='<span class="cvm" style="color:var(--dim);">'+seg.amount+'★</span>';sLose();}}updBal();save();update()},5200)}
 return {initCanvas:initCanvas,buildWheel:buildWheel,update:update,spin:spin};})();
 document.getElementById('rollSpinBtn').addEventListener('click',function(){sClick();Roll.spin()});
 function renderShop(){var g=document.getElementById('shopGrid');if(!g)return;g.innerHTML='';var sS=document.getElementById('shopSearch'),sMin=document.getElementById('shopMin'),sMax=document.getElementById('shopMax');var q=sS?sS.value.toLowerCase():'';var mi=sMin&&sMin.value?parseFloat(sMin.value):null;var ma=sMax&&sMax.value?parseFloat(sMax.value):null;var list=CATALOG.filter(function(it){if(q&&it.name.toLowerCase().indexOf(q)<0)return false;if(mi!==null&&!isNaN(mi)&&(it.value||0)<mi)return false;if(ma!==null&&!isNaN(ma)&&(it.value||0)>ma)return false;return true}).sort(function(a,b){return(a.value||0)-(b.value||0)});if(!list.length){g.innerHTML='<div class="empty">—</div>';return}var frag=document.createDocumentFragment();list.forEach(function(item){var s=document.createElement('div');s.className='slot glass-panel'+((item.value||0)>balance?' disabled':'');applyRar(s,item.value||0);s.innerHTML='<div class="ssi">'+iconTag(item.name,64)+'</div><div class="sname">'+item.name+'</div><div class="sprice">'+(item.value||0)+'★</div>';s.addEventListener('click',function(){sClick();openBuy(item)});frag.appendChild(s)});g.appendChild(frag)}
@@ -384,10 +418,8 @@ document.getElementById('settingsClose').addEventListener('click',function(){sCl
 document.getElementById('vibToggle').addEventListener('change',function(e){vibOn=e.target.checked;Store.set('rollup_vib',vibOn?'true':'false')});
 document.getElementById('sndToggle').addEventListener('change',function(e){sndOn=e.target.checked;Store.set('rollup_snd',sndOn?'true':'false')});
 
-// ПРОФИЛЬ И ПРОДАЖА
 document.getElementById('profileBtn').addEventListener('click',function(){sClick();renderProfile();document.getElementById('profileModal').classList.add('on')});
 document.getElementById('profileClose').addEventListener('click',function(){sClick();document.getElementById('profileModal').classList.remove('on')});
-
 function renderProfile(){
   var u=TGU||{};
   var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));
@@ -409,8 +441,6 @@ function renderProfile(){
         var c=document.createElement('div');
         c.className='invc';
         applyRar(c,it.value||0);
-        
-        // Добавил кнопку продажи
         c.innerHTML=`
             <img src="${getIconUrl(it.name)}" onclick="event.stopPropagation(); window.openGiftFromProfile(${index})">
             <div class="iname">${it.name}</div>
@@ -423,7 +453,6 @@ function renderProfile(){
   }
 }
 
-// Глобальные функции для onclick в HTML
 window.sellItem = function(index) {
     if(isAdmin) { sErr(); toast('error', 'Админ не может продавать'); return; }
     var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
