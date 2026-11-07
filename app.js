@@ -64,18 +64,6 @@ function goScreen(name) {
 
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}});g.appendChild(b)})}
 
-function pickWeightedGift(){var r=Math.random();var cat=[];if(r<.72)cat=FALLBACK.filter(function(g){return g.value<200});else if(r<.92)cat=FALLBACK.filter(function(g){return g.value>=200&&g.value<2000});else if(r<.99)cat=FALLBACK.filter(function(g){return g.value>=2000&&g.value<20000});else cat=FALLBACK.filter(function(g){return g.value>=20000});if(!cat.length)cat=FALLBACK;return cat[Math.floor(Math.random()*cat.length)]}
-
-function createDropEl(gift,animate){
-  var el=document.createElement('div');
-  el.className='live-item'+(animate?'':' no-anim');
-  applyRar(el,gift.value);
-  el.innerHTML=iconTag(gift.name,64);
-  return el;
-}
-function startDrops(){var track=document.getElementById('dropsTrack');if(!track)return;track.innerHTML='';for(var i=0;i<5;i++)track.appendChild(createDropEl(pickWeightedGift(),false));scheduleNextDrop()}
-function scheduleNextDrop(){var d=8000+Math.random()*10000;setTimeout(function(){if(curScreen==='menu'){var track=document.getElementById('dropsTrack');if(track){track.insertBefore(createDropEl(pickWeightedGift(),true),track.firstChild);while(track.children.length>10)track.removeChild(track.lastChild)}}scheduleNextDrop()},d)}
-
 function generateFakeHistory(){
   var arr = [];
   for (var i = 0; i < 15; i++) {
@@ -140,7 +128,6 @@ function endRocketFlight(){
   sExplosion();
   var mult=document.getElementById('rocket-mult');if(mult){mult.className='rocket-mult-hero crashed';mult.textContent=rocketCurrentMult.toFixed(2)+'x'}
   
-  // ВСЕГДА обновляем историю
   rocketHistory.unshift(rocketCurrentMult);
   rocketHistory=rocketHistory.slice(0,20);
   renderRocketHistory();
@@ -193,7 +180,6 @@ function runLoad(dur,done){var start=performance.now();var stages=[{t:0,s:'Ин�
 function loadCatalog(cb){var done=false;function fin(){if(done)return;done=true;if(cb)cb()}setTimeout(fin,3000);fetch('https://api.changes.tg/original/list?size=200').then(function(r){return r.json()}).then(function(data){var items=[];if(Array.isArray(data))items=data;else if(data&&Array.isArray(data.gifts))items=data.gifts;else if(data&&Array.isArray(data.items))items=data.items;else if(data&&Array.isArray(data.result))items=data.result;if(!items.length){CATALOG=FALLBACK.slice();fin();return}var map=new Map();items.forEach(function(it){var name=it.name||it.title||it.slug;if(!name)return;var val=Number(it.value||it.price||0)||0;var fb=FALLBACK.filter(function(f){return f.name===name})[0];map.set(name,{name:String(name),value:val||(fb?fb.value:10)})});FALLBACK.forEach(function(f){if(!map.has(f.name))map.set(f.name,{name:f.name,value:f.value})});CATALOG=Array.from(map.values()).sort(function(a,b){return(a.value||0)-(b.value||0)});fin()}).catch(function(){CATALOG=FALLBACK.slice();fin()})}
 
 function boot(){
-  // Принудительный запуск звука при первом клике
   document.addEventListener('touchstart', ia, {once:true});
   document.addEventListener('click', ia, {once:true});
 
@@ -215,7 +201,7 @@ function boot(){
     var loading=document.getElementById('loading');if(loading)loading.classList.add('hide');
     if(window.__stopLoadingParticles)window.__stopLoadingParticles();
     setTimeout(function(){document.body.classList.remove('loading-active');document.body.style.overflow='';document.body.style.position=''},100);
-    try{startDrops();Rocket.init();rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;updateRocketBtn()}catch(e){}
+    try{Rocket.init();rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;updateRocketBtn()}catch(e){}
   })
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
