@@ -35,27 +35,28 @@ function isUsed(c){return used.indexOf(c)>=0}
 function toast(type,text){var t=document.createElement('div');t.className='toast '+type;var ic={success:'✓',error:'✕',info:'i'};t.innerHTML='<span style="font-weight:900;">'+ic[type]+'</span><span>'+text+'</span>';document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('show')});setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},450)},3000)}
 (function(){var cv=document.getElementById('loadingCanvas');if(!cv)return;var ctx=cv.getContext('2d');var particles=[];var W=0,H=0;function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}resize();window.addEventListener('resize',resize);for(var i=0;i<40;i++){particles.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,r:1+Math.random()*2,life:Math.random()*Math.PI*2,speed:.01+Math.random()*.02})}var animating=true;function loop(){if(!animating)return;ctx.clearRect(0,0,W,H);particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.life+=p.speed;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;var alpha=.3+.5*Math.sin(p.life);ctx.fillStyle='rgba(255,215,0,'+alpha+')';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);g.addColorStop(0,'rgba(255,215,0,'+(alpha*.3)+')');g.addColorStop(1,'rgba(255,215,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2);ctx.fill()});requestAnimationFrame(loop)}loop();window.__stopLoadingParticles=function(){animating=false}})();
 
-// ГЛОБАЛЬНЫЕ ИСКРЫ ПРИ КЛИКЕ
-document.addEventListener('pointerdown', function(e) {
-    if (e.button !== 0 && e.pointerType === 'mouse') return; // ЛКМ
+// КЛИК ПАРТИКЛЫ
+function spawnClickParticles(x, y) {
     var colors = ['#FFD700', '#FF2A55', '#00F0FF', '#ffffff'];
-    var count = 6;
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < 12; i++) {
         var p = document.createElement('div');
         p.className = 'click-particle';
-        p.style.left = e.clientX + 'px';
-        p.style.top = e.clientY + 'px';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
         p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.boxShadow = '0 0 6px ' + p.style.background;
+        p.style.boxShadow = '0 0 10px ' + p.style.background;
         
         var angle = Math.random() * Math.PI * 2;
-        var dist = 30 + Math.random() * 50;
+        var dist = 40 + Math.random() * 60;
         p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
         p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
         
         document.body.appendChild(p);
         setTimeout(function(el) { el.remove(); }, 600, p);
     }
+}
+document.addEventListener('pointerdown', function(e) {
+    spawnClickParticles(e.clientX, e.clientY);
 });
 
 var curScreen='menu';
@@ -72,7 +73,7 @@ function goScreen(name) {
       
       if (name === 'rocket') Rocket.init();
       if (name === 'roll') Roll.initCanvas();
-      if (name === 'cases') renderCases(); // Рендер кейсов
+      if (name === 'cases') renderCases();
       
       setTimeout(() => { loader.classList.remove('active'); }, 100);
     }, 400);
@@ -90,7 +91,7 @@ function goScreen(name) {
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Loot Bag'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// НОВЫЙ РЕЖИМ: КЕЙСЫ
+// КЕЙСЫ
 // ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, icon: 'Crystal Ball', pool: FALLBACK.filter(f => f.value <= 200) },
@@ -133,29 +134,24 @@ function startCaseOpen(c) {
     track.style.transform = 'translateX(0)';
     track.innerHTML = '';
     
-    // Выбор выигрышного предмета (шансы скрыты, но выигрыш дорогого редкий)
-    // В пуле от 0 до 1. Чем выше индекс, тем дороже предмет.
     var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
     var r = Math.random();
     var winIdx = 0;
     
-    if (r < 0.6) winIdx = Math.floor(Math.random() * Math.floor(pool.length * 0.6)); // 60% дешевые
-    else if (r < 0.9) winIdx = Math.floor(pool.length * 0.6 + Math.random() * (pool.length * 0.3)); // 30% средние
-    else winIdx = Math.floor(pool.length * 0.9 + Math.random() * (pool.length * 0.1)); // 10% дорогие
+    if (r < 0.6) winIdx = Math.floor(Math.random() * Math.floor(pool.length * 0.6));
+    else if (r < 0.9) winIdx = Math.floor(pool.length * 0.6 + Math.random() * (pool.length * 0.3));
+    else winIdx = Math.floor(pool.length * 0.9 + Math.random() * (pool.length * 0.1));
     
     if (winIdx >= pool.length) winIdx = pool.length - 1;
     var winItem = pool[winIdx];
     
-    // Генерация 50 предметов
     var items = [];
     for (var i = 0; i < 50; i++) {
         items.push(pool[Math.floor(Math.random() * pool.length)]);
     }
-    // Ставим выигрыш на 45-й индекс
     var targetIdx = 45;
     items[targetIdx] = winItem;
     
-    // Рендер и анимация
     items.forEach(function(it) {
         var d = document.createElement('div');
         d.className = 'case-item';
@@ -164,9 +160,7 @@ function startCaseOpen(c) {
         track.appendChild(d);
     });
     
-    // Вычисляем смещение
-    var itemWidth = 100 + 8; // 100px ширина + 8px gap
-    // Центр экрана минус половина ширины предмета минус отступ до 45-го
+    var itemWidth = 100 + 8;
     var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
     var offset = (targetIdx * itemWidth) - (wrapWidth / 2) + (itemWidth / 2);
     
@@ -174,7 +168,6 @@ function startCaseOpen(c) {
         track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
         track.style.transform = 'translateX(-' + offset + 'px)';
         
-        // Звуки тиков
         var tickCount = 40;
         var tickInt = setInterval(function(){ sTick(); }, 150);
         
