@@ -23,30 +23,15 @@ var balance=parseInt(Store.get(P+'balance')||'20000',10);if(isNaN(balance))balan
 var inventory=[];try{var inv=JSON.parse(Store.get(P+'inv')||'[]');if(Array.isArray(inv))inventory=inv.filter(function(x){return x&&x.name})}catch(e){}
 var used=[];try{var u=JSON.parse(Store.get(P+'used')||'[]');if(Array.isArray(u))used=u}catch(e){}
 var PROMO={'ROMANARMATURA777':10,'CHIHARDEDEP':20};
-
-var FALLBACK=[
-{name:'Pink Heart',value:15},{name:'Toy Bear',value:15},{name:'Red Gift',value:25},{name:'Rose',value:25},{name:'Cake',value:50},{name:'Bouquet',value:50},{name:'Rocket',value:50},
-{name:'Trophy',value:100},{name:'Diamond Ring',value:100},{name:'Blue Diamond',value:100},{name:'Champagne',value:100},{name:'Torch',value:100},
-{name:'Coffee',value:300},{name:'Snowman',value:399},{name:'Snake',value:400},{name:'Candles 25',value:400},{name:'Candy Cane',value:420},{name:'Gnome',value:440},{name:'Backpack',value:450},{name:'Poop',value:458},{name:'Lantern',value:460},{name:'Noodles',value:460},{name:'Cake 8',value:460},{name:'Ice Cream',value:470},{name:'Flamingo',value:474},{name:'Lollipop',value:480},{name:'Happy B-Day',value:480},{name:'Sparkler',value:480},{name:'Tamagotchi',value:480},{name:'Golden Egg',value:480},
-{name:'Liberty',value:481},{name:'Snoop Dogg',value:481},{name:'Weed',value:481},{name:'Clover',value:481},{name:'Socks',value:481},{name:'Moon',value:481},{name:'Cherry Cake',value:481},{name:'Heart Cookie',value:481},{name:'Medal',value:481},{name:'Book',value:481},{name:'Money Bag',value:481},{name:'Retro Rocket',value:481},{name:'Heart Jar',value:481},{name:'Pink Cake',value:481},{name:'Flowers Pot',value:481},{name:'Gingerbread',value:481},{name:'Wine Glass',value:481},{name:'Vinyl',value:481},{name:'Hot Chocolate',value:481},{name:'Door',value:481},{name:'Pot of Gold',value:481},{name:'Cauldron',value:481},{name:'Wreath',value:481},{name:'Jack in the Box',value:481},{name:'Bow Tie',value:481},{name:'Candle',value:481},
-{name:'Broken Egg',value:487},{name:'Calendar',value:500},{name:'Heart Box',value:514},{name:'Moon Necklace',value:515},{name:'Lightsaber',value:541},{name:'Skateboard',value:549},{name:'Snow Globe',value:563},{name:'Witch Hat',value:587},{name:'Mushroom',value:585},{name:'Santa Hat',value:597},{name:'Jester Hat',value:604},{name:'Rabbit Basket',value:604},{name:'Boxing Monkey',value:604},{name:'Blue Gift',value:617},{name:'Hockey Mask',value:625},{name:'Love You',value:648},{name:'Pen',value:691},{name:'Skates',value:687},{name:'Cupcake',value:734},{name:'Dumplings',value:743},{name:'Chocolate Box',value:757},{name:'Gold Bar',value:758},{name:'Bells',value:791},{name:'Star',value:798},{name:'Gold Bell',value:825},{name:'Top Hat',value:826},{name:'Sakura',value:891},{name:'Crystal White',value:963},{name:'Blue Diamond Ring',value:959},{name:'Bracelet',value:963},{name:'Gold Key',value:1837},{name:'Gold Watch',value:4527}
-];
-FALLBACK.sort(function(a,b){return a.value - b.value});
+var FALLBACK=[{name:'Heart Locket',value:15},{name:'Toy Bear',value:15},{name:'Jingle Bells',value:25},{name:'Magic Potion',value:25},{name:'Jelly Bunny',value:25},{name:'Homemade Cake',value:50},{name:'Crystal Ball',value:50},{name:'Top Hat',value:100},{name:'Sakura Flower',value:100},{name:'Clover Pin',value:150},{name:'Bonded Ring',value:180},{name:'Diamond Ring',value:100},{name:"Durov's Cap",value:280},{name:'Cupid Charm',value:350},{name:'Valentine Box',value:420},{name:'Artisan Brick',value:500},{name:'Voodoo Doll',value:600},{name:'Scared Cat',value:700},{name:'Electric Skull',value:850},{name:'Perfume Bottle',value:1000},{name:'Santa Hat',value:1200},{name:'Signet Ring',value:1400},{name:'Swiss Watch',value:1700},{name:'Precious Peach',value:2000},{name:'Plush Pepe',value:2500},{name:'Stellar Rocket',value:3000},{name:'Snoop Dogg',value:3500},{name:'Low Rider',value:4000},{name:'Snoop Cigar',value:4500},{name:'Jolly Chimp',value:5000},{name:'Westside Sign',value:5500},{name:'Kissed Frog',value:6000},{name:'Sharp Tongue',value:6500},{name:'Loot Bag',value:7000},{name:'Trapped Heart',value:8000},{name:'Nail Bracelet',value:9000},{name:'Neko Helmet',value:10000},{name:'Mini Oscar',value:12000},{name:'Gem Signet',value:14000},{name:'Vintage Cigar',value:16000},{name:'Hanging Star',value:18000},{name:'Lunar Snake',value:20000},{name:'Astral Shard',value:24000},{name:'Light Sword',value:28000},{name:'Mighty Arm',value:32000},{name:'Evil Eye',value:38000},{name:'Witch Hat',value:45000},{name:'Liberty Figure',value:55000},{name:"Durov's Glasses",value:65000},{name:'Intelligence Cup',value:80000},{name:'Algorithm Cup',value:95000},{name:"Khabib's Papakha",value:120000},{name:'UFC Strike',value:140000},{name:'Rare Bird',value:170000},{name:'Ion Gem',value:200000},{name:'Hex Pot',value:250000},{name:'Genie Lamp',value:300000},{name:'Tama Gadget',value:400000},{name:'Mirage Lamp',value:600000}];
 var CATALOG=FALLBACK.slice();
 function rarityInfo(v){if(v<100)return{c:'#8a8a95',glow:'rgba(138,138,149,0.5)',bd:'rgba(138,138,149,0.3)'};if(v<500)return{c:'#4b69ff',glow:'rgba(75,105,255,0.6)',bd:'rgba(75,105,255,0.55)'};if(v<2000)return{c:'#8847ff',glow:'rgba(136,71,255,0.7)',bd:'rgba(136,71,255,0.6)'};if(v<10000)return{c:'#d32ce6',glow:'rgba(211,44,230,0.75)',bd:'rgba(211,44,230,0.65)'};if(v<50000)return{c:'#eb4b4b',glow:'rgba(235,75,75,0.85)',bd:'rgba(235,75,75,0.7)'};return{c:'#ffd700',glow:'rgba(255,215,0,0.9)',bd:'rgba(255,215,0,0.8)'}}
 function applyRar(el,v){var r=rarityInfo(v);el.style.setProperty('--rar-color',r.c);el.style.setProperty('--rar-glow',r.glow);el.style.setProperty('--rar-bd',r.bd)}
 
-// 🛠️ ИСПРАВЛЕНИЕ ИКОНОК: Двойной fallback + заглушка, если API мертво
+// ВОЗВРАЩЕНА ОРИГИНАЛЬНАЯ ФУНКЦИЯ ИКОНОК (БЕЗ ЭМОДЗИ И SVG ЗАГЛУШЕК)
 function getIconUrl(name){var n=String(name).replace(/\s+/g,'');return 'https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size=128';}
-function iconTag(name,size){
-    size=size||64;
-    var n=String(name).replace(/\s+/g,'');
-    var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');
-    var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;
-    var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';
-    var placeholder='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23FFD700" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
-    return '<img src="'+primary+'" data-fb="'+fb+'" data-fb2="'+placeholder+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.src=this.dataset.fb2}">'
-}
+function iconTag(name,size){size=size||64;var n=String(name).replace(/\s+/g,'');var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';return '<img src="'+primary+'" data-fb="'+fb+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.style.opacity=0.3}">'}
+
 function fmt(n){n=Math.floor(n||0);if(n>=1e9)return Math.floor(n/1e9)+'B';if(n>=1e6)return Math.floor(n/1e6)+'M';if(n>=1e3)return Math.floor(n/1e3)+'K';return String(n)}
 function updBal(){var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance)}
 function save(){try{Store.set(P+'balance',String(balance));Store.set(P+'inv',JSON.stringify(inventory));Store.set(P+'used',JSON.stringify(used))}catch(e){}try{if(tg.CloudStorage&&!isAdmin){tg.CloudStorage.setItem(P+'balance',String(balance),function(){});tg.CloudStorage.setItem(P+'inv',JSON.stringify(inventory),function(){})}}catch(e){}}
@@ -92,36 +77,26 @@ function goScreen(name) {
   }
 }
 
-// 🛠️ ИСПРАВЛЕНИЕ ИКОНОК В МЕНЮ (Gift Box, Stellar Rocket и Loot Bag не существуют)
-function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Money Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
+function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
-// ============================================================
 // КЕЙСЫ
-// ============================================================
-// 🛠️ ИСПРАВЛЕНИЕ: Фильтры цен изменены, чтобы массивы pool не были пустыми (из-за этого падал скрипт)
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, pool: FALLBACK.filter(f => f.value <= 200) },
     { id: 'c2', name: 'Редкий', price: 2500, rarity: 2, pool: FALLBACK.filter(f => f.value >= 150 && f.value <= 2000) },
     { id: 'c3', name: 'Эпический', price: 10000, rarity: 3, pool: FALLBACK.filter(f => f.value >= 1000 && f.value <= 10000) },
     { id: 'c4', name: 'Легендарный', price: 50000, rarity: 4, pool: FALLBACK.filter(f => f.value >= 3000) },
-    { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, pool: FALLBACK.filter(f => f.value >= 500) }
+    { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, pool: FALLBACK.filter(f => f.value >= 20000) }
 ];
 
-// ============================================================
-// БЕСПЛАТНЫЙ КЕЙС ЗА ПОДПИСКИ / ДЕПОЗИТ / ДРУЗЕЙ
-// ============================================================
+// БЕСПЛАТНЫЙ КЕЙС
 var FREE_CASE = {
     channels: [
         {key:'ch1', name:'RollUp News',  url:'https://t.me/RollUp_BOT'},
         {key:'ch2', name:'RollUp Chat',  url:'https://t.me/RollUp_Chat'},
         {key:'ch3', name:'RollUp Promo', url:'https://t.me/RollUp_Promo'}
     ],
-    minDeposit: 100,
-    minFriends: 5,
-    rewardMin: 400,
-    rewardMax: 700
+    minDeposit: 100, minFriends: 5, rewardMin: 400, rewardMax: 700
 };
-
 var freeCaseState = { subscribed:{}, deposited:0, friendsInvited:0, claimed:false };
 try {
     var fcs = JSON.parse(Store.get(P + 'freecase') || 'null');
@@ -160,11 +135,11 @@ function createFreeCaseCard(){
             <div class="free-case-left"><div class="free-case-icon">${iconTag('Red Gift', 128)}</div></div>
             <div class="free-case-right">
                 <div class="free-case-title">Бесплатный кейс</div>
-                <div class="free-case-sub">Гифт до ${FREE_CASE.rewardMax}★ за подписки</div>
+                <div class="free-case-sub">Гифт до ${FREE_CASE.rewardMax}★ за задания</div>
                 <div class="free-case-progress">
-                    <span class="fcp-item ${prog.subsDone===prog.subsTotal?'done':''}">📢 ${prog.subsDone}/${prog.subsTotal}</span>
-                    <span class="fcp-item ${prog.depDone?'done':''}">💎 ${Math.min(prog.depAmount,prog.depNeeded)}/${prog.depNeeded}</span>
-                    <span class="fcp-item ${prog.friendsDone?'done':''}">👥 ${Math.min(prog.friendsAmount,prog.friendsNeeded)}/${prog.friendsNeeded}</span>
+                    <span class="fcp-item ${prog.subsDone===prog.subsTotal?'done':''}">Подписки: ${prog.subsDone}/${prog.subsTotal}</span>
+                    <span class="fcp-item ${prog.depDone?'done':''}">Депозит: ${Math.min(prog.depAmount,prog.depNeeded)}/${prog.depNeeded}</span>
+                    <span class="fcp-item ${prog.friendsDone?'done':''}">Друзья: ${Math.min(prog.friendsAmount,prog.friendsNeeded)}/${prog.friendsNeeded}</span>
                 </div>
             </div>
         </div>
@@ -177,14 +152,14 @@ function createFreeCaseCard(){
 function openFreeCaseModal(){ var modal = document.getElementById('freeCaseModal'); if (!modal) return; renderFreeCaseModal(); modal.classList.add('on'); }
 function renderFreeCaseModal(){
     var prog = freeCaseProgress();
-    var prev = document.getElementById('fcRewardPreview'); if (prev) prev.innerHTML = iconTag('Red Gift', 128);
+    
     var ch = document.getElementById('fcChannels');
     if (ch) {
         ch.innerHTML = '';
         FREE_CASE.channels.forEach(function(c){
             var done = !!freeCaseState.subscribed[c.key];
             var item = document.createElement('div'); item.className = 'fc-req' + (done ? ' done' : '');
-            item.innerHTML = `<div class="fc-req-icon">${done?'✓':'📢'}</div><div class="fc-req-info"><div class="fc-req-title">${c.name}</div><div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div></div><button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'✓':'Открыть'}</button>`;
+            item.innerHTML = `<div class="fc-req-icon">${done?'✓':'1'}</div><div class="fc-req-info"><div class="fc-req-title">${c.name}</div><div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div></div><button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'✓':'Открыть'}</button>`;
             ch.appendChild(item);
         });
         ch.querySelectorAll('.fc-req-btn[data-ch]').forEach(function(btn){
@@ -195,17 +170,19 @@ function renderFreeCaseModal(){
             });
         });
     }
+    
     var dep = document.getElementById('fcDeposit');
     if (dep) {
         dep.className = 'fc-req' + (prog.depDone ? ' done' : '');
-        dep.innerHTML = `<div class="fc-req-icon">${prog.depDone?'✓':'💎'}</div><div class="fc-req-info"><div class="fc-req-title">Пополнить на ${FREE_CASE.minDeposit}★</div><div class="fc-req-desc">${prog.depDone?'Выполнено':'Внесено: '+prog.depAmount+'/'+prog.depNeeded+'★'}</div></div><button class="fc-req-btn ${prog.depDone?'done':''}" id="fcDepositBtn" ${prog.depDone?'disabled':''}>${prog.depDone?'✓':'Пополнить'}</button>`;
+        dep.innerHTML = `<div class="fc-req-icon">${prog.depDone?'✓':'2'}</div><div class="fc-req-info"><div class="fc-req-title">Пополнить на ${FREE_CASE.minDeposit}★</div><div class="fc-req-desc">${prog.depDone?'Выполнено':'Внесено: '+prog.depAmount+'/'+prog.depNeeded+'★'}</div></div><button class="fc-req-btn ${prog.depDone?'done':''}" id="fcDepositBtn" ${prog.depDone?'disabled':''}>${prog.depDone?'✓':'Пополнить'}</button>`;
         var depBtn = document.getElementById('fcDepositBtn');
         if (depBtn) depBtn.addEventListener('click', function(e){ e.stopPropagation(); sClick(); document.getElementById('freeCaseModal').classList.remove('on'); document.getElementById('starsAmt').value = ''; document.getElementById('starsModal').classList.add('on'); });
     }
+    
     var fr = document.getElementById('fcFriends');
     if (fr) {
         fr.className = 'fc-req' + (prog.friendsDone ? ' done' : '');
-        fr.innerHTML = `<div class="fc-req-icon">${prog.friendsDone?'✓':'👥'}</div><div class="fc-req-info"><div class="fc-req-title">Пригласить ${FREE_CASE.minFriends} друзей</div><div class="fc-req-desc">${prog.friendsDone?'Выполнено':'Приглашено: '+prog.friendsAmount+'/'+prog.friendsNeeded}</div></div><button class="fc-req-btn ${prog.friendsDone?'done':''}" id="fcFriendsBtn" ${prog.friendsDone?'disabled':''}>${prog.friendsDone?'✓':'Пригласить'}</button>`;
+        fr.innerHTML = `<div class="fc-req-icon">${prog.friendsDone?'✓':'3'}</div><div class="fc-req-info"><div class="fc-req-title">Пригласить ${FREE_CASE.minFriends} друзей</div><div class="fc-req-desc">${prog.friendsDone?'Выполнено':'Приглашено: '+prog.friendsAmount+'/'+prog.friendsNeeded}</div></div><button class="fc-req-btn ${prog.friendsDone?'done':''}" id="fcFriendsBtn" ${prog.friendsDone?'disabled':''}>${prog.friendsDone?'✓':'Пригласить'}</button>`;
         var frBtn = document.getElementById('fcFriendsBtn');
         if (frBtn) frBtn.addEventListener('click', function(e){
             e.stopPropagation(); sClick(); shareTg('Залетай в RollUp Premium — крутой казик с гифтами!', 'https://t.me/RollUp_BOT?start=ref_' + UID);
@@ -215,6 +192,7 @@ function renderFreeCaseModal(){
             }
         });
     }
+    
     var openBtn = document.getElementById('fcOpenBtn');
     if (openBtn) {
         openBtn.disabled = !prog.allDone; openBtn.textContent = prog.allDone ? 'Открыть бесплатный кейс' : 'Выполни все задания'; openBtn.className = 'btn ' + (prog.allDone ? 'pri' : 'sec');
@@ -247,7 +225,7 @@ function renderCases() {
     CASES_DATA.forEach(function(c) {
         var el = document.createElement('div'); el.className = 'case-menu-card'; el.setAttribute('data-rarity', c.rarity);
         var trackHTML = '<div class="case-menu-track-wrap"><div class="case-menu-track">';
-        // 🛠️ Защита от пустого массива
+        // Защита от пустых массивов (фикс ошибки)
         var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
         for (var i = 0; i < 15; i++) {
             var item = safePool[Math.floor(Math.random() * safePool.length)];
@@ -283,7 +261,6 @@ function openCaseModal(c) {
     document.getElementById('caseModalTitle').textContent = c.name;
     document.getElementById('casePriceBtn').textContent = fmt(c.price);
     var poolGrid = document.getElementById('casePoolGrid'); poolGrid.innerHTML = '';
-    // 🛠️ Защита от пустого массива
     var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
     var sortedPool = safePool.slice().sort((a,b) => a.value - b.value);
     sortedPool.forEach(function(item) {
@@ -318,7 +295,6 @@ if (openCaseBtn) openCaseBtn.addEventListener('click', function() {
     isCaseSpinning = true; balance -= c.price; updBal(); save(); sOpenCase();
     document.getElementById('openCaseBtn').textContent = 'Открывается...'; document.getElementById('openCaseBtn').disabled = true;
     var track = document.getElementById('caseTrack'); track.style.transition = 'none'; track.style.transform = 'translateX(0)'; track.innerHTML = '';
-    // 🛠️ Защита от пустого массива
     var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
     var pool = safePool.slice().sort(function(a,b){return a.value - b.value;});
     var r = Math.random(); var winIdx = 0;
@@ -345,9 +321,7 @@ if (openCaseBtn) openCaseBtn.addEventListener('click', function() {
     }, 100);
 });
 
-// ============================================================
-// UPGRADER, ROCKET, ROLL, SHOP, PROFILE и т.д. (Логика сохранена)
-// ============================================================
+// UPGRADER, ROCKET, ROLL, SHOP, PROFILE
 var selItems=[],targetItem=null,chance=0,multiplier=0,isSpinning=false;var MULT=[1.2,1.5,2,3,5,10,25,100];var SPIN_DUR=7500;var invSearch='',invMin=null,invMax=null,tgtSearch='',tgtMin=null,tgtMax=null;
 function sumSel(){return selItems.reduce(function(s,i){return s+(i.value||0)},0)}
 function chanceRatio(r){var c=100/r;if(c>99)c=99;if(c<.01)c=.01;return Math.round(c*100)/100}
@@ -376,7 +350,7 @@ function generateCrashPoint(){var r=Math.random();var cp=(.97/(1-r))*0.75;return
 function multAt(e){return Math.pow(1.15,e)}
 function findGiftInInventory(gift){if(!gift)return-1;for(var i=0;i<inventory.length;i++){if(inventory[i].name===gift.name&&(inventory[i].value||0)===(gift.value||0))return i}return-1}
 var Rocket=(function(){var hero,ship,trailPath,milestones,speedlines,giftBadge;var trailPts=[];var defs=[{v:1.5,top:86,lbl:'1.5x'},{v:2,top:76,lbl:'2x'},{v:3,top:66,lbl:'3x'},{v:5,top:55,lbl:'5x'},{v:10,top:43,lbl:'10x',mega:true},{v:25,top:31,lbl:'25x'},{v:50,top:19,lbl:'50x',mega:true},{v:100,top:8,lbl:'100x',mega:true}];
-function init(){hero=document.getElementById('rocket-hero');ship=document.getElementById('rocketShip');trailPath=document.getElementById('rocketTrailPath');milestones=document.getElementById('rocketMilestones');speedlines=document.getElementById('rocketSpeedlines');giftBadge=document.getElementById('rocketGiftBadge');if(!hero)return;if(milestones&&!milestones.children.length){defs.forEach(function(m){var el=document.createElement('div');el.className='rocket-milestone'+(m.mega?' mega':'');el.dataset.v=m.v;el.style.top=m.top+'%';el.innerHTML='<span class="dot"></span>'+m.lbl;milestones.appendChild(el)})}if(speedlines&&!speedlines.children.length){for(var i=0;i<16;i++){var l=document.createElement('div');l.className='line';l.style.left=(Math.random()*100)+'%';l.style.top=(Math.random()*100)+'%';l.style.animationDelay=(Math.random()*.7)+'s';l.style.animationDuration=(.5+Math.random()*.4)+'s';speedlines.appendChild(l)}}if(ship&&!ship.children.length){ship.innerHTML=iconTag('Rocket',128)}if(rocketPhase!=='flying')reset()}
+function init(){hero=document.getElementById('rocket-hero');ship=document.getElementById('rocketShip');trailPath=document.getElementById('rocketTrailPath');milestones=document.getElementById('rocketMilestones');speedlines=document.getElementById('rocketSpeedlines');giftBadge=document.getElementById('rocketGiftBadge');if(!hero)return;if(milestones&&!milestones.children.length){defs.forEach(function(m){var el=document.createElement('div');el.className='rocket-milestone'+(m.mega?' mega':'');el.dataset.v=m.v;el.style.top=m.top+'%';el.innerHTML='<span class="dot"></span>'+m.lbl;milestones.appendChild(el)})}if(speedlines&&!speedlines.children.length){for(var i=0;i<16;i++){var l=document.createElement('div');l.className='line';l.style.left=(Math.random()*100)+'%';l.style.top=(Math.random()*100)+'%';l.style.animationDelay=(Math.random()*.7)+'s';l.style.animationDuration=(.5+Math.random()*.4)+'s';speedlines.appendChild(l)}}if(ship&&!ship.children.length){ship.innerHTML=iconTag('Stellar Rocket',128)}if(rocketPhase!=='flying')reset()}
 function reset(){trailPts=[];if(trailPath)trailPath.setAttribute('d','');if(ship){ship.className='rocket-ship idle';ship.style.top='90%';ship.style.left='50%'; ship.style.opacity='1';}if(hero)hero.classList.remove('flying');if(milestones)Array.prototype.forEach.call(milestones.querySelectorAll('.rocket-milestone'),function(el){el.classList.remove('visible','reached')})}
 function setFlying(){if(ship)ship.className='rocket-ship flying';if(hero)hero.classList.add('flying')}
 function updatePosition(mult){if(!ship)return;var prog=Math.pow(Math.min(1,mult/100),.35);var topPct=90-prog*87;var leftPct=50+Math.sin(prog*10)*4;ship.style.top=topPct+'%';ship.style.left=leftPct+'%';trailPts.push({x:leftPct,y:topPct});if(trailPts.length>50)trailPts.shift();if(trailPath&&trailPts.length>1){var d='M '+trailPts[0].x.toFixed(2)+' '+trailPts[0].y.toFixed(2);for(var i=1;i<trailPts.length;i++)d+=' L '+trailPts[i].x.toFixed(2)+' '+trailPts[i].y.toFixed(2);trailPath.setAttribute('d',d)}if(giftBadge&&!giftBadge.classList.contains('hidden')){giftBadge.style.left=leftPct+'%';giftBadge.style.top=(topPct-8)+'%'}if(milestones){Array.prototype.forEach.call(milestones.querySelectorAll('.rocket-milestone'),function(el){var v=parseFloat(el.dataset.v);if(mult>=v)el.classList.add('visible','reached');else if(mult>=v*.6)el.classList.add('visible')})}}
@@ -437,32 +411,78 @@ document.getElementById('sndToggle').addEventListener('change',function(e){sndOn
 document.getElementById('profileBtn').addEventListener('click',function(){sClick();renderProfile();document.getElementById('profileModal').classList.add('on')});
 document.getElementById('profileClose').addEventListener('click',function(){sClick();document.getElementById('profileModal').classList.remove('on')});
 function renderProfile(){
-  var u=TGU||{}; var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));
-  var av=document.getElementById('pAva'); if(av){if(u.photo_url)av.innerHTML='<img src="'+u.photo_url+'" alt="">';else av.textContent=(u.first_name||'И').charAt(0).toUpperCase()}
-  document.getElementById('pName').textContent=name; document.getElementById('pInvCount').textContent=inventory.length;
-  document.getElementById('pAdmin').style.display=isAdmin?'inline-flex':'none'; var admCard = document.getElementById('adminCard'); if(admCard) admCard.style.display = isAdmin ? 'block' : 'none';
+  var u=TGU||{};
+  var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));
+  var av=document.getElementById('pAva');
+  if(av){if(u.photo_url)av.innerHTML='<img src="'+u.photo_url+'" alt="">';else av.textContent=(u.first_name||'И').charAt(0).toUpperCase()}
+  document.getElementById('pName').textContent=name;
+  document.getElementById('pInvCount').textContent=inventory.length;
+  document.getElementById('pAdmin').style.display=isAdmin?'inline-flex':'none';
+  var admCard = document.getElementById('adminCard');
+  if(admCard) admCard.style.display = isAdmin ? 'block' : 'none';
+  
   var il=document.getElementById('pInvList');
-  if(il){ il.innerHTML=''; if(!inventory.length){il.innerHTML='<div class="empty" style="grid-column:1/-1;text-align:center;color:var(--dim);font-size:11px;padding:24px 8px;">Пусто</div>'}
-    else{ var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)}); srt.forEach(function(it, index){
-        var c=document.createElement('div'); c.className='invc'; applyRar(c,it.value||0);
-        c.innerHTML=`<img src="${getIconUrl(it.name)}" onclick="event.stopPropagation(); window.openGiftFromProfile(${index})"><div class="iname">${it.name}</div><div class="iprice">${(it.value||0)} ★</div><button class="sell-btn" onclick="event.stopPropagation(); window.sellItem(${index})">Продать</button>`;
-        il.appendChild(c); }); } } }
+  if(il){
+    il.innerHTML='';
+    if(!inventory.length){il.innerHTML='<div class="empty" style="grid-column:1/-1;text-align:center;color:var(--dim);font-size:11px;padding:24px 8px;">Пусто</div>'}
+    else{
+      var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
+      srt.forEach(function(it, index){
+        var c=document.createElement('div');
+        c.className='invc';
+        applyRar(c,it.value||0);
+        c.innerHTML=`
+            <img src="${getIconUrl(it.name)}" onclick="event.stopPropagation(); window.openGiftFromProfile(${index})">
+            <div class="iname">${it.name}</div>
+            <div class="iprice">${(it.value||0)} ★</div>
+            <button class="sell-btn" onclick="event.stopPropagation(); window.sellItem(${index})">Продать</button>
+        `;
+        il.appendChild(c);
+      });
+    }
+  }
+}
 
-// 🛠️ ИСПРАВЛЕНИЕ: Убрана проверка isAdmin, теперь админ может продавать
+// АДМИН ТЕПЕРЬ МОЖЕТ ПРОДАВАТЬ (УБРАНА ПРОВЕРКА)
 window.sellItem = function(index) {
     var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
     var item = srt[index];
     if(!item) return;
-    balance += item.value; updBal(); inventory.splice(inventory.indexOf(item), 1); save();
-    sBuy(); renderProfile(); renderInv(); renderArena(); renderTargets();
+    
+    balance += item.value;
+    updBal();
+    inventory.splice(inventory.indexOf(item), 1);
+    save();
+    sBuy();
+    renderProfile();
+    renderInv();
+    renderArena();
+    renderTargets();
     toast('success', 'Продано за +' + fmt(item.value) + ' ★');
 }
 
-window.openGiftFromProfile = function(index) { var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)}); var item = srt[index]; if(item) openGiftModal(item); }
+window.openGiftFromProfile = function(index) {
+    var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
+    var item = srt[index];
+    if(item) openGiftModal(item);
+}
 
-var withdrawBtn = document.getElementById('withdrawBtn'); if(withdrawBtn) withdrawBtn.addEventListener('click', function() { sClick(); toast('info', 'Вывод доступен с 2.1.0 (в разработке)'); });
-var admClear = document.getElementById('admClearInv'); if (admClear) admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
-var admWipeBtn = document.getElementById('admWipe'); if (admWipeBtn) admWipeBtn.addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
+var withdrawBtn = document.getElementById('withdrawBtn');
+if(withdrawBtn) {
+    withdrawBtn.addEventListener('click', function() {
+        sClick();
+        toast('info', 'Вывод доступен с 2.1.0 (в разработке)');
+    });
+}
+
+var admClear = document.getElementById('admClearInv');
+if (admClear) {
+    admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
+}
+var admWipeBtn = document.getElementById('admWipe');
+if (admWipeBtn) {
+    admWipeBtn.addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
+}
 
 document.getElementById('newsBtn').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.add('on')});
 document.getElementById('newsClose').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.remove('on')});
@@ -476,6 +496,7 @@ function loadCatalog(cb){
     fetch('https://api.changes.tg/original/list?size=200').then(function(r){return r.json()}).then(function(data){
         var items=[]; if(Array.isArray(data))items=data; else if(data&&Array.isArray(data.gifts))items=data.gifts; else if(data&&Array.isArray(data.items))items=data.items; else if(data&&Array.isArray(data.result))items=data.result;
         if(!items.length){CATALOG=FALLBACK.slice();fin();return}
+        // FALLBACK в приоритете, API только добавляет новые
         var map=new Map(); FALLBACK.forEach(function(f){ map.set(f.name, {name:f.name, value:f.value}); });
         items.forEach(function(it){ var name=it.name||it.title||it.slug; if(!name)return; if(map.has(name)) return; var val=Number(it.value||it.price||0)||0; map.set(name, {name:String(name), value:val||10}); });
         CATALOG=Array.from(map.values()).sort(function(a,b){return(a.value||0)-(b.value||0)}); fin()
