@@ -435,3 +435,113 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
   .profile-info { padding-top: 45px; }
   .pn-lg { font-size: 16px; }
 }
+/* ========== БЕСПЛАТНЫЙ КЕЙС ========== */
+.case-menu-card.free-case-card{
+  grid-column: 1 / -1;
+  height: 126px;
+  border-color: var(--gold) !important;
+  background: linear-gradient(135deg, rgba(255,215,0,.18), rgba(255,42,85,.14));
+  position: relative;
+  overflow: hidden;
+}
+.free-case-card::after{
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(45deg, transparent 35%, rgba(255,215,0,.18) 50%, transparent 65%);
+  animation: freeShine 2.6s linear infinite;
+  pointer-events:none;
+}
+@keyframes freeShine{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+.free-case-badge{
+  position:absolute; top:8px; right:8px;
+  background: linear-gradient(90deg,#ff0055,#ff0080);
+  color:#fff; font-size:9px; font-weight:900;
+  padding:3px 9px; border-radius:6px;
+  box-shadow: 0 0 15px rgba(255,0,85,.6);
+  animation: pulse 1.5s infinite;
+  z-index:3; letter-spacing:.06em;
+}
+.free-case-inner{
+  position:relative; z-index:2;
+  display:flex; align-items:center; gap:12px;
+  padding:12px 12px 30px; height:100%;
+}
+.free-case-left{
+  width:74px; height:74px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(255,215,0,.08);
+  border:1px solid rgba(255,215,0,.35);
+  border-radius:14px;
+}
+.free-case-icon{ width:100%; height:100%; }
+.free-case-icon img{ width:100%; height:100%; object-fit:contain; }
+.free-case-right{ flex:1; min-width:0; }
+.free-case-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:17px; font-weight:900; color:#fff; margin-bottom:3px;
+}
+.free-case-sub{ font-size:10px; color:var(--gold); font-weight:800; margin-bottom:7px; }
+.free-case-progress{ display:flex; gap:5px; flex-wrap:wrap; }
+.fcp-item{
+  font-size:9px; padding:3px 7px; border-radius:5px;
+  background:rgba(0,0,0,.55); border:1px solid var(--bd);
+  color:var(--dim); font-weight:800;
+}
+.fcp-item.done{
+  color:var(--gr); border-color:rgba(16,185,129,.5);
+  background:rgba(16,185,129,.12);
+}
+.free-case-status{
+  position:absolute; bottom:8px; right:12px;
+  font-size:9px; font-weight:900; color:var(--gold);
+  text-transform:uppercase; letter-spacing:1px; z-index:3;
+}
+.free-case-status.ready{ color:var(--gr); animation: pulse 1s infinite; }
+.free-case-status.claimed{ color:var(--dim); }
+
+.fc-rewards-preview{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:10px; margin-bottom:12px;
+  background: rgba(255,215,0,.06);
+  border:1px solid rgba(255,215,0,.25);
+  border-radius:10px;
+}
+.fc-reward-icon{ width:52px; height:52px; }
+.fc-reward-icon img{ width:100%; height:100%; object-fit:contain; }
+.fc-reward-value{ font-size:17px; font-weight:900; color:var(--gold); }
+
+.fc-req{
+  display:flex; align-items:center; gap:10px;
+  padding:10px; margin-bottom:8px;
+  background: rgba(0,0,0,.4);
+  border:1px solid var(--bd); border-radius:10px;
+  transition: all .2s;
+}
+.fc-req.done{
+  border-color: rgba(16,185,129,.4);
+  background: rgba(16,185,129,.06);
+}
+.fc-req-icon{
+  width:32px; height:32px; border-radius:8px;
+  background: rgba(255,215,0,.1);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:900; flex-shrink:0;
+  color:var(--gold);
+}
+.fc-req.done .fc-req-icon{
+  background: rgba(16,185,129,.18); color: var(--gr);
+}
+.fc-req-info{ flex:1; min-width:0; }
+.fc-req-title{ font-size:11px; font-weight:800; color:#fff; margin-bottom:2px; }
+.fc-req-desc{ font-size:9px; color:var(--dim); }
+.fc-req.done .fc-req-desc{ color: var(--gr); }
+.fc-req-btn{
+  padding:7px 12px; border-radius:7px; border:none;
+  background: linear-gradient(180deg,var(--gold),#FFA500);
+  color:#000; font-size:10px; font-weight:900;
+  cursor:pointer; font-family:inherit; flex-shrink:0;
+  box-shadow: 0 2px 8px rgba(255,215,0,.3);
+}
+.fc-req-btn.done{ background: rgba(16,185,129,.2); color: var(--gr); box-shadow:none; }
+.fc-req-btn:disabled{ opacity:.7; cursor:default; }
