@@ -23,15 +23,14 @@ var balance=parseInt(Store.get(P+'balance')||'20000',10);if(isNaN(balance))balan
 var inventory=[];try{var inv=JSON.parse(Store.get(P+'inv')||'[]');if(Array.isArray(inv))inventory=inv.filter(function(x){return x&&x.name})}catch(e){}
 var used=[];try{var u=JSON.parse(Store.get(P+'used')||'[]');if(Array.isArray(u))used=u}catch(e){}
 var PROMO={'ROMANARMATURA777':10,'CHIHARDEDEP':20};
-var FALLBACK=[{name:'Heart Locket',value:15},{name:'Toy Bear',value:15},{name:'Jingle Bells',value:25},{name:'Magic Potion',value:25},{name:'Jelly Bunny',value:25},{name:'Homemade Cake',value:50},{name:'Crystal Ball',value:50},{name:'Top Hat',value:100},{name:'Sakura Flower',value:100},{name:'Clover Pin',value:150},{name:'Bonded Ring',value:180},{name:'Diamond Ring',value:100},{name:"Durov's Cap",value:280},{name:'Cupid Charm',value:350},{name:'Valentine Box',value:420},{name:'Artisan Brick',value:500},{name:'Voodoo Doll',value:600},{name:'Scared Cat',value:700},{name:'Electric Skull',value:850},{name:'Perfume Bottle',value:1000},{name:'Santa Hat',value:1200},{name:'Signet Ring',value:1400},{name:'Swiss Watch',value:1700},{name:'Precious Peach',value:2000},{name:'Plush Pepe',value:2500},{name:'Stellar Rocket',value:3000},{name:'Snoop Dogg',value:3500},{name:'Low Rider',value:4000},{name:'Snoop Cigar',value:4500},{name:'Jolly Chimp',value:5000},{name:'Westside Sign',value:5500},{name:'Kissed Frog',value:6000},{name:'Sharp Tongue',value:6500},{name:'Loot Bag',value:7000},{name:'Trapped Heart',value:8000},{name:'Nail Bracelet',value:9000},{name:'Neko Helmet',value:10000},{name:'Mini Oscar',value:12000},{name:'Gem Signet',value:14000},{name:'Vintage Cigar',value:16000},{name:'Hanging Star',value:18000},{name:'Lunar Snake',value:20000},{name:'Astral Shard',value:24000},{name:'Light Sword',value:28000},{name:'Mighty Arm',value:32000},{name:'Evil Eye',value:38000},{name:'Witch Hat',value:45000},{name:'Liberty Figure',value:55000},{name:"Durov's Glasses",value:65000},{name:'Intelligence Cup',value:80000},{name:'Algorithm Cup',value:95000},{name:"Khabib's Papakha",value:120000},{name:'UFC Strike',value:140000},{name:'Rare Bird',value:170000},{name:'Ion Gem',value:200000},{name:'Hex Pot',value:250000},{name:'Genie Lamp',value:300000},{name:'Tama Gadget',value:400000},{name:'Mirage Lamp',value:600000}];
+var FALLBACK=[
+{name:'Heart Locket',value:15},{name:'Toy Bear',value:15},{name:'Jingle Bells',value:25},{name:'Magic Potion',value:25},{name:'Jelly Bunny',value:25},{name:'Homemade Cake',value:50},{name:'Crystal Ball',value:50},{name:'Top Hat',value:100},{name:'Sakura Flower',value:100},{name:'Clover Pin',value:150},{name:'Bonded Ring',value:180},{name:'Diamond Ring',value:100},{name:"Durov's Cap",value:280},{name:'Cupid Charm',value:350},{name:'Valentine Box',value:420},{name:'Artisan Brick',value:500},{name:'Voodoo Doll',value:600},{name:'Scared Cat',value:700},{name:'Electric Skull',value:850},{name:'Perfume Bottle',value:1000},{name:'Santa Hat',value:1200},{name:'Signet Ring',value:1400},{name:'Swiss Watch',value:1700},{name:'Precious Peach',value:2000},{name:'Plush Pepe',value:2500},{name:'Stellar Rocket',value:3000},{name:'Snoop Dogg',value:3500},{name:'Low Rider',value:4000},{name:'Snoop Cigar',value:4500},{name:'Jolly Chimp',value:5000},{name:'Westside Sign',value:5500},{name:'Kissed Frog',value:6000},{name:'Sharp Tongue',value:6500},{name:'Loot Bag',value:7000},{name:'Trapped Heart',value:8000},{name:'Nail Bracelet',value:9000},{name:'Neko Helmet',value:10000},{name:'Mini Oscar',value:12000},{name:'Gem Signet',value:14000},{name:'Vintage Cigar',value:16000},{name:'Hanging Star',value:18000},{name:'Lunar Snake',value:20000},{name:'Astral Shard',value:24000},{name:'Light Sword',value:28000},{name:'Mighty Arm',value:32000},{name:'Evil Eye',value:38000},{name:'Witch Hat',value:45000},{name:'Liberty Figure',value:55000},{name:"Durov's Glasses",value:65000},{name:'Intelligence Cup',value:80000},{name:'Algorithm Cup',value:95000},{name:"Khabib's Papakha",value:120000},{name:'UFC Strike',value:140000},{name:'Rare Bird',value:170000},{name:'Ion Gem',value:200000},{name:'Hex Pot',value:250000},{name:'Genie Lamp',value:300000},{name:'Tama Gadget',value:400000},{name:'Mirage Lamp',value:600000}
+];
 var CATALOG=FALLBACK.slice();
 function rarityInfo(v){if(v<100)return{c:'#8a8a95',glow:'rgba(138,138,149,0.5)',bd:'rgba(138,138,149,0.3)'};if(v<500)return{c:'#4b69ff',glow:'rgba(75,105,255,0.6)',bd:'rgba(75,105,255,0.55)'};if(v<2000)return{c:'#8847ff',glow:'rgba(136,71,255,0.7)',bd:'rgba(136,71,255,0.6)'};if(v<10000)return{c:'#d32ce6',glow:'rgba(211,44,230,0.75)',bd:'rgba(211,44,230,0.65)'};if(v<50000)return{c:'#eb4b4b',glow:'rgba(235,75,75,0.85)',bd:'rgba(235,75,75,0.7)'};return{c:'#ffd700',glow:'rgba(255,215,0,0.9)',bd:'rgba(255,215,0,0.8)'}}
 function applyRar(el,v){var r=rarityInfo(v);el.style.setProperty('--rar-color',r.c);el.style.setProperty('--rar-glow',r.glow);el.style.setProperty('--rar-bd',r.bd)}
-
-// ВОЗВРАЩЕНА ОРИГИНАЛЬНАЯ ФУНКЦИЯ ИКОНОК (БЕЗ ЭМОДЗИ И SVG ЗАГЛУШЕК)
 function getIconUrl(name){var n=String(name).replace(/\s+/g,'');return 'https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size=128';}
 function iconTag(name,size){size=size||64;var n=String(name).replace(/\s+/g,'');var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';return '<img src="'+primary+'" data-fb="'+fb+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.style.opacity=0.3}">'}
-
 function fmt(n){n=Math.floor(n||0);if(n>=1e9)return Math.floor(n/1e9)+'B';if(n>=1e6)return Math.floor(n/1e6)+'M';if(n>=1e3)return Math.floor(n/1e3)+'K';return String(n)}
 function updBal(){var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance)}
 function save(){try{Store.set(P+'balance',String(balance));Store.set(P+'inv',JSON.stringify(inventory));Store.set(P+'used',JSON.stringify(used))}catch(e){}try{if(tg.CloudStorage&&!isAdmin){tg.CloudStorage.setItem(P+'balance',String(balance),function(){});tg.CloudStorage.setItem(P+'inv',JSON.stringify(inventory),function(){})}}catch(e){}}
@@ -43,9 +42,18 @@ function toast(type,text){var t=document.createElement('div');t.className='toast
 function spawnClickParticles(x, y) {
     var colors = ['#FFD700', '#FF2A55', '#00F0FF', '#ffffff'];
     for (var i = 0; i < 12; i++) {
-        var p = document.createElement('div');p.className = 'click-particle';p.style.left = x + 'px';p.style.top = y + 'px';p.style.background = colors[Math.floor(Math.random() * colors.length)];p.style.boxShadow = '0 0 10px ' + p.style.background;
-        var angle = Math.random() * Math.PI * 2;var dist = 40 + Math.random() * 60;p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-        document.body.appendChild(p);setTimeout(function(el) { el.remove(); }, 600, p);
+        var p = document.createElement('div');
+        p.className = 'click-particle';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.boxShadow = '0 0 10px ' + p.style.background;
+        var angle = Math.random() * Math.PI * 2;
+        var dist = 40 + Math.random() * 60;
+        p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+        p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+        document.body.appendChild(p);
+        setTimeout(function(el) { el.remove(); }, 600, p);
     }
 }
 document.addEventListener('pointerdown', function(e) { spawnClickParticles(e.clientX, e.clientY); });
@@ -61,9 +69,11 @@ function goScreen(name) {
       const el = document.getElementById('scr-' + name);
       if (el) el.classList.add('on');
       curScreen = name;
+      
       if (name === 'rocket') Rocket.init();
       if (name === 'roll') Roll.initCanvas();
       if (name === 'cases') renderCases();
+      
       setTimeout(() => { loader.classList.remove('active'); }, 100);
     }, 400);
   } else {
@@ -77,9 +87,11 @@ function goScreen(name) {
   }
 }
 
-function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
+function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
-// КЕЙСЫ
+// ============================================================
+// КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ
+// ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, pool: FALLBACK.filter(f => f.value <= 200) },
     { id: 'c2', name: 'Редкий', price: 2500, rarity: 2, pool: FALLBACK.filter(f => f.value >= 150 && f.value <= 2000) },
@@ -88,7 +100,9 @@ var CASES_DATA = [
     { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, pool: FALLBACK.filter(f => f.value >= 20000) }
 ];
 
-// БЕСПЛАТНЫЙ КЕЙС
+// ============================================================
+// БЕСПЛАТНЫЙ КЕЙС (БЕЗ ЭМОДЗИ)
+// ============================================================
 var FREE_CASE = {
     channels: [
         {key:'ch1', name:'RollUp News',  url:'https://t.me/RollUp_BOT'},
@@ -107,6 +121,7 @@ try {
         freeCaseState.claimed = !!fcs.claimed;
     }
 } catch(e) {}
+
 function saveFreeCase(){ try{ Store.set(P + 'freecase', JSON.stringify(freeCaseState)); }catch(e){} }
 function freeCaseProgress(){
     var subsDone = FREE_CASE.channels.filter(function(c){ return freeCaseState.subscribed[c.key]; }).length;
@@ -124,6 +139,12 @@ function shareTg(text, url){
     try { if (tg && tg.openTelegramLink) { tg.openTelegramLink(shareUrl); return; } } catch(e){}
     window.open(shareUrl, '_blank');
 }
+
+// SVG Иконки для замены эмодзи
+var svgBell = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>';
+var svgDiamond = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3h12l4 6-10 13L2 9z"></path></svg>';
+var svgUsers = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>';
+var svgCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 
 function createFreeCaseCard(){
     var el = document.createElement('div'); el.className = 'case-menu-card free-case-card'; el.setAttribute('data-rarity', '5');
@@ -159,14 +180,20 @@ function renderFreeCaseModal(){
         FREE_CASE.channels.forEach(function(c){
             var done = !!freeCaseState.subscribed[c.key];
             var item = document.createElement('div'); item.className = 'fc-req' + (done ? ' done' : '');
-            item.innerHTML = `<div class="fc-req-icon">${done?'✓':'1'}</div><div class="fc-req-info"><div class="fc-req-title">${c.name}</div><div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div></div><button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'✓':'Открыть'}</button>`;
+            item.innerHTML = `<div class="fc-req-icon">${done ? svgCheck : svgBell}</div><div class="fc-req-info"><div class="fc-req-title">${c.name}</div><div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div></div><button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'Готово':'Открыть'}</button>`;
             ch.appendChild(item);
         });
         ch.querySelectorAll('.fc-req-btn[data-ch]').forEach(function(btn){
             btn.addEventListener('click', function(e){
                 e.stopPropagation(); var key = btn.getAttribute('data-ch'); var c = FREE_CASE.channels.filter(function(x){return x.key===key})[0];
-                if (!c) return; openTgLink(c.url); freeCaseState.subscribed[key] = true; saveFreeCase(); sClick(); toast('success','Подписка отмечена');
-                setTimeout(function(){ renderFreeCaseModal(); renderCases(); }, 300);
+                if (!c) return; 
+                openTgLink(c.url); 
+                btn.textContent = 'Проверка...'; 
+                btn.disabled = true;
+                setTimeout(function(){
+                    freeCaseState.subscribed[key] = true; saveFreeCase(); sClick(); toast('success','Подписка подтверждена');
+                    renderFreeCaseModal(); renderCases();
+                }, 2500);
             });
         });
     }
@@ -174,7 +201,7 @@ function renderFreeCaseModal(){
     var dep = document.getElementById('fcDeposit');
     if (dep) {
         dep.className = 'fc-req' + (prog.depDone ? ' done' : '');
-        dep.innerHTML = `<div class="fc-req-icon">${prog.depDone?'✓':'2'}</div><div class="fc-req-info"><div class="fc-req-title">Пополнить на ${FREE_CASE.minDeposit}★</div><div class="fc-req-desc">${prog.depDone?'Выполнено':'Внесено: '+prog.depAmount+'/'+prog.depNeeded+'★'}</div></div><button class="fc-req-btn ${prog.depDone?'done':''}" id="fcDepositBtn" ${prog.depDone?'disabled':''}>${prog.depDone?'✓':'Пополнить'}</button>`;
+        dep.innerHTML = `<div class="fc-req-icon">${prog.depDone ? svgCheck : svgDiamond}</div><div class="fc-req-info"><div class="fc-req-title">Пополнить на ${FREE_CASE.minDeposit}★</div><div class="fc-req-desc">${prog.depDone?'Выполнено':'Внесено: '+prog.depAmount+'/'+prog.depNeeded+'★'}</div></div><button class="fc-req-btn ${prog.depDone?'done':''}" id="fcDepositBtn" ${prog.depDone?'disabled':''}>${prog.depDone?'Готово':'Пополнить'}</button>`;
         var depBtn = document.getElementById('fcDepositBtn');
         if (depBtn) depBtn.addEventListener('click', function(e){ e.stopPropagation(); sClick(); document.getElementById('freeCaseModal').classList.remove('on'); document.getElementById('starsAmt').value = ''; document.getElementById('starsModal').classList.add('on'); });
     }
@@ -182,13 +209,17 @@ function renderFreeCaseModal(){
     var fr = document.getElementById('fcFriends');
     if (fr) {
         fr.className = 'fc-req' + (prog.friendsDone ? ' done' : '');
-        fr.innerHTML = `<div class="fc-req-icon">${prog.friendsDone?'✓':'3'}</div><div class="fc-req-info"><div class="fc-req-title">Пригласить ${FREE_CASE.minFriends} друзей</div><div class="fc-req-desc">${prog.friendsDone?'Выполнено':'Приглашено: '+prog.friendsAmount+'/'+prog.friendsNeeded}</div></div><button class="fc-req-btn ${prog.friendsDone?'done':''}" id="fcFriendsBtn" ${prog.friendsDone?'disabled':''}>${prog.friendsDone?'✓':'Пригласить'}</button>`;
+        fr.innerHTML = `<div class="fc-req-icon">${prog.friendsDone ? svgCheck : svgUsers}</div><div class="fc-req-info"><div class="fc-req-title">Пригласить ${FREE_CASE.minFriends} друзей</div><div class="fc-req-desc">${prog.friendsDone?'Выполнено':'Приглашено: '+prog.friendsAmount+'/'+prog.friendsNeeded}</div></div><button class="fc-req-btn ${prog.friendsDone?'done':''}" id="fcFriendsBtn" ${prog.friendsDone?'disabled':''}>${prog.friendsDone?'Готово':'Пригласить'}</button>`;
         var frBtn = document.getElementById('fcFriendsBtn');
         if (frBtn) frBtn.addEventListener('click', function(e){
-            e.stopPropagation(); sClick(); shareTg('Залетай в RollUp Premium — крутой казик с гифтами!', 'https://t.me/RollUp_BOT?start=ref_' + UID);
+            e.stopPropagation(); sClick(); 
+            shareTg('Залетай в RollUp Premium — крутой казик с гифтами!', 'https://t.me/RollUp_BOT?start=ref_' + UID);
             if (freeCaseState.friendsInvited < FREE_CASE.minFriends) {
-                freeCaseState.friendsInvited++; saveFreeCase(); toast('info','Приглашено: ' + freeCaseState.friendsInvited + '/' + FREE_CASE.minFriends);
-                setTimeout(function(){ renderFreeCaseModal(); renderCases(); }, 300);
+                frBtn.textContent = 'Проверка...'; frBtn.disabled = true;
+                setTimeout(function(){
+                    freeCaseState.friendsInvited++; saveFreeCase(); toast('info','Приглашено: ' + freeCaseState.friendsInvited + '/' + FREE_CASE.minFriends);
+                    renderFreeCaseModal(); renderCases();
+                }, 2500);
             }
         });
     }
@@ -225,7 +256,6 @@ function renderCases() {
     CASES_DATA.forEach(function(c) {
         var el = document.createElement('div'); el.className = 'case-menu-card'; el.setAttribute('data-rarity', c.rarity);
         var trackHTML = '<div class="case-menu-track-wrap"><div class="case-menu-track">';
-        // Защита от пустых массивов (фикс ошибки)
         var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
         for (var i = 0; i < 15; i++) {
             var item = safePool[Math.floor(Math.random() * safePool.length)];
@@ -321,7 +351,9 @@ if (openCaseBtn) openCaseBtn.addEventListener('click', function() {
     }, 100);
 });
 
+// ============================================================
 // UPGRADER, ROCKET, ROLL, SHOP, PROFILE
+// ============================================================
 var selItems=[],targetItem=null,chance=0,multiplier=0,isSpinning=false;var MULT=[1.2,1.5,2,3,5,10,25,100];var SPIN_DUR=7500;var invSearch='',invMin=null,invMax=null,tgtSearch='',tgtMin=null,tgtMax=null;
 function sumSel(){return selItems.reduce(function(s,i){return s+(i.value||0)},0)}
 function chanceRatio(r){var c=100/r;if(c>99)c=99;if(c<.01)c=.01;return Math.round(c*100)/100}
@@ -443,7 +475,6 @@ function renderProfile(){
   }
 }
 
-// АДМИН ТЕПЕРЬ МОЖЕТ ПРОДАВАТЬ (УБРАНА ПРОВЕРКА)
 window.sellItem = function(index) {
     var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
     var item = srt[index];
@@ -496,7 +527,6 @@ function loadCatalog(cb){
     fetch('https://api.changes.tg/original/list?size=200').then(function(r){return r.json()}).then(function(data){
         var items=[]; if(Array.isArray(data))items=data; else if(data&&Array.isArray(data.gifts))items=data.gifts; else if(data&&Array.isArray(data.items))items=data.items; else if(data&&Array.isArray(data.result))items=data.result;
         if(!items.length){CATALOG=FALLBACK.slice();fin();return}
-        // FALLBACK в приоритете, API только добавляет новые
         var map=new Map(); FALLBACK.forEach(function(f){ map.set(f.name, {name:f.name, value:f.value}); });
         items.forEach(function(it){ var name=it.name||it.title||it.slug; if(!name)return; if(map.has(name)) return; var val=Number(it.value||it.price||0)||0; map.set(name, {name:String(name), value:val||10}); });
         CATALOG=Array.from(map.values()).sort(function(a,b){return(a.value||0)-(b.value||0)}); fin()
