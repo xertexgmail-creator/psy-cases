@@ -12,7 +12,6 @@ function sWin(){ia();[523,659,784,1047].forEach(function(f,i){tone(f,.2,'sine',.
 function sLose(){ia();tone(400,.15,'sawtooth',.12,0);tone(300,.15,'sawtooth',.12,.12);tone(200,.35,'sawtooth',.14,.24);haptic('error')}
 function sErr(){ia();tone(200,.1,'square',.12,0);tone(150,.2,'square',.12,.1);haptic('error')}
 function sTick(){ia();tone(1150+Math.random()*250,.018,'square',.035)}
-function sRollWin(){ia();[523,659,784,1047,1319,1568].forEach(function(f,i){tone(f,.2,'sine',.2,i*.09)});haptic('success')}
 function sRollBig(){ia();[523,659,784,1047,1319,1568,2093].forEach(function(f,i){tone(f,.3,'sine',.22,i*.11)});haptic('heavy')}
 function sBuy(){ia();tone(523,.1,'sine',.15,0);tone(659,.1,'sine',.15,.08);tone(784,.15,'sine',.15,.16)}
 function sPromo(){ia();tone(784,.1,'sine',.15,0);tone(1047,.1,'sine',.15,.08);tone(1319,.25,'sine',.15,.16)}
@@ -24,23 +23,30 @@ var balance=parseInt(Store.get(P+'balance')||'20000',10);if(isNaN(balance))balan
 var inventory=[];try{var inv=JSON.parse(Store.get(P+'inv')||'[]');if(Array.isArray(inv))inventory=inv.filter(function(x){return x&&x.name})}catch(e){}
 var used=[];try{var u=JSON.parse(Store.get(P+'used')||'[]');if(Array.isArray(u))used=u}catch(e){}
 var PROMO={'ROMANARMATURA777':10,'CHIHARDEDEP':20};
+
 var FALLBACK=[
-{name:'Pink Heart',value:15},{name:'Toy Bear',value:15},
-{name:'Red Gift',value:25},{name:'Rose',value:25},
-{name:'Cake',value:50},{name:'Bouquet',value:50},{name:'Rocket',value:50},
+{name:'Pink Heart',value:15},{name:'Toy Bear',value:15},{name:'Red Gift',value:25},{name:'Rose',value:25},{name:'Cake',value:50},{name:'Bouquet',value:50},{name:'Rocket',value:50},
 {name:'Trophy',value:100},{name:'Diamond Ring',value:100},{name:'Blue Diamond',value:100},{name:'Champagne',value:100},{name:'Torch',value:100},
-{name:'Coffee',value:300},{name:'Snowman',value:399},{name:'Snake',value:400},{name:'Candles 25',value:400},
-{name:'Candy Cane',value:420},{name:'Gnome',value:440},{name:'Backpack',value:450},{name:'Poop',value:458},{name:'Lantern',value:460},{name:'Noodles',value:460},{name:'Cake 8',value:460},{name:'Ice Cream',value:470},{name:'Flamingo',value:474},{name:'Lollipop',value:480},{name:'Happy B-Day',value:480},{name:'Sparkler',value:480},{name:'Tamagotchi',value:480},{name:'Golden Egg',value:480},
+{name:'Coffee',value:300},{name:'Snowman',value:399},{name:'Snake',value:400},{name:'Candles 25',value:400},{name:'Candy Cane',value:420},{name:'Gnome',value:440},{name:'Backpack',value:450},{name:'Poop',value:458},{name:'Lantern',value:460},{name:'Noodles',value:460},{name:'Cake 8',value:460},{name:'Ice Cream',value:470},{name:'Flamingo',value:474},{name:'Lollipop',value:480},{name:'Happy B-Day',value:480},{name:'Sparkler',value:480},{name:'Tamagotchi',value:480},{name:'Golden Egg',value:480},
 {name:'Liberty',value:481},{name:'Snoop Dogg',value:481},{name:'Weed',value:481},{name:'Clover',value:481},{name:'Socks',value:481},{name:'Moon',value:481},{name:'Cherry Cake',value:481},{name:'Heart Cookie',value:481},{name:'Medal',value:481},{name:'Book',value:481},{name:'Money Bag',value:481},{name:'Retro Rocket',value:481},{name:'Heart Jar',value:481},{name:'Pink Cake',value:481},{name:'Flowers Pot',value:481},{name:'Gingerbread',value:481},{name:'Wine Glass',value:481},{name:'Vinyl',value:481},{name:'Hot Chocolate',value:481},{name:'Door',value:481},{name:'Pot of Gold',value:481},{name:'Cauldron',value:481},{name:'Wreath',value:481},{name:'Jack in the Box',value:481},{name:'Bow Tie',value:481},{name:'Candle',value:481},
 {name:'Broken Egg',value:487},{name:'Calendar',value:500},{name:'Heart Box',value:514},{name:'Moon Necklace',value:515},{name:'Lightsaber',value:541},{name:'Skateboard',value:549},{name:'Snow Globe',value:563},{name:'Witch Hat',value:587},{name:'Mushroom',value:585},{name:'Santa Hat',value:597},{name:'Jester Hat',value:604},{name:'Rabbit Basket',value:604},{name:'Boxing Monkey',value:604},{name:'Blue Gift',value:617},{name:'Hockey Mask',value:625},{name:'Love You',value:648},{name:'Pen',value:691},{name:'Skates',value:687},{name:'Cupcake',value:734},{name:'Dumplings',value:743},{name:'Chocolate Box',value:757},{name:'Gold Bar',value:758},{name:'Bells',value:791},{name:'Star',value:798},{name:'Gold Bell',value:825},{name:'Top Hat',value:826},{name:'Sakura',value:891},{name:'Crystal White',value:963},{name:'Blue Diamond Ring',value:959},{name:'Bracelet',value:963},{name:'Gold Key',value:1837},{name:'Gold Watch',value:4527}
 ];
-
 FALLBACK.sort(function(a,b){return a.value - b.value});
 var CATALOG=FALLBACK.slice();
 function rarityInfo(v){if(v<100)return{c:'#8a8a95',glow:'rgba(138,138,149,0.5)',bd:'rgba(138,138,149,0.3)'};if(v<500)return{c:'#4b69ff',glow:'rgba(75,105,255,0.6)',bd:'rgba(75,105,255,0.55)'};if(v<2000)return{c:'#8847ff',glow:'rgba(136,71,255,0.7)',bd:'rgba(136,71,255,0.6)'};if(v<10000)return{c:'#d32ce6',glow:'rgba(211,44,230,0.75)',bd:'rgba(211,44,230,0.65)'};if(v<50000)return{c:'#eb4b4b',glow:'rgba(235,75,75,0.85)',bd:'rgba(235,75,75,0.7)'};return{c:'#ffd700',glow:'rgba(255,215,0,0.9)',bd:'rgba(255,215,0,0.8)'}}
 function applyRar(el,v){var r=rarityInfo(v);el.style.setProperty('--rar-color',r.c);el.style.setProperty('--rar-glow',r.glow);el.style.setProperty('--rar-bd',r.bd)}
+
+// 🛠️ ИСПРАВЛЕНИЕ ИКОНОК: Двойной fallback + заглушка, если API мертво
 function getIconUrl(name){var n=String(name).replace(/\s+/g,'');return 'https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size=128';}
-function iconTag(name,size){size=size||64;var n=String(name).replace(/\s+/g,'');var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';return '<img src="'+primary+'" data-fb="'+fb+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.style.opacity=0.3}">'}
+function iconTag(name,size){
+    size=size||64;
+    var n=String(name).replace(/\s+/g,'');
+    var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');
+    var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;
+    var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';
+    var placeholder='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23FFD700" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+    return '<img src="'+primary+'" data-fb="'+fb+'" data-fb2="'+placeholder+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.src=this.dataset.fb2}">'
+}
 function fmt(n){n=Math.floor(n||0);if(n>=1e9)return Math.floor(n/1e9)+'B';if(n>=1e6)return Math.floor(n/1e6)+'M';if(n>=1e3)return Math.floor(n/1e3)+'K';return String(n)}
 function updBal(){var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance)}
 function save(){try{Store.set(P+'balance',String(balance));Store.set(P+'inv',JSON.stringify(inventory));Store.set(P+'used',JSON.stringify(used))}catch(e){}try{if(tg.CloudStorage&&!isAdmin){tg.CloudStorage.setItem(P+'balance',String(balance),function(){});tg.CloudStorage.setItem(P+'inv',JSON.stringify(inventory),function(){})}}catch(e){}}
@@ -52,18 +58,9 @@ function toast(type,text){var t=document.createElement('div');t.className='toast
 function spawnClickParticles(x, y) {
     var colors = ['#FFD700', '#FF2A55', '#00F0FF', '#ffffff'];
     for (var i = 0; i < 12; i++) {
-        var p = document.createElement('div');
-        p.className = 'click-particle';
-        p.style.left = x + 'px';
-        p.style.top = y + 'px';
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.boxShadow = '0 0 10px ' + p.style.background;
-        var angle = Math.random() * Math.PI * 2;
-        var dist = 40 + Math.random() * 60;
-        p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-        p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-        document.body.appendChild(p);
-        setTimeout(function(el) { el.remove(); }, 600, p);
+        var p = document.createElement('div');p.className = 'click-particle';p.style.left = x + 'px';p.style.top = y + 'px';p.style.background = colors[Math.floor(Math.random() * colors.length)];p.style.boxShadow = '0 0 10px ' + p.style.background;
+        var angle = Math.random() * Math.PI * 2;var dist = 40 + Math.random() * 60;p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+        document.body.appendChild(p);setTimeout(function(el) { el.remove(); }, 600, p);
     }
 }
 document.addEventListener('pointerdown', function(e) { spawnClickParticles(e.clientX, e.clientY); });
@@ -79,11 +76,9 @@ function goScreen(name) {
       const el = document.getElementById('scr-' + name);
       if (el) el.classList.add('on');
       curScreen = name;
-      
       if (name === 'rocket') Rocket.init();
       if (name === 'roll') Roll.initCanvas();
       if (name === 'cases') renderCases();
-      
       setTimeout(() => { loader.classList.remove('active'); }, 100);
     }, 400);
   } else {
@@ -97,17 +92,19 @@ function goScreen(name) {
   }
 }
 
-function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Gift Box'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
+// 🛠️ ИСПРАВЛЕНИЕ ИКОНОК В МЕНЮ (Gift Box, Stellar Rocket и Loot Bag не существуют)
+function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Money Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ
+// КЕЙСЫ
 // ============================================================
+// 🛠️ ИСПРАВЛЕНИЕ: Фильтры цен изменены, чтобы массивы pool не были пустыми (из-за этого падал скрипт)
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, pool: FALLBACK.filter(f => f.value <= 200) },
     { id: 'c2', name: 'Редкий', price: 2500, rarity: 2, pool: FALLBACK.filter(f => f.value >= 150 && f.value <= 2000) },
     { id: 'c3', name: 'Эпический', price: 10000, rarity: 3, pool: FALLBACK.filter(f => f.value >= 1000 && f.value <= 10000) },
-    { id: 'c4', name: 'Легендарный', price: 50000, rarity: 4, pool: FALLBACK.filter(f => f.value >= 5000 && f.value <= 50000) },
-    { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, pool: FALLBACK.filter(f => f.value >= 20000) }
+    { id: 'c4', name: 'Легендарный', price: 50000, rarity: 4, pool: FALLBACK.filter(f => f.value >= 3000) },
+    { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, pool: FALLBACK.filter(f => f.value >= 500) }
 ];
 
 // ============================================================
@@ -135,26 +132,18 @@ try {
         freeCaseState.claimed = !!fcs.claimed;
     }
 } catch(e) {}
-
 function saveFreeCase(){ try{ Store.set(P + 'freecase', JSON.stringify(freeCaseState)); }catch(e){} }
-
 function freeCaseProgress(){
     var subsDone = FREE_CASE.channels.filter(function(c){ return freeCaseState.subscribed[c.key]; }).length;
     var depDone = freeCaseState.deposited >= FREE_CASE.minDeposit;
     var friendsDone = freeCaseState.friendsInvited >= FREE_CASE.minFriends;
     return {
-        subsDone: subsDone, subsTotal: FREE_CASE.channels.length,
-        depDone: depDone, depAmount: freeCaseState.deposited, depNeeded: FREE_CASE.minDeposit,
+        subsDone: subsDone, subsTotal: FREE_CASE.channels.length, depDone: depDone, depAmount: freeCaseState.deposited, depNeeded: FREE_CASE.minDeposit,
         friendsDone: friendsDone, friendsAmount: freeCaseState.friendsInvited, friendsNeeded: FREE_CASE.minFriends,
-        allDone: subsDone === FREE_CASE.channels.length && depDone && friendsDone,
-        claimed: freeCaseState.claimed
+        allDone: subsDone === FREE_CASE.channels.length && depDone && friendsDone, claimed: freeCaseState.claimed
     };
 }
-
-function openTgLink(url){
-    try { if (tg && tg.openLink) { tg.openLink(url); return; } } catch(e){}
-    window.open(url, '_blank');
-}
+function openTgLink(url){ try { if (tg && tg.openLink) { tg.openLink(url); return; } } catch(e){} window.open(url, '_blank'); }
 function shareTg(text, url){
     var shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
     try { if (tg && tg.openTelegramLink) { tg.openTelegramLink(shareUrl); return; } } catch(e){}
@@ -162,13 +151,9 @@ function shareTg(text, url){
 }
 
 function createFreeCaseCard(){
-    var el = document.createElement('div');
-    el.className = 'case-menu-card free-case-card';
-    el.setAttribute('data-rarity', '5');
-
+    var el = document.createElement('div'); el.className = 'case-menu-card free-case-card'; el.setAttribute('data-rarity', '5');
     var prog = freeCaseProgress();
     var statusLabel = prog.claimed ? 'Получено' : (prog.allDone ? 'ГОТОВО!' : 'ЗАДАНИЯ');
-
     el.innerHTML = `
         <div class="free-case-badge">FREE</div>
         <div class="free-case-inner">
@@ -185,151 +170,69 @@ function createFreeCaseCard(){
         </div>
         <div class="free-case-status ${prog.allDone?'ready':''} ${prog.claimed?'claimed':''}">${statusLabel}</div>
     `;
-
-    el.addEventListener('click', function(){
-        sClick();
-        if (prog.claimed) { toast('info','Кейс уже получен'); return; }
-        openFreeCaseModal();
-    });
+    el.addEventListener('click', function(){ sClick(); if (prog.claimed) { toast('info','Кейс уже получен'); return; } openFreeCaseModal(); });
     return el;
 }
 
-function openFreeCaseModal(){
-    var modal = document.getElementById('freeCaseModal');
-    if (!modal) return;
-    renderFreeCaseModal();
-    modal.classList.add('on');
-}
-
+function openFreeCaseModal(){ var modal = document.getElementById('freeCaseModal'); if (!modal) return; renderFreeCaseModal(); modal.classList.add('on'); }
 function renderFreeCaseModal(){
     var prog = freeCaseProgress();
-    var prev = document.getElementById('fcRewardPreview');
-    if (prev) prev.innerHTML = iconTag('Red Gift', 128);
-
-    // Каналы
+    var prev = document.getElementById('fcRewardPreview'); if (prev) prev.innerHTML = iconTag('Red Gift', 128);
     var ch = document.getElementById('fcChannels');
     if (ch) {
         ch.innerHTML = '';
         FREE_CASE.channels.forEach(function(c){
             var done = !!freeCaseState.subscribed[c.key];
-            var item = document.createElement('div');
-            item.className = 'fc-req' + (done ? ' done' : '');
-            item.innerHTML = `
-                <div class="fc-req-icon">${done?'✓':'📢'}</div>
-                <div class="fc-req-info">
-                    <div class="fc-req-title">${c.name}</div>
-                    <div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div>
-                </div>
-                <button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'✓':'Открыть'}</button>
-            `;
+            var item = document.createElement('div'); item.className = 'fc-req' + (done ? ' done' : '');
+            item.innerHTML = `<div class="fc-req-icon">${done?'✓':'📢'}</div><div class="fc-req-info"><div class="fc-req-title">${c.name}</div><div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div></div><button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'✓':'Открыть'}</button>`;
             ch.appendChild(item);
         });
         ch.querySelectorAll('.fc-req-btn[data-ch]').forEach(function(btn){
             btn.addEventListener('click', function(e){
-                e.stopPropagation();
-                var key = btn.getAttribute('data-ch');
-                var c = FREE_CASE.channels.filter(function(x){return x.key===key})[0];
-                if (!c) return;
-                openTgLink(c.url);
-                freeCaseState.subscribed[key] = true;
-                saveFreeCase();
-                sClick();
-                toast('success','Подписка отмечена');
+                e.stopPropagation(); var key = btn.getAttribute('data-ch'); var c = FREE_CASE.channels.filter(function(x){return x.key===key})[0];
+                if (!c) return; openTgLink(c.url); freeCaseState.subscribed[key] = true; saveFreeCase(); sClick(); toast('success','Подписка отмечена');
                 setTimeout(function(){ renderFreeCaseModal(); renderCases(); }, 300);
             });
         });
     }
-
-    // Депозит
     var dep = document.getElementById('fcDeposit');
     if (dep) {
         dep.className = 'fc-req' + (prog.depDone ? ' done' : '');
-        dep.innerHTML = `
-            <div class="fc-req-icon">${prog.depDone?'✓':'💎'}</div>
-            <div class="fc-req-info">
-                <div class="fc-req-title">Пополнить на ${FREE_CASE.minDeposit}★</div>
-                <div class="fc-req-desc">${prog.depDone?'Выполнено':'Внесено: '+prog.depAmount+'/'+prog.depNeeded+'★'}</div>
-            </div>
-            <button class="fc-req-btn ${prog.depDone?'done':''}" id="fcDepositBtn" ${prog.depDone?'disabled':''}>${prog.depDone?'✓':'Пополнить'}</button>
-        `;
+        dep.innerHTML = `<div class="fc-req-icon">${prog.depDone?'✓':'💎'}</div><div class="fc-req-info"><div class="fc-req-title">Пополнить на ${FREE_CASE.minDeposit}★</div><div class="fc-req-desc">${prog.depDone?'Выполнено':'Внесено: '+prog.depAmount+'/'+prog.depNeeded+'★'}</div></div><button class="fc-req-btn ${prog.depDone?'done':''}" id="fcDepositBtn" ${prog.depDone?'disabled':''}>${prog.depDone?'✓':'Пополнить'}</button>`;
         var depBtn = document.getElementById('fcDepositBtn');
-        if (depBtn) depBtn.addEventListener('click', function(e){
-            e.stopPropagation(); sClick();
-            document.getElementById('freeCaseModal').classList.remove('on');
-            document.getElementById('starsAmt').value = '';
-            document.getElementById('starsModal').classList.add('on');
-        });
+        if (depBtn) depBtn.addEventListener('click', function(e){ e.stopPropagation(); sClick(); document.getElementById('freeCaseModal').classList.remove('on'); document.getElementById('starsAmt').value = ''; document.getElementById('starsModal').classList.add('on'); });
     }
-
-    // Друзья
     var fr = document.getElementById('fcFriends');
     if (fr) {
         fr.className = 'fc-req' + (prog.friendsDone ? ' done' : '');
-        fr.innerHTML = `
-            <div class="fc-req-icon">${prog.friendsDone?'✓':'👥'}</div>
-            <div class="fc-req-info">
-                <div class="fc-req-title">Пригласить ${FREE_CASE.minFriends} друзей</div>
-                <div class="fc-req-desc">${prog.friendsDone?'Выполнено':'Приглашено: '+prog.friendsAmount+'/'+prog.friendsNeeded}</div>
-            </div>
-            <button class="fc-req-btn ${prog.friendsDone?'done':''}" id="fcFriendsBtn" ${prog.friendsDone?'disabled':''}>${prog.friendsDone?'✓':'Пригласить'}</button>
-        `;
+        fr.innerHTML = `<div class="fc-req-icon">${prog.friendsDone?'✓':'👥'}</div><div class="fc-req-info"><div class="fc-req-title">Пригласить ${FREE_CASE.minFriends} друзей</div><div class="fc-req-desc">${prog.friendsDone?'Выполнено':'Приглашено: '+prog.friendsAmount+'/'+prog.friendsNeeded}</div></div><button class="fc-req-btn ${prog.friendsDone?'done':''}" id="fcFriendsBtn" ${prog.friendsDone?'disabled':''}>${prog.friendsDone?'✓':'Пригласить'}</button>`;
         var frBtn = document.getElementById('fcFriendsBtn');
         if (frBtn) frBtn.addEventListener('click', function(e){
-            e.stopPropagation(); sClick();
-            shareTg('Залетай в RollUp Premium — крутой казик с гифтами!',
-                    'https://t.me/RollUp_BOT?start=ref_' + UID);
-            // Демо-инкремент (в проде — верификация через backend по start_param)
+            e.stopPropagation(); sClick(); shareTg('Залетай в RollUp Premium — крутой казик с гифтами!', 'https://t.me/RollUp_BOT?start=ref_' + UID);
             if (freeCaseState.friendsInvited < FREE_CASE.minFriends) {
-                freeCaseState.friendsInvited++;
-                saveFreeCase();
-                toast('info','Приглашено: ' + freeCaseState.friendsInvited + '/' + FREE_CASE.minFriends);
+                freeCaseState.friendsInvited++; saveFreeCase(); toast('info','Приглашено: ' + freeCaseState.friendsInvited + '/' + FREE_CASE.minFriends);
                 setTimeout(function(){ renderFreeCaseModal(); renderCases(); }, 300);
             }
         });
     }
-
-    // Кнопка открытия
     var openBtn = document.getElementById('fcOpenBtn');
     if (openBtn) {
-        openBtn.disabled = !prog.allDone;
-        openBtn.textContent = prog.allDone ? 'Открыть бесплатный кейс' : 'Выполни все задания';
-        openBtn.className = 'btn ' + (prog.allDone ? 'pri' : 'sec');
+        openBtn.disabled = !prog.allDone; openBtn.textContent = prog.allDone ? 'Открыть бесплатный кейс' : 'Выполни все задания'; openBtn.className = 'btn ' + (prog.allDone ? 'pri' : 'sec');
         openBtn.onclick = function(){
-            var p = freeCaseProgress();
-            if (!p.allDone) { sErr(); return; }
-            if (freeCaseState.claimed) { toast('info','Кейс уже получен'); return; }
-            openFreeCaseReward();
+            var p = freeCaseProgress(); if (!p.allDone) { sErr(); return; } if (freeCaseState.claimed) { toast('info','Кейс уже получен'); return; } openFreeCaseReward();
         };
     }
 }
-
 function openFreeCaseReward(){
-    sOpenCase();
-    document.getElementById('freeCaseModal').classList.remove('on');
-
-    var pool = CATALOG.filter(function(it){
-        return (it.value||0) >= FREE_CASE.rewardMin && (it.value||0) <= FREE_CASE.rewardMax;
-    });
+    sOpenCase(); document.getElementById('freeCaseModal').classList.remove('on');
+    var pool = CATALOG.filter(function(it){ return (it.value||0) >= FREE_CASE.rewardMin && (it.value||0) <= FREE_CASE.rewardMax; });
     if (!pool.length) pool = CATALOG.slice();
     var winItem = pool[Math.floor(Math.random() * pool.length)];
-
-    inventory.push({name: winItem.name, value: winItem.value||0});
-    inventory.sort(function(a,b){ return (a.value||0) - (b.value||0); });
-    freeCaseState.claimed = true;
-    saveFreeCase();
-    save();
-
-    setTimeout(function(){
-        openGiftModal(winItem);
-        sWin();
-        confetti();
-        haptic('success');
-        try { renderInv(); renderArena(); renderTargets(); } catch(e){}
-        renderCases();
-    }, 400);
+    inventory.push({name: winItem.name, value: winItem.value||0}); inventory.sort(function(a,b){ return (a.value||0) - (b.value||0); });
+    freeCaseState.claimed = true; saveFreeCase(); save();
+    setTimeout(function(){ openGiftModal(winItem); sWin(); confetti(); haptic('success'); try { renderInv(); renderArena(); renderTargets(); } catch(e){} renderCases(); }, 400);
 }
 
-// ============================================================
 var isCaseSpinning = false;
 var currentCaseData = null;
 var menuOffset = 0;
@@ -339,234 +242,112 @@ function renderCases() {
     var g = document.getElementById('caseGrid');
     if (!g) return;
     g.innerHTML = '';
-
-    // 🔥 Бесплатный кейс — всегда первым (на всю ширину)
     g.appendChild(createFreeCaseCard());
 
     CASES_DATA.forEach(function(c) {
-        var el = document.createElement('div');
-        el.className = 'case-menu-card';
-        el.setAttribute('data-rarity', c.rarity);
-        
+        var el = document.createElement('div'); el.className = 'case-menu-card'; el.setAttribute('data-rarity', c.rarity);
         var trackHTML = '<div class="case-menu-track-wrap"><div class="case-menu-track">';
+        // 🛠️ Защита от пустого массива
+        var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
         for (var i = 0; i < 15; i++) {
-            var item = c.pool[Math.floor(Math.random() * c.pool.length)];
+            var item = safePool[Math.floor(Math.random() * safePool.length)];
             trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
         }
         for (var i = 0; i < 15; i++) {
-            var item = c.pool[Math.floor(Math.random() * c.pool.length)];
+            var item = safePool[Math.floor(Math.random() * safePool.length)];
             trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
         }
         trackHTML += '</div></div>';
-        
-        el.innerHTML = `
-            ${trackHTML}
-            <div class="case-menu-bottom">
-                <div class="cc-name">${c.name}</div>
-                <div class="cc-price">${fmt(c.price)} ★</div>
-            </div>
-        `;
-        
-        el.addEventListener('click', function() { openCaseModal(c); });
-        g.appendChild(el);
+        el.innerHTML = `${trackHTML}<div class="case-menu-bottom"><div class="cc-name">${c.name}</div><div class="cc-price">${fmt(c.price)} ★</div></div>`;
+        el.addEventListener('click', function() { openCaseModal(c); }); g.appendChild(el);
     });
-    
     startMenuLoop();
 }
 
 function startMenuLoop() {
     if (menuRaf) cancelAnimationFrame(menuRaf);
     var lastTime = performance.now();
-    
     function animate() {
-        if (curScreen !== 'cases' || isCaseSpinning) {
-            lastTime = performance.now();
-            menuRaf = requestAnimationFrame(animate);
-            return;
-        }
-        
-        var now = performance.now();
-        var dt = now - lastTime;
-        lastTime = now;
-        
+        if (curScreen !== 'cases' || isCaseSpinning) { lastTime = performance.now(); menuRaf = requestAnimationFrame(animate); return; }
+        var now = performance.now(); var dt = now - lastTime; lastTime = now;
         menuOffset -= 0.05 * dt; 
-        
-        if (Math.abs(menuOffset) >= 15 * 65) {
-            menuOffset = 0;
-        }
-        
-        document.querySelectorAll('.case-menu-track').forEach(track => {
-            track.style.transform = `translateX(${menuOffset}px)`;
-        });
-        
+        if (Math.abs(menuOffset) >= 15 * 65) { menuOffset = 0; }
+        document.querySelectorAll('.case-menu-track').forEach(track => { track.style.transform = `translateX(${menuOffset}px)`; });
         menuRaf = requestAnimationFrame(animate);
     }
     animate();
 }
 
 function openCaseModal(c) {
-    currentCaseData = c;
-    sClick();
-    
+    currentCaseData = c; sClick();
     document.getElementById('caseModalTitle').textContent = c.name;
     document.getElementById('casePriceBtn').textContent = fmt(c.price);
-    
-    var poolGrid = document.getElementById('casePoolGrid');
-    poolGrid.innerHTML = '';
-    var sortedPool = c.pool.slice().sort((a,b) => a.value - b.value);
+    var poolGrid = document.getElementById('casePoolGrid'); poolGrid.innerHTML = '';
+    // 🛠️ Защита от пустого массива
+    var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
+    var sortedPool = safePool.slice().sort((a,b) => a.value - b.value);
     sortedPool.forEach(function(item) {
-        var d = document.createElement('div');
-        d.className = 'cp-item';
-        applyRar(d, item.value);
-        d.innerHTML = iconTag(item.name, 64) + `<div class="cp-name">${item.name}</div>`;
-        d.onclick = function() { openGiftModal(item); };
-        poolGrid.appendChild(d);
+        var d = document.createElement('div'); d.className = 'cp-item'; applyRar(d, item.value);
+        d.innerHTML = iconTag(item.name, 64) + `<div class="cp-name">${item.name}</div>`; d.onclick = function() { openGiftModal(item); }; poolGrid.appendChild(d);
     });
-
-    var track = document.getElementById('caseTrack');
-    track.style.transition = 'none';
-    track.style.transform = 'translateX(0)';
-    track.innerHTML = '';
-    
+    var track = document.getElementById('caseTrack'); track.style.transition = 'none'; track.style.transform = 'translateX(0)'; track.innerHTML = '';
     for (var i = 0; i < 50; i++) {
-        var it = c.pool[Math.floor(Math.random() * c.pool.length)];
-        var d = document.createElement('div');
-        d.className = 'case-item';
-        applyRar(d, it.value);
-        d.innerHTML = iconTag(it.name, 128);
-        track.appendChild(d);
+        var it = safePool[Math.floor(Math.random() * safePool.length)];
+        var d = document.createElement('div'); d.className = 'case-item'; applyRar(d, it.value); d.innerHTML = iconTag(it.name, 128); track.appendChild(d);
     }
-
     document.getElementById('openCaseBtn').disabled = false;
     document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
     document.getElementById('caseModal').classList.add('on');
 }
 
 function openGiftModal(item) {
-    sClick();
-    var modal = document.getElementById('giftModal');
-    var icon = document.getElementById('viewGiftIcon');
-    var name = document.getElementById('viewGiftName');
-    var price = document.getElementById('viewGiftPrice');
-    
-    icon.innerHTML = iconTag(item.name, 128);
-    applyRar(icon, item.value);
-    name.textContent = item.name;
-    price.textContent = (item.value || 0) + ' ★';
-    
-    modal.classList.add('on');
+    sClick(); var modal = document.getElementById('giftModal'); var icon = document.getElementById('viewGiftIcon'); var name = document.getElementById('viewGiftName'); var price = document.getElementById('viewGiftPrice');
+    icon.innerHTML = iconTag(item.name, 128); applyRar(icon, item.value); name.textContent = item.name; price.textContent = (item.value || 0) + ' ★'; modal.classList.add('on');
 }
 
-var closeGift = document.getElementById('closeGiftModal');
-if (closeGift) closeGift.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
-var closeGiftBtn = document.getElementById('closeGiftBtn');
-if (closeGiftBtn) closeGiftBtn.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
-
-var closeCase = document.getElementById('closeCaseModal');
-if (closeCase) closeCase.addEventListener('click', function() {
-    if (isCaseSpinning) return;
-    sClick();
-    document.getElementById('caseModal').classList.remove('on');
-});
-
-var closeFreeCase = document.getElementById('closeFreeCaseModal');
-if (closeFreeCase) closeFreeCase.addEventListener('click', function() {
-    sClick();
-    document.getElementById('freeCaseModal').classList.remove('on');
-});
+var closeGift = document.getElementById('closeGiftModal'); if (closeGift) closeGift.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
+var closeGiftBtn = document.getElementById('closeGiftBtn'); if (closeGiftBtn) closeGiftBtn.addEventListener('click', function() { sClick(); document.getElementById('giftModal').classList.remove('on'); });
+var closeCase = document.getElementById('closeCaseModal'); if (closeCase) closeCase.addEventListener('click', function() { if (isCaseSpinning) return; sClick(); document.getElementById('caseModal').classList.remove('on'); });
+var closeFreeCase = document.getElementById('closeFreeCaseModal'); if (closeFreeCase) closeFreeCase.addEventListener('click', function() { sClick(); document.getElementById('freeCaseModal').classList.remove('on'); });
 
 var openCaseBtn = document.getElementById('openCaseBtn');
 if (openCaseBtn) openCaseBtn.addEventListener('click', function() {
     if (isCaseSpinning) return;
     var c = currentCaseData;
     if (balance < c.price) { sErr(); toast('error', 'Не хватает звёзд'); return; }
-    
-    isCaseSpinning = true;
-    balance -= c.price; updBal(); save();
-    sOpenCase();
-    
-    document.getElementById('openCaseBtn').textContent = 'Открывается...';
-    document.getElementById('openCaseBtn').disabled = true;
-    
-    var track = document.getElementById('caseTrack');
-    track.style.transition = 'none';
-    track.style.transform = 'translateX(0)';
-    track.innerHTML = '';
-    
-    var pool = c.pool.slice().sort(function(a,b){return a.value - b.value;});
-    var r = Math.random();
-    var winIdx = 0;
+    isCaseSpinning = true; balance -= c.price; updBal(); save(); sOpenCase();
+    document.getElementById('openCaseBtn').textContent = 'Открывается...'; document.getElementById('openCaseBtn').disabled = true;
+    var track = document.getElementById('caseTrack'); track.style.transition = 'none'; track.style.transform = 'translateX(0)'; track.innerHTML = '';
+    // 🛠️ Защита от пустого массива
+    var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
+    var pool = safePool.slice().sort(function(a,b){return a.value - b.value;});
+    var r = Math.random(); var winIdx = 0;
     if (r < 0.6) winIdx = Math.floor(Math.random() * Math.floor(pool.length * 0.6));
     else if (r < 0.9) winIdx = Math.floor(pool.length * 0.6 + Math.random() * (pool.length * 0.3));
     else winIdx = Math.floor(pool.length * 0.9 + Math.random() * (pool.length * 0.1));
     if (winIdx >= pool.length) winIdx = pool.length - 1;
     var winItem = pool[winIdx];
-    
     for (var i = 0; i < 50; i++) {
         var it = (i === 45) ? winItem : pool[Math.floor(Math.random() * pool.length)];
-        var d = document.createElement('div');
-        d.className = 'case-item';
-        applyRar(d, it.value);
-        d.innerHTML = iconTag(it.name, 128);
-        track.appendChild(d);
+        var d = document.createElement('div'); d.className = 'case-item'; applyRar(d, it.value); d.innerHTML = iconTag(it.name, 128); track.appendChild(d);
     }
-    
-    var itemWidth = 84 + 8;
-    var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth;
-    var offset = (45 * itemWidth) - (wrapWidth / 2) + (itemWidth / 2);
-    
+    var itemWidth = 84 + 8; var wrapWidth = document.querySelector('.case-track-wrap').offsetWidth; var offset = (45 * itemWidth) - (wrapWidth / 2) + (itemWidth / 2);
     setTimeout(function() {
-        track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)';
-        track.style.transform = `translateX(-${offset}px)`;
-        
+        track.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.3, 1)'; track.style.transform = `translateX(-${offset}px)`;
         var tickInt = setInterval(function(){ sTick(); }, 150);
-        
         setTimeout(function() {
-            clearInterval(tickInt);
-            isCaseSpinning = false;
-            inventory.push(winItem);
-            inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});
-            save();
-            
-            var trackItems = track.querySelectorAll('.case-item');
-            if(trackItems[45]) {
-                trackItems[45].classList.add('win-flash');
-            }
-            
-            document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
-            document.getElementById('openCaseBtn').disabled = false;
-            
+            clearInterval(tickInt); isCaseSpinning = false; inventory.push(winItem); inventory.sort(function(a,b){return(a.value||0)-(b.value||0)}); save();
+            var trackItems = track.querySelectorAll('.case-item'); if(trackItems[45]) trackItems[45].classList.add('win-flash');
+            document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★'; document.getElementById('openCaseBtn').disabled = false;
             openGiftModal(winItem);
-            
-            if (winItem.value > c.price * 1.5) { 
-                sWin(); 
-                confetti(); 
-                document.body.style.animation = 'screenFlashGreen 0.5s';
-                setTimeout(() => { document.body.style.animation = ''; }, 500);
-            } else { 
-                sBuy(); 
-            }
-            
+            if (winItem.value > c.price * 1.5) { sWin(); confetti(); document.body.style.animation = 'screenFlashGreen 0.5s'; setTimeout(() => { document.body.style.animation = ''; }, 500); } else { sBuy(); }
         }, 6100);
     }, 100);
 });
+
 // ============================================================
-
-function generateFakeHistory(){
-  var arr = [];
-  for (var i = 0; i < 15; i++) {
-    var r = Math.random();
-    var cp = 1.01;
-    if (r < 0.4) cp = 1.1 + Math.random() * 0.8;
-    else if (r < 0.75) cp = 1.9 + Math.random() * 2.1;
-    else if (r < 0.92) cp = 4.0 + Math.random() * 6.0;
-    else cp = 10.0 + Math.random() * 40.0;
-    arr.push(cp);
-  }
-  rocketHistory = arr;
-  renderRocketHistory();
-}
-
+// UPGRADER, ROCKET, ROLL, SHOP, PROFILE и т.д. (Логика сохранена)
+// ============================================================
 var selItems=[],targetItem=null,chance=0,multiplier=0,isSpinning=false;var MULT=[1.2,1.5,2,3,5,10,25,100];var SPIN_DUR=7500;var invSearch='',invMin=null,invMax=null,tgtSearch='',tgtMin=null,tgtMax=null;
 function sumSel(){return selItems.reduce(function(s,i){return s+(i.value||0)},0)}
 function chanceRatio(r){var c=100/r;if(c>99)c=99;if(c<.01)c=.01;return Math.round(c*100)/100}
@@ -589,45 +370,33 @@ document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click'
 document.getElementById('upBtn').addEventListener('click',doUpgrade);
 (function(){var a=document.getElementById('invSearch');if(a)a.addEventListener('input',function(){invSearch=a.value;renderInv()});var b=document.getElementById('invMin');if(b)b.addEventListener('input',function(){var v=parseFloat(b.value);invMin=isNaN(v)?null:v;renderInv()});var c=document.getElementById('invMax');if(c)c.addEventListener('input',function(){var v=parseFloat(c.value);invMax=isNaN(v)?null:v;renderInv()});var d=document.getElementById('tgtSearch');if(d)d.addEventListener('input',function(){tgtSearch=d.value;renderTargets()});var e=document.getElementById('tgtMin');if(e)e.addEventListener('input',function(){var v=parseFloat(e.value);tgtMin=isNaN(v)?null:v;renderTargets()});var f=document.getElementById('tgtMax');if(f)f.addEventListener('input',function(){var v=parseFloat(f.value);tgtMax=isNaN(v)?null:v;renderTargets()})})();
 
+// ROCKET
 var R_WAIT=10,R_FLY=60,R_RESULT=5;var rocketPhase='waiting',rocketPhaseStart=Date.now(),rocketPhaseDur=R_WAIT;var rocketBetGift=null,rocketBetActive=false,rocketCrashAt=0,rocketCurrentMult=1,rocketStartTime=0;var rocketHistory=[],rocketLastTick=0,rocketCashedOut=false,rocketCashoutMult=0;var autoWdEnabled=Store.get(P+'rocket_autowd_enabled')==='true';var autoWdValue=parseFloat(Store.get(P+'rocket_autowd_value')||'0')||0;
 function generateCrashPoint(){var r=Math.random();var cp=(.97/(1-r))*0.75;return Math.max(1.01,cp)}
 function multAt(e){return Math.pow(1.15,e)}
 function findGiftInInventory(gift){if(!gift)return-1;for(var i=0;i<inventory.length;i++){if(inventory[i].name===gift.name&&(inventory[i].value||0)===(gift.value||0))return i}return-1}
 var Rocket=(function(){var hero,ship,trailPath,milestones,speedlines,giftBadge;var trailPts=[];var defs=[{v:1.5,top:86,lbl:'1.5x'},{v:2,top:76,lbl:'2x'},{v:3,top:66,lbl:'3x'},{v:5,top:55,lbl:'5x'},{v:10,top:43,lbl:'10x',mega:true},{v:25,top:31,lbl:'25x'},{v:50,top:19,lbl:'50x',mega:true},{v:100,top:8,lbl:'100x',mega:true}];
-function init(){hero=document.getElementById('rocket-hero');ship=document.getElementById('rocketShip');trailPath=document.getElementById('rocketTrailPath');milestones=document.getElementById('rocketMilestones');speedlines=document.getElementById('rocketSpeedlines');giftBadge=document.getElementById('rocketGiftBadge');if(!hero)return;if(milestones&&!milestones.children.length){defs.forEach(function(m){var el=document.createElement('div');el.className='rocket-milestone'+(m.mega?' mega':'');el.dataset.v=m.v;el.style.top=m.top+'%';el.innerHTML='<span class="dot"></span>'+m.lbl;milestones.appendChild(el)})}if(speedlines&&!speedlines.children.length){for(var i=0;i<16;i++){var l=document.createElement('div');l.className='line';l.style.left=(Math.random()*100)+'%';l.style.top=(Math.random()*100)+'%';l.style.animationDelay=(Math.random()*.7)+'s';l.style.animationDuration=(.5+Math.random()*.4)+'s';speedlines.appendChild(l)}}if(ship&&!ship.children.length){ship.innerHTML=iconTag('Stellar Rocket',128)}if(rocketPhase!=='flying')reset()}
+function init(){hero=document.getElementById('rocket-hero');ship=document.getElementById('rocketShip');trailPath=document.getElementById('rocketTrailPath');milestones=document.getElementById('rocketMilestones');speedlines=document.getElementById('rocketSpeedlines');giftBadge=document.getElementById('rocketGiftBadge');if(!hero)return;if(milestones&&!milestones.children.length){defs.forEach(function(m){var el=document.createElement('div');el.className='rocket-milestone'+(m.mega?' mega':'');el.dataset.v=m.v;el.style.top=m.top+'%';el.innerHTML='<span class="dot"></span>'+m.lbl;milestones.appendChild(el)})}if(speedlines&&!speedlines.children.length){for(var i=0;i<16;i++){var l=document.createElement('div');l.className='line';l.style.left=(Math.random()*100)+'%';l.style.top=(Math.random()*100)+'%';l.style.animationDelay=(Math.random()*.7)+'s';l.style.animationDuration=(.5+Math.random()*.4)+'s';speedlines.appendChild(l)}}if(ship&&!ship.children.length){ship.innerHTML=iconTag('Rocket',128)}if(rocketPhase!=='flying')reset()}
 function reset(){trailPts=[];if(trailPath)trailPath.setAttribute('d','');if(ship){ship.className='rocket-ship idle';ship.style.top='90%';ship.style.left='50%'; ship.style.opacity='1';}if(hero)hero.classList.remove('flying');if(milestones)Array.prototype.forEach.call(milestones.querySelectorAll('.rocket-milestone'),function(el){el.classList.remove('visible','reached')})}
 function setFlying(){if(ship)ship.className='rocket-ship flying';if(hero)hero.classList.add('flying')}
 function updatePosition(mult){if(!ship)return;var prog=Math.pow(Math.min(1,mult/100),.35);var topPct=90-prog*87;var leftPct=50+Math.sin(prog*10)*4;ship.style.top=topPct+'%';ship.style.left=leftPct+'%';trailPts.push({x:leftPct,y:topPct});if(trailPts.length>50)trailPts.shift();if(trailPath&&trailPts.length>1){var d='M '+trailPts[0].x.toFixed(2)+' '+trailPts[0].y.toFixed(2);for(var i=1;i<trailPts.length;i++)d+=' L '+trailPts[i].x.toFixed(2)+' '+trailPts[i].y.toFixed(2);trailPath.setAttribute('d',d)}if(giftBadge&&!giftBadge.classList.contains('hidden')){giftBadge.style.left=leftPct+'%';giftBadge.style.top=(topPct-8)+'%'}if(milestones){Array.prototype.forEach.call(milestones.querySelectorAll('.rocket-milestone'),function(el){var v=parseFloat(el.dataset.v);if(mult>=v)el.classList.add('visible','reached');else if(mult>=v*.6)el.classList.add('visible')})}}
 function showGiftBadge(gift){if(!giftBadge)return;if(gift){giftBadge.innerHTML=iconTag(gift.name,64);giftBadge.classList.remove('hidden')}else{giftBadge.classList.add('hidden')}}
 function explode(){
-  if(!hero||!ship)return; 
-  if(ship) { ship.style.opacity = '0'; ship.className = 'rocket-ship'; } 
-  if(trailPath) trailPath.setAttribute('d',''); 
+  if(!hero||!ship)return; if(ship) { ship.style.opacity = '0'; ship.className = 'rocket-ship'; } if(trailPath) trailPath.setAttribute('d',''); 
   var hr=hero.getBoundingClientRect();var sr=ship.getBoundingClientRect();var x=sr.left-hr.left+sr.width/2;var y=sr.top-hr.top+sr.height/2;var flash=document.createElement('div');flash.className='rocket-explosion-flash';hero.appendChild(flash);setTimeout(function(){flash.remove()},1000);[0,120].forEach(function(delay){setTimeout(function(){var ring=document.createElement('div');ring.className='rocket-shock-ring';ring.style.left=x+'px';ring.style.top=y+'px';hero.appendChild(ring);setTimeout(function(){ring.remove()},1400)},delay)});var fb=document.createElement('div');fb.className='rocket-fireball';fb.style.left=x+'px';fb.style.top=y+'px';hero.appendChild(fb);setTimeout(function(){fb.remove()},1600);var colors=['#ff6b35','#fbbf24','#ef4444','#fff','#ff8590'];for(var i=0;i<18;i++){(function(i){var d=document.createElement('div');d.className='rocket-debris';var size=4+Math.random()*8;var ang=Math.random()*Math.PI*2;var dist=60+Math.random()*200;d.style.cssText='left:'+x+'px;top:'+y+'px;width:'+size+'px;height:'+size+'px;background:'+colors[i%colors.length]+';--dx:'+(Math.cos(ang)*dist).toFixed(1)+'px;--dy:'+(Math.sin(ang)*dist).toFixed(1)+'px;animation-delay:'+(Math.random()*.08)+'s';hero.appendChild(d);setTimeout(function(){d.remove()},2000)})(i)}for(var i=0;i<24;i++){(function(i){var s=document.createElement('div');s.className='rocket-spark';var ang=Math.random()*Math.PI*2;var dist=100+Math.random()*300;var sz=2+Math.random()*3;s.style.cssText='left:'+x+'px;top:'+y+'px;width:'+sz+'px;height:'+sz+'px;background:#fff;border-radius:50%;box-shadow:0 0 8px #ffd93d;--dx:'+(Math.cos(ang)*dist).toFixed(1)+'px;--dy:'+(Math.sin(ang)*dist).toFixed(1)+'px;animation-delay:'+(Math.random()*.1)+'s';hero.appendChild(s);setTimeout(function(){s.remove()},2200)})(i)}hero.classList.remove('shaking');void hero.offsetWidth;hero.classList.add('shaking');setTimeout(function(){hero.classList.remove('shaking')},700)}
 return {init:init,reset:reset,setFlying:setFlying,updatePosition:updatePosition,showGiftBadge:showGiftBadge,explode:explode};})();
 function renderRocketHistory(){var el=document.getElementById('rocket-history');if(!el)return;el.innerHTML=rocketHistory.slice(0,15).map(function(h){var c;if(h<1.5)c='low';else if(h<10)c='mid';else c='high';return '<div class="rh-item '+c+'">'+h.toFixed(2)+'x</div>'}).join('')}
 function setRocketTimer(sec){var el=document.getElementById('rocket-timer');if(!el)return;var s=Math.max(0,Math.ceil(sec));if(el.textContent!==String(s))el.textContent=s}
 function updateRocketBtn(){var btn=document.getElementById('rocket-btn');if(!btn)return;var row=document.getElementById('rocket-bet-row');if(!row)return;var phase=document.getElementById('rocket-phase');var phaseTxt=document.getElementById('rocket-phase-text');if(rocketPhase==='waiting'){if(phase)phase.className='rph waiting';if(phaseTxt)phaseTxt.textContent='Приём ставок';if(rocketBetActive){btn.textContent='Ставка принята';btn.disabled=true;btn.classList.remove('cashout','cashed')}else if(rocketBetGift){btn.textContent='Поставить';btn.disabled=false;btn.classList.remove('cashout','cashed')}else{btn.textContent='Выбери гифт';btn.disabled=true;btn.classList.remove('cashout','cashed')}}else if(rocketPhase==='flying'){if(phase)phase.className='rph flying';if(phaseTxt)phaseTxt.textContent=rocketCashedOut?'Летит дальше':'Взлёт';if(rocketBetActive&&!rocketCashedOut){btn.textContent='Забрать '+rocketCurrentMult.toFixed(2)+'x';btn.classList.add('cashout');btn.disabled=false;btn.classList.remove('cashed')}else if(rocketCashedOut){btn.textContent='Забрано на '+rocketCashoutMult.toFixed(2)+'x';btn.classList.remove('cashout');btn.classList.add('cashed');btn.disabled=true}else{btn.textContent='Не участвую';btn.disabled=true;btn.classList.remove('cashout','cashed')}}else{if(phase)phase.className='rph result';if(phaseTxt)phaseTxt.textContent='Результат';btn.textContent='Ждите раунд';btn.disabled=true;btn.classList.remove('cashout','cashed')}if(rocketBetGift){row.className='bet-gift-row glass-panel';applyRar(row,rocketBetGift.value||0);var showEdit=rocketPhase==='waiting'&&!rocketBetActive;row.innerHTML='<div class="bet-gift-icon">'+iconTag(rocketBetGift.name,64)+'</div><div class="bet-gift-info"><div class="bet-gift-name">'+rocketBetGift.name+'</div><div class="bet-gift-value">'+(rocketBetGift.value||0)+'★'+(rocketBetActive?' · принята':'')+'</div></div>'+(showEdit?'<div class="bet-gift-edit">Изм.</div>':'')}else{row.className='bet-gift-row glass-panel empty-bet';row.innerHTML='<div class="bg-label">Нажми чтобы выбрать гифт</div>'}var awdRow=document.getElementById('rocket-autowd-row');if(awdRow)awdRow.classList.toggle('disabled',rocketPhase!=='waiting');if(rocketPhase==='waiting'||rocketPhase==='flying')Rocket.showGiftBadge(rocketBetGift);else Rocket.showGiftBadge(null)}
 function rocketTick(){try{var elapsed=(Date.now()-rocketPhaseStart)/1000;var remaining=Math.max(0,rocketPhaseDur-elapsed);if(curScreen==='rocket')setRocketTimer(remaining);if(rocketPhase==='waiting'){if(remaining<=0){rocketPhase='flying';rocketPhaseStart=Date.now();rocketPhaseDur=R_FLY;rocketCrashAt=generateCrashPoint();rocketCurrentMult=1;rocketStartTime=Date.now();rocketLastTick=0;rocketCashedOut=false;rocketCashoutMult=0;Rocket.reset();Rocket.setFlying();var mult=document.getElementById('rocket-mult');if(mult){mult.className='rocket-mult-hero growing';mult.textContent='1.00x'}updateRocketBtn();return}}else if(rocketPhase==='flying'){var elapsedFly=(Date.now()-rocketStartTime)/1000;var m=multAt(elapsedFly);rocketCurrentMult=m;if(elapsedFly-rocketLastTick>.1){rocketLastTick=elapsedFly;if(rocketBetActive&&!rocketCashedOut&&curScreen==='rocket')sRocketTick()}if(autoWdEnabled&&rocketBetActive&&!rocketCashedOut&&autoWdValue>=1.01&&m>=autoWdValue){cashOutRocket(true)}var multEl=document.getElementById('rocket-mult');if(multEl){multEl.textContent=m.toFixed(2)+'x';if(m>=3)multEl.classList.add('hot')}var pf=document.getElementById('rocket-progress-fill');if(pf)pf.style.width=Math.min(100,Math.pow(m/100,.35)*100)+'%';if(curScreen==='rocket')Rocket.updatePosition(m);if(m>=rocketCrashAt||remaining<=0){rocketCurrentMult=Math.min(rocketCrashAt,m);endRocketFlight()}else if(rocketBetActive&&!rocketCashedOut)updateRocketBtn()}else if(rocketPhase==='result'){if(remaining<=0){rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;rocketBetActive=false;rocketCurrentMult=1;rocketCashedOut=false;Rocket.reset();var mult2=document.getElementById('rocket-mult');if(mult2){mult2.className='rocket-mult-hero';mult2.textContent='1.00x'}updateRocketBtn()}}}catch(e){}}
-function endRocketFlight(){
-  if(rocketPhase!=='flying')return;
-  rocketPhase='result';rocketPhaseStart=Date.now();rocketPhaseDur=R_RESULT;
-  Rocket.explode();
-  sExplosion();
-  var mult=document.getElementById('rocket-mult');if(mult){mult.className='rocket-mult-hero crashed';mult.textContent=rocketCurrentMult.toFixed(2)+'x'}
-  
-  rocketHistory.unshift(rocketCurrentMult);
-  rocketHistory=rocketHistory.slice(0,20);
-  renderRocketHistory();
-  
-  rocketBetActive=false;
-  updateRocketBtn();
-}
+function endRocketFlight(){if(rocketPhase!=='flying')return;rocketPhase='result';rocketPhaseStart=Date.now();rocketPhaseDur=R_RESULT;Rocket.explode();sExplosion();var mult=document.getElementById('rocket-mult');if(mult){mult.className='rocket-mult-hero crashed';mult.textContent=rocketCurrentMult.toFixed(2)+'x'}rocketHistory.unshift(rocketCurrentMult);rocketHistory=rocketHistory.slice(0,20);renderRocketHistory();rocketBetActive=false;updateRocketBtn();}
 function placeRocketBet(){if(rocketPhase!=='waiting')return;if(rocketBetActive)return;if(!rocketBetGift){sErr();toast('error','Выбери гифт');return}var i=findGiftInInventory(rocketBetGift);if(i<0){rocketBetGift=null;updateRocketBtn();sErr();return}var removed=inventory[i];inventory.splice(i,1);var si=selItems.indexOf(removed);if(si>=0)selItems.splice(si,1);rocketBetActive=true;save();renderInv();renderArena();renderTargets();updatePctUI();updateRocketBtn();sBuy()}
 function cashOutRocket(isAuto){if(rocketPhase!=='flying')return;if(!rocketBetActive||rocketCashedOut)return;var bv=rocketBetGift?(rocketBetGift.value||0):0;var win=Math.floor(bv*rocketCurrentMult);balance+=win;updBal();rocketCashedOut=true;rocketCashoutMult=rocketCurrentMult;save();var mult=document.getElementById('rocket-mult');if(mult)mult.className='rocket-mult-hero cashed';var toastEl=document.getElementById('rocket-cashout-toast');if(toastEl&&curScreen==='rocket'){toastEl.textContent=(isAuto?'Авто · ':'')+'+'+fmt(win)+'★';toastEl.classList.add('show');setTimeout(function(){toastEl.classList.remove('show')},2200)}if(curScreen==='rocket')confetti();haptic('success');updateRocketBtn()}
 document.getElementById('rocket-btn').addEventListener('click',function(){sClick();if(rocketPhase==='waiting'&&!rocketBetActive)placeRocketBet();else if(rocketPhase==='flying'&&rocketBetActive&&!rocketCashedOut)cashOutRocket(false)});
 document.getElementById('rocket-bet-row').addEventListener('click',function(){if(rocketPhase!=='waiting')return;if(rocketBetActive)return;if(!inventory.length){sErr();toast('error','Нет гифтов');return}sClick();openPicker('rocket')});
 (function(){var inp=document.getElementById('rocket-autowd-input');var on=document.getElementById('autowd-on');var off=document.getElementById('autowd-off');if(inp)inp.value=autoWdValue>0?autoWdValue:'';if(autoWdEnabled&&on&&off){on.classList.add('active');off.classList.remove('active')}else if(on&&off){off.classList.add('active');on.classList.remove('active')}if(inp)inp.addEventListener('input',function(){var v=parseFloat(inp.value);autoWdValue=isNaN(v)?0:v;Store.set(P+'rocket_autowd_value',String(autoWdValue))});if(on)on.addEventListener('click',function(){autoWdEnabled=true;Store.set(P+'rocket_autowd_enabled','true');on.classList.add('active');off.classList.remove('active');sClick()});if(off)off.addEventListener('click',function(){autoWdEnabled=false;Store.set(P+'rocket_autowd_enabled','false');off.classList.add('active');on.classList.remove('active');sClick()})})();
+
+// ROLL
 var ROLL_COST=100;var SEG_ANGLE=30;var ROLL_SEG=[{amount:500,realW:.8,c1:'#fbbf24',c2:'#d97706'},{amount:200,realW:.8,c1:'#a855f7',c2:'#7c3aed'},{amount:200,realW:.8,c1:'#a855f7',c2:'#7c3aed'},{amount:100,realW:.8,c1:'#06b6d4',c2:'#0891b2'},{amount:100,realW:.8,c1:'#06b6d4',c2:'#0891b2'},{amount:100,realW:.8,c1:'#06b6d4',c2:'#0891b2'},{amount:0,realW:5.0,c1:'#3a3a4a',c2:'#1a1a26'},{amount:10,realW:1.2,c1:'#1a3050',c2:'#0a1525'},{amount:10,realW:1.2,c1:'#1a3050',c2:'#0a1525'},{amount:25,realW:1.2,c1:'#3a2050',c2:'#180d28'},{amount:25,realW:1.2,c1:'#3a2050',c2:'#180d28'},{amount:50,realW:1.2,c1:'#1a4030',c2:'#0a1e18'}];var rollLast=0,rollBest=0,rollRot=0,rollSpinning=false;
 var Roll=(function(){var cv,ctx,anim,lastT=0;var particles=[];function initCanvas(){cv=document.getElementById('rollCanvas');if(!cv)return;var board=document.getElementById('rBoard');if(!board)return;cv.width=board.clientWidth||340;cv.height=board.clientHeight||440;ctx=cv.getContext('2d');if(!anim)loop()}function loop(){anim=requestAnimationFrame(loop);if(!ctx)return;var now=performance.now();var dt=Math.min(50,now-lastT)/1000||.016;lastT=now;var W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);for(var i=particles.length-1;i>=0;i--){var p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.15;p.life-=dt*1.2;if(p.life<=0){particles.splice(i,1);continue}ctx.globalAlpha=p.life;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}function burst(count){var W=cv.width,H=cv.height;var colors=['#fbbf24','#ff6b35','#a855f7','#06b6d4','#10b981'];for(var i=0;i<count;i++){var ang=Math.random()*Math.PI*2;var spd=2+Math.random()*8;particles.push({x:W*.5,y:H*.5,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd-2,life:1,size:3+Math.random()*5,color:colors[Math.floor(Math.random()*colors.length)]})}}function starPts(cx,cy,o,i,p){var a=[];for(var k=0;k<p*2;k++){var r=k%2===0?o:i;var an=(k*Math.PI/p)-Math.PI/2;a.push((cx+r*Math.cos(an)).toFixed(1)+','+(cy+r*Math.sin(an)).toFixed(1))}return a.join(' ')}
 function buildWheel(){var svg=document.getElementById('rollSvg');if(!svg)return;var N=ROLL_SEG.length;var sA=360/N;var cx=100,cy=100;var ro=92,ri=48,rI=72,sO=15,sI=6;var h='<defs>';h+='<linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff8c0"/><stop offset="25%" stop-color="#ffd93d"/><stop offset="50%" stop-color="#c88000"/><stop offset="75%" stop-color="#ffd93d"/><stop offset="100%" stop-color="#fff8c0"/></linearGradient>';ROLL_SEG.forEach(function(seg,i){h+='<linearGradient id="sg'+i+'" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="'+seg.c1+'"/><stop offset="100%" stop-color="'+seg.c2+'"/></linearGradient>'});h+='</defs>';h+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(ro+22)+'" fill="#000"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(ro+14)+'" fill="none" stroke="url(#gold)" stroke-width="7"/>';for(var i=0;i<N;i++){var sC=i*sA-sA/2,eC=i*sA+sA/2;var sM=(sC-90)*Math.PI/180,eM=(eC-90)*Math.PI/180;var p0x=(cx+ro*Math.cos(sM)).toFixed(1),p0y=(cy+ro*Math.sin(sM)).toFixed(1);var p1x=(cx+ro*Math.cos(eM)).toFixed(1),p1y=(cy+ro*Math.sin(eM)).toFixed(1);var p2x=(cx+ri*Math.cos(eM)).toFixed(1),p2y=(cy+ri*Math.sin(eM)).toFixed(1);var p3x=(cx+ri*Math.cos(sM)).toFixed(1),p3y=(cy+ri*Math.sin(sM)).toFixed(1);h+='<path d="M '+p0x+' '+p0y+' A '+ro+' '+ro+' 0 0 1 '+p1x+' '+p1y+' L '+p2x+' '+p2y+' A '+ri+' '+ri+' 0 0 0 '+p3x+' '+p3y+' Z" fill="url(#sg'+i+')" stroke="rgba(255,217,61,0.85)" stroke-width="1.2"/>'}for(var i=0;i<N;i++){var seg=ROLL_SEG[i];h+='<g transform="rotate('+(i*sA)+' '+cx+' '+cy+')"><polygon points="'+starPts(cx,cy-rI,sO,sI,5)+'" fill="url(#gold)" stroke="'+(seg.amount>=100?'#ffd93d':'#fff')+'" stroke-width="0.9"/><text x="'+cx+'" y="'+(cy-rI+20)+'" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="9.5" fill="'+(seg.amount>=100?'#ffd93d':'#fff')+'" style="paint-order:stroke;stroke:rgba(0,0,0,1);stroke-width:4px;">'+seg.amount+'</text></g>'}h+='<circle cx="'+cx+'" cy="'+cy+'" r="'+ri+'" fill="none" stroke="url(#gold)" stroke-width="3"/>';svg.innerHTML=h}
@@ -637,6 +406,8 @@ function getTargetAngle(idx){var base=idx*SEG_ANGLE;if(ROLL_SEG[idx].amount<100&
 function spin(){if(rollSpinning)return;if(balance<ROLL_COST){sErr();toast('error','Нужно '+ROLL_COST+' ★');return}rollSpinning=true;balance-=ROLL_COST;updBal();save();var wrap=document.getElementById('rWW');if(wrap)wrap.classList.add('spinning');var idx=pickByRealW();var targetAngle=getTargetAngle(idx);var finalRot=(360-targetAngle)%360;if(finalRot<0)finalRot+=360;rollRot=rollRot+360*6+((finalRot-(rollRot%360))+360)%360;var w=document.getElementById('rollWheel');if(w){w.style.transition='transform 5s cubic-bezier(.15,.7,.15,1)';w.style.transform='rotate('+rollRot+'deg)'}var tickCount=60;var tickIdx=0;var tickInt=setInterval(function(){sTick();tickIdx++;if(tickIdx>=tickCount)clearInterval(tickInt)},80);setTimeout(function(){clearInterval(tickInt);rollSpinning=false;if(wrap)wrap.classList.remove('spinning');if(w){rollRot=((rollRot%360)+360)%360;w.style.transform='rotate('+rollRot+'deg)'}var seg=ROLL_SEG[idx];var cv2=document.getElementById('rollCenter');if(seg.amount>0){balance+=seg.amount}rollLast=seg.amount;if(seg.amount>rollBest)rollBest=seg.amount;if(cv2){if(seg.amount===0){cv2.innerHTML='<span class="cvm" style="color:#ff6b7a;">0★</span>';sLose();}else if(seg.amount>=100){cv2.innerHTML='<span class="cvm">'+seg.amount+'★</span>';sRollBig();burst(60);confetti();haptic('success');}else{cv2.innerHTML='<span class="cvm" style="color:var(--dim);">'+seg.amount+'★</span>';sLose();}}updBal();save();update()},5200)}
 return {initCanvas:initCanvas,buildWheel:buildWheel,update:update,spin:spin};})();
 document.getElementById('rollSpinBtn').addEventListener('click',function(){sClick();Roll.spin()});
+
+// SHOP, PROFILE, MODALS
 function renderShop(){var g=document.getElementById('shopGrid');if(!g)return;g.innerHTML='';var sS=document.getElementById('shopSearch'),sMin=document.getElementById('shopMin'),sMax=document.getElementById('shopMax');var q=sS?sS.value.toLowerCase():'';var mi=sMin&&sMin.value?parseFloat(sMin.value):null;var ma=sMax&&sMax.value?parseFloat(sMax.value):null;var list=CATALOG.filter(function(it){if(q&&it.name.toLowerCase().indexOf(q)<0)return false;if(mi!==null&&!isNaN(mi)&&(it.value||0)<mi)return false;if(ma!==null&&!isNaN(ma)&&(it.value||0)>ma)return false;return true}).sort(function(a,b){return(a.value||0)-(b.value||0)});if(!list.length){g.innerHTML='<div class="empty">—</div>';return}var frag=document.createDocumentFragment();list.forEach(function(item){var s=document.createElement('div');s.className='slot glass-panel'+((item.value||0)>balance?' disabled':'');applyRar(s,item.value||0);s.innerHTML='<div class="ssi">'+iconTag(item.name,64)+'</div><div class="sname">'+item.name+'</div><div class="sprice">'+(item.value||0)+'★</div>';s.addEventListener('click',function(){sClick();openBuy(item)});frag.appendChild(s)});g.appendChild(frag)}
 var buyItem=null;function openBuy(item){buyItem=item;var bi=document.getElementById('buyIcon');bi.innerHTML=iconTag(item.name,128);applyRar(bi,item.value||0);document.getElementById('buyName').textContent=item.name;document.getElementById('buyPrice').textContent=(item.value||0)+' ★';document.getElementById('buyConfirm').disabled=(item.value||0)>balance;document.getElementById('buyModal').classList.add('on')}
 document.getElementById('buyCancel').addEventListener('click',function(){sClick();document.getElementById('buyModal').classList.remove('on')});
@@ -647,27 +418,11 @@ document.getElementById('pickClose').addEventListener('click',function(){sClick(
 document.getElementById('plusBtn').addEventListener('click',function(){sClick();document.getElementById('starsAmt').value='';document.getElementById('starsModal').classList.add('on')});
 document.getElementById('starsClose').addEventListener('click',function(){sClick();document.getElementById('starsModal').classList.remove('on')});
 
-// ⬇️⬇️⬇️ ИЗМЕНЕНО: теперь пополнение засчитывается в прогресс бесплатного кейса
 document.getElementById('starsOk').addEventListener('click',function(){
-    var amt=parseInt(document.getElementById('starsAmt').value,10);
-    if(!amt||amt<=0){sErr();return}
-    balance+=amt;
-    updBal();
-    save();
-    sClick();
-    toast('success','+'+fmt(amt)+' ★');
-
-    // Учитываем депозит для бесплатного кейса
-    freeCaseState.deposited += amt;
-    saveFreeCase();
-
-    setTimeout(function(){
-        document.getElementById('starsModal').classList.remove('on');
-        // Обновляем прогресс, если открыт бесплатный кейс или экран кейсов
-        var fcModal = document.getElementById('freeCaseModal');
-        if (fcModal && fcModal.classList.contains('on')) renderFreeCaseModal();
-        if (curScreen === 'cases') renderCases();
-    },500);
+    var amt=parseInt(document.getElementById('starsAmt').value,10); if(!amt||amt<=0){sErr();return}
+    balance+=amt; updBal(); save(); sClick(); toast('success','+'+fmt(amt)+' ★');
+    freeCaseState.deposited += amt; saveFreeCase();
+    setTimeout(function(){ document.getElementById('starsModal').classList.remove('on'); var fcModal = document.getElementById('freeCaseModal'); if (fcModal && fcModal.classList.contains('on')) renderFreeCaseModal(); if (curScreen === 'cases') renderCases(); },500);
 });
 
 document.querySelectorAll('#starsModal [data-q]').forEach(function(b){b.addEventListener('click',function(){sClick();document.getElementById('starsAmt').value=b.getAttribute('data-q')})});
@@ -682,78 +437,32 @@ document.getElementById('sndToggle').addEventListener('change',function(e){sndOn
 document.getElementById('profileBtn').addEventListener('click',function(){sClick();renderProfile();document.getElementById('profileModal').classList.add('on')});
 document.getElementById('profileClose').addEventListener('click',function(){sClick();document.getElementById('profileModal').classList.remove('on')});
 function renderProfile(){
-  var u=TGU||{};
-  var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));
-  var av=document.getElementById('pAva');
-  if(av){if(u.photo_url)av.innerHTML='<img src="'+u.photo_url+'" alt="">';else av.textContent=(u.first_name||'И').charAt(0).toUpperCase()}
-  document.getElementById('pName').textContent=name;
-  document.getElementById('pInvCount').textContent=inventory.length;
-  document.getElementById('pAdmin').style.display=isAdmin?'inline-flex':'none';
-  var admCard = document.getElementById('adminCard');
-  if(admCard) admCard.style.display = isAdmin ? 'block' : 'none';
-  
+  var u=TGU||{}; var name=u.first_name?((u.first_name||'')+(u.last_name?' '+u.last_name:'')):('Игрок'+(u.id?' #'+u.id:''));
+  var av=document.getElementById('pAva'); if(av){if(u.photo_url)av.innerHTML='<img src="'+u.photo_url+'" alt="">';else av.textContent=(u.first_name||'И').charAt(0).toUpperCase()}
+  document.getElementById('pName').textContent=name; document.getElementById('pInvCount').textContent=inventory.length;
+  document.getElementById('pAdmin').style.display=isAdmin?'inline-flex':'none'; var admCard = document.getElementById('adminCard'); if(admCard) admCard.style.display = isAdmin ? 'block' : 'none';
   var il=document.getElementById('pInvList');
-  if(il){
-    il.innerHTML='';
-    if(!inventory.length){il.innerHTML='<div class="empty" style="grid-column:1/-1;text-align:center;color:var(--dim);font-size:11px;padding:24px 8px;">Пусто</div>'}
-    else{
-      var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
-      srt.forEach(function(it, index){
-        var c=document.createElement('div');
-        c.className='invc';
-        applyRar(c,it.value||0);
-        c.innerHTML=`
-            <img src="${getIconUrl(it.name)}" onclick="event.stopPropagation(); window.openGiftFromProfile(${index})">
-            <div class="iname">${it.name}</div>
-            <div class="iprice">${(it.value||0)} ★</div>
-            <button class="sell-btn" onclick="event.stopPropagation(); window.sellItem(${index})">Продать</button>
-        `;
-        il.appendChild(c);
-      });
-    }
-  }
-}
+  if(il){ il.innerHTML=''; if(!inventory.length){il.innerHTML='<div class="empty" style="grid-column:1/-1;text-align:center;color:var(--dim);font-size:11px;padding:24px 8px;">Пусто</div>'}
+    else{ var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)}); srt.forEach(function(it, index){
+        var c=document.createElement('div'); c.className='invc'; applyRar(c,it.value||0);
+        c.innerHTML=`<img src="${getIconUrl(it.name)}" onclick="event.stopPropagation(); window.openGiftFromProfile(${index})"><div class="iname">${it.name}</div><div class="iprice">${(it.value||0)} ★</div><button class="sell-btn" onclick="event.stopPropagation(); window.sellItem(${index})">Продать</button>`;
+        il.appendChild(c); }); } } }
 
+// 🛠️ ИСПРАВЛЕНИЕ: Убрана проверка isAdmin, теперь админ может продавать
 window.sellItem = function(index) {
-    if(isAdmin) { sErr(); toast('error', 'Админ не может продавать'); return; }
     var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
     var item = srt[index];
     if(!item) return;
-    
-    balance += item.value;
-    updBal();
-    inventory.splice(inventory.indexOf(item), 1);
-    save();
-    sBuy();
-    renderProfile();
-    renderInv();
-    renderArena();
-    renderTargets();
+    balance += item.value; updBal(); inventory.splice(inventory.indexOf(item), 1); save();
+    sBuy(); renderProfile(); renderInv(); renderArena(); renderTargets();
     toast('success', 'Продано за +' + fmt(item.value) + ' ★');
 }
 
-window.openGiftFromProfile = function(index) {
-    var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
-    var item = srt[index];
-    if(item) openGiftModal(item);
-}
+window.openGiftFromProfile = function(index) { var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)}); var item = srt[index]; if(item) openGiftModal(item); }
 
-var withdrawBtn = document.getElementById('withdrawBtn');
-if(withdrawBtn) {
-    withdrawBtn.addEventListener('click', function() {
-        sClick();
-        toast('info', 'Вывод доступен с 2.1.0 (в разработке)');
-    });
-}
-
-var admClear = document.getElementById('admClearInv');
-if (admClear) {
-    admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
-}
-var admWipeBtn = document.getElementById('admWipe');
-if (admWipeBtn) {
-    admWipeBtn.addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
-}
+var withdrawBtn = document.getElementById('withdrawBtn'); if(withdrawBtn) withdrawBtn.addEventListener('click', function() { sClick(); toast('info', 'Вывод доступен с 2.1.0 (в разработке)'); });
+var admClear = document.getElementById('admClearInv'); if (admClear) admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
+var admWipeBtn = document.getElementById('admWipe'); if (admWipeBtn) admWipeBtn.addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
 
 document.getElementById('newsBtn').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.add('on')});
 document.getElementById('newsClose').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.remove('on')});
@@ -761,57 +470,25 @@ document.getElementById('logoBtn').addEventListener('click',function(){if(curScr
 function setLoad(p,text){var bar=document.getElementById('loadingBar');var txt=document.getElementById('loadingText');if(bar)bar.style.width=p+'%';if(txt&&text!==undefined)txt.textContent=text}
 function runLoad(dur,done){var start=performance.now();var stages=[{t:0,s:'Инициализация...'},{t:.12,s:'Интерфейс...'},{t:.28,s:'Режимы...'},{t:.45,s:'Инвентарь...'},{t:.62,s:'Каталог...'},{t:.80,s:'Финал...'},{t:.94,s:'Почти...'},{t:1,s:'Готово!'}];var last=-1;function tick(now){var p=Math.min(1,(now-start)/dur);setLoad(p*100);for(var i=stages.length-1;i>=0;i--){if(p>=stages[i].t){if(i>last){last=i;setLoad(p*100,stages[i].s)}break}}if(p<1)requestAnimationFrame(tick);else setTimeout(done,350)}requestAnimationFrame(tick)}
 
-// ⬇️⬇️⬇️ ИЗМЕНЕНО: FALLBACK теперь имеет приоритет над API
 function loadCatalog(cb){
-    var done=false;
-    function fin(){if(done)return;done=true;if(cb)cb()}
+    var done=false; function fin(){if(done)return;done=true;if(cb)cb()}
     setTimeout(fin,3000);
     fetch('https://api.changes.tg/original/list?size=200').then(function(r){return r.json()}).then(function(data){
-        var items=[];
-        if(Array.isArray(data))items=data;
-        else if(data&&Array.isArray(data.gifts))items=data.gifts;
-        else if(data&&Array.isArray(data.items))items=data.items;
-        else if(data&&Array.isArray(data.result))items=data.result;
+        var items=[]; if(Array.isArray(data))items=data; else if(data&&Array.isArray(data.gifts))items=data.gifts; else if(data&&Array.isArray(data.items))items=data.items; else if(data&&Array.isArray(data.result))items=data.result;
         if(!items.length){CATALOG=FALLBACK.slice();fin();return}
-        var map=new Map();
-        // 🔥 FALLBACK — источник истины для цен. API только добавляет новые предметы.
-        FALLBACK.forEach(function(f){ map.set(f.name, {name:f.name, value:f.value}); });
-        items.forEach(function(it){
-            var name=it.name||it.title||it.slug;
-            if(!name)return;
-            if(map.has(name)) return; // не перезаписываем цены из FALLBACK
-            var val=Number(it.value||it.price||0)||0;
-            map.set(name, {name:String(name), value:val||10});
-        });
-        CATALOG=Array.from(map.values()).sort(function(a,b){return(a.value||0)-(b.value||0)});
-        fin()
+        var map=new Map(); FALLBACK.forEach(function(f){ map.set(f.name, {name:f.name, value:f.value}); });
+        items.forEach(function(it){ var name=it.name||it.title||it.slug; if(!name)return; if(map.has(name)) return; var val=Number(it.value||it.price||0)||0; map.set(name, {name:String(name), value:val||10}); });
+        CATALOG=Array.from(map.values()).sort(function(a,b){return(a.value||0)-(b.value||0)}); fin()
     }).catch(function(){CATALOG=FALLBACK.slice();fin()})
 }
 
 function boot(){
-  document.addEventListener('touchstart', ia, {once:true});
-  document.addEventListener('click', ia, {once:true});
-
+  document.addEventListener('touchstart', ia, {once:true}); document.addEventListener('click', ia, {once:true});
   document.body.classList.add('loading-active');
-  try{updBal()}catch(e){}
-  try{buildMenu()}catch(e){}
-  try{renderMult();renderInv();renderArena();renderTargets();updatePctUI()}catch(e){}
-  try{Roll.buildWheel();Roll.update();renderRocketHistory();renderShop()}catch(e){}
-  try{Rocket.init()}catch(e){}
-  try{generateFakeHistory()}catch(e){}
-  
-  setInterval(function() {
-      const el = document.getElementById('onlineCount');
-      if(el) el.textContent = Math.floor(Math.random() * 3) + 1;
-  }, 5000);
-
+  try{updBal()}catch(e){} try{buildMenu()}catch(e){} try{renderMult();renderInv();renderArena();renderTargets();updatePctUI()}catch(e){} try{Roll.buildWheel();Roll.update();renderRocketHistory();renderShop()}catch(e){} try{Rocket.init()}catch(e){}
+  setInterval(function() { const el = document.getElementById('onlineCount'); if(el) el.textContent = Math.floor(Math.random() * 3) + 1; }, 5000);
   loadCatalog(function(){try{renderInv();renderArena();renderTargets();renderShop()}catch(e){}});
-  runLoad(2600,function(){
-    var loading=document.getElementById('loading');if(loading)loading.classList.add('hide');
-    if(window.__stopLoadingParticles)window.__stopLoadingParticles();
-    setTimeout(function(){document.body.classList.remove('loading-active');document.body.style.overflow='';document.body.style.position=''},100);
-    try{Rocket.init();rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;updateRocketBtn()}catch(e){}
-  })
+  runLoad(2600,function(){ var loading=document.getElementById('loading');if(loading)loading.classList.add('hide'); if(window.__stopLoadingParticles)window.__stopLoadingParticles(); setTimeout(function(){document.body.classList.remove('loading-active');document.body.style.overflow='';document.body.style.position=''},100); try{Rocket.init();rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;updateRocketBtn()}catch(e){} })
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 setInterval(rocketTick,50);
