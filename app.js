@@ -32,10 +32,9 @@ var FALLBACK=[
 {name:'Coffee',value:300},{name:'Snowman',value:399},{name:'Snake',value:400},{name:'Candles 25',value:400},
 {name:'Candy Cane',value:420},{name:'Gnome',value:440},{name:'Backpack',value:450},{name:'Poop',value:458},{name:'Lantern',value:460},{name:'Noodles',value:460},{name:'Cake 8',value:460},{name:'Ice Cream',value:470},{name:'Flamingo',value:474},{name:'Lollipop',value:480},{name:'Happy B-Day',value:480},{name:'Sparkler',value:480},{name:'Tamagotchi',value:480},{name:'Golden Egg',value:480},
 {name:'Liberty',value:481},{name:'Snoop Dogg',value:481},{name:'Weed',value:481},{name:'Clover',value:481},{name:'Socks',value:481},{name:'Moon',value:481},{name:'Cherry Cake',value:481},{name:'Heart Cookie',value:481},{name:'Medal',value:481},{name:'Book',value:481},{name:'Money Bag',value:481},{name:'Retro Rocket',value:481},{name:'Heart Jar',value:481},{name:'Pink Cake',value:481},{name:'Flowers Pot',value:481},{name:'Gingerbread',value:481},{name:'Wine Glass',value:481},{name:'Vinyl',value:481},{name:'Hot Chocolate',value:481},{name:'Door',value:481},{name:'Pot of Gold',value:481},{name:'Cauldron',value:481},{name:'Wreath',value:481},{name:'Jack in the Box',value:481},{name:'Bow Tie',value:481},{name:'Candle',value:481},
-{name:'Broken Egg',value:487},{name:'Calendar',value:500},{name:'Heart Box',value:514},{name:'Moon Necklace',value:515},{name:'Lightsaber',value:541},{name:'Skateboard',value:549},{name:'Snow Globe',value:563},{name:'Witch Hat',value:587},{name:'Mushroom',value:585},{name:'Santa Hat',value:597},{name:'Jester Hat',value:604},{name:'Rabbit Basket',value:604},{name:'Boxing Monkey',value:604},{name:'Blue Gift',value:617},{name:'Hockey Mask',value:625},{name:'Love You',value:648},{name:'Pen',value:691},{name:'Skates',value:687},{name:'Cupcake',value:734},{name:'Dumplings',value:743},{name:'Chocolate Box',value:757},{name:'Gold Bar',value:758},{name:'Bells',value:791},{name:'Star',value:798},{name:'Gold Bell',value:825},{name:'Top Hat',value:826},{name:'Sakura',value:891},{name:'Crystal White',value:963},{name:'Blue Diamond Ring',value:959},{name:'Bracelet',value:963},{name:'Gold Key',value:1837},{name:'Gold Watch',value:4527} // Ой, тут немного перепутал порядок, идем дальше по порядку
+{name:'Broken Egg',value:487},{name:'Calendar',value:500},{name:'Heart Box',value:514},{name:'Moon Necklace',value:515},{name:'Lightsaber',value:541},{name:'Skateboard',value:549},{name:'Snow Globe',value:563},{name:'Witch Hat',value:587},{name:'Mushroom',value:585},{name:'Santa Hat',value:597},{name:'Jester Hat',value:604},{name:'Rabbit Basket',value:604},{name:'Boxing Monkey',value:604},{name:'Blue Gift',value:617},{name:'Hockey Mask',value:625},{name:'Love You',value:648},{name:'Pen',value:691},{name:'Skates',value:687},{name:'Cupcake',value:734},{name:'Dumplings',value:743},{name:'Chocolate Box',value:757},{name:'Gold Bar',value:758},{name:'Bells',value:791},{name:'Star',value:798},{name:'Gold Bell',value:825},{name:'Top Hat',value:826},{name:'Sakura',value:891},{name:'Crystal White',value:963},{name:'Blue Diamond Ring',value:959},{name:'Bracelet',value:963},{name:'Gold Key',value:1837},{name:'Gold Watch',value:4527}
 ];
 
-// СОРТИРОВКА ДЛЯ КРАСОТЫ (эта строчка оставит всё по порядку цен)
 FALLBACK.sort(function(a,b){return a.value - b.value});
 var CATALOG=FALLBACK.slice();
 function rarityInfo(v){if(v<100)return{c:'#8a8a95',glow:'rgba(138,138,149,0.5)',bd:'rgba(138,138,149,0.3)'};if(v<500)return{c:'#4b69ff',glow:'rgba(75,105,255,0.6)',bd:'rgba(75,105,255,0.55)'};if(v<2000)return{c:'#8847ff',glow:'rgba(136,71,255,0.7)',bd:'rgba(136,71,255,0.6)'};if(v<10000)return{c:'#d32ce6',glow:'rgba(211,44,230,0.75)',bd:'rgba(211,44,230,0.65)'};if(v<50000)return{c:'#eb4b4b',glow:'rgba(235,75,75,0.85)',bd:'rgba(235,75,75,0.7)'};return{c:'#ffd700',glow:'rgba(255,215,0,0.9)',bd:'rgba(255,215,0,0.8)'}}
@@ -110,6 +109,227 @@ var CASES_DATA = [
     { id: 'c4', name: 'Легендарный', price: 50000, rarity: 4, pool: FALLBACK.filter(f => f.value >= 5000 && f.value <= 50000) },
     { id: 'c5', name: 'Мифический', price: 200000, rarity: 5, pool: FALLBACK.filter(f => f.value >= 20000) }
 ];
+
+// ============================================================
+// БЕСПЛАТНЫЙ КЕЙС ЗА ПОДПИСКИ / ДЕПОЗИТ / ДРУЗЕЙ
+// ============================================================
+var FREE_CASE = {
+    channels: [
+        {key:'ch1', name:'RollUp News',  url:'https://t.me/RollUp_BOT'},
+        {key:'ch2', name:'RollUp Chat',  url:'https://t.me/RollUp_Chat'},
+        {key:'ch3', name:'RollUp Promo', url:'https://t.me/RollUp_Promo'}
+    ],
+    minDeposit: 100,
+    minFriends: 5,
+    rewardMin: 400,
+    rewardMax: 700
+};
+
+var freeCaseState = { subscribed:{}, deposited:0, friendsInvited:0, claimed:false };
+try {
+    var fcs = JSON.parse(Store.get(P + 'freecase') || 'null');
+    if (fcs && typeof fcs === 'object') {
+        freeCaseState.subscribed = fcs.subscribed || {};
+        freeCaseState.deposited = Number(fcs.deposited) || 0;
+        freeCaseState.friendsInvited = Number(fcs.friendsInvited) || 0;
+        freeCaseState.claimed = !!fcs.claimed;
+    }
+} catch(e) {}
+
+function saveFreeCase(){ try{ Store.set(P + 'freecase', JSON.stringify(freeCaseState)); }catch(e){} }
+
+function freeCaseProgress(){
+    var subsDone = FREE_CASE.channels.filter(function(c){ return freeCaseState.subscribed[c.key]; }).length;
+    var depDone = freeCaseState.deposited >= FREE_CASE.minDeposit;
+    var friendsDone = freeCaseState.friendsInvited >= FREE_CASE.minFriends;
+    return {
+        subsDone: subsDone, subsTotal: FREE_CASE.channels.length,
+        depDone: depDone, depAmount: freeCaseState.deposited, depNeeded: FREE_CASE.minDeposit,
+        friendsDone: friendsDone, friendsAmount: freeCaseState.friendsInvited, friendsNeeded: FREE_CASE.minFriends,
+        allDone: subsDone === FREE_CASE.channels.length && depDone && friendsDone,
+        claimed: freeCaseState.claimed
+    };
+}
+
+function openTgLink(url){
+    try { if (tg && tg.openLink) { tg.openLink(url); return; } } catch(e){}
+    window.open(url, '_blank');
+}
+function shareTg(text, url){
+    var shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
+    try { if (tg && tg.openTelegramLink) { tg.openTelegramLink(shareUrl); return; } } catch(e){}
+    window.open(shareUrl, '_blank');
+}
+
+function createFreeCaseCard(){
+    var el = document.createElement('div');
+    el.className = 'case-menu-card free-case-card';
+    el.setAttribute('data-rarity', '5');
+
+    var prog = freeCaseProgress();
+    var statusLabel = prog.claimed ? 'Получено' : (prog.allDone ? 'ГОТОВО!' : 'ЗАДАНИЯ');
+
+    el.innerHTML = `
+        <div class="free-case-badge">FREE</div>
+        <div class="free-case-inner">
+            <div class="free-case-left"><div class="free-case-icon">${iconTag('Red Gift', 128)}</div></div>
+            <div class="free-case-right">
+                <div class="free-case-title">Бесплатный кейс</div>
+                <div class="free-case-sub">Гифт до ${FREE_CASE.rewardMax}★ за подписки</div>
+                <div class="free-case-progress">
+                    <span class="fcp-item ${prog.subsDone===prog.subsTotal?'done':''}">📢 ${prog.subsDone}/${prog.subsTotal}</span>
+                    <span class="fcp-item ${prog.depDone?'done':''}">💎 ${Math.min(prog.depAmount,prog.depNeeded)}/${prog.depNeeded}</span>
+                    <span class="fcp-item ${prog.friendsDone?'done':''}">👥 ${Math.min(prog.friendsAmount,prog.friendsNeeded)}/${prog.friendsNeeded}</span>
+                </div>
+            </div>
+        </div>
+        <div class="free-case-status ${prog.allDone?'ready':''} ${prog.claimed?'claimed':''}">${statusLabel}</div>
+    `;
+
+    el.addEventListener('click', function(){
+        sClick();
+        if (prog.claimed) { toast('info','Кейс уже получен'); return; }
+        openFreeCaseModal();
+    });
+    return el;
+}
+
+function openFreeCaseModal(){
+    var modal = document.getElementById('freeCaseModal');
+    if (!modal) return;
+    renderFreeCaseModal();
+    modal.classList.add('on');
+}
+
+function renderFreeCaseModal(){
+    var prog = freeCaseProgress();
+    var prev = document.getElementById('fcRewardPreview');
+    if (prev) prev.innerHTML = iconTag('Red Gift', 128);
+
+    // Каналы
+    var ch = document.getElementById('fcChannels');
+    if (ch) {
+        ch.innerHTML = '';
+        FREE_CASE.channels.forEach(function(c){
+            var done = !!freeCaseState.subscribed[c.key];
+            var item = document.createElement('div');
+            item.className = 'fc-req' + (done ? ' done' : '');
+            item.innerHTML = `
+                <div class="fc-req-icon">${done?'✓':'📢'}</div>
+                <div class="fc-req-info">
+                    <div class="fc-req-title">${c.name}</div>
+                    <div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div>
+                </div>
+                <button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'✓':'Открыть'}</button>
+            `;
+            ch.appendChild(item);
+        });
+        ch.querySelectorAll('.fc-req-btn[data-ch]').forEach(function(btn){
+            btn.addEventListener('click', function(e){
+                e.stopPropagation();
+                var key = btn.getAttribute('data-ch');
+                var c = FREE_CASE.channels.filter(function(x){return x.key===key})[0];
+                if (!c) return;
+                openTgLink(c.url);
+                freeCaseState.subscribed[key] = true;
+                saveFreeCase();
+                sClick();
+                toast('success','Подписка отмечена');
+                setTimeout(function(){ renderFreeCaseModal(); renderCases(); }, 300);
+            });
+        });
+    }
+
+    // Депозит
+    var dep = document.getElementById('fcDeposit');
+    if (dep) {
+        dep.className = 'fc-req' + (prog.depDone ? ' done' : '');
+        dep.innerHTML = `
+            <div class="fc-req-icon">${prog.depDone?'✓':'💎'}</div>
+            <div class="fc-req-info">
+                <div class="fc-req-title">Пополнить на ${FREE_CASE.minDeposit}★</div>
+                <div class="fc-req-desc">${prog.depDone?'Выполнено':'Внесено: '+prog.depAmount+'/'+prog.depNeeded+'★'}</div>
+            </div>
+            <button class="fc-req-btn ${prog.depDone?'done':''}" id="fcDepositBtn" ${prog.depDone?'disabled':''}>${prog.depDone?'✓':'Пополнить'}</button>
+        `;
+        var depBtn = document.getElementById('fcDepositBtn');
+        if (depBtn) depBtn.addEventListener('click', function(e){
+            e.stopPropagation(); sClick();
+            document.getElementById('freeCaseModal').classList.remove('on');
+            document.getElementById('starsAmt').value = '';
+            document.getElementById('starsModal').classList.add('on');
+        });
+    }
+
+    // Друзья
+    var fr = document.getElementById('fcFriends');
+    if (fr) {
+        fr.className = 'fc-req' + (prog.friendsDone ? ' done' : '');
+        fr.innerHTML = `
+            <div class="fc-req-icon">${prog.friendsDone?'✓':'👥'}</div>
+            <div class="fc-req-info">
+                <div class="fc-req-title">Пригласить ${FREE_CASE.minFriends} друзей</div>
+                <div class="fc-req-desc">${prog.friendsDone?'Выполнено':'Приглашено: '+prog.friendsAmount+'/'+prog.friendsNeeded}</div>
+            </div>
+            <button class="fc-req-btn ${prog.friendsDone?'done':''}" id="fcFriendsBtn" ${prog.friendsDone?'disabled':''}>${prog.friendsDone?'✓':'Пригласить'}</button>
+        `;
+        var frBtn = document.getElementById('fcFriendsBtn');
+        if (frBtn) frBtn.addEventListener('click', function(e){
+            e.stopPropagation(); sClick();
+            shareTg('Залетай в RollUp Premium — крутой казик с гифтами!',
+                    'https://t.me/RollUp_BOT?start=ref_' + UID);
+            // Демо-инкремент (в проде — верификация через backend по start_param)
+            if (freeCaseState.friendsInvited < FREE_CASE.minFriends) {
+                freeCaseState.friendsInvited++;
+                saveFreeCase();
+                toast('info','Приглашено: ' + freeCaseState.friendsInvited + '/' + FREE_CASE.minFriends);
+                setTimeout(function(){ renderFreeCaseModal(); renderCases(); }, 300);
+            }
+        });
+    }
+
+    // Кнопка открытия
+    var openBtn = document.getElementById('fcOpenBtn');
+    if (openBtn) {
+        openBtn.disabled = !prog.allDone;
+        openBtn.textContent = prog.allDone ? 'Открыть бесплатный кейс' : 'Выполни все задания';
+        openBtn.className = 'btn ' + (prog.allDone ? 'pri' : 'sec');
+        openBtn.onclick = function(){
+            var p = freeCaseProgress();
+            if (!p.allDone) { sErr(); return; }
+            if (freeCaseState.claimed) { toast('info','Кейс уже получен'); return; }
+            openFreeCaseReward();
+        };
+    }
+}
+
+function openFreeCaseReward(){
+    sOpenCase();
+    document.getElementById('freeCaseModal').classList.remove('on');
+
+    var pool = CATALOG.filter(function(it){
+        return (it.value||0) >= FREE_CASE.rewardMin && (it.value||0) <= FREE_CASE.rewardMax;
+    });
+    if (!pool.length) pool = CATALOG.slice();
+    var winItem = pool[Math.floor(Math.random() * pool.length)];
+
+    inventory.push({name: winItem.name, value: winItem.value||0});
+    inventory.sort(function(a,b){ return (a.value||0) - (b.value||0); });
+    freeCaseState.claimed = true;
+    saveFreeCase();
+    save();
+
+    setTimeout(function(){
+        openGiftModal(winItem);
+        sWin();
+        confetti();
+        haptic('success');
+        try { renderInv(); renderArena(); renderTargets(); } catch(e){}
+        renderCases();
+    }, 400);
+}
+
+// ============================================================
 var isCaseSpinning = false;
 var currentCaseData = null;
 var menuOffset = 0;
@@ -119,7 +339,10 @@ function renderCases() {
     var g = document.getElementById('caseGrid');
     if (!g) return;
     g.innerHTML = '';
-    
+
+    // 🔥 Бесплатный кейс — всегда первым (на всю ширину)
+    g.appendChild(createFreeCaseCard());
+
     CASES_DATA.forEach(function(c) {
         var el = document.createElement('div');
         el.className = 'case-menu-card';
@@ -130,7 +353,6 @@ function renderCases() {
             var item = c.pool[Math.floor(Math.random() * c.pool.length)];
             trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
         }
-        // Дубликат для бесшовности
         for (var i = 0; i < 15; i++) {
             var item = c.pool[Math.floor(Math.random() * c.pool.length)];
             trackHTML += `<div class="cm-item" style="border-color:${rarityInfo(item.value).c}">${iconTag(item.name, 64)}</div>`;
@@ -167,10 +389,8 @@ function startMenuLoop() {
         var dt = now - lastTime;
         lastTime = now;
         
-        // Скорость прокрутки (пикселей в миллисекунду)
         menuOffset -= 0.05 * dt; 
         
-        // Сброс, если уехали на длину первой половины (15 элементов по 65px)
         if (Math.abs(menuOffset) >= 15 * 65) {
             menuOffset = 0;
         }
@@ -247,6 +467,12 @@ if (closeCase) closeCase.addEventListener('click', function() {
     if (isCaseSpinning) return;
     sClick();
     document.getElementById('caseModal').classList.remove('on');
+});
+
+var closeFreeCase = document.getElementById('closeFreeCaseModal');
+if (closeFreeCase) closeFreeCase.addEventListener('click', function() {
+    sClick();
+    document.getElementById('freeCaseModal').classList.remove('on');
 });
 
 var openCaseBtn = document.getElementById('openCaseBtn');
@@ -420,7 +646,30 @@ var pickMode=null;function openPicker(mode){if(!inventory.length){sErr();return}
 document.getElementById('pickClose').addEventListener('click',function(){sClick();document.getElementById('pickModal').classList.remove('on')});
 document.getElementById('plusBtn').addEventListener('click',function(){sClick();document.getElementById('starsAmt').value='';document.getElementById('starsModal').classList.add('on')});
 document.getElementById('starsClose').addEventListener('click',function(){sClick();document.getElementById('starsModal').classList.remove('on')});
-document.getElementById('starsOk').addEventListener('click',function(){var amt=parseInt(document.getElementById('starsAmt').value,10);if(!amt||amt<=0){sErr();return}balance+=amt;updBal();save();sClick();toast('success','+'+fmt(amt)+' ★');setTimeout(function(){document.getElementById('starsModal').classList.remove('on')},500)});
+
+// ⬇️⬇️⬇️ ИЗМЕНЕНО: теперь пополнение засчитывается в прогресс бесплатного кейса
+document.getElementById('starsOk').addEventListener('click',function(){
+    var amt=parseInt(document.getElementById('starsAmt').value,10);
+    if(!amt||amt<=0){sErr();return}
+    balance+=amt;
+    updBal();
+    save();
+    sClick();
+    toast('success','+'+fmt(amt)+' ★');
+
+    // Учитываем депозит для бесплатного кейса
+    freeCaseState.deposited += amt;
+    saveFreeCase();
+
+    setTimeout(function(){
+        document.getElementById('starsModal').classList.remove('on');
+        // Обновляем прогресс, если открыт бесплатный кейс или экран кейсов
+        var fcModal = document.getElementById('freeCaseModal');
+        if (fcModal && fcModal.classList.contains('on')) renderFreeCaseModal();
+        if (curScreen === 'cases') renderCases();
+    },500);
+});
+
 document.querySelectorAll('#starsModal [data-q]').forEach(function(b){b.addEventListener('click',function(){sClick();document.getElementById('starsAmt').value=b.getAttribute('data-q')})});
 document.getElementById('promoBtn').addEventListener('click',function(){sClick();document.getElementById('promoMsg').textContent='';document.getElementById('promoInput').value='';document.getElementById('promoModal').classList.add('on')});
 document.getElementById('promoClose').addEventListener('click',function(){sClick();document.getElementById('promoModal').classList.remove('on')});
@@ -511,7 +760,33 @@ document.getElementById('newsClose').addEventListener('click',function(){sClick(
 document.getElementById('logoBtn').addEventListener('click',function(){if(curScreen==='menu')return;sClick();goScreen('menu')});
 function setLoad(p,text){var bar=document.getElementById('loadingBar');var txt=document.getElementById('loadingText');if(bar)bar.style.width=p+'%';if(txt&&text!==undefined)txt.textContent=text}
 function runLoad(dur,done){var start=performance.now();var stages=[{t:0,s:'Инициализация...'},{t:.12,s:'Интерфейс...'},{t:.28,s:'Режимы...'},{t:.45,s:'Инвентарь...'},{t:.62,s:'Каталог...'},{t:.80,s:'Финал...'},{t:.94,s:'Почти...'},{t:1,s:'Готово!'}];var last=-1;function tick(now){var p=Math.min(1,(now-start)/dur);setLoad(p*100);for(var i=stages.length-1;i>=0;i--){if(p>=stages[i].t){if(i>last){last=i;setLoad(p*100,stages[i].s)}break}}if(p<1)requestAnimationFrame(tick);else setTimeout(done,350)}requestAnimationFrame(tick)}
-function loadCatalog(cb){var done=false;function fin(){if(done)return;done=true;if(cb)cb()}setTimeout(fin,3000);fetch('https://api.changes.tg/original/list?size=200').then(function(r){return r.json()}).then(function(data){var items=[];if(Array.isArray(data))items=data;else if(data&&Array.isArray(data.gifts))items=data.gifts;else if(data&&Array.isArray(data.items))items=data.items;else if(data&&Array.isArray(data.result))items=data.result;if(!items.length){CATALOG=FALLBACK.slice();fin();return}var map=new Map();items.forEach(function(it){var name=it.name||it.title||it.slug;if(!name)return;var val=Number(it.value||it.price||0)||0;var fb=FALLBACK.filter(function(f){return f.name===name})[0];map.set(name,{name:String(name),value:val||(fb?fb.value:10)})});FALLBACK.forEach(function(f){if(!map.has(f.name))map.set(f.name,{name:f.name,value:f.value})});CATALOG=Array.from(map.values()).sort(function(a,b){return(a.value||0)-(b.value||0)});fin()}).catch(function(){CATALOG=FALLBACK.slice();fin()})}
+
+// ⬇️⬇️⬇️ ИЗМЕНЕНО: FALLBACK теперь имеет приоритет над API
+function loadCatalog(cb){
+    var done=false;
+    function fin(){if(done)return;done=true;if(cb)cb()}
+    setTimeout(fin,3000);
+    fetch('https://api.changes.tg/original/list?size=200').then(function(r){return r.json()}).then(function(data){
+        var items=[];
+        if(Array.isArray(data))items=data;
+        else if(data&&Array.isArray(data.gifts))items=data.gifts;
+        else if(data&&Array.isArray(data.items))items=data.items;
+        else if(data&&Array.isArray(data.result))items=data.result;
+        if(!items.length){CATALOG=FALLBACK.slice();fin();return}
+        var map=new Map();
+        // 🔥 FALLBACK — источник истины для цен. API только добавляет новые предметы.
+        FALLBACK.forEach(function(f){ map.set(f.name, {name:f.name, value:f.value}); });
+        items.forEach(function(it){
+            var name=it.name||it.title||it.slug;
+            if(!name)return;
+            if(map.has(name)) return; // не перезаписываем цены из FALLBACK
+            var val=Number(it.value||it.price||0)||0;
+            map.set(name, {name:String(name), value:val||10});
+        });
+        CATALOG=Array.from(map.values()).sort(function(a,b){return(a.value||0)-(b.value||0)});
+        fin()
+    }).catch(function(){CATALOG=FALLBACK.slice();fin()})
+}
 
 function boot(){
   document.addEventListener('touchstart', ia, {once:true});
