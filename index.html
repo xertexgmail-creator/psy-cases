@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css?v=20">
+<link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 
@@ -23,10 +23,7 @@
 </div>
 </div>
 
-<div class="page-loader" id="pageLoader">
-  <div class="spinner"></div>
-</div>
-
+<div class="page-loader" id="pageLoader"><div class="spinner"></div></div>
 <div id="err"></div>
 
 <div class="stage">
@@ -127,27 +124,17 @@
 <!-- МОДАЛЬНОЕ ОКНО КЕЙСА -->
 <div class="ov" id="caseModal">
   <div class="modal case-modal-content glass-panel">
-    <button class="close-btn" id="closeCaseModal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-    
-    <div class="case-modal-header">
-      <div class="case-modal-title" id="caseModalTitle">Кейс</div>
-    </div>
-
+    <button class="close-btn" id="closeCaseModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div class="case-modal-header"><div class="case-modal-title" id="caseModalTitle">Кейс</div></div>
     <div class="case-rolling-area" id="caseRollingArea">
       <div class="case-track-wrap glass-panel">
-        <div class="track-fade-left"></div>
-        <div class="track-fade-right"></div>
-        <div class="case-pointer"></div>
+        <div class="track-fade-left"></div><div class="track-fade-right"></div><div class="case-pointer"></div>
         <div class="case-track" id="caseTrack"></div>
       </div>
     </div>
-
     <div class="case-actions" style="width:100%; margin-top:15px;">
       <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; padding:16px; font-size:15px;">Открыть за <span id="casePriceBtn">500</span> ★</button>
     </div>
-
     <div class="case-pool-wrapper">
       <div class="case-pool-title">Содержимое кейса</div>
       <div class="case-pool-grid" id="casePoolGrid"></div>
@@ -155,16 +142,14 @@
   </div>
 </div>
 
-<!-- БЕСПЛАТНЫЙ КЕЙС (БЕЗ ЭМОДЗИ) -->
+<!-- БЕСПЛАТНЫЙ КЕЙС (1 КАНАЛ) -->
 <div class="ov" id="freeCaseModal">
   <div class="modal glass-panel" style="max-width:420px; padding:20px;">
-    <button class="close-btn" id="closeFreeCaseModal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
+    <button class="close-btn" id="closeFreeCaseModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="modal-t">Бесплатный кейс</div>
     <div class="modal-s">Выполни все задания — получи случайный гифт до 700★</div>
     
-    <div id="fcChannels"></div>
+    <div id="fcChannelBox"></div>
     <div id="fcDeposit"></div>
     <div id="fcFriends"></div>
     
@@ -175,9 +160,7 @@
 <!-- МОДАЛКА ПРОСМОТРА ГИФТА -->
 <div class="ov" id="giftModal" style="z-index: 500;">
   <div class="modal glass-panel" style="max-width: 300px; text-align: center;">
-    <button class="close-btn" id="closeGiftModal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
+    <button class="close-btn" id="closeGiftModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="bgic" id="viewGiftIcon" style="width: 120px; height: 120px; margin-bottom: 15px;"></div>
     <div class="modal-t" id="viewGiftName" style="font-size: 20px; margin-bottom: 5px;">Гифт</div>
     <div class="modal-s" style="font-size: 16px; font-weight: 900; color: var(--gold);" id="viewGiftPrice">— ★</div>
@@ -185,8 +168,22 @@
   </div>
 </div>
 
-<!-- ОСТАЛЬНЫЕ МОДАЛКИ -->
-<div class="ov" id="starsModal"><div class="modal glass-panel"><button class="close-btn" id="starsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Пополнение</div><div class="modal-s">Введи сумму</div><input type="number" class="inp" id="starsAmt" placeholder="500" min="1"><div class="qrow"><button class="btn sec" data-q="100" type="button">100</button><button class="btn sec" data-q="500" type="button">500</button><button class="btn sec" data-q="1000" type="button">1K</button><button class="btn sec" data-q="10000" type="button">10K</button></div><div class="row"><button class="btn pri" id="starsOk" type="button">Пополнить</button></div></div></div>
+<!-- ОБНОВЛЕННОЕ ОКНО ПОПОЛНЕНИЯ -->
+<div class="ov" id="starsModal">
+  <div class="modal glass-panel" style="max-width:360px; text-align:center;">
+    <button class="close-btn" id="starsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div class="modal-t">Пополнение</div>
+    <div class="modal-s">Введи сумму в звездах</div>
+    
+    <div class="premium-input-wrap">
+      <div class="premium-star">★</div>
+      <input type="number" class="premium-inp" id="starsAmt" placeholder="0" min="1">
+    </div>
+    
+    <button class="btn pri" id="starsOk" type="button" style="width:100%; padding:16px; font-size:15px; border-radius:12px;">Пополнить</button>
+  </div>
+</div>
+
 <div class="ov" id="pickModal"><div class="modal glass-panel"><button class="close-btn" id="pickClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Выбери гифт</div><div class="pickgr" id="pickGrid"></div></div></div>
 <div class="ov" id="buyModal"><div class="modal glass-panel"><button class="close-btn" id="buyCancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="bgic" id="buyIcon"></div><div class="modal-t" id="buyName">—</div><div class="modal-s" id="buyPrice" style="font-size:20px;font-weight:900;">—</div><div class="row"><button class="btn pri" id="buyConfirm" type="button" style="width:100%;">Купить</button></div></div></div>
 <div class="ov" id="promoModal"><div class="modal glass-panel"><button class="close-btn" id="promoClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Промокод</div><div class="modal-s">Введи код</div><input type="text" class="inp" id="promoInput" placeholder="ПРОМОКОД"><div id="promoMsg" style="font-size:11px;font-weight:700;min-height:16px;text-align:center;margin-bottom:12px;"></div><div class="row"><button class="btn pri" id="promoOk" type="button" style="width:100%;">Активировать</button></div></div></div>
@@ -196,7 +193,6 @@
 <div class="ov" id="profileModal">
   <div class="modal glass-panel" style="max-width:420px; padding:0; overflow:hidden;">
     <button class="close-btn" id="profileClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    
     <div class="profile-header-bg"></div>
     <div class="profile-header">
       <div class="ava-lg" id="pAva">?</div>
@@ -208,19 +204,16 @@
         </div>
       </div>
     </div>
-
     <div class="profile-actions">
       <button class="btn sec" style="font-size:11px; padding:10px;">Пополнить</button>
       <button class="btn pri" id="withdrawBtn" style="font-size:11px; padding:10px;">Вывести</button>
     </div>
-
     <div class="acard" id="adminCard" style="margin: 10px 20px 0; display:none;">
       <div class="abtns">
         <button class="abtn red" id="admClearInv" type="button">Очистить инвентарь</button>
         <button class="abtn red" id="admWipe" type="button">Вайп аккаунта</button>
       </div>
     </div>
-
     <div class="profile-inventory-wrapper">
       <div class="profile-inv-title">Инвентарь</div>
       <div class="pinv-list" id="pInvList"></div>
@@ -246,6 +239,6 @@
   </div>
 </div>
 
-<script src="app.js?v=20"></script>
+<script src="app.js?v=21"></script>
 </body>
 </html>
