@@ -97,6 +97,57 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .close-btn:hover { background: rgba(255,42,85,0.2); color: var(--crimson); border-color: rgba(255,42,85,0.4); transform: rotate(90deg); }
 .close-btn svg { width: 16px; height: 16px; }
 
+/* ===== SVG / иконки под тёмный фон ===== */
+.si { width: 16px; height: 16px; color: currentColor; filter: drop-shadow(0 0 6px rgba(0,0,0,0.6)); }
+.sicon img, .ssi img, .cp-item img, .cm-item img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.bgic img { width: 90%; height: 90%; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7)); }
+.iconTag img { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); }
+
+/* Убираем белую окантовку у SVG иконок в тёмных кнопках */
+.sicon, .ssi, .bgic { background: rgba(0,0,0,0.15); border-radius: 8px; }
+/* Портал: иконка в кнопке режима */
+.card-ic img, .hero-ic img { filter: drop-shadow(0 12px 24px rgba(0,0,0,0.9)) drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
+
+/* ===== Реалистичные эффекты победы ===== */
+.win-flash { animation: winFlash 0.6s ease-in-out infinite alternate; border-color: var(--gold); box-shadow: 0 0 24px var(--gold), inset 0 0 12px rgba(255,215,0,0.3); }
+@keyframes winFlash { 0% { transform: scale(1); box-shadow: 0 0 16px var(--gold); } 100% { transform: scale(1.08); box-shadow: 0 0 32px var(--gold); } }
+
+.screenFlashGreen { animation: screenFlashGreen 0.5s ease-in-out forwards; }
+@keyframes screenFlashGreen { 0% { box-shadow: 0 0 0 rgba(16,185,129,0); } 40% { box-shadow: 0 0 40px rgba(16,185,129,0.35); } 100% { box-shadow: 0 0 0 rgba(16,185,129,0); } }
+
+.loseShake { animation: loseShake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes loseShake { 0%,100%{transform:translateX(0)}10%{transform:translateX(-6px)}20%{transform:translateX(6px)}30%{transform:translateX(-4px)}40%{transform:translateX(4px)}50%{transform:translateX(-2px)}60%{transform:translateX(2px)}70%{transform:translateX(-1px)}80%{transform:translateX(1px)} }
+
+.screenFlashRed { animation: screenFlashRed 0.5s ease-in-out forwards; }
+@keyframes screenFlashRed { 0% { box-shadow: 0 0 0 rgba(255,42,85,0); } 40% { box-shadow: 0 0 40px rgba(255,42,85,0.35); } 100% { box-shadow: 0 0 0 rgba(255,42,85,0); } }
+
+/* Победный тсунами карточек */
+.win.pop { animation: winPop 0.5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes winPop { 0% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.15); filter: brightness(1.25); } 100% { transform: scale(1); filter: brightness(1); } }
+
+/* Победный всплеск экрана */
+@keyframes winFlashScreen {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Правильные стили для всех SVG-иконок под тёмный фон */
+.si { width: 16px; height: 16px; color: currentColor; display: inline-block; vertical-align: middle; filter: drop-shadow(0 0 6px rgba(0,0,0,0.6)); }
+.sicon, .ssi, .bgic { background: rgba(0,0,0,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.sicon img, .ssi img, .cp-item img, .cm-item img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.bgic img { width: 90%; height: 90%; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7)); }
+.card-ic img, .hero-ic img { filter: drop-shadow(0 12px 24px rgba(0,0,0,0.9)) drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
+.free-case-icon img { filter: drop-shadow(0 0 16px rgba(255,215,0,0.4)); }
+
+/* Иконки модалки гифта */
+.gift-hero-img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 24px rgba(255,255,255,0.15)); border-radius: 12px; background: rgba(0,0,0,0.3); padding: 8px; }
+
+/* Кнопки с градиентом и подсветкой */
+.btn.pri::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%); opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 2; }
+.btn.pri:active::after { opacity: 1; animation: btnShineFlash 0.6s; }
+@keyframes btnShineFlash { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
 .click-particle { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 999999; animation: particleAnim 0.6s cubic-bezier(0.15, 0.9, 0.3, 1) forwards; }
 @keyframes particleAnim { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
 
