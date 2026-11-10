@@ -6,6 +6,76 @@ html, body { background: var(--bg); width: 100%; height: 100%; overflow: hidden;
 body { color: var(--tx); font-family: 'Inter', sans-serif; font-size: 14px; display: flex; flex-direction: column; overscroll-behavior: none; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; user-select: none; }
 body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(circle at 15% 0%, rgba(255, 215, 0, 0.06), transparent 50%), radial-gradient(circle at 85% 100%, rgba(255, 42, 85, 0.06), transparent 50%); }
 
+/* ===== Spring-анимации и hover-эффекты ( добавлены ) ===== */
+
+/* Главные кнопки */
+.btn {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.btn:hover { transform: scale(1.05); box-shadow: 0 0 14px var(--gold); }
+.btn:active { transform: scale(0.97); }
+
+/* Все интерактивные элементы */
+.card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card, .invc, .fc-req-btn, .upbtn {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.2s;
+}
+.card:hover, .ib:hover, .bal:hover, .slot:hover, .mbtn:hover, .tab:hover,
+.invcs:hover, .case-menu-card:hover, .invc:hover, .fc-req-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25);
+  filter: brightness(1.1);
+}
+.card:active, .ib:active, .bal:active, .slot:active, .mbtn:active, .tab:active,
+.invcs:active, .case-menu-card:active, .invc:active, .fc-req-btn:active, .upbtn:active {
+  transform: scale(0.97);
+}
+
+/* Модальные окна */
+.ov.on .modal { animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes modalIn { from { opacity: 0; transform: scale(.94) translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Фокус на инпутах */
+input:focus, .inp:focus, .ninput:focus, .premium-inp:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(255,215,0,.2);
+  transition: all .25s;
+}
+
+/* Выделенные карточки кейсов на hover */
+.case-menu-card[data-rarity]:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--gold); }
+.case-item:hover { transform: scale(1.05); border-color: var(--rar-color); box-shadow: 0 0 16px var(--rar-glow); }
+.slot.selected, .slot:hover { transform: scale(1.05); border-color: var(--rar-color); box-shadow: 0 0 14px var(--rar-glow); }
+
+/* Микро-анимации иконок */
+.sicon:hover img, .ssi:hover img, .free-case-icon:hover img {
+  animation: floatIcon 2.5s ease-in-out infinite;
+}
+
+/* Улучшенный pulse для dot-элементов */
+.rph .pdot { animation: pulse 1.2s ease-in-out infinite; }
+
+/* Выделение инвентаря */
+.invc.selected { box-shadow: 0 0 20px var(--rar-glow), inset 0 0 12px var(--rar-glow); }
+
+/* Плавный transition для боковой панели модалок */
+.ov { transition: opacity .3s cubic-bezier(.34,1.56,.64,1); }
+.ov.on { opacity: 1; }
+
+/* Улучшенные табы */
+.tab { transition: all .2s cubic-bezier(.34,1.56,.64,1); }
+.tab.active { transform: translateY(-1px); }
+
+/* Улучшенный скролл инвентаря / кейсов */
+.iscr, .shopscr { scroll-behavior: smooth; }
+.iscr::-webkit-scrollbar, .shopscr::-webkit-scrollbar { width: 4px; height: 4px; }
+.iscr::-webkit-scrollbar-thumb, .shopscr::-webkit-scrollbar-thumb { background: rgba(255,215,0,.4); border-radius: 2px; }
+.iscr::-webkit-scrollbar-thumb:hover, .shopscr::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* (конец добавленных Spring-анимаций) */
+
 button, .card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card, .invc, .fc-req-btn {
   transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s, background-color 0.2s !important;
 }
@@ -95,7 +165,45 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .news-title { font-size: 12px; font-weight: 800; color: #fff; }
 .news-ver { font-size: 10px; color: var(--dim); margin-top: 2px; }
 .news-arrow { margin-left: auto; color: var(--crimson); font-weight: 900; }
-.btn { flex: 1; padding: 14px; border-radius: 12px; border: none; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; }
+.btn { flex: 1; padding: 14px; border-radius: 12px; border: none; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.btn:hover { transform: scale(1.05); box-shadow: 0 0 14px var(--gold); }
+.btn:active { transform: scale(0.97); }
+
+.card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card, .invc, .fc-req-btn, .upbtn { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s; }
+.card:hover, .ib:hover, .bal:hover, .slot:hover, .mbtn:hover, .tab:hover, .invcs:hover, .case-menu-card:hover, .invc:hover, .fc-req-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25); filter: brightness(1.1); }
+.card:active, .ib:active, .bal:active, .slot:active, .mbtn:active, .tab:active, .invcs:active, .case-menu-card:active, .invc:active, .fc-req-btn:active, .upbtn:active { transform: scale(0.97); }
+
+input:focus, .inp:focus, .ninput:focus, .premium-inp:focus { border-color: var(--gold); box-shadow: 0 0 12px rgba(255,215,0,.2); transition: all .25s; }
+
+/* Улучшенные hover‑эффекты для специальных элементов */
+.case-menu-card[data-rarity]:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--gold); }
+.case-item:hover { transform: scale(1.05); border-color: var(--rar-color); box-shadow: 0 0 16px var(--rar-glow); }
+.slot.selected, .slot:hover { transform: scale(1.05); border-color: var(--rar-color); box-shadow: 0 0 14px var(--rar-glow); }
+
+/* Микро-анимации для иконок и инвентаря */
+.sicon:hover img, .ssi:hover img, .free-case-icon:hover img { animation: floatIcon 2.5s ease-in-out infinite; }
+
+/* Улучшенный pulse для dot‑элементов */
+.rph .pdot { animation: pulse 1.2s ease-in-out infinite; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .6; transform: scale(1.2); } }
+
+/* Тень для выделения инвентаря */
+.invc.selected { box-shadow: 0 0 20px var(--rar-glow), inset 0 0 12px var(--rar-glow); }
+
+/* Плавный transition для боковой панели модалок */
+.ov { transition: opacity .3s cubic-bezier(.34,1.56,.64,1); }
+.ov.on { opacity: 1; }
+
+/* Улучшенные табы */
+.tab { transition: all .2s cubic-bezier(.34,1.56,.64,1); }
+.tab.active { transform: translateY(-1px); }
+
+/* Улучшенный скролл инвентаря / кейсов */
+.iscr, .shopscr { scroll-behavior: smooth; }
+.iscr::-webkit-scrollbar, .shopscr::-webkit-scrollbar { width: 4px; height: 4px; }
+.iscr::-webkit-scrollbar-thumb, .shopscr::-webkit-scrollbar-thumb { background: rgba(255,215,0,.4); border-radius: 2px; }
+.iscr::-webkit-scrollbar-thumb:hover, .shopscr::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 .btn.pri { background: linear-gradient(135deg, var(--gold), #FFA500); color: #000; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); }
 .btn.sec { background: rgba(255,255,255,0.05); color: var(--tx); border: 1px solid var(--bd); }
 .arena { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-bottom: 12px; flex-shrink: 0; }
@@ -356,8 +464,7 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 /* ОСТАЛЬНЫЕ МОДАЛКИ */
 .ov { position: fixed; inset: 0; background: rgba(0,0,0,.85); backdrop-filter: blur(8px); display: none; z-index: 300; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); overflow-y: auto; }
 .ov.on { display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
-.modal { padding: 22px; max-width: 360px; width: 100%; flex-shrink: 0; margin: auto; animation: modalIn .3s cubic-bezier(.34,1.56,.64,1); position: relative; }
-@keyframes modalIn { from{transform:scale(.94) translateY(8px);opacity:0}to{transform:none;opacity:1} }
+.modal { padding: 22px; max-width: 360px; width: 100%; flex-shrink: 0; margin: auto; position: relative; }
 .modal-t { font-size: 18px; font-weight: 900; text-align: center; margin-bottom: 16px; letter-spacing: -.02em; font-family: 'Space Grotesk', sans-serif; }
 .modal-s { font-size: 12px; color: var(--dim); text-align: center; margin-bottom: 16px; line-height: 1.5; }
 .inp { width: 100%; background: rgba(0,0,0,.5); border: 1px solid var(--bd); border-radius: 11px; color: var(--tx); font-size: 16px; font-weight: 800; padding: 14px; text-align: center; outline: none; margin-bottom: 12px; transition: all .15s; }
