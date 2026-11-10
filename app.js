@@ -1,9 +1,9 @@
 window.onerror=function(msg,url,line){try{var e=document.getElementById('err');if(e){e.style.display='block';e.textContent='ERR: '+msg+' ['+line+']'}}catch(x){}return false};
 (function(){"use strict";var memStore={};var Store={get:function(k){try{var v=localStorage.getItem(k);return v===null?(memStore[k]||null):v}catch(e){return memStore[k]||null}},set:function(k,v){memStore[k]=String(v);try{localStorage.setItem(k,String(v))}catch(e){}},remove:function(k){delete memStore[k];try{localStorage.removeItem(k)}catch(e){}}};
 var tg=(window.Telegram&&window.Telegram.WebApp)?window.Telegram.WebApp:null;if(!tg){tg={ready:function(){},expand:function(){},initDataUnsafe:{},CloudStorage:null,HapticFeedback:null}}else{try{tg.ready()}catch(e){}try{tg.expand()}catch(e){}}
-var TGU=(tg.initDataUnsafe&&tg.initDataUnsafe.user)||null;var UID=(TGU&&TGU.id)?String(TGU.id):(Store.get('guest_id')||(function(){var id='g'+Math.random().toString(36).slice(2,10);Store.set('guest_id',id);return id})());var P='rollup_'+UID+'_';
+var TGU=(tg.initDataUnsafe&&tg.initDataUnsafe.user)||null;var UID=(TGU&&TGU.id)?String(TGU.id):(Store.get('guest_id')||(function(){var id='g'+Math.random().toString(36).slice(2,10);Store.set('guest_id',id);return id})());var P='rollspin_'+UID+'_';
 var ADMIN=['xertex_grace','onyurknees','romasik09','malindak'];var isAdmin=(function(){var u=TGU&&TGU.username;return u&&ADMIN.indexOf(String(u).toLowerCase())>=0})();
-var vibOn=Store.get('rollup_vib')!=='false';var sndOn=Store.get('rollup_snd')!=='false';
+var vibOn=Store.get('rollspin_vib')!=='false';var sndOn=Store.get('rollspin_snd')!=='false';
 function haptic(type){try{if(!vibOn||!tg.HapticFeedback)return;if(type==='light')tg.HapticFeedback.impactOccurred('light');else if(type==='medium')tg.HapticFeedback.impactOccurred('medium');else if(type==='heavy')tg.HapticFeedback.impactOccurred('heavy');else if(type==='success')tg.HapticFeedback.notificationOccurred('success');else if(type==='error')tg.HapticFeedback.notificationOccurred('error')}catch(e){}}
 var actx=null;function ia(){if(actx)return;try{actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume();}catch(e){}}
 function tone(f,d,t,v,dl){try{if(!sndOn||!actx)return;if(actx.state==='suspended')actx.resume();var t0=actx.currentTime+(dl||0);var o=actx.createOscillator();var g=actx.createGain();o.type=t||'sine';o.frequency.setValueAtTime(f||440,t0);g.gain.setValueAtTime(v||.15,t0);g.gain.exponentialRampToValueAtTime(.001,t0+(d||.1));o.connect(g);g.connect(actx.destination);o.start(t0);o.stop(t0+(d||.1))}catch(e){}}
@@ -93,7 +93,7 @@ var CASES_DATA = [
 // БЕСПЛАТНЫЙ КЕЙС (1 КАНАЛ + ПРОВЕРКА)
 // ============================================================
 var FREE_CASE = {
-    channel: { name: 'RollsUp', url: 'https://t.me/RollsUp', key: 'rollsup' },
+    channel: { name: 'Roll&Spin', url: 'https://t.me/RollSpin1', key: 'rollspin' },
     minDeposit: 100,
     minFriends: 5,
     rewardMin: 400,
@@ -172,31 +172,22 @@ function renderFreeCaseModal(){
         if (btn) btn.addEventListener('click', function(e){
             e.stopPropagation(); 
             if (prog.subDone) {
-                // Если уже подписан, проверяем на отписку
                 btn.textContent = 'Проверка...';
                 btn.disabled = true;
                 setTimeout(function() {
-                    // В реальном приложении здесь запрос к боту: getChatMember
-                    // Сейчас мы имитируем успешную проверку (чтобы не слетало)
-                    // Если хочешь сымитировать отписку, поменяй true на false в след строке:
                     var stillSubscribed = true; 
-                    
                     if (stillSubscribed) {
                         toast('success', 'Вы подписаны!');
                     } else {
-                        freeCaseState.isSubscribed = false;
-                        saveFreeCase();
-                        toast('error', 'Вы отписались от канала!');
+                        freeCaseState.isSubscribed = false; saveFreeCase(); toast('error', 'Вы отписались!');
                     }
                     renderFreeCaseModal(); renderCases();
                 }, 1500);
             } else {
-                // Открываем канал
                 openTgLink(FREE_CASE.channel.url);
                 btn.textContent = 'Проверка...';
                 btn.disabled = true;
                 setTimeout(function() {
-                    // В реальном приложении здесь запрос к боту getChatMember
                     freeCaseState.isSubscribed = true; 
                     saveFreeCase(); sClick(); toast('success','Подписка подтверждена');
                     renderFreeCaseModal(); renderCases();
@@ -220,7 +211,7 @@ function renderFreeCaseModal(){
         var frBtn = document.getElementById('fcFriendsBtn');
         if (frBtn) frBtn.addEventListener('click', function(e){
             e.stopPropagation(); sClick(); 
-            shareTg('Залетай в RollUp Premium — крутой казик с гифтами!', 'https://t.me/RollUp_BOT?start=ref_' + UID);
+            shareTg('Залетай в Roll&Spin — крутой казик с гифтами!', 'https://t.me/RollSpinApp_bot?start=ref_' + UID);
             if (freeCaseState.friendsInvited < FREE_CASE.minFriends) {
                 frBtn.textContent = 'Проверка...'; frBtn.disabled = true;
                 setTimeout(function(){
@@ -432,25 +423,11 @@ document.getElementById('pickClose').addEventListener('click',function(){sClick(
 document.getElementById('plusBtn').addEventListener('click',function(){sClick();document.getElementById('starsAmt').value='';document.getElementById('starsModal').classList.add('on')});
 document.getElementById('starsClose').addEventListener('click',function(){sClick();document.getElementById('starsModal').classList.remove('on')});
 
-// ПОПОЛНЕНИЕ (С ИНВОЙСОМ)
 document.getElementById('starsOk').addEventListener('click',function(){
     var amt = parseInt(document.getElementById('starsAmt').value,10); 
     if(!amt || amt <= 0) { sErr(); return; }
-    
-    // В реальном приложении здесь должен быть fetch к боту для создания счета
-    // Пример:
-    // fetch('https://твой-бот.com/api/create-invoice', {
-    //    method: 'POST', body: JSON.stringify({ amount: amt, uid: UID })
-    // }).then(r => r.json()).then(data => {
-    //    tg.openInvoice(data.invoiceLink, function(status) {
-    //        if (status === 'paid') { balance += amt; updBal(); save(); ... }
-    //    });
-    // });
-    
-    // ТЕСТОВЫЙ РЕЖИМ (пока нет бэкенда):
     balance += amt; updBal(); save(); sClick(); toast('success','+'+fmt(amt)+' ★');
     freeCaseState.deposited += amt; saveFreeCase();
-    
     setTimeout(function(){ 
         document.getElementById('starsModal').classList.remove('on'); 
         var fcModal = document.getElementById('freeCaseModal'); 
@@ -464,8 +441,8 @@ document.getElementById('promoClose').addEventListener('click',function(){sClick
 document.getElementById('promoOk').addEventListener('click',function(){var code=document.getElementById('promoInput').value.trim().toUpperCase();var m=document.getElementById('promoMsg');if(!code){m.style.color='#ef4444';m.textContent='Введи код';sErr();return}if(!PROMO[code]){m.style.color='#ef4444';m.textContent='Неверный';sErr();return}if(isUsed(code)){m.style.color='#ef4444';m.textContent='Использован';sErr();return}var r=PROMO[code];balance+=r;updBal();markUsed(code);save();m.style.color='#10b981';m.textContent='+'+r+' ★';sPromo();haptic('success');setTimeout(function(){document.getElementById('promoModal').classList.remove('on')},1200)});
 document.getElementById('settingsBtn').addEventListener('click',function(){sClick();document.getElementById('vibToggle').checked=vibOn;document.getElementById('sndToggle').checked=sndOn;document.getElementById('settingsModal').classList.add('on')});
 document.getElementById('settingsClose').addEventListener('click',function(){sClick();document.getElementById('settingsModal').classList.remove('on')});
-document.getElementById('vibToggle').addEventListener('change',function(e){vibOn=e.target.checked;Store.set('rollup_vib',vibOn?'true':'false')});
-document.getElementById('sndToggle').addEventListener('change',function(e){sndOn=e.target.checked;Store.set('rollup_snd',sndOn?'true':'false')});
+document.getElementById('vibToggle').addEventListener('change',function(e){vibOn=e.target.checked;Store.set('rollspin_vib',vibOn?'true':'false')});
+document.getElementById('sndToggle').addEventListener('change',function(e){sndOn=e.target.checked;Store.set('rollspin_snd',sndOn?'true':'false')});
 
 document.getElementById('profileBtn').addEventListener('click',function(){sClick();renderProfile();document.getElementById('profileModal').classList.add('on')});
 document.getElementById('profileClose').addEventListener('click',function(){sClick();document.getElementById('profileModal').classList.remove('on')});
@@ -506,16 +483,7 @@ window.sellItem = function(index) {
     var srt=inventory.slice().sort(function(a,b){return(b.value||0)-(a.value||0)});
     var item = srt[index];
     if(!item) return;
-    
-    balance += item.value;
-    updBal();
-    inventory.splice(inventory.indexOf(item), 1);
-    save();
-    sBuy();
-    renderProfile();
-    renderInv();
-    renderArena();
-    renderTargets();
+    balance += item.value; updBal(); inventory.splice(inventory.indexOf(item), 1); save(); sBuy(); renderProfile(); renderInv(); renderArena(); renderTargets();
     toast('success', 'Продано за +' + fmt(item.value) + ' ★');
 }
 
@@ -527,20 +495,13 @@ window.openGiftFromProfile = function(index) {
 
 var withdrawBtn = document.getElementById('withdrawBtn');
 if(withdrawBtn) {
-    withdrawBtn.addEventListener('click', function() {
-        sClick();
-        toast('info', 'Вывод доступен с 2.1.0 (в разработке)');
-    });
+    withdrawBtn.addEventListener('click', function() { sClick(); toast('info', 'Вывод доступен с 2.1.0 (в разработке)'); });
 }
 
 var admClear = document.getElementById('admClearInv');
-if (admClear) {
-    admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
-}
+if (admClear) admClear.addEventListener('click',function(){if(!isAdmin)return;inventory=[];selItems=[];targetItem=null;save();renderInv();renderArena();renderTargets();updatePctUI();toast('success','Очищено')});
 var admWipeBtn = document.getElementById('admWipe');
-if (admWipeBtn) {
-    admWipeBtn.addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
-}
+if (admWipeBtn) admWipeBtn.addEventListener('click',function(){if(!isAdmin)return;try{localStorage.clear()}catch(e){}toast('success','Вайп');setTimeout(function(){location.reload()},600)});
 
 document.getElementById('newsBtn').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.add('on')});
 document.getElementById('newsClose').addEventListener('click',function(){sClick();document.getElementById('newsModal').classList.remove('on')});
