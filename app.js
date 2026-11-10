@@ -42,18 +42,9 @@ function toast(type,text){var t=document.createElement('div');t.className='toast
 function spawnClickParticles(x, y) {
     var colors = ['#FFD700', '#FF2A55', '#00F0FF', '#ffffff'];
     for (var i = 0; i < 12; i++) {
-        var p = document.createElement('div');
-        p.className = 'click-particle';
-        p.style.left = x + 'px';
-        p.style.top = y + 'px';
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.boxShadow = '0 0 10px ' + p.style.background;
-        var angle = Math.random() * Math.PI * 2;
-        var dist = 40 + Math.random() * 60;
-        p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-        p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-        document.body.appendChild(p);
-        setTimeout(function(el) { el.remove(); }, 600, p);
+        var p = document.createElement('div');p.className = 'click-particle';p.style.left = x + 'px';p.style.top = y + 'px';p.style.background = colors[Math.floor(Math.random() * colors.length)];p.style.boxShadow = '0 0 10px ' + p.style.background;
+        var angle = Math.random() * Math.PI * 2;var dist = 40 + Math.random() * 60;p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+        document.body.appendChild(p);setTimeout(function(el) { el.remove(); }, 600, p);
     }
 }
 document.addEventListener('pointerdown', function(e) { spawnClickParticles(e.clientX, e.clientY); });
@@ -69,11 +60,9 @@ function goScreen(name) {
       const el = document.getElementById('scr-' + name);
       if (el) el.classList.add('on');
       curScreen = name;
-      
       if (name === 'rocket') Rocket.init();
       if (name === 'roll') Roll.initCanvas();
       if (name === 'cases') renderCases();
-      
       setTimeout(() => { loader.classList.remove('active'); }, 100);
     }, 400);
   } else {
@@ -90,7 +79,7 @@ function goScreen(name) {
 function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
-// КЕЙСЫ С БЕСКОНЕЧНЫМ ПРОКРУТОМ
+// КЕЙСЫ
 // ============================================================
 var CASES_DATA = [
     { id: 'c1', name: 'Стартовый', price: 500, rarity: 1, pool: FALLBACK.filter(f => f.value <= 200) },
@@ -101,21 +90,21 @@ var CASES_DATA = [
 ];
 
 // ============================================================
-// БЕСПЛАТНЫЙ КЕЙС (БЕЗ ЭМОДЗИ)
+// БЕСПЛАТНЫЙ КЕЙС (1 КАНАЛ + ПРОВЕРКА)
 // ============================================================
 var FREE_CASE = {
-    channels: [
-        {key:'ch1', name:'RollUp News',  url:'https://t.me/RollUp_BOT'},
-        {key:'ch2', name:'RollUp Chat',  url:'https://t.me/RollUp_Chat'},
-        {key:'ch3', name:'RollUp Promo', url:'https://t.me/RollUp_Promo'}
-    ],
-    minDeposit: 100, minFriends: 5, rewardMin: 400, rewardMax: 700
+    channel: { name: 'RollsUp', url: 'https://t.me/RollsUp', key: 'rollsup' },
+    minDeposit: 100,
+    minFriends: 5,
+    rewardMin: 400,
+    rewardMax: 700
 };
-var freeCaseState = { subscribed:{}, deposited:0, friendsInvited:0, claimed:false };
+
+var freeCaseState = { isSubscribed: false, deposited: 0, friendsInvited: 0, claimed: false };
 try {
     var fcs = JSON.parse(Store.get(P + 'freecase') || 'null');
     if (fcs && typeof fcs === 'object') {
-        freeCaseState.subscribed = fcs.subscribed || {};
+        freeCaseState.isSubscribed = !!fcs.isSubscribed;
         freeCaseState.deposited = Number(fcs.deposited) || 0;
         freeCaseState.friendsInvited = Number(fcs.friendsInvited) || 0;
         freeCaseState.claimed = !!fcs.claimed;
@@ -124,13 +113,13 @@ try {
 
 function saveFreeCase(){ try{ Store.set(P + 'freecase', JSON.stringify(freeCaseState)); }catch(e){} }
 function freeCaseProgress(){
-    var subsDone = FREE_CASE.channels.filter(function(c){ return freeCaseState.subscribed[c.key]; }).length;
     var depDone = freeCaseState.deposited >= FREE_CASE.minDeposit;
     var friendsDone = freeCaseState.friendsInvited >= FREE_CASE.minFriends;
     return {
-        subsDone: subsDone, subsTotal: FREE_CASE.channels.length, depDone: depDone, depAmount: freeCaseState.deposited, depNeeded: FREE_CASE.minDeposit,
+        subDone: freeCaseState.isSubscribed,
+        depDone: depDone, depAmount: freeCaseState.deposited, depNeeded: FREE_CASE.minDeposit,
         friendsDone: friendsDone, friendsAmount: freeCaseState.friendsInvited, friendsNeeded: FREE_CASE.minFriends,
-        allDone: subsDone === FREE_CASE.channels.length && depDone && friendsDone, claimed: freeCaseState.claimed
+        allDone: freeCaseState.isSubscribed && depDone && friendsDone, claimed: freeCaseState.claimed
     };
 }
 function openTgLink(url){ try { if (tg && tg.openLink) { tg.openLink(url); return; } } catch(e){} window.open(url, '_blank'); }
@@ -140,7 +129,6 @@ function shareTg(text, url){
     window.open(shareUrl, '_blank');
 }
 
-// SVG Иконки для замены эмодзи
 var svgBell = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>';
 var svgDiamond = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3h12l4 6-10 13L2 9z"></path></svg>';
 var svgUsers = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>';
@@ -158,7 +146,7 @@ function createFreeCaseCard(){
                 <div class="free-case-title">Бесплатный кейс</div>
                 <div class="free-case-sub">Гифт до ${FREE_CASE.rewardMax}★ за задания</div>
                 <div class="free-case-progress">
-                    <span class="fcp-item ${prog.subsDone===prog.subsTotal?'done':''}">Подписки: ${prog.subsDone}/${prog.subsTotal}</span>
+                    <span class="fcp-item ${prog.subDone?'done':''}">Подписка: ${prog.subDone?'Да':'Нет'}</span>
                     <span class="fcp-item ${prog.depDone?'done':''}">Депозит: ${Math.min(prog.depAmount,prog.depNeeded)}/${prog.depNeeded}</span>
                     <span class="fcp-item ${prog.friendsDone?'done':''}">Друзья: ${Math.min(prog.friendsAmount,prog.friendsNeeded)}/${prog.friendsNeeded}</span>
                 </div>
@@ -171,30 +159,49 @@ function createFreeCaseCard(){
 }
 
 function openFreeCaseModal(){ var modal = document.getElementById('freeCaseModal'); if (!modal) return; renderFreeCaseModal(); modal.classList.add('on'); }
+
 function renderFreeCaseModal(){
     var prog = freeCaseProgress();
     
-    var ch = document.getElementById('fcChannels');
+    var ch = document.getElementById('fcChannelBox');
     if (ch) {
-        ch.innerHTML = '';
-        FREE_CASE.channels.forEach(function(c){
-            var done = !!freeCaseState.subscribed[c.key];
-            var item = document.createElement('div'); item.className = 'fc-req' + (done ? ' done' : '');
-            item.innerHTML = `<div class="fc-req-icon">${done ? svgCheck : svgBell}</div><div class="fc-req-info"><div class="fc-req-title">${c.name}</div><div class="fc-req-desc">${done?'Подписка подтверждена':'Подписаться на канал'}</div></div><button class="fc-req-btn ${done?'done':''}" data-ch="${c.key}" ${done?'disabled':''}>${done?'Готово':'Открыть'}</button>`;
-            ch.appendChild(item);
-        });
-        ch.querySelectorAll('.fc-req-btn[data-ch]').forEach(function(btn){
-            btn.addEventListener('click', function(e){
-                e.stopPropagation(); var key = btn.getAttribute('data-ch'); var c = FREE_CASE.channels.filter(function(x){return x.key===key})[0];
-                if (!c) return; 
-                openTgLink(c.url); 
-                btn.textContent = 'Проверка...'; 
+        ch.className = 'fc-req' + (prog.subDone ? ' done' : '');
+        ch.innerHTML = `<div class="fc-req-icon">${prog.subDone ? svgCheck : svgBell}</div><div class="fc-req-info"><div class="fc-req-title">Подписка на ${FREE_CASE.channel.name}</div><div class="fc-req-desc">${prog.subDone?'Подписка подтверждена':'Подписаться на канал'}</div></div><button class="fc-req-btn ${prog.subDone?'done':''}" id="fcSubBtn">${prog.subDone?'Проверить':'Открыть'}</button>`;
+        
+        var btn = document.getElementById('fcSubBtn');
+        if (btn) btn.addEventListener('click', function(e){
+            e.stopPropagation(); 
+            if (prog.subDone) {
+                // Если уже подписан, проверяем на отписку
+                btn.textContent = 'Проверка...';
                 btn.disabled = true;
-                setTimeout(function(){
-                    freeCaseState.subscribed[key] = true; saveFreeCase(); sClick(); toast('success','Подписка подтверждена');
+                setTimeout(function() {
+                    // В реальном приложении здесь запрос к боту: getChatMember
+                    // Сейчас мы имитируем успешную проверку (чтобы не слетало)
+                    // Если хочешь сымитировать отписку, поменяй true на false в след строке:
+                    var stillSubscribed = true; 
+                    
+                    if (stillSubscribed) {
+                        toast('success', 'Вы подписаны!');
+                    } else {
+                        freeCaseState.isSubscribed = false;
+                        saveFreeCase();
+                        toast('error', 'Вы отписались от канала!');
+                    }
+                    renderFreeCaseModal(); renderCases();
+                }, 1500);
+            } else {
+                // Открываем канал
+                openTgLink(FREE_CASE.channel.url);
+                btn.textContent = 'Проверка...';
+                btn.disabled = true;
+                setTimeout(function() {
+                    // В реальном приложении здесь запрос к боту getChatMember
+                    freeCaseState.isSubscribed = true; 
+                    saveFreeCase(); sClick(); toast('success','Подписка подтверждена');
                     renderFreeCaseModal(); renderCases();
                 }, 2500);
-            });
+            }
         });
     }
     
@@ -232,6 +239,7 @@ function renderFreeCaseModal(){
         };
     }
 }
+
 function openFreeCaseReward(){
     sOpenCase(); document.getElementById('freeCaseModal').classList.remove('on');
     var pool = CATALOG.filter(function(it){ return (it.value||0) >= FREE_CASE.rewardMin && (it.value||0) <= FREE_CASE.rewardMax; });
@@ -424,14 +432,33 @@ document.getElementById('pickClose').addEventListener('click',function(){sClick(
 document.getElementById('plusBtn').addEventListener('click',function(){sClick();document.getElementById('starsAmt').value='';document.getElementById('starsModal').classList.add('on')});
 document.getElementById('starsClose').addEventListener('click',function(){sClick();document.getElementById('starsModal').classList.remove('on')});
 
+// ПОПОЛНЕНИЕ (С ИНВОЙСОМ)
 document.getElementById('starsOk').addEventListener('click',function(){
-    var amt=parseInt(document.getElementById('starsAmt').value,10); if(!amt||amt<=0){sErr();return}
-    balance+=amt; updBal(); save(); sClick(); toast('success','+'+fmt(amt)+' ★');
+    var amt = parseInt(document.getElementById('starsAmt').value,10); 
+    if(!amt || amt <= 0) { sErr(); return; }
+    
+    // В реальном приложении здесь должен быть fetch к боту для создания счета
+    // Пример:
+    // fetch('https://твой-бот.com/api/create-invoice', {
+    //    method: 'POST', body: JSON.stringify({ amount: amt, uid: UID })
+    // }).then(r => r.json()).then(data => {
+    //    tg.openInvoice(data.invoiceLink, function(status) {
+    //        if (status === 'paid') { balance += amt; updBal(); save(); ... }
+    //    });
+    // });
+    
+    // ТЕСТОВЫЙ РЕЖИМ (пока нет бэкенда):
+    balance += amt; updBal(); save(); sClick(); toast('success','+'+fmt(amt)+' ★');
     freeCaseState.deposited += amt; saveFreeCase();
-    setTimeout(function(){ document.getElementById('starsModal').classList.remove('on'); var fcModal = document.getElementById('freeCaseModal'); if (fcModal && fcModal.classList.contains('on')) renderFreeCaseModal(); if (curScreen === 'cases') renderCases(); },500);
+    
+    setTimeout(function(){ 
+        document.getElementById('starsModal').classList.remove('on'); 
+        var fcModal = document.getElementById('freeCaseModal'); 
+        if (fcModal && fcModal.classList.contains('on')) renderFreeCaseModal(); 
+        if (curScreen === 'cases') renderCases(); 
+    }, 500);
 });
 
-document.querySelectorAll('#starsModal [data-q]').forEach(function(b){b.addEventListener('click',function(){sClick();document.getElementById('starsAmt').value=b.getAttribute('data-q')})});
 document.getElementById('promoBtn').addEventListener('click',function(){sClick();document.getElementById('promoMsg').textContent='';document.getElementById('promoInput').value='';document.getElementById('promoModal').classList.add('on')});
 document.getElementById('promoClose').addEventListener('click',function(){sClick();document.getElementById('promoModal').classList.remove('on')});
 document.getElementById('promoOk').addEventListener('click',function(){var code=document.getElementById('promoInput').value.trim().toUpperCase();var m=document.getElementById('promoMsg');if(!code){m.style.color='#ef4444';m.textContent='Введи код';sErr();return}if(!PROMO[code]){m.style.color='#ef4444';m.textContent='Неверный';sErr();return}if(isUsed(code)){m.style.color='#ef4444';m.textContent='Использован';sErr();return}var r=PROMO[code];balance+=r;updBal();markUsed(code);save();m.style.color='#10b981';m.textContent='+'+r+' ★';sPromo();haptic('success');setTimeout(function(){document.getElementById('promoModal').classList.remove('on')},1200)});
