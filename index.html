@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#030304">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Roll&Spin Premium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css?v=22">
+<link rel="stylesheet" href="style.css?v=23">
 </head>
 <body>
 
@@ -33,10 +35,14 @@
 <div class="online-indicator"><span class="online-dot"></span><span id="onlineCount">1</span></div>
 </div>
 <div class="hr">
-<div class="bal glass-panel" id="plusBtn"><span class="star">★</span><span id="balTxt">20000</span><span class="plus">+</span></div>
-<button class="ib glass-panel" id="promoBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
-<button class="ib glass-panel" id="settingsBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-<button class="ib glass-panel" id="profileBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
+<div class="bal glass-panel" id="plusBtn" role="button" aria-label="Пополнить баланс">
+<svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+<span id="balTxt">20000</span>
+<svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+</div>
+<button class="ib glass-panel" id="promoBtn" type="button" aria-label="Промокод"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
+<button class="ib glass-panel" id="settingsBtn" type="button" aria-label="Настройки"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+<button class="ib glass-panel" id="profileBtn" type="button" aria-label="Профиль"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
 </div>
 </div>
 
@@ -46,23 +52,23 @@
 <div class="news-line glass-panel" id="newsBtn">
 <span class="news-dot"></span>
 <div class="news-text"><div class="news-title">Мы вернулись! Обновление 2.1.0</div><div class="news-ver">Глобальная переработка</div></div>
-<span class="news-arrow">→</span>
+<span class="news-arrow"><svg class="arrow-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
 </div>
 <div class="grid" id="menuGrid"></div>
 </div>
 
 <div class="scr" id="scr-upgrader">
 <div class="arena">
-<div class="islot glass-panel" id="fromCard"><div class="stitle">Твой</div><div class="sicon" id="fromIcon"></div><div class="iname" id="fromName">—</div><div class="ival" id="fromValue">—</div></div>
-<div class="wcol"><div class="wwrap" id="wheelWrap"><svg class="wsvg" viewBox="0 0 100 100"><defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b0b8ff"/></linearGradient><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f1f2a"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="none" stroke="url(#tg)" stroke-width="10"/><path id="winArc" fill="url(#wg)"/></svg><div class="wptr" id="wheelPtr"></div><div class="wc"><div class="wp" id="wheelPct">—</div><div class="wl" id="wheelLbl">—</div></div></div></div>
-<div class="islot glass-panel" id="toCard"><div class="stitle">Цель</div><div class="sicon" id="toIcon"></div><div class="iname" id="toName">—</div><div class="ival" id="toValue">—</div></div>
+<div class="islot glass-panel" id="fromCard"><div class="stitle">Твой</div><div class="sicon" id="fromIcon"></div><div class="iname" id="fromName">-</div><div class="ival" id="fromValue">-</div></div>
+<div class="wcol"><div class="wwrap" id="wheelWrap"><svg class="wsvg" viewBox="0 0 100 100"><defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b0b8ff"/></linearGradient><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f1f2a"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="none" stroke="url(#tg)" stroke-width="10"/><path id="winArc" fill="url(#wg)"/></svg><div class="wptr" id="wheelPtr"></div><div class="wc"><div class="wp" id="wheelPct">-</div><div class="wl" id="wheelLbl">-</div></div></div></div>
+<div class="islot glass-panel" id="toCard"><div class="stitle">Цель</div><div class="sicon" id="toIcon"></div><div class="iname" id="toName">-</div><div class="ival" id="toValue">-</div></div>
 </div>
 <div class="mgrid" id="multGrid"></div>
 <button class="upbtn" id="upBtn" type="button">Прокачать</button>
 <div class="tabs"><button class="tab active" data-tab="inv" type="button">Инвентарь <span id="invCount"></span></button><button class="tab" data-tab="target" type="button">Цель</button></div>
 <div class="panel glass-panel">
-<div class="pv active" id="pv-inv"><div class="ptools"><div class="sbox glass-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="invSearch" placeholder="Поиск..."></div><input type="number" class="ninput glass-panel" id="invMin" placeholder="От"><input type="number" class="ninput glass-panel" id="invMax" placeholder="До"></div><div class="iscr"><div class="igrid" id="invGrid"></div></div></div>
-<div class="pv" id="pv-target"><div class="ptools"><div class="sbox glass-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="tgtSearch" placeholder="Поиск..."></div><input type="number" class="ninput glass-panel" id="tgtMin" placeholder="От"><input type="number" class="ninput glass-panel" id="tgtMax" placeholder="До"></div><div class="iscr"><div class="igrid" id="tgtGrid"></div></div></div>
+<div class="pv active" id="pv-inv"><div class="ptools"><div class="sbox glass-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="invSearch" placeholder="Поиск..."></div><input type="number" inputmode="numeric" class="ninput glass-panel" id="invMin" placeholder="От"><input type="number" inputmode="numeric" class="ninput glass-panel" id="invMax" placeholder="До"></div><div class="iscr"><div class="igrid" id="invGrid"></div></div></div>
+<div class="pv" id="pv-target"><div class="ptools"><div class="sbox glass-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="tgtSearch" placeholder="Поиск..."></div><input type="number" inputmode="numeric" class="ninput glass-panel" id="tgtMin" placeholder="От"><input type="number" inputmode="numeric" class="ninput glass-panel" id="tgtMax" placeholder="До"></div><div class="iscr"><div class="igrid" id="tgtGrid"></div></div></div>
 </div>
 </div>
 
@@ -87,7 +93,7 @@
 <div class="bet-gift-row glass-panel empty-bet" id="rocket-bet-row"><div class="bg-label">Нажми чтобы выбрать гифт</div></div>
 <div class="rocket-autowd-row glass-panel" id="rocket-autowd-row">
 <div class="rocket-autowd-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Автовывод</div>
-<div class="rocket-autowd-input"><input type="number" id="rocket-autowd-input" placeholder="1.5" step="0.1" min="1.01"><span class="rocket-autowd-suffix">x</span></div>
+<div class="rocket-autowd-input"><input type="number" inputmode="decimal" id="rocket-autowd-input" placeholder="1.5" step="0.1" min="1.01"><span class="rocket-autowd-suffix">x</span></div>
 <div class="rocket-autowd-toggle"><button type="button" class="active" id="autowd-off">ВЫКЛ</button><button type="button" id="autowd-on">ВКЛ</button></div>
 </div>
 <button class="rocket-btn" id="rocket-btn" type="button" disabled>Ждите раунд</button>
@@ -99,16 +105,16 @@
 <canvas id="rollCanvas"></canvas>
 <div class="rww" id="rWW">
 <div class="rptr"><svg viewBox="0 0 52 64"><defs><linearGradient id="rp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8c0"/><stop offset=".5" stop-color="#FFD700"/><stop offset="1" stop-color="#ff9500"/></linearGradient></defs><circle cx="26" cy="16" r="13" fill="url(#rp)" stroke="#fff" stroke-width="2"/><circle cx="26" cy="16" r="5" fill="#000"/><path d="M 9 27 L 43 27 L 26 62 Z" fill="url(#rp)" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>
-<div class="rcent"><div class="rcl">Выигрыш</div><div class="rcv" id="rollCenter">—</div></div>
+<div class="rcent"><div class="rcl">Выигрыш</div><div class="rcv" id="rollCenter">-</div></div>
 <div class="rwheel" id="rollWheel"><svg viewBox="-30 -30 260 260" id="rollSvg"></svg></div>
 </div>
 </div>
-<button class="rspin" id="rollSpinBtn" type="button">Крутить за 100 ★</button>
+<button class="rspin" id="rollSpinBtn" type="button">Крутить за 100<svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
 </div>
 
 <div class="scr" id="scr-shop">
-<div class="shopbar glass-panel"><span class="lbl">Баланс</span><span class="val"><span id="shopBal">20000</span> ★</span></div>
-<div class="shoprow"><div class="sbox glass-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="shopSearch" placeholder="Поиск..."></div><input type="number" class="ninput glass-panel" id="shopMin" placeholder="От"><input type="number" class="ninput glass-panel" id="shopMax" placeholder="До"></div>
+<div class="shopbar glass-panel"><span class="lbl">Баланс</span><span class="val"><span id="shopBal">20000</span><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span></div>
+<div class="shoprow"><div class="sbox glass-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="shopSearch" placeholder="Поиск..."></div><input type="number" inputmode="numeric" class="ninput glass-panel" id="shopMin" placeholder="От"><input type="number" inputmode="numeric" class="ninput glass-panel" id="shopMax" placeholder="До"></div>
 <div class="shopwrap glass-panel"><div class="shopscr"><div class="igrid" id="shopGrid"></div></div></div>
 </div>
 
@@ -118,22 +124,22 @@
   <div class="case-grid" id="caseGrid"></div>
 </div>
 
-<div class="footer">powered by <a href="https://t.me/RollSpinApp_bot" target="_blank">@RollSpinApp_bot</a> · v2.1.0</div>
+<div class="footer">powered by <a href="https://t.me/RollSpinApp_bot" target="_blank">@RollSpinApp_bot</a> | v2.1.0</div>
 </div>
 
 <!-- МОДАЛЬНОЕ ОКНО КЕЙСА -->
 <div class="ov" id="caseModal">
   <div class="modal case-modal-content glass-panel">
-    <button class="close-btn" id="closeCaseModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="close-btn" id="closeCaseModal" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="case-modal-header"><div class="case-modal-title" id="caseModalTitle">Кейс</div></div>
     <div class="case-rolling-area" id="caseRollingArea">
       <div class="case-track-wrap glass-panel">
-        <div class="track-fade-left"></div><div class="track-fade-right"></div><div class="case-pointer"></div>
+        <div class="track-fade-left"></div><div class="track-fade-right"></div><div class="case-pointer" id="casePointer"></div>
         <div class="case-track" id="caseTrack"></div>
       </div>
     </div>
     <div class="case-actions" style="width:100%; margin-top:15px;">
-      <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; padding:16px; font-size:15px;">Открыть за <span id="casePriceBtn">500</span> ★</button>
+      <button class="btn pri" id="openCaseBtn" type="button" style="width:100%; font-size:15px;">Открыть за <span id="casePriceBtn">500</span><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
     </div>
     <div class="case-pool-wrapper">
       <div class="case-pool-title">Содержимое кейса</div>
@@ -142,69 +148,69 @@
   </div>
 </div>
 
-<!-- БЕСПЛАТНЫЙ КЕЙС (1 КАНАЛ) -->
+<!-- БЕСПЛАТНЫЙ КЕЙС -->
 <div class="ov" id="freeCaseModal">
   <div class="modal glass-panel" style="max-width:420px; padding:20px;">
-    <button class="close-btn" id="closeFreeCaseModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    <div class="modal-t">Бесплатный кейс</div>
-    <div class="modal-s">Выполни все задания — получи случайный гифт до 700★</div>
-    
+    <button class="close-btn" id="closeFreeCaseModal" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div class="modal-t" style="padding:0 40px;">Бесплатный кейс</div>
+    <div class="modal-s">Выполни все задания и получи случайный гифт до 700<svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+
     <div id="fcChannelBox"></div>
     <div id="fcDeposit"></div>
     <div id="fcFriends"></div>
-    
-    <button class="btn sec" id="fcOpenBtn" style="width:100%; margin-top:14px;" disabled>Выполни все задания</button>
+
+    <button class="btn sec" id="fcOpenBtn" type="button" style="width:100%; margin-top:14px;" disabled>Выполни все задания</button>
   </div>
 </div>
 
-<!-- МОДАЛКА ПРОСМОТРА ГИФТА -->
+<!-- ПРОСМОТР ГИФТА -->
 <div class="ov" id="giftModal" style="z-index: 500;">
   <div class="modal glass-panel" style="max-width: 300px; text-align: center;">
-    <button class="close-btn" id="closeGiftModal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="close-btn" id="closeGiftModal" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="bgic" id="viewGiftIcon" style="width: 120px; height: 120px; margin-bottom: 15px;"></div>
     <div class="modal-t" id="viewGiftName" style="font-size: 20px; margin-bottom: 5px;">Гифт</div>
-    <div class="modal-s" style="font-size: 16px; font-weight: 900; color: var(--gold);" id="viewGiftPrice">— ★</div>
-    <button class="btn sec" id="closeGiftBtn" style="margin-top: 15px;">Закрыть</button>
+    <div class="modal-s" style="font-size: 16px; font-weight: 900; color: var(--gold);" id="viewGiftPrice">-</div>
+    <button class="btn sec" id="closeGiftBtn" type="button" style="margin-top: 15px; width:100%;">Закрыть</button>
   </div>
 </div>
 
-<!-- ОБНОВЛЕННОЕ ОКНО ПОПОЛНЕНИЯ -->
+<!-- ПОПОЛНЕНИЕ -->
 <div class="ov" id="starsModal">
   <div class="modal glass-panel" style="max-width:360px; text-align:center;">
-    <button class="close-btn" id="starsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    <div class="modal-t">Пополнение</div>
-    <div class="modal-s">Введи сумму в звездах</div>
-    <div class="premium-input-wrap">
-      <div class="premium-star">★</div>
-      <input type="number" class="premium-inp" id="starsAmt" placeholder="0" min="1">
+    <button class="close-btn" id="starsClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div class="modal-t" style="padding:0 40px;">Пополнение</div>
+    <div class="modal-s">Введи сумму в звёздах</div>
+    <div class="premium-input-wrap" id="starsWrap">
+      <svg class="premium-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <input type="number" inputmode="numeric" class="premium-inp" id="starsAmt" placeholder="0" min="1">
     </div>
-    <button class="btn pri" id="starsOk" type="button" style="width:100%; padding:16px; font-size:15px; border-radius:12px;">Пополнить</button>
+    <button class="btn pri" id="starsOk" type="button" style="width:100%; font-size:15px;">Пополнить</button>
   </div>
 </div>
 
-<div class="ov" id="pickModal"><div class="modal glass-panel"><button class="close-btn" id="pickClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Выбери гифт</div><div class="pickgr" id="pickGrid"></div></div></div>
-<div class="ov" id="buyModal"><div class="modal glass-panel"><button class="close-btn" id="buyCancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="bgic" id="buyIcon"></div><div class="modal-t" id="buyName">—</div><div class="modal-s" id="buyPrice" style="font-size:20px;font-weight:900;">—</div><div class="row"><button class="btn pri" id="buyConfirm" type="button" style="width:100%;">Купить</button></div></div></div>
-<div class="ov" id="promoModal"><div class="modal glass-panel"><button class="close-btn" id="promoClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Промокод</div><div class="modal-s">Введи код</div><input type="text" class="inp" id="promoInput" placeholder="ПРОМОКОД"><div id="promoMsg" style="font-size:11px;font-weight:700;min-height:16px;text-align:center;margin-bottom:12px;"></div><div class="row"><button class="btn pri" id="promoOk" type="button" style="width:100%;">Активировать</button></div></div></div>
-<div class="ov" id="settingsModal"><div class="modal glass-panel"><button class="close-btn" id="settingsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t">Настройки</div><div class="srow"><span class="slbl">Вибрация</span><label class="sw"><input type="checkbox" id="vibToggle"><span class="sl"></span></label></div><div class="srow"><span class="slbl">Звук</span><label class="sw"><input type="checkbox" id="sndToggle"><span class="sl"></span></label></div></div></div>
+<div class="ov" id="pickModal"><div class="modal glass-panel"><button class="close-btn" id="pickClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t" style="padding:0 40px;">Выбери гифт</div><div class="pickgr" id="pickGrid"></div></div></div>
+<div class="ov" id="buyModal"><div class="modal glass-panel"><button class="close-btn" id="buyCancel" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="bgic" id="buyIcon"></div><div class="modal-t" id="buyName">-</div><div class="modal-s" id="buyPrice" style="font-size:20px;font-weight:900;display:flex;justify-content:center;align-items:center;">-</div><div class="row"><button class="btn pri" id="buyConfirm" type="button" style="width:100%;">Купить</button></div></div></div>
+<div class="ov" id="promoModal"><div class="modal glass-panel"><button class="close-btn" id="promoClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t" style="padding:0 40px;">Промокод</div><div class="modal-s">Введи код</div><input type="text" class="inp" id="promoInput" placeholder="ПРОМОКОД" autocomplete="off" autocapitalize="characters"><div id="promoMsg" style="font-size:12px;font-weight:700;min-height:18px;text-align:center;margin-bottom:12px;display:flex;justify-content:center;align-items:center;"></div><div class="row"><button class="btn pri" id="promoOk" type="button" style="width:100%;">Активировать</button></div></div></div>
+<div class="ov" id="settingsModal"><div class="modal glass-panel"><button class="close-btn" id="settingsClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="modal-t" style="padding:0 40px;">Настройки</div><div class="srow"><span class="slbl">Вибрация</span><label class="sw"><input type="checkbox" id="vibToggle"><span class="sl"></span></label></div><div class="srow"><span class="slbl">Звук</span><label class="sw"><input type="checkbox" id="sndToggle"><span class="sl"></span></label></div></div></div>
 
 <!-- ПРОФИЛЬ -->
 <div class="ov" id="profileModal">
   <div class="modal glass-panel" style="max-width:420px; padding:0; overflow:hidden;">
-    <button class="close-btn" id="profileClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="close-btn" id="profileClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="profile-header-bg"></div>
     <div class="profile-header">
       <div class="ava-lg" id="pAva">?</div>
       <div class="profile-info">
         <div class="pn-lg" id="pName">Игрок</div>
         <div class="pc-lg">
-          <span class="pchip gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span id="pInvCount">0</span> гифтов</span>
+          <span class="pchip gold"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span id="pInvCount">0</span> гифтов</span>
           <span class="pchip admin" id="pAdmin" style="display:none;">ADMIN</span>
         </div>
       </div>
     </div>
     <div class="profile-actions">
-      <button class="btn sec" style="font-size:11px; padding:10px;">Пополнить</button>
-      <button class="btn pri" id="withdrawBtn" style="font-size:11px; padding:10px;">Вывести</button>
+      <button class="btn sec" id="profileDepositBtn" type="button">Пополнить</button>
+      <button class="btn pri" id="withdrawBtn" type="button">Вывести</button>
     </div>
     <div class="acard" id="adminCard" style="margin: 10px 20px 0; display:none;">
       <div class="abtns">
@@ -221,7 +227,7 @@
 
 <div class="ov" id="newsModal">
   <div class="modal news-m glass-panel">
-    <button class="close-btn" id="newsClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="close-btn" id="newsClose" type="button" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="news-mh">
       <div class="news-mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
       <div><div class="news-mt">Мы вернулись!</div><div class="news-ms">Обновление 2.1.0</div></div>
@@ -231,12 +237,12 @@
         <div class="nvh"><div class="nvt">2.1.0</div><div class="nvty">Релиз</div></div>
         <div class="nvti">Глобальная переработка проекта</div>
         <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><div class="nfn">Новый облик</div><div class="nfd">Полностью переписали интерфейс Roll&Spin, сделали его премиальным и быстрым. Кейсы, инвентарь и ракетка теперь выглядят иначе.</div></div></div>
-        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Продажа гифтов</div><div class="nfd">В профиле появилась возможность продавать предметы за звезды. Вывод средств (пока что в виде заглушки) тоже добавлен.</div></div></div>
+        <div class="nf glass-panel"><div class="nfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="nfn">Продажа гифтов</div><div class="nfd">В профиле появилась возможность продавать предметы за звёзды. Вывод средств (пока что в виде заглушки) тоже добавлен.</div></div></div>
       </div>
     </div>
   </div>
 </div>
 
-<script src="app.js?v=22"></script>
+<script src="app.js?v=23"></script>
 </body>
 </html>
