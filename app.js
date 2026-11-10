@@ -587,5 +587,125 @@ function boot(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 
+/* ============================================================
+   ОБРАБОТЧИК КНОПКИ АПГРЕЙДЕРА (ранее отсутствовал)
+   + Реалистичные эффекты победы / проигрыша
+   ============================================================ */
+document.getElementById('upBtn').addEventListener('click', async function () {
+    if (isSpinning || !selItems.length || !targetItem) return;
+    isSpinning = true;
+    var upBtn = document.getElementById('upBtn');
+    if (upBtn) upBtn.disabled = true;
+    document.getElementById('fromCard').className = 'islot glass-panel';
+    document.getElementById('toCard').className = 'islot glass-panel';
+    var s = sumSel();
+    var realChance = Math.min(95, chance * 0.85);
+    var win = Math.random() * 100 < realChance;
+    var cp = selItems.slice();
+    if (win) {
+        cp.forEach(function (it) {
+            var i = inventory.indexOf(it);
+            if (i >= 0) inventory.splice(i, 1);
+        });
+        var ni = { name: targetItem.name, value: targetItem.value || 0 };
+        inventory.push(ni);
+        inventory.sort(function (a, b) { return (a.value || 0) - (b.value || 0); });
+        selItems = [];
+        targetItem = null;
+    } else {
+        cp.forEach(function (it) {
+            var i = inventory.indexOf(it);
+            if (i >= 0) inventory.splice(i, 1);
+        });
+        selItems = [];
+        targetItem = null;
+    }
+    save();
+    startSpinAnim();
+    var w = await spinWheel(chance, win);
+    endSpinAnim(w);
+    if (w) {
+        document.getElementById('toCard').classList.add('win');
+        confetti();
+        haptic('success');
+        sWin();
+        // Победный всплеск на экране
+        var flash = document.createElement('div');
+        flash.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(16,185,129,0.25),transparent 70%);animation:winFlashScreen 0.7s ease-out forwards';
+        document.body.appendChild(flash);
+        setTimeout(function () { flash.remove(); }, 800);
+        // Плавающие золотые частицы
+        for (var i = 0; i < 24; i++) {
+            (function () {
+                var p = document.createElement('div');
+                p.style.cssText = 'position:fixed;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#FFD700;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);box-shadow:0 0 12px #FFD700';
+                var a = Math.random() * Math.PI * 2;
+                var v = 120 + Math.random() * 200;
+                var dx = Math.cos(a) * v, dy = Math.sin(a) * v - 100;
+                p.animate([{ transform: 'translate(-50%,-50%) scale(1)', opacity: 1 }, { transform: 'translate(calc(-50% + ' + dx + 'px),calc(-50% + ' + dy + 'px)) scale(0.2)', opacity: 0 }], { duration: 1200, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' });
+                document.body.appendChild(p);
+                setTimeout(function () { p.remove(); }, 1400);
+            })();
+        }
+    } else {
+        document.getElementById('toCard').classList.add('lose');
+        haptic('error');
+        sLose();
+        // Проигрышный всплеск + дрожь
+        document.body.style.animation = 'screenFlashRed 0.5s ease-in-out';
+        setTimeout(function () { document.body.style.animation = ''; }, 500);
+        var loseCard = document.getElementById('toCard');
+        if (loseCard) {
+            loseCard.classList.add('loseShake');
+            setTimeout(function () { loseCard.classList.remove('loseShake'); }, 500);
+        }
+        // Падающие красные частицы
+        for (var i = 0; i < 16; i++) {
+            (function () {
+                var p = document.createElement('div');
+                p.style.cssText = 'position:fixed;left:' + (20 + Math.random() * 60) + '%;top:-10px;width:4px;height:4px;border-radius:50%;background:#EF4444;pointer-events:none;z-index:9997;box-shadow:0 0 8px #EF4444';
+                var v = 300 + Math.random() * 400;
+                var dx = (Math.random() - 0.5) * 100;
+                p.animate([{ transform: 'translateY(0) rotate(0)', opacity: 1 }, { transform: 'translateY(' + v + 'px) rotate(720deg)', opacity: 0 }], { duration: 1200 + Math.random() * 400, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' });
+                document.body.appendChild(p);
+                setTimeout(function () { p.remove(); }, 1800);
+            })();
+        }
+    }
+    renderInv();
+    renderArena();
+    renderTargets();
+    updatePctUI();
+    setTimeout(function () {
+        isSpinning = false;
+        updateUpBtn();
+    }, 500);
+});
+
+/* Заменяем иконку на кнопке режима "Апгрейдер" на существующий гифт */
+(function () {
+    var upgraderCard = document.querySelector('.card[data-mode="upgrader"]');
+    if (upgraderCard) {
+        var ic = upgraderCard.querySelector('.card-ic');
+        if (ic) {
+            // Используем существующий гифт из FALLBACK вместо "Diamond Ring"
+            ic.innerHTML = iconTag('Plush Pepe', 128);
+        }
+    }
+})();
+
+/* Добавляем анимацию экрана при победе */
+(function () {
+    var style = document.createElement('style');
+    style.textContent = `
+        @keyframes winFlashScreen {
+            0% { opacity: 0; }
+            30% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+})();
+
 setInterval(rocketTick,50);
 })();
