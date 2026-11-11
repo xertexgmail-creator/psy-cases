@@ -221,7 +221,8 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .btn:active { transform: scale(0.97); }
 
 .card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card, .invc, .fc-req-btn, .upbtn { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s; }
-.card:hover, .ib:hover, .bal:hover, .slot:hover, .mbtn:hover, .tab:hover, .invcs:hover, .case-menu-card:hover, .invc:hover, .fc-req-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25); filter: brightness(1.1); }
+.card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255, 215, 0, 0.3), 0 0 12px rgba(255, 215, 0, 0.15); }
+.ib:hover, .bal:hover, .slot:hover, .mbtn:hover, .tab:hover, .invcs:hover, .case-menu-card:hover, .invc:hover, .fc-req-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25); filter: brightness(1.1); }
 .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active, .tab:active, .invcs:active, .case-menu-card:active, .invc:active, .fc-req-btn:active, .upbtn:active { transform: scale(0.97); }
 
 input:focus, .inp:focus, .ninput:focus, .premium-inp:focus { border-color: var(--gold); box-shadow: 0 0 12px rgba(255,215,0,.2); transition: all .25s; }
@@ -283,7 +284,9 @@ input:focus, .inp:focus, .ninput:focus, .premium-inp:focus { border-color: var(-
 .mbtn.active { background: linear-gradient(180deg, var(--gold), #FFA500); color: #000; border-color: transparent; box-shadow: 0 2px 8px rgba(255, 215, 0, .35); }
 .mbtn .c { display: block; font-size: 6px; color: var(--dim); margin-top: 3px; font-weight: 700; }
 .mbtn.active .c { color: rgba(0,0,0,.55); }
-.upbtn { width: 66%; margin: 0 auto 12px; padding: 15px; background: linear-gradient(180deg, #fff, var(--gold)); border: none; border-radius: 12px; color: #000; font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; font-family: inherit; box-shadow: 0 4px 14px rgba(255, 215, 0, .25), 0 1px 0 rgba(255,255,255,.5) inset; }
+.upbtn { width: 66%; margin: 0 auto 12px; padding: 18px 24px; font-size: 13px; background: linear-gradient(180deg, #FFD700, #FFA500); border: none; border-radius: 16px; color: #000; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; font-family: inherit; box-shadow: 0 8px 28px rgba(255, 215, 0, 0.35), 0 1px 2px rgba(255, 255, 255, 0.2) inset; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.upbtn:hover { transform: scale(1.05); box-shadow: 0 12px 36px rgba(255, 215, 0, 0.45); }
+.upbtn:active { transform: scale(0.97); }
 .upbtn:disabled { opacity: .22; cursor: not-allowed; box-shadow: none; }
 .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 8px; }
 .tab { background: rgba(255,255,255,.02); border: 1px solid var(--bd); color: var(--dim); padding: 10px; border-radius: 10px; font-size: 10px; font-weight: 800; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: .06em; }
