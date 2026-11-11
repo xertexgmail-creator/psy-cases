@@ -534,14 +534,30 @@ document.getElementById('starsClose').addEventListener('click',function(){sClick
 document.getElementById('starsOk').addEventListener('click', async function(){
     var amt = parseInt(document.getElementById('starsAmt').value, 10);
     if (!amt || amt <= 0) { sErr(); return; }
+    
+    var btn = this;
+    btn.textContent = 'Загрузка...';
+    btn.disabled = true;
+
     try {
         var res = await fetch('https://rollspin-app.vercel.app/api/create_invoice', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ amount: amt, initData: (tg && tg.initData) || '' })
         });
+        
+        if (!res.ok) {
+            throw new Error('Ошибка сервера: ' + res.status);
+        }
+
         var data = await res.json();
-        if (!data || !data.link) { sErr(); toast('error', 'Не удалось создать счёт'); return; }
+        
+        if (!data || !data.link) { 
+            sErr(); 
+            toast('error', data.error || 'Не удалось создать счёт'); 
+            return; 
+        }
+        
         if (tg && tg.openInvoice) {
             tg.openInvoice(data.link, function(status) {
                 if (status === 'paid') {
@@ -555,7 +571,11 @@ document.getElementById('starsOk').addEventListener('click', async function(){
             window.open(data.link, '_blank');
         }
     } catch (e) {
-        sErr(); toast('error', 'Ошибка соединения');
+        sErr(); 
+        toast('error', e.message);
+    } finally {
+        btn.textContent = 'Пополнить';
+        btn.disabled = false;
     }
 });
 
@@ -681,7 +701,6 @@ function boot(){
   runLoad(2600,function(){ var loading=document.getElementById('loading');if(loading)loading.classList.add('hide'); if(window.__stopLoadingParticles)window.__stopLoadingParticles(); setTimeout(function(){document.body.classList.remove('loading-active');document.body.style.overflow='';document.body.style.position=''},100); try{Rocket.init();rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;updateRocketBtn()}catch(e){} })
 }
 
-// Запуск с защитой от падения
 try {
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 } catch (e) {
