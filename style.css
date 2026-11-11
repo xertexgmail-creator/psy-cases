@@ -108,6 +108,34 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 /* Портал: иконка в кнопке режима */
 .card-ic img, .hero-ic img { filter: drop-shadow(0 12px 24px rgba(0,0,0,0.9)) drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
 
+/* ===== Анимированные мини-иконки режимов (циклы) ===== */
+.mode-roll .card-ic img, .mode-roll .hero-ic img { animation: spinIcon 3s linear infinite; }
+@keyframes spinIcon { to { transform: rotate(360deg); } }
+
+.mode-cases .card-ic img, .mode-cases .hero-ic img { animation: floatIcon 3s ease-in-out infinite, casePulse 2.4s ease-in-out infinite; }
+@keyframes casePulse { 0%,100% { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(255,215,0,0.3)); } 50% { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 22px rgba(255,42,85,0.6)); } }
+
+.mode-upgrader .card-ic img, .mode-upgrader .hero-ic img { animation: upFloat 2.6s ease-in-out infinite, upGlow 1.8s ease-in-out infinite; }
+@keyframes upFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-6px) scale(1.04); } }
+@keyframes upGlow { 0%,100% { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 14px rgba(168,85,247,0.5)); } 50% { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 26px rgba(168,85,247,0.9)); } }
+
+.mode-rocket .card-ic img, .mode-rocket .hero-ic img { animation: rocketFly 3.5s ease-in-out infinite; }
+@keyframes rocketFly { 0% { transform: translateY(0) rotate(-45deg) scale(1); filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 14px rgba(0,240,255,0.5)); } 50% { transform: translateY(-8px) rotate(-45deg) scale(1.06); filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 26px rgba(255,42,85,0.7)); } 100% { transform: translateY(0) rotate(-45deg) scale(1); filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 14px rgba(0,240,255,0.5)); } }
+
+.mode-shop .card-ic img, .mode-shop .hero-ic img { animation: shopBob 3s ease-in-out infinite, shopShine 2s ease-in-out infinite; }
+@keyframes shopBob { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.03); } }
+@keyframes shopShine { 0% { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(255,215,0,0.3)); } 50% { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 24px rgba(255,215,0,0.7)); } 100% { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(255,215,0,0.3)); } }
+
+/* ===== НОВЫЕ АНИМАЦИИ ДЛЯ НОВОСТЕЙ ===== */
+.nvc.event { animation: newsPulse 3s ease-in-out infinite; }
+@keyframes newsPulse { 0%,100% { box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 18px rgba(168,85,247,0.15); } 50% { box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 30px rgba(168,85,247,0.4); } }
+.nvc.event .nvti { background: linear-gradient(120deg, #fff 0%, var(--purple) 60%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nvc.event .nvti::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--purple), var(--crimson)); border-radius: 4px 0 0 4px; animation: pulseLeft 3s ease-in-out infinite; }
+@keyframes pulseLeft { 0% { transform: translateX(-100%); } 50% { transform: translateX(0); } 100% { transform: translateX(100%); } }
+
+/* Hero-иконка Plush Pepe в режиме Roll — крутит колесо */
+.hero-ic img { transform-origin: center center; }
+
 /* ===== Реалистичные эффекты победы ===== */
 .win-flash { animation: winFlash 0.6s ease-in-out infinite alternate; border-color: var(--gold); box-shadow: 0 0 24px var(--gold), inset 0 0 12px rgba(255,215,0,0.3); }
 @keyframes winFlash { 0% { transform: scale(1); box-shadow: 0 0 16px var(--gold); } 100% { transform: scale(1.08); box-shadow: 0 0 32px var(--gold); } }
@@ -545,6 +573,56 @@ input:focus, .inp:focus, .ninput:focus, .premium-inp:focus { border-color: var(-
 }
 .premium-inp::placeholder { color: var(--mute); }
 .premium-inp::-webkit-outer-spin-button, .premium-inp::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* ===== ЦВЕТЫ БЕЙДЖЕЙ ДЛЯ ТИПОВ НОВОСТЕЙ ===== */
+.nvc.update .nvt { background: linear-gradient(180deg, var(--cyan), #0891b2); }
+.nvc.update .nvty { background: rgba(0,240,255,0.12); border-color: rgba(0,240,255,0.4); color: #7ff0ff; }
+.nvc.bugfix .nvt { background: linear-gradient(180deg, var(--gr), #059669); }
+.nvc.bugfix .nvty { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: #7ff0b0; }
+.nvc.event .nvt { background: linear-gradient(180deg, var(--purple), #7c3aed); }
+.nvc.event .nvty { background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.4); color: #c4b5fd; }
+.nvc.release .nvt { background: linear-gradient(180deg, var(--crimson), #dc2626); }
+.nvc.release .nvty { background: rgba(255,42,85,0.12); border-color: rgba(255,42,85,0.4); color: #ff8590; }
+.nvc.event .nvti { background: linear-gradient(120deg, #fff 0%, var(--purple) 60%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nvc.event .nvti::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--purple), var(--crimson)); border-radius: 4px 0 0 4px; animation: pulseLeft 3s ease-in-out infinite; }
+@keyframes pulseLeft { 0% { transform: translateX(-100%); } 50% { transform: translateX(0); } 100% { transform: translateX(100%); } }
+.news-m { box-shadow: 0 24px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,215,0,0.15); }
+.news-mh { background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,42,85,0.06)); border-bottom: 1px solid rgba(255,215,0,0.2); }
+.news-mi { animation: newsIconPulse 2s ease-in-out infinite; }
+@keyframes newsIconPulse { 0%,100% { box-shadow: 0 0 24px rgba(255,215,0,0.4); } 50% { box-shadow: 0 0 36px rgba(255,215,0,0.7); } }
+.news-mt { background: linear-gradient(120deg, #fff 0%, var(--gold) 50%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+.news-c { background: linear-gradient(180deg, rgba(255,255,255,0.015), transparent); }
+.nvc { background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid var(--bd2); transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s, border-color 0.25s; }
+.nvc:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.5), 0 0 18px rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.4); }
+.nvc::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.6; }
+.nvc.release::before { background: linear-gradient(90deg, transparent, var(--crimson), transparent); }
+.nvc.update::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+.nvc.event::before { background: linear-gradient(90deg, transparent, var(--purple), transparent); box-shadow: 0 0 16px rgba(168,85,247,0.4); }
+.nvc.event { animation: newsPulse 3s ease-in-out infinite; }
+@keyframes newsPulse { 0%,100% { box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 18px rgba(168,85,247,0.15); } 50% { box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 30px rgba(168,85,247,0.4); } }
+.nvc.event .nvti { background: linear-gradient(120deg, #fff 0%, var(--purple) 60%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nvc.bugfix::before { background: linear-gradient(90deg, transparent, var(--gr), transparent); }
+
+.nvh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; position: relative; z-index: 1; }
+.nvt { animation: badgePulse 2s ease-in-out infinite; }
+@keyframes badgePulse { 0%,100% { box-shadow: 0 0 0 rgba(255,215,0,0); } 50% { box-shadow: 0 0 12px rgba(255,215,0,0.4); } }
+.nvty { animation: tagBlink 1.6s ease-in-out infinite; }
+@keyframes tagBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.65; } }
+
+.nvti { background: linear-gradient(120deg, #fff 0%, var(--gold) 60%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+.nf { background: rgba(255,255,255,0.02); border: 1px solid var(--bd); transition: background 0.2s, border-color 0.2s; }
+.nf:hover { background: rgba(255,255,255,0.05); border-color: var(--bd2); }
+.nfi { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.3); color: var(--gold); transition: all 0.25s; }
+.nf:hover .nfi { background: rgba(255,215,0,0.2); box-shadow: 0 0 16px rgba(255,215,0,0.3); transform: scale(1.08); }
+.nfn { color: #fff; }
+.nfd { color: var(--dim); }
+.nfd b { color: var(--gold); text-shadow: 0 0 8px rgba(255,215,0,0.3); }
+
+/* Анимированный фон модалки новостей */
+.news-m::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,215,0,0.04) 0%, transparent 60%); animation: newsBgShift 12s ease-in-out infinite; pointer-events: none; z-index: 0; }
+@keyframes newsBgShift { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(30px,-20px) rotate(180deg); } }
 
 /* TOAST */
 .toast { position: fixed; top: calc(env(safe-area-inset-top) + 14px); left: 50%; transform: translateX(-50%) translateY(-120%); max-width: calc(100% - 24px); padding: 12px 18px; border-radius: 12px; font-size: 12px; font-weight: 900; z-index: 9999; opacity: 0; pointer-events: none; display: flex; align-items: center; gap: 8px; transition: all .4s cubic-bezier(.34,1.56,.64,1); box-shadow: 0 12px 32px rgba(0,0,0,.7), 0 1px 0 rgba(255,255,255,.2) inset; }
