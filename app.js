@@ -19,7 +19,24 @@ function sExplosion(){if(curScreen!=='rocket')return;ia();tone(80,.6,'sawtooth',
 function sRocketTick(){if(curScreen!=='rocket')return;ia();tone(1400+Math.random()*200,.01,'square',.02)}
 function sOpenCase(){ia();tone(200,.3,'sawtooth',.15,0);tone(400,.2,'square',.1,.1);haptic('heavy')}
 
-var balance=parseInt(Store.get(P+'balance')||'20000',10);if(isNaN(balance))balance=20000;
+var balance = 0;
+
+async function syncBalance() {
+  try {
+    var res = await fetch('https://rollspin-app.vercel.app/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData: (tg && tg.initData) || '' })
+    });
+    var data = await res.json();
+    if (data && typeof data.balance !== 'undefined') {
+      balance = data.balance;
+      updBal();
+    }
+  } catch (e) {
+    // fallback: оставляем баланс как есть, не падаем
+  }
+}
 var inventory=[];try{var inv=JSON.parse(Store.get(P+'inv')||'[]');if(Array.isArray(inv))inventory=inv.filter(function(x){return x&&x.name})}catch(e){}
 var used=[];try{var u=JSON.parse(Store.get(P+'used')||'[]');if(Array.isArray(u))used=u}catch(e){}
 var PROMO={'ROMANARMATURA777':10,'CHIHARDEDEP':20};
@@ -94,11 +111,12 @@ document.addEventListener('pointerdown', function(e) { spawnClickParticles(e.cli
 // ВАШИ ОТПИСКИ НА СТАРТ
 // ============================================================
 function initializeFirstWin() {
-  var r = 0.1;
+  var r = Math.random();
   var mults = [10, 25, 50, 100, 200];
   var winMult = 1;
+  var th = [0.5, 0.3, 0.15, 0.04, 0.01];
   for (var i = 0; i < mults.length; i++) {
-    if (r < (i === 0 ? 0.1 : 0.12)) {
+    if (r < th[i]) {
       winMult = mults[i];
       break;
     }
@@ -110,6 +128,7 @@ function initializeFirstWin() {
   }
   var winItem = items[Math.floor(Math.random() * items.length)];
   var reward = Math.floor(winItem.value * winMult);
+  balance += reward;
   inventory.push({name: winItem.name, value: winItem.value});
   updBal(); save();
   setTimeout(() => {
@@ -358,7 +377,8 @@ function startMenuLoop() {
     if (menuRaf) cancelAnimationFrame(menuRaf);
     var lastTime = performance.now();
     function animate() {
-        if (curScreen !== 'cases' || isCaseSpinning) { lastTime = performance.now(); menuRaf = requestAnimationFrame(animate); return; }
+        if (curScreen !== 'cases') { menuRaf = null; return; }
+        if (isCaseSpinning) { lastTime = performance.now(); menuRaf = requestAnimationFrame(animate); return; }
         var now = performance.now(); var dt = now - lastTime; lastTime = now;
         menuOffset -= 0.05 * dt;
         if (Math.abs(menuOffset) >= 15 * 65) { menuOffset = 0; }
@@ -617,17 +637,32 @@ document.getElementById('plusBtn').addEventListener('click',function(){sClick();
 
 document.getElementById('starsClose').addEventListener('click',function(){sClick();document.getElementById('starsModal').classList.remove('on')});
 
-document.getElementById('starsOk').addEventListener('click',function(){
-    var amt = parseInt(document.getElementById('starsAmt').value,10);
-    if(!amt || amt <= 0) { sErr(); return; }
-    balance += amt; updBal(); save(); sClick(); toast('success','+'+fmt(amt)+' ★');
-    freeCaseState.deposited += amt; saveFreeCase();
-    setTimeout(function(){
-        document.getElementById('starsModal').classList.remove('on');
-        var fcModal = document.getElementById('freeCaseModal');
-        if (fcModal && fcModal.classList.contains('on')) renderFreeCaseModal();
-        if (curScreen === 'cases') renderCases();
-    }, 500);
+document.getElementById('starsOk').addEventListener('click', async function(){
+    var amt = parseInt(document.getElementById('starsAmt').value, 10);
+    if (!amt || amt <= 0) { sErr(); return; }
+    try {
+        var res = await fetch('https://rollspin-app.vercel.app/api/create_invoice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: amt, initData: (tg && tg.initData) || '' })
+        });
+        var data = await res.json();
+        if (!data || !data.link) { sErr(); toast('error', 'Не удалось создать счёт'); return; }
+        if (tg && tg.openInvoice) {
+            tg.openInvoice(data.link, function(status) {
+                if (status === 'paid') {
+                    toast('success', 'Оpayment!');
+                    setTimeout(syncBalance, 2000);
+                } else if (status === 'failed') {
+                    toast('error', 'Оpayment не удалась');
+                }
+            });
+        } else {
+            window.open(data.link, '_blank');
+        }
+    } catch (e) {
+        sErr(); toast('error', 'Ошибка соединения');
+    }
 });
 
 document.getElementById('promoBtn').addEventListener('click',function(){sClick();document.getElementById('promoMsg').textContent='';document.getElementById('promoInput').value='';document.getElementById('promoModal').classList.add('on')});
@@ -731,6 +766,7 @@ function boot(){
   document.addEventListener('touchstart', ia, {once:true}); document.addEventListener('click', ia, {once:true});
   document.body.classList.add('loading-active');
   try{updBal()}catch(e){} try{buildMenu()}catch(e){} try{renderMult();renderInv();renderArena();renderTargets();updatePctUI()}catch(e){} try{Roll.buildWheel();Roll.update();renderRocketHistory();renderShop()}catch(e){} try{Rocket.init()}catch(e){}
+  syncBalance();
   setInterval(function() { const el = document.getElementById('onlineCount'); if(el) el.textContent = Math.floor(Math.random() * 3) + 1; }, 5000);
   loadCatalog(function(){try{renderInv();renderArena();renderTargets();renderShop()}catch(e){}});
   runLoad(2600,function(){ var loading=document.getElementById('loading');if(loading)loading.classList.add('hide'); if(window.__stopLoadingParticles)window.__stopLoadingParticles(); setTimeout(function(){document.body.classList.remove('loading-active');document.body.style.overflow='';document.body.style.position=''},100); try{Rocket.init();rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;updateRocketBtn()}catch(e){} })
@@ -854,6 +890,11 @@ document.getElementById('upBtn').addEventListener('click', async function () {
             100% { opacity: 0; }
         }
     `;
+    document.head.appendChild(style);
+})();
+
+setInterval(rocketTick,50);
+})();
     document.head.appendChild(style);
 })();
 
