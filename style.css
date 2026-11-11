@@ -13,7 +13,6 @@ button, .card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card, .invc, .f
 @keyframes floatIcon { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.02); } }
 .card-ic img, .hero-ic img, .free-case-icon img { animation: floatIcon 3s ease-in-out infinite; }
 
-/* Анимации иконок */
 .mode-roll .card-ic img, .mode-roll .hero-ic img { animation: spinIcon 3s linear infinite; }
 @keyframes spinIcon { to { transform: rotate(360deg); } }
 .mode-cases .card-ic img { animation: floatIcon 3s ease-in-out infinite, casePulse 2.4s ease-in-out infinite; }
@@ -359,7 +358,7 @@ button, .card, .ib, .bal, .slot, .mbtn, .tab, .invcs, .case-menu-card, .invc, .f
 /* НОВОЕ ОКНО ПОПОЛНЕНИЯ */
 .premium-input-wrap { position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; background: rgba(0,0,0,0.4); border: 1px solid var(--bd2); border-radius: 14px; padding: 5px 15px; transition: all .3s; }
 .premium-input-wrap:focus-within { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.15); }
-.premium-star { font-size: 28px; color: var(--gold); margin-right: 10px; filter: drop-shadow(0 0 8px rgba(255,215,0,0.6)); }
+.premium-star { width: 32px; height: 32px; fill: var(--gold); margin-right: 12px; filter: drop-shadow(0 0 8px rgba(255,215,0,0.6)); flex-shrink: 0; }
 .premium-inp { background: transparent; border: none; outline: none; color: #fff; font-size: 28px; font-weight: 900; width: 100%; font-family: 'Space Grotesk', sans-serif; padding: 10px 0; letter-spacing: -.02em; }
 .premium-inp::placeholder { color: var(--mute); }
 .premium-inp::-webkit-outer-spin-button, .premium-inp::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
