@@ -680,6 +680,12 @@ function boot(){
   loadCatalog(function(){try{renderInv();renderArena();renderTargets();renderShop()}catch(e){}});
   runLoad(2600,function(){ var loading=document.getElementById('loading');if(loading)loading.classList.add('hide'); if(window.__stopLoadingParticles)window.__stopLoadingParticles(); setTimeout(function(){document.body.classList.remove('loading-active');document.body.style.overflow='';document.body.style.position=''},100); try{Rocket.init();rocketPhase='waiting';rocketPhaseStart=Date.now();rocketPhaseDur=R_WAIT;updateRocketBtn()}catch(e){} })
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+
+// Запуск с защитой от падения
+try {
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+} catch (e) {
+    console.error("Ошибка при запуске:", e);
+}
 setInterval(rocketTick,50);
 })();
