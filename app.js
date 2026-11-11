@@ -327,7 +327,7 @@ function startMenuLoop() {
 function openCaseModal(c) {
     currentCaseData = c; sClick();
     document.getElementById('caseModalTitle').textContent = c.name;
-    document.getElementById('casePriceBtn').textContent = fmt(c.price);
+    var cpBtn=document.getElementById('casePriceBtn');if(cpBtn)cpBtn.textContent=fmt(c.price);
     var poolGrid = document.getElementById('casePoolGrid'); poolGrid.innerHTML = '';
     var safePool = (c.pool && c.pool.length) ? c.pool : FALLBACK;
     var sortedPool = safePool.slice().sort((a,b) => a.value - b.value);
@@ -341,7 +341,7 @@ function openCaseModal(c) {
         var d = document.createElement('div'); d.className = 'case-item'; applyRar(d, it.value); d.innerHTML = iconTag(it.name, 128); track.appendChild(d);
     }
     document.getElementById('openCaseBtn').disabled = false;
-    document.getElementById('openCaseBtn').textContent = 'Открыть за ' + fmt(c.price) + ' ★';
+    var ocBtn=document.getElementById('openCaseBtn');var ocSpan=ocBtn&&ocBtn.querySelector('#casePriceBtn');if(ocSpan)ocSpan.textContent=fmt(c.price);
     document.getElementById('caseModal').classList.add('on');
 }
 
