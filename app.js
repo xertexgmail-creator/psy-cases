@@ -32,7 +32,49 @@ function applyRar(el,v){var r=rarityInfo(v);el.style.setProperty('--rar-color',r
 function getIconUrl(name){var n=String(name).replace(/\s+/g,'');return 'https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size=128';}
 function iconTag(name,size){size=size||64;var n=String(name).replace(/\s+/g,'');var slug=String(name).toLowerCase().replace(/'/g,'').replace(/[^a-z0-9]/g,'');var primary='https://api.changes.tg/original/'+encodeURIComponent(n)+'.png?size='+size;var fb='https://images.weserv.nl/?url='+encodeURIComponent('nft.fragment.com/gift/'+slug+'-1.webp')+'&output=webp&q=85&w='+size+'&h='+size+'&fit=contain';return '<img src="'+primary+'" data-fb="'+fb+'" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.dataset.fb}else{this.style.opacity=0.3}">'}
 function fmt(n){n=Math.floor(n||0);if(n>=1e9)return Math.floor(n/1e9)+'B';if(n>=1e6)return Math.floor(n/1e6)+'M';if(n>=1e3)return Math.floor(n/1e3)+'K';return String(n)}
-function updBal(){var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance)}
+function updBal(){var b=document.getElementById('balTxt');if(b)b.textContent=fmt(balance);var sb=document.getElementById('shopBal');if(sb)sb.textContent=fmt(balance);
+// Обновляем интерфейс апгрейдера с новым звёздным полем
+var upgraderCard=document.getElementById('scr-upgrader');if(upgraderCard){var starsWrap=document.getElementById('upgraderStars');if(starsWrap)starsWrap.value='';}}
+
+function renderUpgraderStars(){
+    var upgraderCard=document.getElementById('scr-upgrader');if(!upgraderCard)return;
+    // Создаём контейнер для звёздного поля
+    var starsContainer=document.createElement('div');
+    starsContainer.id='upgraderStarsWrap';
+    starsContainer.style.cssText='position:absolute;top:60px;left:50%;transform:translateX(-50%);width:90%;background:rgba(0,0,0,0.6);border-radius:12px;padding:12px;z-index:100;box-shadow:0 0 24px rgba(255,215,0,0.2);display:none;transition:opacity 0.3s;';
+    starsContainer.innerHTML=`
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+            <span style="color:#FFD700;font-weight:900;font-size:14px;">Дополнительная звёзды:</span>
+            <input type="number" id="upgraderStars" min="0" max="9999" placeholder="0" style="width:100px;padding:8px;border:2px solid var(--gold);border-radius:8px;background:transparent;color:var(--gold);font-family:inherit;font-weight:900;text-align:center;transition:border-color 0.2s;">
+            <button id="upgraderStarsConfirm" style="padding:8px 16px;background:linear-gradient(180deg,var(--gold),#FFA500);border:none;border-radius:8px;font-weight:900;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(255,215,0,0.3);">Применить</button>
+        </div>
+        <div id="upgraderStarsHelp" style="font-size:11px;color:var(--dim);margin-top:4px;">Каждые 10 звёзд дают +10% к шансу апгрейда</div>
+    `;
+    upgraderCard.appendChild(starsContainer);
+
+    var toggler=document.createElement('button');
+    toggler.id='upgraderStarsToggle';
+    toggler.innerHTML='<span style="color:#FFD700;">★</span> Звёзды';
+    toggler.style.cssText='position:absolute;top:60px;right:20px;background:rgba(0,0,0,0.4);border-radius:8px;padding:8px 12px;cursor:pointer;z-index:100;border:1px solid rgba(255,215,0,0.3);transition:all 0.2s;';
+    upgraderCard.appendChild(toggler);
+
+    toggler.addEventListener('click',function(){sClick();if(starsContainer.style.display==='block'){starsContainer.style.opacity='0';setTimeout(function(){starsContainer.remove();toggler.style.background='rgba(0,0,0,0.4)';},300)}else{starsContainer.style.display='block';setTimeout(function(){starsContainer.style.opacity='1';document.getElementById('upgraderStars').focus();},10);toggler.style.background='rgba(255,215,0,0.2)';}});
+
+    document.getElementById('upgraderStarsConfirm').addEventListener('click',function(){sClick();var starsValue=parseInt(document.getElementById('upgraderStars').value)||0;if(starsValue>0){balance+=starsValue;updBal();save();toast('success','+'+starsValue+' ★');}starsContainer.style.opacity='0';setTimeout(function(){starsContainer.remove();toggler.style.background='rgba(0,0,0,0.4)';},300)});
+}
+
+// Обновляем кнопку апгрейдера с новым звёздным полем
+function updateUpgraderStarsUI(){
+    var upgraderCard=document.getElementById('scr-upgrader');if(!upgraderCard)return;
+    // Очищаем предыдущий контейнер
+    var oldWrap=document.getElementById('upgraderStarsWrap');if(oldWrap)oldWrap.remove();
+    var oldToggle=document.getElementById('upgraderStarsToggle');if(oldToggle)oldToggle.remove();
+    // Показываем звёздную иконку для апгрейдера
+    if(upgraderCard.querySelector('.upbtn')){
+        var upbtn=upgraderCard.querySelector('.upbtn');
+        upbtn.addEventListener('click',function(e){e.stopPropagation();sClick();var starsModal=document.getElementById('starsModal');if(starsModal)starsModal.classList.add('on');});
+    }
+}
 function save(){try{Store.set(P+'balance',String(balance));Store.set(P+'inv',JSON.stringify(inventory));Store.set(P+'used',JSON.stringify(used))}catch(e){}try{if(tg.CloudStorage&&!isAdmin){tg.CloudStorage.setItem(P+'balance',String(balance),function(){});tg.CloudStorage.setItem(P+'inv',JSON.stringify(inventory),function(){})}}catch(e){}}
 function markUsed(c){if(used.indexOf(c)<0){used.push(c);save()}}
 function isUsed(c){return used.indexOf(c)>=0}
@@ -102,6 +144,7 @@ function goScreen(name) {
       if (name === 'rocket') Rocket.init();
       if (name === 'roll') Roll.initCanvas();
       if (name === 'cases') renderCases();
+      if (name === 'upgrader') renderUpgraderStars();
       setTimeout(() => { loader.classList.remove('active'); }, 100);
     }, 400);
   } else {
@@ -112,10 +155,11 @@ function goScreen(name) {
     if (name === 'rocket') Rocket.init();
     if (name === 'roll') Roll.initCanvas();
     if (name === 'cases') renderCases();
+    if (name === 'upgrader') renderUpgraderStars();
   }
 }
 
-function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'');b.setAttribute('data-mode',c.mode);var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
+function buildMenu(){var g=document.getElementById('menuGrid');if(!g)return;g.innerHTML='';var cards=[{mode:'roll',hero:true,badge:'HOT',title:'ROLL',sub:'Крути и получай звёзды',icon:'Plush Pepe'},{mode:'cases',title:'Кейсы',desc:'Открывай за звёзды',icon:'Red Gift'},{mode:'upgrader',title:'Апгрейдер',desc:'Прокачивай гифты',icon:'Diamond Ring'},{mode:'rocket',title:'Ракетка',desc:'Улетай в космос',icon:'Stellar Rocket'},{mode:'shop',title:'Магазин',desc:'Купить гифты',icon:'Loot Bag'}];cards.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='card glass-panel'+(c.hero?' hero':'')+' mode-'+c.mode;b.setAttribute('data-mode',c.mode);b.classList.add('menu-item');var iconHTML=iconTag(c.icon,128);if(c.hero){b.innerHTML='<div class="card-badge">'+c.badge+'</div><div class="hero-in"><div class="hero-ic">'+iconHTML+'</div><div class="hero-tx"><div class="hero-t">'+c.title+'</div><div class="hero-s">'+c.sub+'</div></div><div class="hero-a">→</div></div>'}else{b.innerHTML='<div class="icon-star"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="card-ic">'+iconHTML+'</div><div class="card-t">'+c.title+'</div><div class="card-d">'+c.desc+'</div>'}b.addEventListener('click',function(){sClick();if(c.mode==='upgrader')goScreen('upgrader');else if(c.mode==='rocket')goScreen('rocket');else if(c.mode==='roll'){goScreen('roll');Roll.update()}else if(c.mode==='shop'){goScreen('shop');renderShop()}else if(c.mode==='cases')goScreen('cases')});g.appendChild(b)})}
 
 // ============================================================
 // КЕЙСЫ
@@ -409,7 +453,113 @@ function confetti(){var colors=['#fff','#10b981','#3b82f6','#a855f7','#fbbf24','
 var tickTO=null;function startSpinAnim(){document.getElementById('wheelWrap').classList.add('spinning');var T0=150,T1=35,E=SPIN_DUR-500,e=0;var loop=function(){sTick();var p=Math.min(1,e/E);var d=T0-(T0-T1)*p;e+=d;if(e<E)tickTO=setTimeout(loop,d)};loop()}
 function endSpinAnim(win){clearTimeout(tickTO);document.getElementById('wheelWrap').classList.remove('spinning');if(win)sWin();else sLose()}
 function spinWheel(ch,preWin){return new Promise(function(resolve){var p=document.getElementById('wheelPtr');var h=Math.min(179.9,ch*3.6/2);var s0=180-h,s1=180+h;var a;if(preWin){var sp=Math.max(.1,s1-s0-.2);a=s0+.1+Math.random()*sp}else{var o=Math.max(.1,360-(s1-s0)-.2);a=s1+.1+Math.random()*o;if(a>360)a-=360}var t=8+Math.floor(Math.random()*4);var tot=t*360+a;p.style.transition='none';p.style.transform='rotate(0deg)';void p.offsetWidth;p.style.transition='transform '+SPIN_DUR+'ms cubic-bezier(0.15,0.7,0.15,1)';p.style.transform='rotate('+tot+'deg)';var fn=((tot%360)+360)%360;setTimeout(function(){resolve(fn>=s0&&fn<=s1)},SPIN_DUR+100)})}
-async function doUpgrade(){if(isSpinning||!selItems.length||!targetItem)return;isSpinning=true;document.getElementById('upBtn').disabled=true;document.getElementById('fromCard').className='islot glass-panel';document.getElementById('toCard').className='islot glass-panel';var s=sumSel();var realChance=Math.min(95,chance*0.85);var win=Math.random()*100<realChance;var cp=selItems.slice();if(win){cp.forEach(function(it){var i=inventory.indexOf(it);if(i>=0)inventory.splice(i,1)});var ni={name:targetItem.name,value:targetItem.value||0};inventory.push(ni);inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});selItems=[];targetItem=null}else{cp.forEach(function(it){var i=inventory.indexOf(it);if(i>=0)inventory.splice(i,1)});selItems=[];targetItem=null}save();startSpinAnim();var w=await spinWheel(chance,win);endSpinAnim(w);if(w){document.getElementById('toCard').classList.add('win');confetti();haptic('success')}else{document.getElementById('toCard').classList.add('lose')}renderInv();renderArena();renderTargets();updatePctUI();setTimeout(function(){isSpinning=false;updateUpBtn()},500)}
+async function doUpgrade(){if(isSpinning||!selItems.length||!targetItem)return;isSpinning=true;document.getElementById('upBtn').disabled=true;document.getElementById('fromCard').className='islot glass-panel';document.getElementById('toCard').className='islot glass-panel';var s=sumSel();var realChance=Math.min(95,chance*0.85);var win=Math.random()*100<realChance;var cp=selItems.slice();if(win){cp.forEach(function(it){var i=inventory.indexOf(it);if(i>=0)inventory.splice(i,1)});var ni={name:targetItem.name,value:targetItem.value||0};inventory.push(ni);inventory.sort(function(a,b){return(a.value||0)-(b.value||0)});selItems=[];targetItem=null}else{cp.forEach(function(it){var i=inventory.indexOf(it);if(i>=0)inventory.splice(i,1)});selItems=[];targetItem=null}save();startSpinAnim();var w=await spinWheel(chance,win);endSpinAnim(w);if(w){document.getElementById('toCard').classList.add('win');confetti();haptic('success');
+        // Добавляем звездную иконку для апгрейдера
+        var starsContainer = document.createElement('div');
+        starsContainer.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);width:100%;text-align:center;z-index:9999;background:rgba(0,0,0,0.5);padding:8px 0;border-radius:8px;display:none;transition:opacity 0.3s';
+        starsContainer.innerHTML = `
+            <div style="display:flex;justify-content:center;align-items:center;gap:8px;color:#FFD700;font-size:16px;font-weight:900;">
+                <span>★ Звёзды для апгрейда:</span>
+                <input type="number" id="upgraderStars" min="0" max="9999" placeholder="Введите количество" style="width:120px;padding:6px;border:2px solid var(--gold);border-radius:6px;background:transparent;color:var(--gold);font-family:inherit;font-weight:900;">
+            </div>
+        `;
+        document.body.appendChild(starsContainer);
+        starsContainer.style.display = 'block';
+        setTimeout(() => {
+            starsContainer.style.opacity = '1';
+        }, 100);
+
+        var upBtn = document.getElementById('upBtn');
+        upBtn.addEventListener('click', function() {
+            var starsValue = parseInt(document.getElementById('upgraderStars').value) || 0;
+            if (starsValue > 0) {
+                var bonusChance = Math.min(100, starsValue * 0.1);
+                var realChance = Math.min(95, chance * 0.85 + bonusChance);
+                var win = Math.random() * 100 < realChance;
+                var cp = selItems.slice();
+                if (win) {
+                    cp.forEach(function (it) {
+                        var i = inventory.indexOf(it);
+                        if (i >= 0) inventory.splice(i, 1);
+                    });
+                    var ni = { name: targetItem.name, value: targetItem.value || 0 };
+                    inventory.push(ni);
+                    inventory.sort(function (a, b) { return (a.value || 0) - (b.value || 0); });
+                    selItems = [];
+                    targetItem = null;
+                } else {
+                    cp.forEach(function (it) {
+                        var i = inventory.indexOf(it);
+                        if (i >= 0) inventory.splice(i, 1);
+                    });
+                    selItems = [];
+                    targetItem = null;
+                }
+                save();
+                startSpinAnim();
+                var w = await spinWheel(chance, win);
+                endSpinAnim(w);
+                if (w) {
+                    document.getElementById('toCard').classList.add('win');
+                    confetti();
+                    haptic('success');
+                    sWin();
+                    // Победный всплеск на экране
+                    var flash = document.createElement('div');
+                    flash.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(16,185,129,0.25),transparent 70%);animation:winFlashScreen 0.7s ease-out forwards';
+                    document.body.appendChild(flash);
+                    setTimeout(function () { flash.remove(); }, 800);
+                    // Плавающие золотые частицы
+                    for (var i = 0; i < 24; i++) {
+                        (function () {
+                            var p = document.createElement('div');
+                            p.style.cssText = 'position:fixed;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#FFD700;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);box-shadow:0 0 12px #FFD700';
+                            var a = Math.random() * Math.PI * 2;
+                            var v = 120 + Math.random() * 200;
+                            var dx = Math.cos(a) * v, dy = Math.sin(a) * v - 100;
+                            p.animate([{ transform: 'translate(-50%,-50%) scale(1)', opacity: 1 }, { transform: 'translate(calc(-50% + ' + dx + 'px),calc(-50% + ' + dy + 'px)) scale(0.2), opacity: 0 }], { duration: 1200, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' });
+                            document.body.appendChild(p);
+                            setTimeout(function () { p.remove(); }, 1400);
+                        })();
+                    }
+                } else {
+                    document.getElementById('toCard').classList.add('lose');
+                    haptic('error');
+                    sLose();
+                    // Проигрышный всплеск + дрожь
+                    document.body.style.animation = 'screenFlashRed 0.5s ease-in-out';
+                    setTimeout(function () { document.body.style.animation = ''; }, 500);
+                    var loseCard = document.getElementById('toCard');
+                    if (loseCard) {
+                        loseCard.classList.add('loseShake');
+                        setTimeout(function () { loseCard.classList.remove('loseShake'); }, 500);
+                    }
+                    // Падающие красные частицы
+                    for (var i = 0; i < 16; i++) {
+                        (function () {
+                            var p = document.createElement('div');
+                            p.style.cssText = 'position:fixed;left:' + (20 + Math.random() * 60) + '%;top:-10px;width:4px;height:4px;border-radius:50%;background:#EF4444;pointer-events:none;z-index:9997;box-shadow:0 0 8px #EF4444';
+                            var v = 300 + Math.random() * 400;
+                            var dx = (Math.random() - 0.5) * 100;
+                            p.animate([{ transform: 'translateY(0) rotate(0)', opacity: 1 }, { transform: 'translateY(' + v + 'px) rotate(720deg)', opacity: 0 }], { duration: 1200 + Math.random() * 400, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' });
+                            document.body.appendChild(p);
+                            setTimeout(function () { p.remove(); }, 1800);
+                        })();
+                    }
+                }
+                renderInv();
+                renderArena();
+                renderTargets();
+                updatePctUI();
+                setTimeout(function () {
+                    isSpinning = false;
+                    updateUpBtn();
+                    starsContainer.style.opacity = '0';
+                    setTimeout(() => starsContainer.remove(), 1000);
+                }, 5000);
+            }
+        });
+    }else{document.getElementById('toCard').classList.add('lose')}renderInv();renderArena();renderTargets();updatePctUI();setTimeout(function(){isSpinning=false;updateUpBtn()},500)}
 
 // ROCKET
 var R_WAIT=10,R_FLY=60,R_RESULT=5;var rocketPhase='waiting',rocketPhaseStart=Date.now(),rocketPhaseDur=R_WAIT;var rocketBetGift=null,rocketBetActive=false,rocketCrashAt=0,rocketCurrentMult=1,rocketStartTime=0;var rocketHistory=[],rocketLastTick=0,rocketCashedOut=false,rocketCashoutMult=0;var autoWdEnabled=Store.get(P+'rocket_autowd_enabled')==='true';var autoWdValue=parseFloat(Store.get(P+'rocket_autowd_value')||'0')||0;
