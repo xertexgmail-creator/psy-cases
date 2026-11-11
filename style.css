@@ -35,6 +35,56 @@ body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-i
 
 /* Модальные окна */
 .ov.on .modal { animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+/* ===== НОВАЯ МОДАЛЬНАЯ ВЕРСТКА С ЭФФЕКТОМ ВЫПЛЫВАЮЩЕГО ШАРОВ ===== */
+.ov .modal { transform: translateY(60px) scale(0.9); opacity: 0; transform-origin: center bottom; }
+.ov.on .modal { animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+@keyframes modalIn { to { transform: translateY(0) scale(1); opacity: 1; } }
+/* ===== НОВОЕ СТИЛЬ ЗВЁЗДНОГО ПОЛЕ В АПГРЕЙДЕРЕ ===== */
+#upgraderStars {
+  background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,215,0,0.02));
+  border: 2px solid rgba(255,215,0,0.3);
+  border-radius: 12px;
+  color: var(--gold);
+  font-weight: 900;
+  box-shadow: 0 0 20px rgba(255,215,0,0.15) inset;
+  transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+#upgraderStars:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 30px rgba(255,215,0,0.35) inset, 0 0 20px rgba(255,215,0,0.3); }
+#upgraderStars::placeholder { color: var(--dim); opacity: 0.6; }
+/* ===== ЭФФЕКТЫ МОДАЛЬНЫХ ФОНОВ ===== */
+.ov .modal, .ov .news-m { background-size: 140% 140%; background-position: center; animation: modalBgShift 20s ease-in-out infinite; }
+@keyframes modalBgShift { 0% { background-size: 140% 140%; background-position: 0% 0%; } 25% { background-size: 120% 120%; background-position: -10px -10px; } 50% { background-size: 130% 130%; background-position: 5px 5px; } 75% { background-size: 120% 120%; background-position: -5px -5px; } 100% { background-size: 140% 140%; background-position: 0% 0%; } }
+/* ===== НОВЫЕ АНИМАЦИИ ДЛЯ НОВОСТНОГО БЛОКА ===== */
+.news-m { position: relative; overflow: hidden; }
+.news-m::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 30%, rgba(255,215,0,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,42,85,0.08) 0%, transparent 50%); animation: newsBgComplex 30s ease-in-out infinite; pointer-events: none; z-index: 0; }
+@keyframes newsBgComplex { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(-15px,10px) scale(1.05); } 50% { transform: translate(10px,-15px) scale(0.95); } 75% { transform: translate(-5px,5px) scale(1.02); } 100% { transform: translate(0,0) scale(1); } }
+.news-m > * { position: relative; z-index: 1; }
+.news-m { box-shadow: 0 24px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(255,215,0,0.03); }
+.news-m:hover::before { animation-play-state: paused; }
+/* ===== ЭЛЕМЕНТЫ НОВОСТНОГО БЛОКА ===== */
+.news-mh { position: relative; z-index: 1; }
+.news-mh::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.05), transparent); animation: newsHeaderShine 3s ease-in-out infinite; pointer-events: none; }
+@keyframes newsHeaderShine { 0%,100% { transform: translateX(-100%); } 50% { transform: translateX(100%); } }
+.news-c { position: relative; z-index: 1; }
+.news-c::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, rgba(255,215,0,0.03) 0%, transparent 70%); animation: newsInnerPulse 20s ease-in-out infinite; pointer-events: none; z-index: 0; }
+@keyframes newsInnerPulse { 0%,100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.6; } }
+/* ===== АНИМАЦИИ БЛОКА НОВОСТЕЙ ===== */
+.news-m { animation: newsContainerPulse 4s ease-in-out infinite; }
+@keyframes newsContainerPulse { 0%,100% { filter: drop-shadow(0 0 8px rgba(255,215,0,0.15)); } 50% { filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); } }
+.news-line { animation: newsLineGlow 3s ease-in-out infinite; }
+@keyframes newsLineGlow { 0%,100% { box-shadow: 0 0 12px rgba(255,215,0,0.15); } 50% { box-shadow: 0 0 24px rgba(255,215,0,0.35); } }
+/* ===== СТИЛИ ЗНАЧКОВ НОВОСТЕЙ ===== */
+.nvc.update .nvt { background: linear-gradient(180deg, var(--cyan), #0891b2); }
+.nvc.update .nvty { background: rgba(0,240,255,0.12); border-color: rgba(0,240,255,0.4); color: #7ff0ff; }
+.nvc.bugfix .nvt { background: linear-gradient(180deg, var(--gr), #059669); }
+.nvc.bugfix .nvty { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: #7ff0b0; }
+.nvc.event .nvt { background: linear-gradient(180deg, var(--purple), #7c3aed); }
+.nvc.event .nvty { background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.4); color: #c4b5fd; }
+.nvc.release .nvt { background: linear-gradient(180deg, var(--crimson), #dc2626); }
+.nvc.release .nvty { background: rgba(255,42,85,0.12); border-color: rgba(255,42,85,0.4); color: #ff8590; }
+.nvc.event .nvti { background: linear-gradient(120deg, #fff 0%, var(--purple) 60%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nvc.event .nvti::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--purple), var(--crimson)); border-radius: 4px 0 0 4px; animation: pulseLeft 3s ease-in-out infinite; }
+@keyframes pulseLeft { 0% { transform: translateX(-100%); } 50% { transform: translateX(0); } 100% { transform: translateX(100%); } }
 @keyframes modalIn { from { opacity: 0; transform: scale(.94) translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* Фокус на инпутах */
@@ -212,6 +262,17 @@ button:active, .card:active, .ib:active, .bal:active, .slot:active, .mbtn:active
 .logo .d { color: var(--gold); }
 .bal { display: flex; align-items: center; gap: 6px; padding: 8px 12px; height: 36px; border-radius: 999px; font-size: 14px; font-weight: 800; color: var(--gold); cursor: pointer; }
 .bal .plus { font-size: 16px; opacity: 0.8; }
+/* Звёздная иконка в балансе — пульсирует, приглашая пополнить */
+.bal .si { animation: starPulse 1.8s ease-in-out infinite; transform-origin: center; }
+@keyframes starPulse { 0%,100% { filter: drop-shadow(0 0 6px rgba(0,0,0,0.6)); transform: scale(1); } 50% { filter: drop-shadow(0 0 12px rgba(255,215,0,0.9)); transform: scale(1.12); } }
+/* ===== УПРАВЛЯЮЩАЯ ПАНЕЛЬ СО ЗВЁЗДНЫМИ ИКОНКАМИ ===== */
+.card.menu-item .icon-star { display: flex; justify-content: center; align-items: center; position: relative; width: 32px; height: 32px; }
+.card.menu-item .icon-star svg { width: 28px; height: 28px; color: rgba(255,215,0,0.3); transition: all 0.4s cubic-bezier(.34,1.56,.64,1); }
+.card.menu-item:hover .icon-star svg { color: rgba(255,215,0,0.8); transform: scale(1.15); filter: drop-shadow(0 0 12px rgba(255,215,0,0.6)); animation: starGlow 2s ease-in-out infinite; }
+@keyframes starGlow { 0%,100% { filter: drop-shadow(0 0 8px rgba(255,215,0,0.4)); } 50% { filter: drop-shadow(0 0 20px rgba(255,215,0,0.8)); } }
+.card.menu-item .icon-star::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%); opacity: 0; transition: opacity 0.3s; }
+.card.menu-item:hover .icon-star::after { opacity: 1; animation: starPulse 2s ease-in-out infinite; }
+@keyframes starPulse { 0%,100% { transform: scale(1); opacity: 0; } 50% { transform: scale(1.2); opacity: 0.6; } }
 .ib { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--dim); cursor: pointer; padding: 0; }
 .ib svg { width: 18px; height: 18px; }
 .menu-title { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 4px; }
